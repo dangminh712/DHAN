@@ -2464,11 +2464,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DangMinh\\Desktop\\Đồ án khoa học\\server\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "C:\\Users\\DangMinh\\Desktop\\Đồ án khoa học\\server\\Server.csproj",
+      "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj",
       "packagesPath": "C:\\Users\\DangMinh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DangMinh\\Desktop\\Đồ án khoa học\\server\\obj\\",
+      "outputPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\DangMinh\\AppData\\Roaming\\NuGet\\NuGet.Config"

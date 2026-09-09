@@ -8,7 +8,7 @@ public class MySqlMediaService : IMediaService
 {
     private readonly IServiceScopeFactory _scopeFactory;
 
-    public string StorageMode => "MySQL Server (Database: media_intranet_db)";
+    public string StorageMode => "MySQL 8.0 (Database: training_management | 27 Tables | RBAC & Clearance)";
 
     public MySqlMediaService(IServiceScopeFactory scopeFactory)
     {

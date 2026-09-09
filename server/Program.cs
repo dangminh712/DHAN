@@ -27,14 +27,26 @@ builder.Services.AddCors(options =>
 
 // Parse MySQL configuration
 var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? "Server=localhost;Port=3306;Database=media_intranet_db;User=root;Password=;";
+    ?? "Server=127.0.0.1;Port=3307;Database=media_intranet_db;User=root;Password=;";
+
+var csBuilder = new MySqlConnector.MySqlConnectionStringBuilder(rawConnectionString);
+string dbHost = string.IsNullOrWhiteSpace(csBuilder.Server) ? "127.0.0.1" : csBuilder.Server;
+int dbPort = csBuilder.Port == 0 ? 3306 : (int)csBuilder.Port;
 
 // Check if MySQL server is physically reachable before configuring or querying
-bool isMySqlAvailable = CheckPortReachable("localhost", 3306, 800);
+bool isMySqlAvailable = CheckPortReachable(dbHost, dbPort, 1200);
 
 if (isMySqlAvailable)
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseMySql(rawConnectionString, new MySqlServerVersion(new Version(8, 0, 36)), mySqlOptions =>
+        {
+            mySqlOptions.EnableRetryOnFailure(maxRetryCount: 2, maxRetryDelay: TimeSpan.FromSeconds(2), errorNumbersToAdd: null);
+        });
+    });
+
+    builder.Services.AddDbContext<TrainingDbContext>(options =>
     {
         options.UseMySql(rawConnectionString, new MySqlServerVersion(new Version(8, 0, 36)), mySqlOptions =>
         {
@@ -50,7 +62,19 @@ else
     builder.Services.AddSingleton<IMediaService, JsonMediaService>();
 }
 
-builder.Services.AddControllers();
+// Register Security & DBMS Business Services
+builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
+builder.Services.AddScoped<IAccessDecisionService, AccessDecisionService>();
+builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<ISecurityAlertService, SecurityAlertService>();
+builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 var app = builder.Build();
 
