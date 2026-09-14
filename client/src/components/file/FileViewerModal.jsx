@@ -63,10 +63,10 @@ export default function FileViewerModal({ isOpen, onClose, file, lectureId, onDo
         </div>
 
         {/* Media Viewing Container with Watermark Overlay */}
-        <div className="relative w-full min-h-[450px] max-h-[70vh] bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center border border-slate-800 shadow-inner">
+        <div className={`relative w-full min-h-[450px] max-h-[70vh] ${fileType === 'PDF' ? 'bg-slate-100 border-slate-200' : 'bg-slate-900 border-slate-800'} rounded-xl overflow-hidden flex items-center justify-center border shadow-inner`}>
           {/* Security Watermark (Diagonal background repeated pattern) */}
           <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden flex items-center justify-center opacity-15 select-none">
-            <div className="transform -rotate-12 text-center text-white font-mono text-sm tracking-widest leading-loose">
+            <div className={`transform -rotate-12 text-center ${fileType === 'PDF' ? 'text-slate-600' : 'text-white'} font-mono text-sm tracking-widest leading-loose`}>
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i}>{watermarkText}</div>
               ))}

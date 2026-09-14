@@ -90,6 +90,9 @@ public class User
     public OrganizationalUnit? OrganizationalUnit { get; set; }
 
     public string Status { get; set; } = "ACTIVE";
+    public bool MustChangePassword { get; set; } = false;
+    public bool IsProfileLocked { get; set; } = false;
+    public string? StudentCode { get; set; }
     public DateTime? LastLoginAt { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
@@ -237,6 +240,7 @@ public class Lecture
 
     public ICollection<LecturePermission> Permissions { get; set; } = new List<LecturePermission>();
     public ICollection<LectureFile> LectureFiles { get; set; } = new List<LectureFile>();
+    public ICollection<QuizQuestion> QuizQuestions { get; set; } = new List<QuizQuestion>();
 }
 
 // 13. LecturePermission
@@ -372,6 +376,7 @@ public class WatchHistory
     public Lecture? Lecture { get; set; }
 
     public decimal LastPositionSeconds { get; set; } = 0;
+    public int? LastPdfPage { get; set; }
     public decimal? DurationSeconds { get; set; }
     public bool Completed { get; set; } = false;
     public DateTime LastWatchedAt { get; set; } = DateTime.UtcNow;
@@ -394,6 +399,29 @@ public class LearningProgress
     public decimal ProgressPercent { get; set; } = 0;
     public bool Completed { get; set; } = false;
     public DateTime? CompletedAt { get; set; }
+    public string? Notes { get; set; }
+    public string? CompletedParts { get; set; }
+    public int? QuizScore { get; set; }
+    public DateTime? LastAccessedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+}
+
+// 19b. QuizQuestion
+[Table("quiz_questions")]
+public class QuizQuestion
+{
+    [Key]
+    public ulong Id { get; set; }
+    public ulong LectureId { get; set; }
+    public Lecture? Lecture { get; set; }
+
+    public string Question { get; set; } = string.Empty;
+    public string OptionsJson { get; set; } = "[]";
+    public int CorrectIndex { get; set; }
+    public string? Explanation { get; set; }
+    public int OrderIndex { get; set; } = 1;
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

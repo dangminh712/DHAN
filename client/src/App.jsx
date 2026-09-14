@@ -7,8 +7,10 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
 // Common Modals
-import UploadModal from './components/common/UploadModal';
+import FileUploadModal from './components/file/FileUploadModal';
+import LectureModal from './components/lecture/LectureModal';
 import NetworkModal from './components/common/NetworkModal';
+import { lectureService } from './services/lectureService';
 
 // Dedicated URL Pages
 import HomePage from './pages/HomePage';
@@ -16,6 +18,7 @@ import StudentPortalPage from './pages/StudentPortalPage';
 import TeacherPortalPage from './pages/TeacherPortalPage';
 import AdminPortalPage from './pages/AdminPortalPage';
 import AcademicPage from './pages/AcademicPage';
+import ProvisioningPage from './pages/ProvisioningPage';
 import DbmsAdminPage from './pages/DbmsAdminPage';
 import LectureStudyPage from './LectureStudyPage';
 import DirectMediaViewerModal from './components/common/DirectMediaViewerModal';
@@ -46,6 +49,7 @@ export default function App() {
   const [activeRoleTab, setActiveRoleTab] = useState('student');
   const [networkInfo, setNetworkInfo] = useState(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isLectureModalOpen, setIsLectureModalOpen] = useState(false);
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [copiedHash, setCopiedHash] = useState(null);
@@ -56,6 +60,8 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [academicUnits, setAcademicUnits] = useState([]);
   const [academicSubjects, setAcademicSubjects] = useState([]);
+  const [academicClasses, setAcademicClasses] = useState([]);
+  const [lectures, setLectures] = useState([]);
 
   const showToast = (type, text) => {
     setStatusMessage({ type, text });
@@ -91,7 +97,9 @@ export default function App() {
   const handleSwitchUser = async (username, showNotice = true) => {
     try {
       const res = await axios.post('/api/auth/switch-user', { username });
-      const user = res.data.user;
+      const user = res.data.user || res.data;
+      localStorage.setItem('dhan_session_token', res.data.token || '');
+      localStorage.setItem('dhan_active_user_id', user.id || '1');
       setCurrentUser(user);
       localStorage.setItem('dhan_active_username', user.username);
       if (showNotice) {
@@ -101,6 +109,7 @@ export default function App() {
       console.error('Lỗi chuyển đổi user:', err);
       const fallback = availableUsers.find(u => u.username === username);
       if (fallback) {
+        localStorage.setItem('dhan_active_user_id', fallback.id || '1');
         setCurrentUser(fallback);
         localStorage.setItem('dhan_active_username', fallback.username);
       }
@@ -110,14 +119,16 @@ export default function App() {
   // 5. Nạp danh mục đơn vị và học phần đào tạo
   const fetchAcademicData = async () => {
     try {
-      const [unitsRes, subjectsRes] = await Promise.all([
+      const [unitsRes, subjectsRes, classesRes] = await Promise.all([
         axios.get('/api/academic/units').catch(() => ({ data: [] })),
-        axios.get('/api/academic/subjects').catch(() => ({ data: [] }))
+        axios.get('/api/academic/subjects').catch(() => ({ data: [] })),
+        axios.get('/api/academic/classes').catch(() => ({ data: [] }))
       ]);
       setAcademicUnits(unitsRes.data || []);
       setAcademicSubjects(subjectsRes.data || []);
+      setAcademicClasses(classesRes.data || []);
     } catch (err) {
-      console.warn('Lỗi nạp danh mục Khoa & Môn học:', err.message);
+      console.warn('Lỗi nạp danh mục Khoa, Môn học & Lớp:', err.message);
     }
   };
 
@@ -154,7 +165,17 @@ export default function App() {
     fetchAcademicData();
     fetchFiles();
     fetchNetworkInfo();
+    fetchLectures();
   }, []);
+
+  const fetchLectures = async () => {
+    try {
+      const data = await lectureService.getLectures();
+      setLectures(data || []);
+    } catch (err) {
+      console.warn('Chưa nạp bài giảng:', err.message);
+    }
+  };
 
   // 8. Đăng tải bài giảng
   const handleUpload = async (fileList) => {
@@ -227,6 +248,7 @@ export default function App() {
       <LectureStudyPage
         lectureId={lectureId}
         allFiles={files}
+        currentUser={currentUser}
         onBack={() => { window.location.hash = '#/'; }}
       />
     );
@@ -276,6 +298,43 @@ export default function App() {
       {/* NAVBAR ĐIỀU HƯỚNG CÁC URL RIÊNG BIỆT */}
       <Navbar currentRoute={route} />
 
+      {/* CẢNH BÁO YÊU CẦU ĐỔI MẬT KHẨU LẦN ĐẦU CHO HỌC VIÊN */}
+      {currentUser?.mustChangePassword && (
+        <div style={{
+          background: 'linear-gradient(90deg, #78350F 0%, #B45309 100%)',
+          color: '#FEF3C7',
+          padding: '10px 24px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '10px',
+          fontSize: '13px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '16px' }}>⚠️</span>
+            <span>
+              Tài khoản học viên <strong style={{ color: '#FFFFFF', textDecoration: 'underline' }}>{currentUser.username}</strong> đang sử dụng mật khẩu mặc định. Đồng chí cần đổi mật khẩu mới và cập nhật hồ sơ để bảo mật hệ thống.
+            </span>
+          </div>
+          <a
+            href="#/cap-tai-khoan"
+            style={{
+              padding: '4px 12px',
+              borderRadius: '5px',
+              background: '#FDE047',
+              color: '#78350F',
+              fontWeight: 800,
+              fontSize: '12px',
+              textDecoration: 'none'
+            }}
+          >
+            Đổi mật khẩu ngay →
+          </a>
+        </div>
+      )}
+
       {/* NỘI DUNG TỪNG TRANG THEO URL RIÊNG */}
       {/* 1. CỔNG HỌC VIÊN (DÀNH RIÊNG CHO HỌC VIÊN SĨ QUAN) */}
       {(route === '/hoc-vien' || route === '/student' || route === '/students') && (
@@ -294,6 +353,7 @@ export default function App() {
           onCopyHash={copyToClipboard}
           copiedHash={copiedHash}
           onSelectFile={(f) => setSelectedFile(f)}
+          lectures={lectures}
         />
       )}
 
@@ -318,6 +378,15 @@ export default function App() {
           availableUsers={availableUsers}
           currentUser={currentUser}
           onSwitchUser={handleSwitchUser}
+        />
+      )}
+
+      {/* 3b. CẤP TÀI KHOẢN HỌC VIÊN TỰ ĐỘNG & QUẢN TRỊ ĐỒNG BỘ */}
+      {(route === '/cap-tai-khoan' || route === '/provision' || route === '/provisioning') && (
+        <ProvisioningPage
+          onSwitchUser={handleSwitchUser}
+          currentUser={currentUser}
+          academicClasses={academicClasses}
         />
       )}
 
@@ -351,10 +420,12 @@ export default function App() {
           currentUser={currentUser}
           onSearch={fetchFiles}
           onOpenUpload={() => setIsUploadModalOpen(true)}
+          onOpenCreateLecture={() => setIsLectureModalOpen(true)}
           onCopyHash={copyToClipboard}
           copiedHash={copiedHash}
           onDeleteFile={handleDeleteFile}
           onSelectFile={(f) => setSelectedFile(f)}
+          lectures={lectures}
         />
       )}
 
@@ -367,13 +438,29 @@ export default function App() {
         copiedHash={copiedHash}
       />
 
-      {/* MODAL ĐĂNG TẢI BÀI GIẢNG */}
-      <UploadModal
+      {/* MODAL NHẬP LIỆU FILE (PDF, PPT, VIDEO, ẢNH, AUDIO) LƯU NỘI BỘ MÁY TÍNH */}
+      <FileUploadModal
         isOpen={isUploadModalOpen}
-        onClose={() => !uploading && setIsUploadModalOpen(false)}
-        uploading={uploading}
-        uploadProgress={uploadProgress}
-        onUpload={handleUpload}
+        onClose={() => setIsUploadModalOpen(false)}
+        onUploaded={() => {
+          fetchFiles();
+          fetchLectures();
+          showToast('success', 'Đã nạp học liệu và lưu trữ nội bộ thành công!');
+        }}
+        currentUser={currentUser}
+        lectures={lectures}
+      />
+
+      {/* MODAL SOẠN / TẠO VÀ LƯU BÀI GIẢNG ĐIỆN TỬ */}
+      <LectureModal
+        isOpen={isLectureModalOpen}
+        onClose={() => setIsLectureModalOpen(false)}
+        onSaved={() => {
+          fetchLectures();
+          fetchFiles();
+          showToast('success', 'Đã tạo và lưu bài giảng điện tử thành công vào CSDL!');
+        }}
+        currentUser={currentUser}
       />
 
       {/* MODAL THÔNG SỐ MẠNG INTRANET */}

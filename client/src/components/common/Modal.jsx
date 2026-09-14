@@ -13,30 +13,57 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = 'ma
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+    <div className="modal-backdrop" onClick={onClose}>
       <div
-        className="fixed inset-0"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <div
-        className={`relative w-full ${maxWidth} max-h-[90vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-10`}
+        className="modal-dialog"
+        style={{
+          maxWidth: maxWidth === 'max-w-2xl' ? '640px' : maxWidth === 'max-w-3xl' ? '820px' : '960px',
+          width: '92vw',
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          background: '#FFFFFF',
+          borderRadius: '12px',
+          overflow: 'hidden',
+          boxShadow: '0 25px 50px -12px rgba(11, 30, 54, 0.4)',
+          border: '1px solid #CBD5E1'
+        }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/70">
-          <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+        <div style={{
+          padding: '14px 20px',
+          background: '#0B1E36',
+          borderBottom: '2px solid #A31A1A',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          color: '#FFFFFF'
+        }}>
+          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '8px' }}>
             {title}
           </h3>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-lg transition-colors"
+            className="modal-close-btn"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'rgba(255, 255, 255, 0.8)',
+              cursor: 'pointer',
+              padding: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '6px'
+            }}
           >
-            <X className="w-5 h-5" />
+            <X size={18} />
           </button>
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 overflow-y-auto flex-1">
+        <div style={{ padding: '20px', overflowY: 'auto', flex: 1, maxHeight: 'calc(90vh - 65px)' }}>
           {children}
         </div>
       </div>

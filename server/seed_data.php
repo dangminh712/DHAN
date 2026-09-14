@@ -16,11 +16,38 @@ echo "=== BAT DAU NAP DU LIEU CHO TOAN BO 27 BANG DBMS ===\n";
 // Disable foreign key checks for clean reload
 $mysqli->query("SET FOREIGN_KEY_CHECKS = 0");
 
+// 0. ENSURE QUIZ_QUESTIONS TABLE & EXTENDED COLUMNS EXIST
+$mysqli->query("CREATE TABLE IF NOT EXISTS `quiz_questions` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `lecture_id` BIGINT UNSIGNED NOT NULL,
+  `question` TEXT NOT NULL,
+  `options_json` JSON NOT NULL,
+  `correct_index` INT NOT NULL,
+  `explanation` TEXT NULL,
+  `order_index` INT NOT NULL DEFAULT 1,
+  `created_at` DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_at` DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  CONSTRAINT `fk_quiz_questions_lecture` FOREIGN KEY (`lecture_id`) REFERENCES `lectures` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
+
+$cols = [
+    'notes' => 'LONGTEXT NULL',
+    'completed_parts' => 'VARCHAR(255) NULL',
+    'quiz_score' => 'INT NULL',
+    'last_accessed_at' => 'DATETIME(6) NULL'
+];
+foreach ($cols as $colName => $colDef) {
+    $chk = $mysqli->query("SHOW COLUMNS FROM `learning_progress` LIKE '$colName'");
+    if ($chk && $chk->num_rows == 0) {
+        $mysqli->query("ALTER TABLE `learning_progress` ADD COLUMN `$colName` $colDef");
+    }
+}
+
 $truncateTables = [
     'notifications', 'user_mfa', 'user_sessions', 'security_alerts',
     'audit_logs', 'download_logs', 'learning_progress', 'watch_history',
     'file_permissions', 'lecture_files', 'lecture_permissions', 'file_versions',
-    'files', 'lectures', 'user_clearance_levels', 'student_classes',
+    'files', 'quiz_questions', 'lectures', 'user_clearance_levels', 'student_classes',
     'teacher_subjects', 'users', 'subjects', 'classes', 'organizational_units',
     'role_permissions', 'permissions', 'roles', 'classification_levels',
     'retention_policies', 'system_settings'
@@ -134,7 +161,7 @@ ON DUPLICATE KEY UPDATE `name`=VALUES(`name`), `credits`=VALUES(`credits`);");
 echo "[x] subjects: OK\n";
 
 // 8. USERS (Mật khẩu: T04@Security2026!)
-$pwHash = 'PBKDF2$10000$QkJCQkJCQkJCQkJCQkJCQg==$hpHOUzFu1ARuTqMCNZpOZNowkZ28THKwsh0SQPcTHnU=';
+$pwHash = 'PBKDF2$10000$QkJCQkJCQkJCQkJCQkJCQg==$MIf+22JcC29OXsA/PSZzWj5QoYCLM+T8t0AEkf2BwuQ=';
 $mysqli->query("INSERT INTO `users` (`id`, `username`, `password_hash`, `full_name`, `email`, `phone`, `role_id`, `organizational_unit_id`, `status`) VALUES
 (1, 'admin', '$pwHash', 'Thiếu tướng, PGS.TS Quản trị viên', 'admin@dhan.edu.vn', '0901234567', 1, 1, 'ACTIVE'),
 (2, 'gv_quang', '$pwHash', 'Đại tá Trần Minh Quang (Trưởng Khoa ANDT)', 'quangtm@dhan.edu.vn', '0902345678', 3, 2, 'ACTIVE'),
@@ -147,7 +174,34 @@ $mysqli->query("INSERT INTO `users` (`id`, `username`, `password_hash`, `full_na
 (9, 'hv_thao', '$pwHash', 'Học viên Trần Phương Thảo (LT15)', 'thaotp@student.dhan.edu.vn', '0916789012', 4, 4, 'ACTIVE'),
 (10, 'hv_an', '$pwHash', 'Học viên Vũ Quốc An (VB2_K8)', 'anvq@student.dhan.edu.vn', '0917890123', 4, 5, 'ACTIVE')
 ON DUPLICATE KEY UPDATE `full_name`=VALUES(`full_name`), `email`=VALUES(`email`), `role_id`=VALUES(`role_id`);");
-echo "[x] users: OK (10 nguoi dung)\n";
+
+// Populate batch students: 001_d31a -> 040_d31a (Lớp D31A)
+$hoList = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Võ', 'Đặng', 'Bùi', 'Đỗ', 'Hồ', 'Ngô', 'Dương'];
+$demList = ['Văn', 'Thị', 'Đức', 'Hồng', 'Minh', 'Thanh', 'Tuấn', 'Quang', 'Hải', 'Xuân', 'Gia', 'Ngọc', 'Đình'];
+$tenList = ['Anh', 'Bình', 'Cường', 'Dũng', 'Đạt', 'Giang', 'Hà', 'Hải', 'Huy', 'Khoa', 'Long', 'Nam', 'Nghĩa', 'Phúc', 'Quân', 'Sơn', 'Tài', 'Tâm', 'Thắng', 'Tùng'];
+
+for ($i = 1; $i <= 40; $i++) {
+    $uid = 10 + $i;
+    $codeStr = sprintf("%03d_d31a", $i);
+    $stdCode = sprintf("D31A-%03d", $i);
+    $ho = $hoList[$i % count($hoList)];
+    $dem = $demList[($i * 2) % count($demList)];
+    $ten = $tenList[($i * 3) % count($tenList)];
+    $fullName = "$ho $dem $ten";
+    $email = "$codeStr@student.dhan.edu.vn";
+    $phone = sprintf("091%07d", 1000000 + $i * 137);
+
+    $stmtStd = $mysqli->prepare("INSERT INTO `users` (`id`, `username`, `password_hash`, `full_name`, `email`, `phone`, `role_id`, `organizational_unit_id`, `student_code`, `status`, `must_change_password`) VALUES (?, ?, ?, ?, ?, ?, 4, 2, ?, 'ACTIVE', 1) ON DUPLICATE KEY UPDATE `full_name`=VALUES(`full_name`)");
+    $stmtStd->bind_param("issssss", $uid, $codeStr, $pwHash, $fullName, $email, $phone, $stdCode);
+    $stmtStd->execute();
+
+    // Link to Class 1 (D31A)
+    $mysqli->query("INSERT IGNORE INTO `student_classes` (`student_id`, `class_id`, `status`) VALUES ($uid, 1, 'ACTIVE')");
+    // Grant Clearance Level 1 or 2
+    $lvl = ($i % 5 == 0) ? 2 : 1;
+    $mysqli->query("INSERT INTO `user_clearance_levels` (`user_id`, `classification_level_id`, `granted_by`, `status`) VALUES ($uid, $lvl, 1, 'ACTIVE') ON DUPLICATE KEY UPDATE `classification_level_id`=VALUES(`classification_level_id`)");
+}
+echo "[x] users: OK (50 nguoi dung gom ca hoc vien D31A)\n";
 
 // 9. TEACHER_SUBJECTS
 $mysqli->query("INSERT IGNORE INTO `teacher_subjects` (`teacher_id`, `subject_id`) VALUES
@@ -383,15 +437,148 @@ $mysqli->query("INSERT INTO `watch_history` (`id`, `user_id`, `file_id`, `lectur
 ON DUPLICATE KEY UPDATE `last_position_seconds`=VALUES(`last_position_seconds`), `completed`=VALUES(`completed`);");
 echo "[x] watch_history: OK (4 ban ghi)\n";
 
+// 18b. QUIZ_QUESTIONS (Section 22a)
+$quizData = [
+    // Lecture 1: Khám nghiệm hiện trường
+    [
+        'lecture_id' => 1,
+        'order_index' => 1,
+        'question' => 'Khi tiếp cận hiện trường vụ án hình sự, nguyên tắc bảo vệ hiện trường quan trọng nhất là gì?',
+        'options' => [
+            'Thu gom toàn bộ vật chứng vào túi ni lông ngay lập tức',
+            'Giữ nguyên trạng thái hiện trường, căng dây phong tỏa và ghi nhận dấu vết ban đầu',
+            'Cho phép người dân vào hỗ trợ tìm kiếm chứng cứ',
+            'Chụp ảnh lưu niệm rồi dọn dẹp hiện trường sạch sẽ'
+        ],
+        'correct' => 1,
+        'explanation' => 'Theo quy định tố tụng hình sự và nghiệp vụ trinh sát CAND, bảo vệ nguyên trạng hiện trường là điều kiện tiên quyết để khám nghiệm chính xác.'
+    ],
+    [
+        'lecture_id' => 1,
+        'order_index' => 2,
+        'question' => 'Trong kỹ thuật thu thập dấu vết đường vân (vân tay) tiềm ẩn trên bề mặt nhẵn, phương pháp nào thông dụng nhất?',
+        'options' => [
+            'Phương pháp quét bột từ tính và bột huỳnh quang kết hợp chổi chuyên dụng',
+            'Phương pháp ngâm nước nóng',
+            'Phương pháp đốt nóng bằng lửa trực tiếp',
+            'Phương pháp lau chùi bằng cồn công nghiệp'
+        ],
+        'correct' => 0,
+        'explanation' => 'Bột từ tính và bột huỳnh quang kết hợp chổi lông sóc là phương pháp kinh điển, không phá hủy cấu trúc mẫu sinh học.'
+    ],
+    [
+        'lecture_id' => 1,
+        'order_index' => 3,
+        'question' => 'Sơ đồ hiện trường vụ án hình sự theo quy chuẩn Bộ Công An bắt buộc phải thể hiện yếu tố nào?',
+        'options' => [
+            'Chữ ký của tất cả người dân chứng kiến quanh khu vực',
+            'Hình ảnh chân dung các điều tra viên tham gia',
+            'Vị trí tử thi/vật chứng trọng tâm, hướng Bắc địa lý và tỷ lệ xích đo đạc chuẩn',
+            'Dự đoán động cơ gây án của đối tượng'
+        ],
+        'correct' => 2,
+        'explanation' => 'Sơ đồ hiện trường phải đảm bảo tính khách quan khoa học: hướng Bắc chuẩn, tỷ lệ đo đạc chính xác và vị trí tương quan của vật chứng.'
+    ],
+    [
+        'lecture_id' => 1,
+        'order_index' => 4,
+        'question' => 'Biên bản khám nghiệm hiện trường có giá trị chứng cứ pháp lý khi nào?',
+        'options' => [
+            'Khi chỉ cần Trưởng Công an quận/huyện ký duyệt sau buổi khám nghiệm',
+            'Khi được lập ngay tại chỗ, có đầy đủ chữ ký của Điều tra viên, Cán bộ khám nghiệm và Người chứng kiến',
+            'Khi được quay video phát trực tiếp lên mạng xã hội',
+            'Khi viết lại sau 3 ngày hoàn thành công tác thực địa'
+        ],
+        'correct' => 1,
+        'explanation' => 'Điều 201 Bộ luật Tố tụng hình sự 2015 quy định biên bản phải lập ngay tại chỗ và có đầy đủ thành phần tham gia ký xác nhận.'
+    ],
+    // Lecture 2: An ninh mạng
+    [
+        'lecture_id' => 2,
+        'order_index' => 1,
+        'question' => 'Yêu cầu bắt buộc hàng đầu trong quy trình thu thập chứng cứ kỹ thuật số (Digital Forensics) là gì?',
+        'options' => [
+            'Bật nguồn máy tính để kiểm tra trực tiếp tập tin nghi vấn',
+            'Tạo bản sao bảo toàn bit-stream (Forensic Image) và tính toán mã băm SHA-256 đối chiếu toàn vẹn',
+            'Đổi mật khẩu người dùng để khóa quyền truy cập',
+            'Gửi ổ cứng qua bưu điện không cần niêm phong túi tĩnh điện'
+        ],
+        'correct' => 1,
+        'explanation' => 'Tính toàn vẹn của chứng cứ điện tử chỉ được thừa nhận trước tòa khi mã băm SHA-256 của bản sao trùng khớp tuyệt đối với thiết bị gốc.'
+    ],
+    [
+        'lecture_id' => 2,
+        'order_index' => 2,
+        'question' => 'Khi phát hiện một máy trạm trong mạng nội bộ Intranet bị nhiễm mã độc Ransomware, thao tác đầu tiên là gì?',
+        'options' => [
+            'Tắt nguồn máy tính đột ngột bằng cách rút dây điện',
+            'Rút cáp mạng LAN / ngắt kết nối mạng ngay lập tức để cách ly lây lan diện rộng',
+            'Mở phần mềm diệt virus quét toàn bộ ổ đĩa',
+            'Gửi email cảnh báo đính kèm file nghi nhiễm cho toàn đơn vị'
+        ],
+        'correct' => 1,
+        'explanation' => 'Cách ly vật lý khỏi mạng LAN ngay lập tức ngăn chặn mã độc phát tán ngang (lateral movement) sang các máy chủ dữ liệu trọng yếu khác.'
+    ],
+    [
+        'lecture_id' => 2,
+        'order_index' => 3,
+        'question' => 'Theo Luật An ninh mạng 2018, cơ quan tổ chức phải lưu trữ nhật ký hệ thống (System Audit Logs) trong thời gian tối thiểu bao lâu?',
+        'options' => [
+            '1 tháng',
+            '6 tháng',
+            '12 tháng (1 năm)',
+            '5 năm'
+        ],
+        'correct' => 2,
+        'explanation' => 'Luật An ninh mạng quy định nhật ký hệ thống phải được lưu trữ tối thiểu 12 tháng để phục vụ công tác điều tra, truy vết khi xảy ra sự cố.'
+    ],
+    // Lecture 3: Tố tụng hình sự
+    [
+        'lecture_id' => 3,
+        'order_index' => 1,
+        'question' => 'Thời hạn tạm giữ người theo thủ tục tố tụng hình sự tối đa không quá bao nhiêu ngày?',
+        'options' => [
+            '3 ngày',
+            '9 ngày (tối đa 3 ngày và có thể gia hạn 2 lần, mỗi lần không quá 3 ngày)',
+            '15 ngày',
+            '30 ngày'
+        ],
+        'correct' => 1,
+        'explanation' => 'Điều 118 BLTTHS 2015 quy định thời hạn tạm giữ là 3 ngày, trường hợp cần thiết có thể gia hạn 2 lần, mỗi lần không quá 3 ngày.'
+    ],
+    // Lecture 5: Trinh sát thực địa
+    [
+        'lecture_id' => 5,
+        'order_index' => 1,
+        'question' => 'Nguyên tắc cao nhất trong công tác trinh sát bảo vệ mục tiêu chính trị trọng điểm là gì?',
+        'options' => [
+            'Chủ động phòng ngừa, phát hiện từ sớm từ xa, không để bị động bất ngờ',
+            'Bố trí lực lượng công khai càng đông càng tốt',
+            'Chỉ xử lý khi có đối tượng đột nhập vào khu vực cấm',
+            'Sử dụng vũ khí quân dụng trong mọi tình huống tụ tập'
+        ],
+        'correct' => 0,
+        'explanation' => 'Phương châm tác chiến an ninh CAND là chủ động nắm tình hình từ sớm, từ xa, giải quyết triệt để nguy cơ tiềm ẩn.'
+    ]
+];
+
+$stmtQuiz = $mysqli->prepare("INSERT INTO `quiz_questions` (`lecture_id`, `question`, `options_json`, `correct_index`, `explanation`, `order_index`) VALUES (?, ?, ?, ?, ?, ?)");
+foreach ($quizData as $q) {
+    $optJson = json_encode($q['options'], JSON_UNESCAPED_UNICODE);
+    $stmtQuiz->bind_param("issisi", $q['lecture_id'], $q['question'], $optJson, $q['correct'], $q['explanation'], $q['order_index']);
+    $stmtQuiz->execute();
+}
+echo "[x] quiz_questions: OK (" . count($quizData) . " cau hoi nghiep vu)\n";
+
 // 19. LEARNING_PROGRESS (Section 22)
-$mysqli->query("INSERT INTO `learning_progress` (`id`, `user_id`, `lecture_id`, `progress_percent`, `completed`, `completed_at`) VALUES
-(1, 5, 1, 65.00, FALSE, NULL),
-(2, 7, 2, 100.00, TRUE, '2026-09-08 17:00:00'),
-(3, 8, 2, 45.00, FALSE, NULL),
-(4, 9, 3, 10.00, FALSE, NULL),
-(5, 10, 5, 80.00, FALSE, NULL)
-ON DUPLICATE KEY UPDATE `progress_percent`=VALUES(`progress_percent`), `completed`=VALUES(`completed`);");
-echo "[x] learning_progress: OK (5 ban ghi)\n";
+$mysqli->query("INSERT INTO `learning_progress` (`id`, `user_id`, `lecture_id`, `progress_percent`, `completed`, `completed_at`, `notes`, `completed_parts`, `quiz_score`, `last_accessed_at`) VALUES
+(1, 5, 1, 75.00, FALSE, NULL, 'Ghi chú nghiệp vụ: Chú ý bảo quản dấu vết đường vân trên bề mặt trơn nhẵn; đối chiếu biên bản phải có đủ 4 bên ký tên.', '1,2,3', 100, '2026-09-09 20:45:00'),
+(2, 7, 2, 100.00, TRUE, '2026-09-08 17:00:00', 'Đã hoàn thành toàn bộ chuyên đề An ninh mạng và quy trình bảo vệ Bí mật Nhà nước.', '1,2,3,4,5', 100, '2026-09-08 17:00:00'),
+(3, 8, 2, 45.00, FALSE, NULL, 'Cần nghiên cứu thêm phần Forensic Image và mã băm SHA-256.', '1,2', 75, '2026-09-09 08:30:00'),
+(4, 9, 3, 20.00, FALSE, NULL, 'Nghiên cứu Điều 118 Bộ luật TTHS 2015 về thời hạn tạm giữ.', '1', NULL, '2026-09-09 14:10:00'),
+(5, 10, 5, 80.00, FALSE, NULL, 'Nắm vững nguyên tắc trinh sát ngoại tuyến từ sớm từ xa.', '1,2,3,4', 90, '2026-09-09 16:20:00')
+ON DUPLICATE KEY UPDATE `progress_percent`=VALUES(`progress_percent`), `completed`=VALUES(`completed`), `notes`=VALUES(`notes`), `completed_parts`=VALUES(`completed_parts`), `quiz_score`=VALUES(`quiz_score`);");
+echo "[x] learning_progress: OK (5 ban ghi tien do va ghi chu)\n";
 
 // 20. DOWNLOAD_LOGS (Section 23)
 $mysqli->query("INSERT INTO `download_logs` (`id`, `user_id`, `file_id`, `lecture_id`, `ip_address`, `user_agent`, `file_size`, `status`, `denial_reason`, `downloaded_at`) VALUES

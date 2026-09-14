@@ -15,10 +15,35 @@ public class FileStorageService : IFileStorageService
         }
     }
 
-    public async Task<StoredFileInfo> SavePhysicalFileAsync(IFormFile formFile)
+    public async Task<StoredFileInfo> SavePhysicalFileAsync(IFormFile formFile, string? categoryFolder = null)
     {
+        string ext = Path.GetExtension(formFile.FileName).ToLower();
+
+        string fileType = ext switch
+        {
+            ".pdf" => "PDF",
+            ".mp4" or ".mov" or ".avi" or ".mkv" or ".webm" => "VIDEO",
+            ".jpg" or ".jpeg" or ".png" or ".svg" or ".webp" or ".gif" => "IMAGE",
+            ".mp3" or ".wav" or ".m4a" or ".ogg" or ".aac" => "AUDIO",
+            ".ppt" or ".pptx" => "SLIDE",
+            ".doc" or ".docx" or ".xls" or ".xlsx" or ".txt" => "DOCUMENT",
+            _ => "OTHER"
+        };
+
+        string targetCategory = !string.IsNullOrWhiteSpace(categoryFolder)
+            ? categoryFolder.Trim()
+            : fileType switch
+            {
+                "VIDEO" => "Videos",
+                "PDF" => "PDFs",
+                "SLIDE" => "Slides_PPT",
+                "AUDIO" => "Audios",
+                "IMAGE" => "Images",
+                _ => "Documents"
+            };
+
         var now = DateTime.UtcNow;
-        string subDir = Path.Combine(now.ToString("yyyy"), now.ToString("MM"), now.ToString("dd"));
+        string subDir = Path.Combine(targetCategory, now.ToString("yyyy"), now.ToString("MM"));
         string targetDir = Path.Combine(_storageRoot, subDir);
 
         if (!Directory.Exists(targetDir))
@@ -26,7 +51,6 @@ public class FileStorageService : IFileStorageService
             Directory.CreateDirectory(targetDir);
         }
 
-        string ext = Path.GetExtension(formFile.FileName).ToLower();
         string guidName = $"{Guid.NewGuid():N}{ext}";
         string fullPath = Path.Combine(targetDir, guidName);
         string relativePath = Path.Combine("Storage", subDir, guidName).Replace("\\", "/");
@@ -45,15 +69,6 @@ public class FileStorageService : IFileStorageService
             sha256 = Convert.ToHexString(hashBytes).ToLower();
         }
 
-        string fileType = ext switch
-        {
-            ".pdf" => "PDF",
-            ".mp4" or ".mov" or ".avi" or ".mkv" => "VIDEO",
-            ".jpg" or ".jpeg" or ".png" or ".svg" or ".webp" => "IMAGE",
-            ".doc" or ".docx" or ".xls" or ".xlsx" or ".ppt" or ".pptx" => "DOCUMENT",
-            _ => "OTHER"
-        };
-
         return new StoredFileInfo
         {
             StoredName = guidName,
@@ -68,9 +83,10 @@ public class FileStorageService : IFileStorageService
 
     public string GetPhysicalFullPath(string relativeStoragePath)
     {
+        if (string.IsNullOrWhiteSpace(relativeStoragePath)) return string.Empty;
         // Normalize slashes
         string normalized = relativeStoragePath.Replace("/", Path.DirectorySeparatorChar.ToString()).Replace("\\", Path.DirectorySeparatorChar.ToString());
-        if (normalized.StartsWith("Storage" + Path.DirectorySeparatorChar))
+        if (normalized.StartsWith("Storage" + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
         {
             normalized = normalized.Substring("Storage".Length + 1);
         }

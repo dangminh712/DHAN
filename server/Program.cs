@@ -1,144 +1,41 @@
-using System.Net.Sockets;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Server.Data;
 using Server.Services;
+using Server.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Ensure telemetry is turned off for offline intranet environment
-Environment.SetEnvironmentVariable("DOTNET_CLI_TELEMETRY_OPTOUT", "1");
-
-// Listen on 0.0.0.0:5000 to allow LAN access
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(5000);
-});
-
-// Configure CORS for Local Intranet
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("IntranetCorsPolicy", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
-
-// Parse MySQL configuration
-var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? "Server=127.0.0.1;Port=3307;Database=media_intranet_db;User=root;Password=;";
-
-var csBuilder = new MySqlConnector.MySqlConnectionStringBuilder(rawConnectionString);
-string dbHost = string.IsNullOrWhiteSpace(csBuilder.Server) ? "127.0.0.1" : csBuilder.Server;
-int dbPort = csBuilder.Port == 0 ? 3306 : (int)csBuilder.Port;
-
-// Check if MySQL server is physically reachable before configuring or querying
-bool isMySqlAvailable = CheckPortReachable(dbHost, dbPort, 1200);
-
-if (isMySqlAvailable)
-{
-    builder.Services.AddDbContext<AppDbContext>(options =>
-    {
-        options.UseMySql(rawConnectionString, new MySqlServerVersion(new Version(8, 0, 36)), mySqlOptions =>
-        {
-            mySqlOptions.EnableRetryOnFailure(maxRetryCount: 2, maxRetryDelay: TimeSpan.FromSeconds(2), errorNumbersToAdd: null);
-        });
-    });
-
-    builder.Services.AddDbContext<TrainingDbContext>(options =>
-    {
-        options.UseMySql(rawConnectionString, new MySqlServerVersion(new Version(8, 0, 36)), mySqlOptions =>
-        {
-            mySqlOptions.EnableRetryOnFailure(maxRetryCount: 2, maxRetryDelay: TimeSpan.FromSeconds(2), errorNumbersToAdd: null);
-        });
-    });
-
-    builder.Services.AddSingleton<IMediaService, MySqlMediaService>();
-}
-else
-{
-    // Fallback: Local JSON storage mode (100% offline, zero error logs, no external download needed)
-    builder.Services.AddSingleton<IMediaService, JsonMediaService>();
-}
-
-// Register Security & DBMS Business Services
+builder.WebHost.ConfigureKestrel(o => o.ListenAnyIP(builder.Configuration.GetValue("HttpPort", 5000)));
+builder.Services.AddCors(o => o.AddPolicy("IntranetCorsPolicy", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+    .WithExposedHeaders("Accept-Ranges", "Content-Range", "Content-Length")));
+var connection = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Thiếu cấu hình kết nối MySQL DefaultConnection.");
+builder.Services.AddDbContext<AppDbContext>(o => o.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 36))));
+builder.Services.AddDbContext<TrainingDbContext>(o => o.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 36))));
+builder.Services.AddSingleton<IMediaService, MySqlMediaService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddScoped<IAccessDecisionService, AccessDecisionService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<ISecurityAlertService, SecurityAlertService>();
 builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
-    });
-
+builder.Services.Configure<FormOptions>(o => { o.MemoryBufferThreshold = 65536; o.MultipartBodyLengthLimit = 1073741824; });
+builder.Services.AddControllers(o => o.Filters.Add<ApiErrorFilter>()).AddJsonOptions(o =>
+{
+    o.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    o.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+});
+builder.Services.Configure<ApiBehaviorOptions>(o => o.InvalidModelStateResponseFactory = c =>
+    new BadRequestObjectResult(new { success = false, code = "VALIDATION_ERROR", message = "Dữ liệu nhập không hợp lệ.",
+        errors = c.ModelState.Where(x => x.Value?.Errors.Count > 0).ToDictionary(x => x.Key, x => x.Value!.Errors.Select(e => e.ErrorMessage)) }));
 var app = builder.Build();
-
-// Display friendly startup status
-using (var scope = app.Services.CreateScope())
-{
-    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-    if (isMySqlAvailable)
-    {
-        try
-        {
-            var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
-            dbContext?.Database.EnsureCreated();
-            logger.LogInformation("==================================================================");
-            logger.LogInformation(">>> [CSDL]: Đã kết nối MySQL Server (localhost:3306) thành công.");
-            logger.LogInformation("==================================================================");
-        }
-        catch (Exception ex)
-        {
-            logger.LogWarning($">>> Không thể khởi tạo bảng MySQL: {ex.Message}");
-        }
-    }
-    else
-    {
-        logger.LogInformation("==================================================================");
-        logger.LogInformation(">>> [THÔNG BÁO]: MySQL Server chưa được bật trên cổng 3306.");
-        logger.LogInformation(">>> [TỰ ĐỘNG CHUYỂN]: Kích hoạt Chế độ Lưu trữ Cục bộ (metadata.json).");
-        logger.LogInformation(">>> Mọi tính năng: Upload, Xem, Tua Video HTTP 206, Tải xuống hoạt động 100%!");
-        logger.LogInformation("==================================================================");
-    }
-}
-
 app.UseCors("IntranetCorsPolicy");
-
-app.UseRouting();
-
+app.UseMiddleware<ApiExceptionMiddleware>();
 app.MapControllers();
-
-// Health check endpoint
-app.MapGet("/", (IMediaService mediaService) => Results.Ok(new
-{
-    status = "Online",
-    mode = "Intranet/Offline",
-    database = mediaService.StorageMode,
-    serverTime = DateTime.UtcNow,
-    message = "Hệ thống Backend .NET 8 đang chạy ổn định."
-}));
-
+app.MapGet("/", async (TrainingDbContext db, CancellationToken ct) =>
+    await db.Database.CanConnectAsync(ct)
+        ? Results.Ok(new { success = true, database = "MySQL", status = "Online" })
+        : Results.Json(new { success = false, code = "DATABASE_UNAVAILABLE", message = "Không kết nối được MySQL." }, statusCode: 503));
+// Apply migrations explicitly with dotnet ef database update, never during web startup.
 app.Run();
-
-// Fast TCP connectivity check helper (avoiding EF Core retry spam)
-static bool CheckPortReachable(string host, int port, int timeoutMs)
-{
-    try
-    {
-        using var client = new TcpClient();
-        var result = client.BeginConnect(host, port, null, null);
-        var success = result.AsyncWaitHandle.WaitOne(timeoutMs);
-        if (!success) return false;
-        client.EndConnect(result);
-        return true;
-    }
-    catch
-    {
-        return false;
-    }
-}
+public partial class Program { }

@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "Id": 1,
     "OriginalFileName": "Giao_trinh_An_ninh_dieu_tra_Chuong_1.pdf",
@@ -58,45 +58,5 @@
     "Category": "image",
     "Checksum": "f6a1b2c3d4e5234567890123456789012345f0126789012345123456789013d",
     "CreatedAt": "2026-09-06T16:30:00Z"
-  },
-  {
-    "Id": 7,
-    "OriginalFileName": "Video_huong_dan_Thao_tac_Kham_nghiem_Hien_truong.mp4",
-    "StoredFileName": "video_huong_dan.mp4",
-    "ContentType": "video/mp4",
-    "FileSize": 593061,
-    "Category": "video",
-    "Checksum": "07a2b3c4d5e6f78901234567890123456789abcdef0123456789abcdef012345",
-    "CreatedAt": "2026-09-07T08:10:00Z"
-  },
-  {
-    "Id": 8,
-    "OriginalFileName": "So_do_Kien_truc_He_thong_An_ninh_Mang_T04.jpg",
-    "StoredFileName": "so_do_kien_truc.jpg",
-    "ContentType": "image/jpeg",
-    "FileSize": 542091,
-    "Category": "image",
-    "Checksum": "18b3c4d5e6f7a89012345678901234567890bcdef0123456789abcdef0123456",
-    "CreatedAt": "2026-09-07T14:40:00Z"
-  },
-  {
-    "Id": 9,
-    "OriginalFileName": "Ghi_am_Giai_dap_Thac_mac_Nghiep_vu_Sĩ_quan.wav",
-    "StoredFileName": "audio_on_tap.wav",
-    "ContentType": "audio/wav",
-    "FileSize": 498420,
-    "Category": "audio",
-    "Checksum": "29c4d5e6f7a8b90123456789012345678901cdef0123456789abcdef01234567",
-    "CreatedAt": "2026-09-08T09:15:00Z"
-  },
-  {
-    "Id": 10,
-    "OriginalFileName": "Tai_lieu_Quy_trinh_Xu_ly_Khung_hoang_An_ninh.pdf",
-    "StoredFileName": "test.pdf",
-    "ContentType": "application/pdf",
-    "FileSize": 741,
-    "Category": "document",
-    "Checksum": "3ad5e6f7a8b9c01234567890123456789012def0123456789abcdef012345678",
-    "CreatedAt": "2026-09-08T15:20:00Z"
   }
 ]

@@ -69,22 +69,42 @@ public class AccessDecisionService : IAccessDecisionService
             if (lecture.TeacherId == userId)
                 return new AccessDecisionResult { Allowed = true };
 
-            // Section 34: If lecture is CLOSED, students DENY
-            if (lecture.Status == "CLOSED")
-                return new AccessDecisionResult { Allowed = false, StatusCode = 403, Reason = "Bài giảng đã đóng (CLOSED). Toàn bộ quyền truy cập bị khóa." };
+            // If lecture is CLOSED or LOCKED, students DENY
+            if (lecture.Status == "CLOSED" || lecture.Status == "LOCKED")
+                return new AccessDecisionResult { Allowed = false, StatusCode = 403, Reason = "Bài giảng đã bị khóa (LOCKED/CLOSED). Toàn bộ quyền truy cập bị ngắt." };
 
             if (lecture.Status != "PUBLISHED")
                 return new AccessDecisionResult { Allowed = false, StatusCode = 403, Reason = "Bài giảng chưa được phát hành (Trạng thái: " + lecture.Status + ")." };
 
-            // Section 38: Student's class must be in lecture_permissions
-            bool classAllowed = lecture.Permissions.Any(lp => userClassIds.Contains(lp.ClassId) && lp.CanView);
+            // Check lecture visibility: Public to ALL or Restricted to assigned classes
+            bool isPublicAll = !lecture.Permissions.Any() || lecture.Permissions.Any(lp => lp.ClassId == 0);
+            bool classAllowed = isPublicAll || lecture.Permissions.Any(lp => userClassIds.Contains(lp.ClassId) && lp.CanView);
             if (!classAllowed && user.Role?.Code == "STUDENT")
-                return new AccessDecisionResult { Allowed = false, StatusCode = 403, Reason = "Lớp học của học viên không được phân quyền bài giảng này." };
+                return new AccessDecisionResult { Allowed = false, StatusCode = 403, Reason = "Bài giảng chỉ dành riêng cho các lớp chỉ định. Lớp của học viên chưa được phân quyền." };
 
             // Section 35: File must be in lecture_files and is_visible = true
             var lectureFile = lecture.LectureFiles.FirstOrDefault(lf => lf.FileId == fileId);
             if (lectureFile == null || !lectureFile.IsVisible)
                 return new AccessDecisionResult { Allowed = false, StatusCode = 403, Reason = "Tập tin bị ẩn hoặc không thuộc danh mục bài giảng." };
+
+            // YÊU CẦU: Học viên có thể xem những tài liệu giáo viên đã add vào bài giảng của lớp của mình (dù cho là tài liệu tuyệt mật)
+            return new AccessDecisionResult { Allowed = true, Reason = "Tài liệu thuộc bài giảng của lớp - Giảng viên đã ủy quyền truy cập học vụ." };
+        }
+
+        // 5b. Check if file is embedded into any published lecture assigned to student's class
+        if (user.Role?.Code == "STUDENT")
+        {
+            var isAttachedToStudentLecture = await _db.LectureFiles
+                .Include(lf => lf.Lecture)
+                    .ThenInclude(l => l.Permissions)
+                .AnyAsync(lf => lf.FileId == fileId && lf.IsVisible &&
+                    lf.Lecture.Status == "PUBLISHED" && lf.Lecture.DeletedAt == null &&
+                    (!lf.Lecture.Permissions.Any() || lf.Lecture.Permissions.Any(lp => lp.ClassId == 0 || (userClassIds.Contains(lp.ClassId) && lp.CanView))));
+
+            if (isAttachedToStudentLecture)
+            {
+                return new AccessDecisionResult { Allowed = true, Reason = "Tài liệu thuộc bài giảng được phân quyền cho lớp của học viên." };
+            }
         }
 
         // 6. Section 37: File Classification <= User Clearance
@@ -136,6 +156,19 @@ public class AccessDecisionService : IAccessDecisionService
                     Allowed = false,
                     StatusCode = 403,
                     Reason = "Học liệu này chỉ được phép xem trực tuyến, giảng viên không mở quyền tải về máy (is_downloadable=false)."
+                };
+            }
+        }
+        else if (user?.Role?.Code == "STUDENT")
+        {
+            var nonDownloadableLf = await _db.LectureFiles.FirstOrDefaultAsync(lf => lf.FileId == fileId && !lf.IsDownloadable);
+            if (nonDownloadableLf != null)
+            {
+                return new AccessDecisionResult
+                {
+                    Allowed = false,
+                    StatusCode = 403,
+                    Reason = "Học liệu này thuộc bài giảng chỉ cho phép xem trực tuyến, không được phép tải về máy."
                 };
             }
         }

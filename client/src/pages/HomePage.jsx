@@ -31,10 +31,10 @@ import {
   Users,
   ShieldAlert
 } from 'lucide-react';
-import { INITIAL_LECTURES } from '../lectureData';
 
 export default function HomePage({
   files,
+  lectures = [],
   loading,
   search,
   setSearch,
@@ -48,12 +48,15 @@ export default function HomePage({
   currentUser,
   onSearch,
   onOpenUpload,
+  onOpenCreateLecture,
   onCopyHash,
   copiedHash,
   onDeleteFile,
   onSelectFile
 }) {
   const [homeSection, setHomeSection] = useState('integrated'); // 'integrated' | 'repository'
+  const [selectedClassification, setSelectedClassification] = useState('ALL');
+
   const quickKeywords = [
     'An ninh điều tra',
     'Nghiệp vụ an ninh',
@@ -62,6 +65,35 @@ export default function HomePage({
     'Bảo vệ bí mật nhà nước',
     'Lý luận chính trị'
   ];
+
+  const getClassificationBadge = (classification) => {
+    const c = classification?.toUpperCase() || 'NORMAL';
+    if (c.includes('TUYET_MAT') || c.includes('TUYỆT MẬT')) {
+      return { label: 'Tuyệt mật (Bậc 5)', bg: '#7F1D1D', text: '#FEF2F2', border: '#991B1B' };
+    }
+    if (c.includes('SECRET') || c.includes('TOI_MAT') || c.includes('TỐI MẬT')) {
+      return { label: 'Tối mật (Bậc 4)', bg: '#FEF2F2', text: '#991B1B', border: '#FECACA' };
+    }
+    if (c.includes('CONFIDENTIAL') || c.includes('MAT') || c.includes('MẬT')) {
+      return { label: 'Mật (Bậc 3)', bg: '#FEF3C7', text: '#92400E', border: '#FDE68A' };
+    }
+    if (c.includes('INTERNAL') || c.includes('NOI_BO') || c.includes('NỘI BỘ')) {
+      return { label: 'Lưu hành nội bộ (Bậc 2)', bg: '#EFF6FF', text: '#1E40AF', border: '#BFDBFE' };
+    }
+    return { label: 'Công khai (Bậc 1)', bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' };
+  };
+
+  const isStudent = currentUser?.role === 'STUDENT';
+  const studentClasses = currentUser?.assignedClasses?.length
+    ? currentUser.assignedClasses
+    : (currentUser?.className ? [currentUser.className] : []);
+
+  const visibleLectures = lectures.filter(lec => {
+    if (!isStudent) return true;
+    const isPublic = !lec.assignedClasses || lec.assignedClasses.length === 0 || lec.isPublic;
+    const belongsToMyClass = lec.assignedClasses?.some(c => studentClasses.includes(c));
+    return isPublic || belongsToMyClass;
+  });
 
   const totalFiles = files.length;
   const totalSizeBytes = files.reduce((acc, f) => acc + (f.fileSize || 0), 0);
@@ -90,8 +122,16 @@ export default function HomePage({
   };
 
   const filteredFiles = files.filter(f => {
-    if (search.trim()) {
-      return f.originalFileName.toLowerCase().includes(search.toLowerCase());
+    if (search.trim() && !f.originalFileName.toLowerCase().includes(search.toLowerCase())) {
+      return false;
+    }
+    if (selectedClassification !== 'ALL') {
+      const fc = f.classification?.toUpperCase() || 'NORMAL';
+      if (selectedClassification === 'TUYET_MAT' && !fc.includes('TUYET') && !fc.includes('TUYỆT')) return false;
+      if (selectedClassification === 'TOI_MAT' && (!fc.includes('TOI') && !fc.includes('TỐI') && !fc.includes('SECRET'))) return false;
+      if (selectedClassification === 'MAT' && (!fc.includes('MAT') && !fc.includes('MẬT') && !fc.includes('CONFIDENTIAL'))) return false;
+      if (selectedClassification === 'INTERNAL' && (!fc.includes('INTERNAL') && !fc.includes('NOI_BO') && !fc.includes('NỘI BỘ'))) return false;
+      if (selectedClassification === 'NORMAL' && (fc.includes('TUYET') || fc.includes('TOI') || fc.includes('MAT') || fc.includes('INTERNAL') || fc.includes('SECRET'))) return false;
     }
     return true;
   });
@@ -369,7 +409,7 @@ export default function HomePage({
               >
                 <Layers size={18} />
                 <span>1. BÀI GIẢNG ĐIỆN TỬ TÍCH HỢP ĐA HỌC LIỆU</span>
-                <span className="segment-badge">{INITIAL_LECTURES.length} Bài giảng</span>
+                <span className="segment-badge">{lectures.length} Bài giảng</span>
               </button>
 
               <button
@@ -385,7 +425,7 @@ export default function HomePage({
 
           {/* ══════════════════════════════════════════════════════════
               PHÂN HỆ 1: CHƯƠNG TRÌNH BÀI GIẢNG ĐIỆN TỬ TÍCH HỢP (T04)
-              (1 Bài giảng gồm Video, Đề cương PDF, Slide PPT, Sơ đồ, Quiz)
+              (Lấy 100% từ CSDL MySQL 8.0 - training_management)
              ══════════════════════════════════════════════════════════ */}
           {homeSection === 'integrated' && (
             <div style={{ padding: '0 24px 20px' }}>
@@ -395,7 +435,9 @@ export default function HomePage({
                 alignItems: 'center',
                 borderBottom: '2px solid #E2E8F0',
                 paddingBottom: '10px',
-                marginBottom: '16px'
+                marginBottom: '16px',
+                flexWrap: 'wrap',
+                gap: '12px'
               }}>
                 <div>
                   <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#0B1E36', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
@@ -403,108 +445,188 @@ export default function HomePage({
                     CHƯƠNG TRÌNH BÀI GIẢNG ĐIỆN TỬ TÍCH HỢP ĐA HỌC LIỆU (T04)
                   </h3>
                   <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0' }}>
-                    Mỗi bài giảng gồm 5 phần chuẩn CAND: tích hợp <strong>Video MP4, Slide PPT/PDF, Sơ đồ tác chiến, Văn bản pháp luật & Câu hỏi ôn tập</strong>.
+                    Dữ liệu trực tiếp từ <strong>CSDL MySQL 8.0</strong>: tích hợp <strong>Video MP4, Slide PPT/SVG, Giáo trình PDF, Sơ đồ tác chiến & Câu hỏi trắc nghiệm</strong>.
                   </p>
                 </div>
-                <span style={{ fontSize: '12px', fontWeight: 700, background: '#FEE2E2', color: '#991B1B', padding: '4px 12px', borderRadius: '16px' }}>
-                  {INITIAL_LECTURES.length} Bài giảng tích hợp
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 700, background: '#FEE2E2', color: '#991B1B', padding: '6px 12px', borderRadius: '16px' }}>
+                    {visibleLectures.length} Bài giảng {isStudent ? '(Lớp & Công khai)' : '(MySQL)'}
+                  </span>
+                  {onOpenCreateLecture && (
+                    <button
+                      type="button"
+                      onClick={onOpenCreateLecture}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: 'linear-gradient(135deg, #B91C1C 0%, #991B1B 100%)',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '6px 14px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 4px rgba(185, 28, 28, 0.25)',
+                        transition: 'transform 0.1s'
+                      }}
+                    >
+                      <BookOpen size={15} />
+                      + Tạo bài giảng mới
+                    </button>
+                  )}
+                  {onOpenUpload && (
+                    <button
+                      type="button"
+                      onClick={onOpenUpload}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        background: '#F8FAFC',
+                        color: '#1E293B',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <UploadCloud size={15} color="#A31A1A" />
+                      Tải lên Folder
+                    </button>
+                  )}
+                </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                {INITIAL_LECTURES.map(lec => (
-                  <div key={lec.id} style={{
-                    background: '#fff',
-                    border: '1px solid #E2E8F0',
-                    borderRadius: '10px',
-                    padding: '16px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                  }}>
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 800, background: '#A31A1A', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>
-                          {lec.code}
-                        </span>
-                        <span style={{
-                          fontSize: '11px',
-                          fontWeight: 700,
-                          background: lec.securityLevel === 'TUYỆT MẬT' ? '#FEE2E2' : lec.securityLevel === 'MẬT - AN NINH' ? '#FEF3C7' : '#DBEAFE',
-                          color: lec.securityLevel === 'TUYỆT MẬT' ? '#991B1B' : lec.securityLevel === 'MẬT - AN NINH' ? '#92400E' : '#1E40AF',
-                          padding: '2px 8px',
-                          borderRadius: '10px'
-                        }}>
-                          {lec.securityLevel}
-                        </span>
+              {visibleLectures.length === 0 ? (
+                <div style={{ padding: '36px', textAlign: 'center', color: '#64748B', background: '#F8FAFC', borderRadius: '10px' }}>
+                  <Layers size={36} color="#94A3B8" style={{ margin: '0 auto 12px' }} />
+                  <p style={{ fontWeight: 600, fontSize: '15px', color: '#334155' }}>Chưa có bài giảng nào phù hợp cho lớp học vụ của bạn.</p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                  {visibleLectures.map(lec => {
+                    const fileCount = lec.files?.length || lec.fileCount || 0;
+                    const hasVideo = lec.files?.some(f => f.fileType === 'VIDEO') || false;
+                    const hasDoc = lec.files?.some(f => f.fileType === 'PDF' || f.fileType === 'DOCUMENT') || false;
+                    const hasImage = lec.files?.some(f => f.fileType === 'IMAGE') || false;
+                    const isPublic = !lec.assignedClasses || lec.assignedClasses.length === 0 || lec.isPublic;
+
+                    return (
+                      <div key={lec.id} style={{
+                        background: '#fff',
+                        border: '1px solid #E2E8F0',
+                        borderRadius: '10px',
+                        padding: '16px',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                      }}>
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <span style={{ fontSize: '11px', fontWeight: 800, background: '#A31A1A', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>
+                                {lec.subjectCode || 'T04-BG'}
+                              </span>
+                              {isPublic ? (
+                                <span style={{ fontSize: '10.5px', background: '#F1F5F9', color: '#475569', padding: '2px 6px', borderRadius: '4px', fontWeight: 700, border: '1px solid #CBD5E1' }}>
+                                  🌐 Công khai
+                                </span>
+                              ) : (
+                                <span style={{ fontSize: '10.5px', background: '#EFF6FF', color: '#1E40AF', padding: '2px 6px', borderRadius: '4px', fontWeight: 700, border: '1px solid #BFDBFE' }}>
+                                  🎓 Lớp {lec.assignedClasses?.join(', ')}
+                                </span>
+                              )}
+                            </div>
+                            <span style={{
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              background: lec.status === 'PUBLISHED' ? '#DCFCE7' : lec.status === 'SCHEDULED' ? '#FEF3C7' : '#F1F5F9',
+                              color: lec.status === 'PUBLISHED' ? '#166534' : lec.status === 'SCHEDULED' ? '#92400E' : '#475569',
+                              padding: '2px 8px',
+                              borderRadius: '10px'
+                            }}>
+                              {lec.status === 'PUBLISHED' ? 'ĐÃ PHÁT HÀNH' : lec.status === 'SCHEDULED' ? 'LẬP LỊCH' : 'BẢN THẢO'}
+                            </span>
+                          </div>
+
+                          <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#0B1E36', lineHeight: 1.35, marginBottom: '8px' }}>
+                            {lec.title}
+                          </h4>
+
+                          <p style={{ fontSize: '12.5px', color: '#475569', marginBottom: '12px', lineHeight: 1.4 }}>
+                            {lec.description && lec.description.length > 110 ? lec.description.substring(0, 110) + '...' : (lec.description || 'Chuyên đề đào tạo nghiệp vụ Sĩ quan CAND.')}
+                          </p>
+
+                          <div style={{ background: '#F8FAFC', borderRadius: '6px', padding: '8px 10px', fontSize: '12px', color: '#334155', marginBottom: '12px' }}>
+                            <div>👨‍🏫 <strong>Giảng viên:</strong> {lec.teacherName || 'Bộ môn Nghiệp vụ'}</div>
+                            <div>🏛️ <strong>Khoa:</strong> {lec.departmentName || lec.subject || 'Khoa Nghiệp vụ An ninh'}</div>
+                          </div>
+
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
+                            {hasVideo && (
+                              <span style={{ fontSize: '11px', background: '#FEE2E2', color: '#991B1B', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                                🎥 Video MP4
+                              </span>
+                            )}
+                            {hasDoc && (
+                              <span style={{ fontSize: '11px', background: '#DBEAFE', color: '#1E40AF', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                                📄 Giáo trình / Slide
+                              </span>
+                            )}
+                            {hasImage && (
+                              <span style={{ fontSize: '11px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                                🗺️ Sơ đồ hiện trường
+                              </span>
+                            )}
+                            <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#334155', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                              📁 {fileCount} Học liệu CSDL
+                            </span>
+                            <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#334155', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                              📝 5 Phần & Quiz
+                            </span>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid #F1F5F9', paddingTop: '12px' }}>
+                          <a
+                            href={`#/study/${lec.id}`}
+                            className="btn-view-lecture"
+                            style={{
+                              flex: 1,
+                              textDecoration: 'none',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '6px',
+                              padding: '8px 12px',
+                              fontSize: '13px'
+                            }}
+                          >
+                            <Play size={14} />
+                            Vào phòng học bài giảng
+                          </a>
+
+                          <a
+                            href={`/#/study/${lec.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-card-icon"
+                            title="Mở bài giảng trong tab mới độc lập"
+                            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <ExternalLink size={14} />
+                          </a>
+                        </div>
                       </div>
-
-                      <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#0B1E36', lineHeight: 1.35, marginBottom: '8px' }}>
-                        {lec.title}
-                      </h4>
-
-                      <p style={{ fontSize: '12.5px', color: '#475569', marginBottom: '12px', lineHeight: 1.4 }}>
-                        {lec.description.length > 110 ? lec.description.substring(0, 110) + '...' : lec.description}
-                      </p>
-
-                      <div style={{ background: '#F8FAFC', borderRadius: '6px', padding: '8px 10px', fontSize: '12px', color: '#334155', marginBottom: '12px' }}>
-                        <div>👨‍🏫 <strong>Giảng viên:</strong> {lec.lecturer}</div>
-                        <div>🏛️ <strong>Khoa:</strong> {lec.departmentName}</div>
-                      </div>
-
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
-                        <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#334155', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                          🎥 Video MP4
-                        </span>
-                        <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#334155', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                          📄 Đề cương PDF
-                        </span>
-                        <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#334155', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                          📑 Slide bài giảng
-                        </span>
-                        <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#334155', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                          🗺️ Sơ đồ hiện trường
-                        </span>
-                        <span style={{ fontSize: '11px', background: '#F1F5F9', color: '#334155', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                          📝 5 Phần & Quiz
-                        </span>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid #F1F5F9', paddingTop: '12px' }}>
-                      <a
-                        href={`#/study/${lec.id}`}
-                        className="btn-view-lecture"
-                        style={{
-                          flex: 1,
-                          textDecoration: 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          padding: '8px 12px',
-                          fontSize: '13px'
-                        }}
-                      >
-                        <Play size={14} />
-                        Vào phòng học bài giảng
-                      </a>
-
-                      <a
-                        href={`/#/study/${lec.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-card-icon"
-                        title="Mở bài giảng trong tab mới độc lập"
-                        style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      >
-                        <ExternalLink size={14} />
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -561,6 +683,41 @@ export default function HomePage({
             </div>
           </div>
 
+          {/* BỘ LỌC PHÂN CẤP BẢO MẬT HỌC LIỆU */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', padding: '0 24px 14px', marginBottom: '14px' }}>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#475569', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Shield size={14} color="#A31A1A" />
+              Cấp độ bảo mật CAND:
+            </span>
+            {[
+              { key: 'ALL', label: 'Tất cả cấp độ' },
+              { key: 'TUYET_MAT', label: '🔴 Tuyệt mật' },
+              { key: 'TOI_MAT', label: '🛑 Tối mật' },
+              { key: 'MAT', label: '🟡 Mật' },
+              { key: 'INTERNAL', label: '🔵 Nội bộ' },
+              { key: 'NORMAL', label: '🟢 Công khai' }
+            ].map(item => (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => setSelectedClassification(item.key)}
+                style={{
+                  padding: '4px 10px',
+                  borderRadius: '16px',
+                  fontSize: '11.5px',
+                  fontWeight: selectedClassification === item.key ? 700 : 500,
+                  border: selectedClassification === item.key ? '1px solid #0B1E36' : '1px solid #CBD5E1',
+                  background: selectedClassification === item.key ? '#0B1E36' : '#FFFFFF',
+                  color: selectedClassification === item.key ? '#FFFFFF' : '#334155',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s'
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
           {/* LƯỚI BÀI GIẢNG */}
           {loading ? (
             <div className="empty-state-box">
@@ -593,21 +750,39 @@ export default function HomePage({
                 const isDoc = file.category === 'document';
                 const isAudio = file.category === 'audio';
                 const isImg = file.category === 'image';
+                const clsBadge = getClassificationBadge(file.classification);
 
                 return (
                   <div key={file.id} className="lecture-card">
-                    <div className="card-top-badge">
-                      <span className={`type-indicator ${file.category}`}>
-                        {isVideo && <Video size={13} />}
-                        {isDoc && <FileText size={13} />}
-                        {isAudio && <Music size={13} />}
-                        {isImg && <ImageIcon size={13} />}
-                        {!isVideo && !isDoc && !isAudio && !isImg && <FileQuestion size={13} />}
-                        {file.category === 'video' ? 'VIDEO BÀI GIẢNG' :
-                         file.category === 'document' ? 'TÀI LIỆU / PDF' :
-                         file.category === 'audio' ? 'GHI ÂM BÀI GIẢNG' :
-                         file.category === 'image' ? 'SLIDE / SƠ ĐỒ' : 'HỌC LIỆU KHÁC'}
-                      </span>
+                    <div className="card-top-badge" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span className={`type-indicator ${file.category}`}>
+                          {isVideo && <Video size={13} />}
+                          {isDoc && <FileText size={13} />}
+                          {isAudio && <Music size={13} />}
+                          {isImg && <ImageIcon size={13} />}
+                          {!isVideo && !isDoc && !isAudio && !isImg && <FileQuestion size={13} />}
+                          {file.category === 'video' ? 'VIDEO BÀI GIẢNG' :
+                           file.category === 'document' ? 'TÀI LIỆU / PDF' :
+                           file.category === 'audio' ? 'GHI ÂM BÀI GIẢNG' :
+                           file.category === 'image' ? 'SLIDE / SƠ ĐỒ' : 'HỌC LIỆU KHÁC'}
+                        </span>
+                        <span style={{
+                          fontSize: '10.5px',
+                          fontWeight: 700,
+                          background: clsBadge.bg,
+                          color: clsBadge.text,
+                          border: `1px solid ${clsBadge.border}`,
+                          padding: '2px 7px',
+                          borderRadius: '4px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '3px'
+                        }}>
+                          <Shield size={11} />
+                          {clsBadge.label}
+                        </span>
+                      </div>
                       <span className="card-file-size">
                         {formatFileSize(file.fileSize)}
                       </span>
@@ -624,15 +799,8 @@ export default function HomePage({
                           <span>{formatDate(file.createdAt)}</span>
                         </div>
                         <div className="meta-row">
-                          <span><Hash size={12} style={{ display: 'inline', marginRight: '4px' }} /> Mã SHA-256:</span>
-                          <span
-                            className="sha-badge"
-                            title="Bấm để sao chép mã băm SHA-256"
-                            onClick={() => onCopyHash(file.checksum, file.id)}
-                          >
-                            {copiedHash === file.id ? <Check size={11} color="#059669" /> : <Copy size={11} />}
-                            {file.checksum ? file.checksum.substring(0, 10) + '...' : 'N/A'}
-                          </span>
+                          <span><Users size={12} style={{ display: 'inline', marginRight: '4px' }} /> Người đăng:</span>
+                          <span style={{ fontWeight: 600, color: '#0B1E36' }}>{file.uploaderName || file.uploadedBy || 'Cán bộ quản trị T04'}</span>
                         </div>
                       </div>
                     </div>

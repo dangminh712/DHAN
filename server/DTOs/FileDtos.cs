@@ -36,3 +36,11 @@ public class UploadFileMetadataDto
     public ulong? LectureId { get; set; }
     public bool IsDownloadable { get; set; } = true;
 }
+
+public class UpdateFileDto
+{
+    public string? OriginalName { get; set; }
+    public ulong ClassificationLevelId { get; set; }
+    public string? Status { get; set; }
+}
+

@@ -109,7 +109,7 @@ export default function AuditPage() {
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
               onClick={loadData}
-              className="btn-filter-pill active"
+              className="btn-filter-pill"
               style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', cursor: 'pointer' }}
             >
               <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />

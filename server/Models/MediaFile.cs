@@ -28,4 +28,14 @@ public class MediaFile
     public string Checksum { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [MaxLength(100)]
+    public string Classification { get; set; } = "Lưu hành nội bộ";
+
+    public int ClassificationOrder { get; set; } = 2;
+
+    public ulong? ClassificationLevelId { get; set; }
+
+    [MaxLength(150)]
+    public string? UploaderName { get; set; }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Award, GraduationCap, FolderKanban, ShieldAlert, Database } from 'lucide-react';
+import { BookOpen, Award, GraduationCap, FolderKanban, ShieldAlert, Database, UserPlus } from 'lucide-react';
 
 export default function Navbar({ currentRoute }) {
   return (
@@ -32,6 +32,17 @@ export default function Navbar({ currentRoute }) {
         >
           <ShieldAlert size={15} />
           Quản trị Hệ thống
+        </a>
+        <a
+          href="#/cap-tai-khoan"
+          className={`nav-item ${currentRoute === '/cap-tai-khoan' ? 'active' : ''}`}
+          style={{ position: 'relative' }}
+        >
+          <UserPlus size={15} />
+          Cấp Tài Khoản
+          <span style={{ fontSize: '9.5px', background: '#D97706', color: '#fff', padding: '1px 5px', borderRadius: '4px', fontWeight: 800, marginLeft: '4px' }}>
+            MỚI
+          </span>
         </a>
         <a
           href="#/academic"
