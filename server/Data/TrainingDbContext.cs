@@ -28,6 +28,7 @@ public class TrainingDbContext : DbContext
     public DbSet<FileVersion> FileVersions => Set<FileVersion>();
     public DbSet<WatchHistory> WatchHistories => Set<WatchHistory>();
     public DbSet<LearningProgress> LearningProgresses => Set<LearningProgress>();
+    public DbSet<QuizQuestion> QuizQuestions => Set<QuizQuestion>();
     public DbSet<DownloadLog> DownloadLogs => Set<DownloadLog>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<SecurityAlert> SecurityAlerts => Set<SecurityAlert>();
@@ -40,6 +41,18 @@ public class TrainingDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<PdfNote>().HasIndex(n => new { n.UserId, n.FileId, n.PdfPage });
+        modelBuilder.Entity<LearningPartProgress>().HasIndex(p => new { p.UserId, p.LectureId, p.PartId }).IsUnique();
+        modelBuilder.Entity<QuizAttempt>().HasIndex(a => new { a.UserId, a.LectureId, a.SubmittedAt });
+        modelBuilder.Entity<QuizAttempt>().HasIndex(a => new { a.UserId, a.SubmissionId }).IsUnique();
+        modelBuilder.Entity<QuizAttempt>().Property(a => a.AnswersJson).HasColumnType("longtext");
+        modelBuilder.Entity<QuizAttempt>().Property(a => a.ResultJson).HasColumnType("longtext");
+        modelBuilder.Entity<PdfNote>().HasOne<User>().WithMany().HasForeignKey(n => n.UserId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<PdfNote>().HasOne<FileRecord>().WithMany().HasForeignKey(n => n.FileId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<LearningPartProgress>().HasOne<User>().WithMany().HasForeignKey(n => n.UserId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<LearningPartProgress>().HasOne<Lecture>().WithMany().HasForeignKey(n => n.LectureId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<QuizAttempt>().HasOne<User>().WithMany().HasForeignKey(n => n.UserId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<QuizAttempt>().HasOne<Lecture>().WithMany().HasForeignKey(n => n.LectureId).OnDelete(DeleteBehavior.Restrict);
 
         // 1. RolePermission Composite Key
         modelBuilder.Entity<RolePermission>()

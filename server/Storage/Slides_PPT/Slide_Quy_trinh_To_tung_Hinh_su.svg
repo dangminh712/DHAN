@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="800" height="80" fill="#A31A1A"/>
+  <text x="400" y="50" text-anchor="middle" fill="#FFFFFF" font-size="28" font-weight="bold" font-family="Arial">TRƯỜNG ĐẠI HỌC AN NINH NHÂN DÂN</text>
+  <rect x="0" y="80" width="800" height="4" fill="#D4A843"/>
+  <text x="400" y="150" text-anchor="middle" fill="#0B1E36" font-size="22" font-weight="bold" font-family="Arial">SLIDE MINH HỌA BÀI GIẢNG</text>
+  <text x="400" y="190" text-anchor="middle" fill="#475569" font-size="16" font-family="Arial">Khoa An ninh điều tra - Học phần Nghiệp vụ cơ bản</text>
+  <rect x="100" y="230" width="600" height="200" rx="12" fill="#F1F5F9" stroke="#E2E8F0"/>
+  <text x="400" y="310" text-anchor="middle" fill="#64748B" font-size="14" font-family="Arial">Nội dung bài giảng minh họa</text>
+  <text x="400" y="340" text-anchor="middle" fill="#64748B" font-size="14" font-family="Arial">Dành cho hệ thống quản lý học liệu nội bộ T04</text>
+  <text x="400" y="370" text-anchor="middle" fill="#A31A1A" font-size="14" font-weight="bold" font-family="Arial">LƯU HÀNH NỘI BỘ - MẬT</text>
+  <rect x="0" y="560" width="800" height="40" fill="#0B1E36"/>
+  <text x="400" y="585" text-anchor="middle" fill="#94A3B8" font-size="12" font-family="Arial">© Bộ Công an - Đại học An ninh Nhân dân</text>
+</svg>

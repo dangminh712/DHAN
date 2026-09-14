@@ -26,7 +26,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? category, [FromQuery] string? search)
+    public async Task<IActionResult> GetAll([FromQuery] string? category, [FromQuery] string? search, [FromQuery] int page = 1, [FromQuery] int pageSize = 50)
     {
         try
         {
@@ -59,7 +59,26 @@ public class MediaController : ControllerBase
                 query = query.Where(f => f.OriginalName.Contains(s));
             }
 
-            var list = await query.OrderByDescending(f => f.CreatedAt).ToListAsync();
+            var list = await query.AsNoTracking()
+                .Include(f => f.ClassificationLevel)
+                .Include(f => f.Uploader)
+                .OrderByDescending(f => f.CreatedAt).ThenByDescending(f => f.Id)
+                .Skip((Math.Clamp(page, 1, 100000) - 1) * Math.Clamp(pageSize, 1, 100)).Take(Math.Clamp(pageSize, 1, 100))
+                .Select(f => new {
+                    f.Id,
+                    f.OriginalName,
+                    f.StoredName,
+                    f.MimeType,
+                    f.FileSize,
+                    f.FileType,
+                    f.Extension,
+                    f.ChecksumSha256,
+                    f.CreatedAt,
+                    Classification = f.ClassificationLevel != null ? f.ClassificationLevel.Name : "Lưu hành nội bộ",
+                    ClassificationOrder = f.ClassificationLevel != null ? f.ClassificationLevel.LevelOrder : 2,
+                    ClassificationLevelId = f.ClassificationLevelId,
+                    UploaderName = f.Uploader != null ? f.Uploader.FullName : "Cán bộ quản trị T04"
+                }).ToListAsync();
 
             var mapped = list.Select(f => new MediaFile
             {
@@ -70,7 +89,11 @@ public class MediaController : ControllerBase
                 FileSize = (long)f.FileSize,
                 Category = MapToCategory(f.FileType, f.Extension),
                 Checksum = f.ChecksumSha256,
-                CreatedAt = f.CreatedAt
+                CreatedAt = f.CreatedAt,
+                Classification = f.Classification,
+                ClassificationOrder = f.ClassificationOrder,
+                ClassificationLevelId = f.ClassificationLevelId,
+                UploaderName = f.UploaderName
             }).ToList();
 
             return Ok(mapped);
@@ -78,14 +101,17 @@ public class MediaController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Lỗi khi lấy danh sách tập tin từ training_management.files");
-            return Ok(new List<MediaFile>());
+            throw;
         }
     }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var f = await _db.Files.FirstOrDefaultAsync(x => x.Id == (ulong)id && x.Status != "DELETED");
+        var f = await _db.Files
+            .Include(x => x.ClassificationLevel)
+            .Include(x => x.Uploader)
+            .FirstOrDefaultAsync(x => x.Id == (ulong)id && x.Status != "DELETED");
         if (f == null) return NotFound(new { message = "Không tìm thấy tập tin." });
 
         var mapped = new MediaFile
@@ -97,40 +123,47 @@ public class MediaController : ControllerBase
             FileSize = (long)f.FileSize,
             Category = MapToCategory(f.FileType, f.Extension),
             Checksum = f.ChecksumSha256,
-            CreatedAt = f.CreatedAt
+            CreatedAt = f.CreatedAt,
+            Classification = f.ClassificationLevel?.Name ?? "Lưu hành nội bộ",
+            ClassificationOrder = f.ClassificationLevel?.LevelOrder ?? 2,
+            ClassificationLevelId = f.ClassificationLevelId,
+            UploaderName = f.Uploader?.FullName ?? "Cán bộ quản trị T04"
         };
 
         return Ok(mapped);
     }
 
-    [HttpGet("stream/{id:int}")]
-    public async Task<IActionResult> Stream(int id)
+    [HttpGet("stream/{id}")]
+    public async Task<IActionResult> Stream(ulong id)
     {
-        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == (ulong)id);
-        if (file == null) return NotFound();
+        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id);
+        if (file == null) return NotFound(new { message = "Không tìm thấy tập tin trong hệ thống." });
 
         string physicalPath = _storage.GetPhysicalFullPath(file.StoragePath);
-        if (!System.IO.File.Exists(physicalPath))
+        if (string.IsNullOrWhiteSpace(physicalPath) || !System.IO.File.Exists(physicalPath))
         {
             return NotFound(new { message = "Tập tin vật lý không tồn tại trên ổ cứng." });
         }
 
-        return PhysicalFile(physicalPath, file.MimeType, enableRangeProcessing: true);
+        string mime = string.IsNullOrWhiteSpace(file.MimeType) ? "application/octet-stream" : file.MimeType;
+        return PhysicalFile(physicalPath, mime, enableRangeProcessing: true);
     }
 
-    [HttpGet("download/{id:int}")]
-    public async Task<IActionResult> Download(int id)
+    [HttpGet("download/{id}")]
+    public async Task<IActionResult> Download(ulong id)
     {
-        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == (ulong)id);
-        if (file == null) return NotFound();
+        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id);
+        if (file == null) return NotFound(new { message = "Không tìm thấy tập tin trong hệ thống." });
 
         string physicalPath = _storage.GetPhysicalFullPath(file.StoragePath);
-        if (!System.IO.File.Exists(physicalPath))
+        if (string.IsNullOrWhiteSpace(physicalPath) || !System.IO.File.Exists(physicalPath))
         {
             return NotFound(new { message = "Tập tin vật lý không tồn tại trên ổ cứng." });
         }
 
-        return PhysicalFile(physicalPath, file.MimeType, file.OriginalName, enableRangeProcessing: true);
+        string mime = string.IsNullOrWhiteSpace(file.MimeType) ? "application/octet-stream" : file.MimeType;
+        string downloadName = string.IsNullOrWhiteSpace(file.OriginalName) ? Path.GetFileName(physicalPath) : file.OriginalName;
+        return PhysicalFile(physicalPath, mime, downloadName, enableRangeProcessing: true);
     }
 
     [HttpPost("upload")]
@@ -213,7 +246,7 @@ public class MediaController : ControllerBase
         });
     }
 
-    private static string MapToCategory(string fileType, string extension)
+    private static string MapToCategory(string fileType, string? extension)
     {
         string t = fileType.ToUpperInvariant();
         if (t == "VIDEO") return "video";
@@ -221,7 +254,7 @@ public class MediaController : ControllerBase
         if (t == "IMAGE") return "image";
         if (t == "DOCUMENT") return "document";
 
-        string ext = extension.ToLowerInvariant();
+        string ext = extension?.ToLowerInvariant() ?? "";
         if (ext == ".pdf" || ext == ".doc" || ext == ".docx") return "document";
         if (ext == ".mp4" || ext == ".mkv") return "video";
         if (ext == ".png" || ext == ".jpg" || ext == ".svg") return "image";

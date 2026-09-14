@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   ArrowLeft,
   BookOpen,
@@ -14,6 +14,8 @@ import {
   ChevronRight,
   Shield,
   ShieldCheck,
+  ShieldAlert,
+  Lock,
   CheckCircle2,
   Clock,
   Save,
@@ -28,100 +30,181 @@ import {
   RefreshCw,
   Printer
 } from 'lucide-react';
-import { createMediaViewerUrl, createPdfNoteKey, normalizePdfPage } from './pdfViewer';
-import { INITIAL_LECTURES } from './lectureData';
+import { createMediaViewerUrl } from './pdfViewer';
+import { learningService } from './services/learningService';
+import { createQuizDraftKey } from './learningProgress';
+import PageNotes from './components/lecture/PageNotes';
+import { StudyPdf, ResumeVideo } from './components/lecture/StudyMedia';
+import { lectureService } from './services/lectureService';
 
-export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [] }) {
+export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [], currentUser }) {
   const [activePart, setActivePart] = useState(2); // Mặc định mở Phần 2 (Lý thuyết & Video)
   const [mediaTab, setMediaTab] = useState('video'); // 'video' | 'slide' | 'doc' | 'image' | 'quiz'
   const [pdfPage, setPdfPage] = useState(1);
-  const [noteContent, setNoteContent] = useState('');
-  const [copiedNote, setCopiedNote] = useState(false);
-  const [savedStatus, setSavedStatus] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [completedParts, setCompletedParts] = useState([1]);
+  const [completedParts, setCompletedParts] = useState([]);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [showQuizResults, setShowQuizResults] = useState(false);
+  const [quizResult, setQuizResult] = useState(null);
+  const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
+  const [backendLecture, setBackendLecture] = useState(null);
+  const [fetchLoading, setFetchLoading] = useState(false);
 
+  const [selectedDocId, setSelectedDocId] = useState(null);
+  const [learning, setLearning] = useState(null);
+  const [learningError, setLearningError] = useState('');
+  const submissionId = useRef(null);
   const containerRef = useRef(null);
 
-  // Tìm bài giảng theo ID từ INITIAL_LECTURES hoặc allFiles hoặc file prop
+  // Tìm bài giảng theo ID từ backend
   const effectiveId = lectureId || file?.id || 1;
-  const lectureObj = INITIAL_LECTURES.find(l => String(l.id) === String(effectiveId))
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadDetail = async () => {
+      try {
+        setFetchLoading(true);
+        const data = await lectureService.getLectureDetail(effectiveId, currentUser?.id);
+        if (isMounted && data) {
+          setBackendLecture(data);
+        }
+      } catch (err) {
+        setLearningError(err.response?.data?.message || 'Không tải được bài giảng.');
+      } finally {
+        if (isMounted) setFetchLoading(false);
+      }
+    };
+    if (effectiveId) {
+      loadDetail();
+    }
+    return () => { isMounted = false; };
+  }, [effectiveId, currentUser?.id]);
+
+  const draftKey = createQuizDraftKey(currentUser?.id, effectiveId);
+  useEffect(() => {
+    let active = true;
+    setLearning(null); setCompletedParts([]); setLearningError('');
+    setQuizResult(null); setShowQuizResults(false); setQuizAnswers({});
+    let draft;
+    try { draft = JSON.parse(localStorage.getItem(draftKey)); } catch { /* damaged local draft */ }
+    submissionId.current = draft?.submissionId || crypto.randomUUID();
+    if (draft?.answers) setQuizAnswers(draft.answers);
+    if (!currentUser?.id) return;
+    Promise.all([learningService.getProgress(effectiveId, currentUser.id), learningService.attempts(effectiveId, currentUser.id)]).then(([progress, attempts]) => {
+      if (!active) return;
+      setLearning(progress);
+      setCompletedParts(progress.parts.filter(p => p.completed).map(p => p.partId));
+      if (!draft && attempts.items && attempts.items[0]) {
+        setQuizAnswers(attempts.items[0].answers || {});
+        setQuizResult(attempts.items[0].result); setShowQuizResults(true);
+      }
+    }).catch(e => { if (active) setLearningError(e.response?.data?.message || 'Không tải được tiến độ học.'); });
+    return () => { active = false; };
+  }, [effectiveId, currentUser?.id]);
+
+  const lectureObj = backendLecture
     || allFiles.find(f => String(f.id) === String(effectiveId))
-    || file
-    || INITIAL_LECTURES[0];
+    || file;
 
   const fileId = lectureObj?.id || effectiveId;
   const fileName = lectureObj?.title || lectureObj?.originalFileName || 'Bài giảng Nghiệp vụ An ninh T04';
-  const category = lectureObj?.category || (lectureObj?.mediaItems?.some(m => m.type === 'video') ? 'video' : 'document');
-  const isLecture = Boolean(lectureObj?.mediaItems && lectureObj?.mediaItems.length > 0);
+  const category = lectureObj?.category || 'document';
+
+  const filesList = lectureObj?.files || [];
   const mediaItems = lectureObj?.mediaItems || [];
-  const lecturerName = lectureObj?.lecturer || 'TS. Nguyễn Văn An - Trưởng Khoa ANĐT';
-  const deptName = lectureObj?.departmentName || 'Trường Đại học An ninh nhân dân';
+  const isLecture = Boolean(filesList.length > 0 || mediaItems.length > 0);
 
-  // Định tuyến tài liệu thực tế cho từng phân hệ trong bài giảng
+  const lecturerName = lectureObj?.teacherName || lectureObj?.lecturer || 'Đại tá Trần Minh Quang (Trưởng Khoa ANDT)';
+  const deptName = lectureObj?.departmentName || lectureObj?.subject || 'Khoa An ninh điều tra';
+  const subjectCode = lectureObj?.subjectCode || lectureObj?.code || 'ANDT_301';
+
+  // Định tuyến tài liệu thực tế cho từng phân hệ từ CSDL MySQL
+  const videoFromFiles = filesList.find(f => {
+    const type = (f.fileType || '').toLowerCase();
+    const name = (f.originalName || '').toLowerCase();
+    return type === 'video' || type === 'mp4' || type === 'audio' || type.startsWith('video/') ||
+           name.endsWith('.mp4') || name.endsWith('.webm') || name.endsWith('.mov') || name.endsWith('.mkv') || name.endsWith('.mp3');
+  });
   const videoItem = mediaItems.find(m => m.role === 'video' || m.type === 'video');
-  const videoFileId = videoItem?.mediaFileId || (category === 'video' ? fileId : 7);
-  const videoLabel = videoItem?.label || fileName;
+  const videoFileId = videoFromFiles?.fileId || videoItem?.mediaFileId || null;
+  const videoLabel = videoFromFiles?.originalName || videoItem?.label || fileName;
 
+  const slideFromFiles = filesList.find(f => {
+    const type = (f.fileType || '').toLowerCase();
+    const name = (f.originalName || '').toLowerCase();
+    return type === 'pdf' || type === 'ppt' || type === 'pptx' || type === 'slide' ||
+           name.endsWith('.pdf') || name.endsWith('.ppt') || name.endsWith('.pptx');
+  }) || filesList.find(f => f.fileId !== videoFromFiles?.fileId) || filesList[0];
   const slideItem = mediaItems.find(m => m.role === 'slide');
-  const slideFileId = slideItem?.mediaFileId || (category === 'document' ? fileId : 1);
-  const slideLabel = slideItem?.label || 'Slide trình chiếu bài giảng điện tử';
+  const slideFileId = slideFromFiles?.fileId || slideItem?.mediaFileId || null;
+  const slideLabel = slideFromFiles?.originalName || slideItem?.label || 'Slide trình chiếu bài giảng điện tử';
 
-  const docItem = mediaItems.find(m => (activePart === 4 ? m.role === 'reference_law' : m.role === 'syllabus') || m.type === 'document');
-  const docFileId = docItem?.mediaFileId || (activePart === 4 ? 10 : (category === 'document' ? fileId : 4));
-  const docLabel = docItem?.label || (activePart === 4 ? 'Văn bản quy phạm pháp luật ngành' : 'Đề cương chi tiết học phần');
+  const docFilesList = useMemo(() => {
+    return filesList.filter(f => {
+      const type = (f.fileType || '').toLowerCase();
+      const name = (f.originalName || '').toLowerCase();
+      return type === 'pdf' || type === 'document' || type === 'slide' ||
+             name.endsWith('.pdf') || name.endsWith('.doc') || name.endsWith('.docx') || name.endsWith('.txt');
+    });
+  }, [filesList]);
 
+  const currentDocFile = useMemo(() => {
+    if (selectedDocId) {
+      const found = docFilesList.find(f => String(f.fileId) === String(selectedDocId));
+      if (found) return found;
+    }
+    return docFilesList[0] || slideFromFiles;
+  }, [selectedDocId, docFilesList, slideFromFiles]);
+
+  const isCurrentDocPdf = useMemo(() => {
+    const name = (currentDocFile?.originalName || '').toLowerCase();
+    const type = (currentDocFile?.fileType || '').toLowerCase();
+    return type === 'pdf' || name.endsWith('.pdf');
+  }, [currentDocFile]);
+
+  const docFileId = currentDocFile?.fileId || null;
+  const docLabel = currentDocFile?.originalName || (activePart === 4 ? 'Văn bản quy phạm pháp luật ngành' : 'Đề cương chi tiết học phần');
+
+  const imageFromFiles = filesList.find(f => ['image', 'png', 'jpg'].includes(f.fileType?.toLowerCase()));
   const imageItem = mediaItems.find(m => m.role === 'situation_diagram' || m.type === 'image');
-  const imageFileId = imageItem?.mediaFileId || (category === 'image' ? fileId : 6);
-  const imageLabel = imageItem?.label || 'Sơ đồ hiện trường & Bản đồ tác chiến';
+  const imageFileId = imageFromFiles?.fileId || imageItem?.mediaFileId || null;
+  const imageLabel = imageFromFiles?.originalName || imageItem?.label || 'Sơ đồ hiện trường & Bản đồ tác chiến';
 
-  // Đồng bộ định dạng hiển thị phù hợp với loại file gốc
+  // Đồng bộ định dạng hiển thị phù hợp: nếu bài giảng có video thì luôn ưu tiên giữ tab video ở Phần 2
   useEffect(() => {
-    if (category === 'video' || category === 'audio') {
-      setMediaTab('video');
-      setActivePart(2);
-    } else if (category === 'document') {
-      setMediaTab('slide');
-      setActivePart(2);
-    } else if (category === 'image') {
-      setMediaTab('image');
-      setActivePart(3);
+    if (backendLecture) {
+      const hasVideo = Boolean(videoFileId || videoFromFiles);
+      if (hasVideo) {
+        setMediaTab('video');
+        setActivePart(2);
+      } else if (slideFileId) {
+        setMediaTab('slide');
+        setActivePart(2);
+      }
+    } else if (file) {
+      if (category === 'video' || category === 'audio') {
+        setMediaTab('video');
+        setActivePart(2);
+      } else if (category === 'document') {
+        setMediaTab('slide');
+        setActivePart(2);
+      } else if (category === 'image') {
+        setMediaTab('image');
+        setActivePart(3);
+      }
     }
-  }, [file]);
+  }, [backendLecture, file]);
 
-  // Nạp ghi chú của học viên từ localStorage
-  useEffect(() => {
-    const key = `dhan:lecture-note:${fileId}:part-${activePart}`;
-    const saved = localStorage.getItem(key) || '';
-    setNoteContent(saved);
-  }, [fileId, activePart]);
-
-  // Lưu ghi chú
-  const handleSaveNote = (text) => {
-    setNoteContent(text);
-    const key = `dhan:lecture-note:${fileId}:part-${activePart}`;
-    if (text.trim()) {
-      localStorage.setItem(key, text);
-    } else {
-      localStorage.removeItem(key);
-    }
-    setSavedStatus(true);
-    setTimeout(() => setSavedStatus(false), 2000);
-  };
-
-  const handleCopyNote = () => {
-    if (!noteContent) return;
-    navigator.clipboard.writeText(noteContent);
-    setCopiedNote(true);
-    setTimeout(() => setCopiedNote(false), 2000);
-  };
-
-  const togglePartCompletion = (partId) => {
-    setCompletedParts(prev =>
-      prev.includes(partId) ? prev.filter(p => p !== partId) : [...prev, partId]
-    );
+  const activePdfFile = mediaTab === 'slide' ? slideFromFiles : currentDocFile;
+  const activePdfId = ['slide', 'doc'].includes(mediaTab) && activePdfFile?.originalName?.toLowerCase().endsWith('.pdf') ? activePdfFile.fileId : null;
+  const mediaProgress = id => learning?.files.find(p => String(p.fileId) === String(id));
+  const togglePartCompletion = async partId => {
+    if (!learning || partId === 5 || (partId === 2 && videoFileId)) return;
+    const completed = !completedParts.includes(partId);
+    try {
+      await learningService.patchProgress(effectiveId, { partId, completed });
+      setCompletedParts(previous => completed ? [...new Set([...previous, partId])] : previous.filter(p => p !== partId));
+    } catch (e) { setLearningError(e.response?.data?.message || 'Không lưu được tiến độ.'); }
   };
 
   // 5 Phần chuẩn cấu trúc bài giảng đào tạo Sĩ quan CAND
@@ -139,7 +222,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
       title: 'Phần 2: Lý thuyết Chuyên đề & Trình chiếu',
       subtitle: 'Slide bài giảng PPT/PDF & Video ghi hình giảng viên',
       icon: Video,
-      defaultTab: category === 'video' ? 'video' : 'slide',
+      defaultTab: (videoFileId || videoFromFiles) ? 'video' : 'slide',
       duration: '45 phút'
     },
     {
@@ -168,62 +251,152 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
     }
   ];
 
-  // Câu hỏi ôn tập mẫu nghiệp vụ
-  const sampleQuiz = [
-    {
-      id: 'q1',
-      question: 'Khi tiếp cận hiện trường vụ án an ninh trật tự, nguyên tắc bảo vệ hiện trường quan trọng nhất là gì?',
-      options: [
-        'A. Thu gom toàn bộ vật chứng vào túi ni lông ngay lập tức',
-        'B. Giữ nguyên trạng thái hiện trường, căng dây phong tỏa và ghi nhận dấu vết ban đầu',
-        'C. Cho phép người dân vào hỗ trợ tìm kiếm chứng cứ',
-        'D. Chụp ảnh lưu niệm rồi dọn dẹp hiện trường sạch sẽ'
-      ],
-      correct: 1,
-      explanation: 'Theo quy định tố tụng hình sự và nghiệp vụ trinh sát CAND, bảo vệ nguyên trạng hiện trường là điều kiện tiên quyết để khám nghiệm chính xác.'
-    },
-    {
-      id: 'q2',
-      question: 'Quy trình thu thập chứng cứ điện tử trong điều tra tội phạm công nghệ cao đòi hỏi yêu cầu bắt buộc nào?',
-      options: [
-        'A. Tạo bản sao bảo toàn (Forensic Image) và tính toán mã băm SHA-256 / MD5 xác thực',
-        'B. Bật thiết bị lên và duyệt qua các tập tin trực tiếp',
-        'C. Format ổ cứng trước khi sao lưu',
-        'D. Gửi email tập tin chứng cứ cho người thân'
-      ],
-      correct: 0,
-      explanation: 'Chứng cứ số phải đảm bảo tính nguyên vẹn tuyệt đối qua mã băm cryptographic (SHA-256) được hội đồng điều tra niêm phong.'
-    },
-    {
-      id: 'q3',
-      question: 'Thẩm quyền phê chuẩn lệnh bắt người trong trường hợp khẩn cấp thuộc về cơ quan nào?',
-      options: [
-        'A. Cơ quan Cảnh sát điều tra / An ninh điều tra cùng cấp',
-        'B. Viện Kiểm sát nhân dân có thẩm quyền',
-        'C. Ủy ban nhân dân cấp xã',
-        'D. Đơn vị dân quân tự vệ'
-      ],
-      correct: 1,
-      explanation: 'Viện Kiểm sát nhân dân thực hành quyền công tố và kiểm sát điều tra có thẩm quyền phê chuẩn theo Bộ luật Tố tụng hình sự.'
-    }
-  ];
+  // Câu hỏi trắc nghiệm lấy trực tiếp từ MySQL CSDL
+  const quizQuestions = (backendLecture?.quizQuestions && backendLecture.quizQuestions.length > 0)
+    ? backendLecture.quizQuestions
+    : [];
 
   const handleSelectAnswer = (qId, optionIdx) => {
-    setQuizAnswers(prev => ({ ...prev, [qId]: optionIdx }));
+    if (showQuizResults || isSubmittingQuiz) return;
+    const answers = { ...quizAnswers, [qId]: optionIdx };
+    setQuizAnswers(answers);
+    try { localStorage.setItem(draftKey, JSON.stringify({ answers, submissionId: submissionId.current })); }
+    catch { setLearningError('Không lưu được bản nháp trên trình duyệt.'); }
   };
 
-  const calculateQuizScore = () => {
-    let correctCount = 0;
-    sampleQuiz.forEach((q) => {
-      if (quizAnswers[q.id] === q.correct) correctCount++;
-    });
-    return correctCount;
+  const handleSubmitQuiz = async () => {
+    if (quizQuestions.length === 0) return;
+    setIsSubmittingQuiz(true);
+    try {
+      if (currentUser?.id) {
+        const result = await lectureService.submitQuiz(effectiveId, {
+          userId: currentUser.id,
+          answers: quizAnswers,
+          submissionId: submissionId.current
+        });
+        setQuizResult(result);
+        localStorage.removeItem(draftKey);
+        setCompletedParts(previous => [...new Set([...previous, 5])]);
+      }
+      setShowQuizResults(true);
+    } catch (err) {
+      setLearningError(err.response?.data?.message || 'Không nộp được bài. Bản nháp vẫn được giữ.');
+    } finally {
+      setIsSubmittingQuiz(false);
+    }
+  };
+
+  const getQuizScoreStats = () => {
+    if (quizResult) {
+      return {
+        correct: quizResult.correctAnswers,
+        total: quizResult.totalQuestions,
+        score: quizResult.score,
+        passed: quizResult.passed
+      };
+    }
+    return { correct: 0, total: quizQuestions.length, score: 0, passed: false };
   };
 
   const progressPercent = Math.round((completedParts.length / 5) * 100);
 
+  // Quyền truy cập và Khóa bài giảng
+  const roleCode = (typeof currentUser?.role === 'string' ? currentUser.role : currentUser?.role?.code) || '';
+  const isOfficerOrAdmin = ['SUPER_ADMIN', 'ADMIN', 'TEACHER'].includes(roleCode.toUpperCase());
+  const currentStatus = backendLecture?.status || lectureObj?.status || 'PUBLISHED';
+  const isLocked = (currentStatus === 'LOCKED' || currentStatus === 'CLOSED') && !isOfficerOrAdmin;
+
+  const isPublicAll = backendLecture ? backendLecture.isPublicAll : (lectureObj?.isPublicAll !== false);
+  const assignedClassIds = backendLecture?.assignedClassIds || lectureObj?.assignedClassIds || [];
+  const assignedClasses = backendLecture?.assignedClasses || lectureObj?.assignedClasses || [];
+
+  const userClassId = currentUser?.studentClasses?.[0]?.classId || currentUser?.classId;
+  const hasClassAccess = isOfficerOrAdmin || isPublicAll || (assignedClassIds.length === 0) || (userClassId && assignedClassIds.some(id => String(id) === String(userClassId)));
+
+  // Quyền tải file
+  const activeBackendFile = backendLecture?.files?.find(f => String(f.fileId) === String(fileId) || String(f.fileId) === String(slideFileId) || String(f.fileId) === String(videoFileId)) || backendLecture?.files?.[0];
+  const isDownloadAllowed = activeBackendFile ? activeBackendFile.isDownloadable : (lectureObj?.isDownloadable !== false);
+
   // Link mở tab mới chuẩn xác theo URL định tuyến #/study/:id
   const newTabUrl = `/#/study/${fileId}`;
+
+  // 1. Màn hình chặn nếu Bài giảng bị Giảng viên Khóa / Đóng
+  if (isLocked) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#0B1E36', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', color: '#fff' }}>
+        <div style={{ maxWidth: '580px', width: '100%', background: 'rgba(15, 23, 42, 0.96)', border: '2px solid #A31A1A', borderRadius: '16px', padding: '40px 32px', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.7)' }}>
+          <div style={{ width: '72px', height: '72px', background: 'rgba(163, 26, 26, 0.2)', border: '2px solid #A31A1A', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#EF4444' }}>
+            <Lock size={36} />
+          </div>
+          <span style={{ display: 'inline-block', padding: '4px 14px', background: '#A31A1A', color: '#fff', fontSize: '11.5px', fontWeight: 800, borderRadius: '20px', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '14px' }}>
+            {currentStatus === 'LOCKED' ? 'HỌC PHẦN ĐANG TẠM KHÓA' : 'HỌC PHẦN ĐÃ KẾT THÚC / ĐÓNG'}
+          </span>
+          <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '14px', color: '#F8FAFC' }}>
+            {fileName}
+          </h2>
+          <p style={{ fontSize: '14.5px', color: '#94A3B8', lineHeight: 1.6, marginBottom: '24px' }}>
+            Giảng viên bộ môn đã <strong>khóa truy cập</strong> bài giảng này đối với học viên. Bạn không thể xem tài liệu hoặc bài tập vào thời điểm này.
+          </p>
+          <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '12px 16px', marginBottom: '28px', fontSize: '13px', color: '#CBD5E1', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <Shield size={16} color="#D4A843" />
+            <span>Mã kiểm soát: SEC-LOCKED-{fileId} • ĐẠI HỌC AN NINH NHÂN DÂN</span>
+          </div>
+          <button
+            onClick={() => { if (onBack) onBack(); else window.location.hash = '#/'; }}
+            style={{ padding: '12px 28px', background: '#D4A843', color: '#0B1E36', fontWeight: 800, borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}
+          >
+            <ArrowLeft size={16} />
+            <span>Quay lại Cổng học phần</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 2. Màn hình chặn nếu Giới hạn lớp học vụ mà học viên không thuộc lớp đó
+  if (!hasClassAccess) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#0B1E36', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', color: '#fff' }}>
+        <div style={{ maxWidth: '580px', width: '100%', background: 'rgba(15, 23, 42, 0.96)', border: '2px solid #D4A843', borderRadius: '16px', padding: '40px 32px', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.7)' }}>
+          <div style={{ width: '72px', height: '72px', background: 'rgba(212, 168, 67, 0.2)', border: '2px solid #D4A843', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#D4A843' }}>
+            <ShieldAlert size={36} />
+          </div>
+          <span style={{ display: 'inline-block', padding: '4px 14px', background: '#D4A843', color: '#0B1E36', fontSize: '11.5px', fontWeight: 800, borderRadius: '20px', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '14px' }}>
+            GIỚI HẠN LỚP HỌC VỤ
+          </span>
+          <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '14px', color: '#F8FAFC' }}>
+            {fileName}
+          </h2>
+          <p style={{ fontSize: '14.5px', color: '#94A3B8', lineHeight: 1.6, marginBottom: '16px' }}>
+            Bài giảng này được cấu hình giới hạn chỉ dành riêng cho các lớp học vụ:
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '20px' }}>
+            {assignedClasses.length > 0 ? (
+              assignedClasses.map((cls, idx) => (
+                <span key={idx} style={{ padding: '6px 12px', background: 'rgba(212, 168, 67, 0.15)', border: '1px solid #D4A843', color: '#D4A843', borderRadius: '6px', fontSize: '13px', fontWeight: 700 }}>
+                  {cls}
+                </span>
+              ))
+            ) : (
+              <span style={{ color: '#94A3B8', fontSize: '13px' }}>Chỉ định lớp học chuyên trách</span>
+            )}
+          </div>
+          <p style={{ fontSize: '13px', color: '#64748B', marginBottom: '28px' }}>
+            Tài khoản của đồng chí không thuộc danh sách lớp được cấp quyền. Vui lòng liên hệ Giảng viên để được phê duyệt bổ sung vào lớp.
+          </p>
+          <button
+            onClick={() => { if (onBack) onBack(); else window.location.hash = '#/'; }}
+            style={{ padding: '12px 28px', background: '#D4A843', color: '#0B1E36', fontWeight: 800, borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}
+          >
+            <ArrowLeft size={16} />
+            <span>Quay lại Danh sách bài giảng</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (fetchLoading || !backendLecture) return <div role="status">{learningError || 'Đang tải bài giảng…'}<button onClick={onBack}>Quay lại</button></div>;
 
   return (
     <div className="lecture-study-wrapper" ref={containerRef}>
@@ -253,7 +426,18 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
             </button>
             <div className="study-divider-v"></div>
             <div className="study-title-block">
-              <span className="study-agency-tag">TRƯỜNG ĐẠI HỌC AN NINH NHÂN DÂN • T04</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                <span className="study-agency-tag">TRƯỜNG ĐẠI HỌC AN NINH NHÂN DÂN • T04</span>
+                <span style={{ fontSize: '11px', fontWeight: 800, background: '#D4A843', color: '#0B1E36', padding: '2px 8px', borderRadius: '4px', letterSpacing: '0.5px' }}>
+                  {subjectCode}
+                </span>
+                <span style={{ fontSize: '12px', color: '#E2E8F0', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  👨‍🏫 Giảng viên: <strong style={{ color: '#FEF08A' }}>{lecturerName}</strong>
+                </span>
+                <span style={{ fontSize: '12px', color: '#CBD5E1', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  🏛️ Khoa: <strong style={{ color: '#93C5FD' }}>{deptName}</strong>
+                </span>
+              </div>
               <h1 className="study-lecture-name" title={fileName}>
                 {fileName}
               </h1>
@@ -278,15 +462,37 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
               <span>Mở tab mới</span>
             </a>
 
-            <a
-              href={`/api/media/download/${fileId}`}
-              download={fileName}
-              className="btn-study-action"
-              title="Tải toàn bộ học liệu về máy tính"
-            >
-              <Download size={15} />
-              <span>Tải học liệu</span>
-            </a>
+            {/* Quyền tải học liệu do giảng viên thiết lập */}
+            {isDownloadAllowed ? (
+              <a
+                href={`/api/media/download/${fileId}`}
+                download={fileName}
+                className="btn-study-action"
+                title="Tải toàn bộ học liệu về máy tính"
+              >
+                <Download size={15} />
+                <span>Tải học liệu</span>
+              </a>
+            ) : (
+              <button
+                disabled
+                className="btn-study-action disabled"
+                style={{
+                  opacity: 0.7,
+                  cursor: 'not-allowed',
+                  background: '#334155',
+                  border: '1px solid #475569',
+                  color: '#CBD5E1',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+                title="Giảng viên đã khóa tính năng tải học liệu này về máy (Chỉ cho phép đọc trực tuyến)"
+              >
+                <Lock size={14} color="#F59E0B" />
+                <span>Khóa tải về (Chỉ xem)</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -411,7 +617,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                 onClick={() => setMediaTab('quiz')}
               >
                 <HelpCircle size={15} />
-                Câu hỏi ôn tập ({sampleQuiz.length} câu)
+                Câu hỏi ôn tập ({quizQuestions.length} câu)
               </button>
             </div>
 
@@ -424,83 +630,181 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
 
           {/* VÙNG NỘI DUNG HIỂN THỊ CHÍNH */}
           <div className="study-viewport">
+            {learningError && <p role="alert">{learningError}</p>}
             {/* 1. TAB VIDEO */}
             {mediaTab === 'video' && (
               <div className="study-video-container">
-                <video
-                  controls
-                  autoPlay={false}
-                  preload="metadata"
-                  className="study-video-player"
-                  src={`/api/media/stream/${videoFileId}`}
-                >
-                  Trình duyệt của bạn không hỗ trợ phát Video HTML5.
-                </video>
-                <div className="video-info-strip">
-                  <div className="video-title">
-                    <h4>🎥 Video bài giảng: {videoLabel}</h4>
-                    <p>Chuẩn truyền phát HTTP 206 Partial Content mượt mà, hỗ trợ tua thời gian tức thì.</p>
+                {videoFileId ? (
+                  <ResumeVideo
+                    key={`${currentUser?.id}:${videoFileId}`}
+                    lectureId={effectiveId}
+                    fileId={videoFileId}
+                    initialSecond={Number(mediaProgress(videoFileId)?.lastVideoSecond || 0)}
+                    url={`/api/media/stream/${videoFileId}`}
+                    onComplete={() => setCompletedParts(previous => [...new Set([...previous, 2])])}
+                    onError={setLearningError}
+                  />
+                ) : (
+                  <div className="document-empty-card" style={{ padding: '48px 24px', textAlign: 'center' }}>
+                    <Video size={48} color="#94A3B8" style={{ margin: '0 auto 12px' }} />
+                    <h4 style={{ color: '#0B1E36', fontWeight: 800 }}>Chưa có Video bài giảng dạng MP4</h4>
+                    <p style={{ fontSize: '13px', color: '#64748B', margin: '4px auto 16px', maxWidth: '420px' }}>
+                      Bài giảng này chưa được đính kèm tệp video. Đồng chí có thể chuyển sang tab <strong>Slide trình chiếu</strong> hoặc <strong>Văn bản quy phạm</strong> để học tập.
+                    </p>
+                    {slideFileId && (
+                      <button
+                        type="button"
+                        onClick={() => setMediaTab('slide')}
+                        className="btn-upload-primary"
+                        style={{ margin: '0 auto', fontSize: '12.5px', padding: '6px 14px' }}
+                      >
+                        Chuyển sang xem Slide trình chiếu →
+                      </button>
+                    )}
                   </div>
-                  <div className="video-actions">
-                    <a
-                      href={`/api/media/stream/${videoFileId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-sub-action"
-                    >
-                      <ExternalLink size={13} />
-                      Mở luồng video gốc
-                    </a>
+                )}
+                {videoFileId && (
+                  <div className="video-info-strip">
+                    <div className="video-title">
+                      <h4>🎥 Video bài giảng: {videoLabel}</h4>
+                      <p>Chuẩn truyền phát HTTP 206 Partial Content mượt mà, hỗ trợ tua thời gian tức thì.</p>
+                    </div>
+                    <div className="video-actions">
+                      <a
+                        href={`/api/media/stream/${videoFileId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-sub-action"
+                      >
+                        <ExternalLink size={13} />
+                        Mở luồng video gốc
+                      </a>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
 
-            {/* 2. TAB SLIDE TRÌNH CHIẾU & TÀI LIỆU PDF */}
-            {(mediaTab === 'slide' || mediaTab === 'doc') && (
+            {/* 2. TAB SLIDE TRÌNH CHIẾU */}
+            {mediaTab === 'slide' && (
               <div className="study-doc-container">
-                <div className="doc-page-toolbar">
-                  <div className="page-nav-group">
-                    <button
-                      className="btn-doc-nav"
-                      onClick={() => setPdfPage(p => Math.max(1, p - 1))}
-                      disabled={pdfPage <= 1}
-                      title="Trang trước"
-                    >
-                      <ChevronLeft size={16} />
-                    </button>
-                    <span className="page-indicator">Trang <strong>{pdfPage}</strong></span>
-                    <button
-                      className="btn-doc-nav"
-                      onClick={() => setPdfPage(p => p + 1)}
-                      title="Trang sau"
-                    >
-                      <ChevronRight size={16} />
-                    </button>
+                {slideFileId && learning ? (
+                  <StudyPdf
+                    key={`${currentUser?.id}:${effectiveId}:${slideFileId}:slide`}
+                    lectureId={effectiveId}
+                    fileId={slideFileId}
+                    partId={2}
+                    initialPage={mediaProgress(slideFileId)?.lastPdfPage || 1}
+                    url={`/api/media/stream/${slideFileId}`}
+                    fileName={slideFromFiles?.originalName || 'Slide bài giảng điện tử'}
+                    downloadUrl={`/api/media/download/${slideFileId}`}
+                    canDownload={slideFromFiles?.isDownloadable ?? isDownloadAllowed}
+                    onPage={setPdfPage}
+                    onError={setLearningError}
+                  />
+                ) : (
+                  <div className="document-empty-card">
+                    <FileText size={48} color="#94A3B8" />
+                    <h4>Chưa có Slide trình chiếu dạng PDF cho bài giảng này</h4>
+                    <p>Giảng viên có thể tải lên slide bài giảng tại mục Quản lý học liệu để học viên theo dõi.</p>
                   </div>
+                )}
+              </div>
+            )}
 
-                  <div className="doc-type-badge">
-                    {mediaTab === 'slide' ? slideLabel : docLabel}
+            {/* 2B. TAB VĂN BẢN QUY PHẠM & ĐỀ CƯƠNG TÀI LIỆU */}
+            {mediaTab === 'doc' && (
+              <div className="study-doc-container">
+                {docFilesList.length > 1 && (
+                  <div className="attached-docs-bar">
+                    <span style={{ fontSize: '12.5px', fontWeight: 700, color: '#334155' }}>
+                      📚 Danh mục văn bản & tài liệu đính kèm ({docFilesList.length}):
+                    </span>
+                    <div className="attached-docs-pills">
+                      {docFilesList.map(doc => {
+                        const isChosen = String(doc.fileId) === String(currentDocFile?.fileId);
+                        const isPdf = (doc.originalName || '').toLowerCase().endsWith('.pdf') || doc.fileType === 'PDF';
+                        return (
+                          <button
+                            key={doc.fileId}
+                            type="button"
+                            className={`attached-doc-pill ${isChosen ? 'active' : ''}`}
+                            onClick={() => setSelectedDocId(doc.fileId)}
+                            title={doc.originalName}
+                          >
+                            <FileText size={14} />
+                            <span style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {doc.originalName}
+                            </span>
+                            <span className="doc-pill-badge">{isPdf ? 'PDF' : (doc.fileType || 'VĂN BẢN')}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
+                )}
 
-                  <div className="doc-tools-right">
-                    <a
-                      href={createMediaViewerUrl(mediaTab === 'slide' ? slideFileId : docFileId, 'document', pdfPage)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-sub-action"
-                    >
-                      <ExternalLink size={13} />
-                      Mở PDF toàn trang
-                    </a>
+                {currentDocFile ? (
+                  isCurrentDocPdf ? (
+                    <StudyPdf
+                      key={`${currentUser?.id}:${effectiveId}:${currentDocFile.fileId}:doc`}
+                      lectureId={effectiveId}
+                      fileId={currentDocFile.fileId}
+                      partId={4}
+                      initialPage={mediaProgress(currentDocFile.fileId)?.lastPdfPage || 1}
+                      url={`/api/media/stream/${currentDocFile.fileId}`}
+                      fileName={currentDocFile.originalName}
+                      downloadUrl={`/api/media/download/${currentDocFile.fileId}`}
+                      canDownload={currentDocFile.isDownloadable ?? isDownloadAllowed}
+                      onPage={setPdfPage}
+                      onError={setLearningError}
+                    />
+                  ) : (
+                    <div className="doc-office-card">
+                      <div className="doc-office-icon">
+                        <FileText size={36} />
+                      </div>
+                      <h4 className="doc-office-title">{currentDocFile.originalName}</h4>
+                      <div className="doc-office-meta">
+                        <span>Định dạng: <strong>{currentDocFile.fileType || 'Tài liệu Office'}</strong></span>
+                        <span>•</span>
+                        <span>Dung lượng: <strong>{currentDocFile.fileSize ? `${Math.round(currentDocFile.fileSize / 1024)} KB` : 'N/A'}</strong></span>
+                        <span>•</span>
+                        <span>Bảo mật: <strong>{currentDocFile.classification || 'Lưu hành nội bộ'}</strong></span>
+                      </div>
+                      <p style={{ fontSize: '13px', color: '#64748B', maxWidth: '500px' }}>
+                        Tài liệu văn bản nghiệp vụ phục vụ nghiên cứu và đối chiếu thực hành. Học viên có thể tải tập tin về máy để tra cứu nội dung chi tiết.
+                      </p>
+                      <div className="doc-office-actions">
+                        <a
+                          href={`/api/media/download/${currentDocFile.fileId}`}
+                          download={currentDocFile.originalName}
+                          className="btn-study-action"
+                          style={{ background: '#991B1B', color: '#fff', border: 'none' }}
+                        >
+                          <Download size={15} />
+                          <span>Tải tài liệu về máy tính</span>
+                        </a>
+                        <a
+                          href={`/api/media/stream/${currentDocFile.fileId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-study-action"
+                          style={{ background: '#F1F5F9', color: '#0F172A', border: '1px solid #CBD5E1' }}
+                        >
+                          <ExternalLink size={15} />
+                          <span>Mở luồng tệp tin gốc</span>
+                        </a>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <div className="document-empty-card">
+                    <FileText size={48} color="#94A3B8" />
+                    <h4>Chưa có tài liệu tham khảo cho học phần này</h4>
+                    <p>Giảng viên phụ trách chuyên đề chưa bổ sung văn bản quy phạm pháp luật hoặc tài liệu đọc thêm vào bài giảng.</p>
                   </div>
-                </div>
-
-                <iframe
-                  title="Trình đọc bài giảng PDF"
-                  className="study-pdf-frame"
-                  src={createMediaViewerUrl(mediaTab === 'slide' ? slideFileId : docFileId, 'document', pdfPage)}
-                />
+                )}
               </div>
             )}
 
@@ -538,136 +842,123 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                 <div className="quiz-header-banner">
                   <div>
                     <h3>📝 Phiếu câu hỏi ôn tập & Củng cố nhận thức Sĩ quan</h3>
-                    <p>Học viên chọn đáp án đúng nhất để kiểm tra mức độ nắm vững bài giảng.</p>
+                    <p>Học viên chọn đáp án đúng nhất để kiểm tra mức độ nắm vững bài giảng (đồng bộ CSDL MySQL).</p>
                   </div>
                   {showQuizResults && (
-                    <div className="quiz-score-badge">
-                      Kết quả: <strong>{calculateQuizScore()} / {sampleQuiz.length}</strong> câu đúng
+                    <div className="quiz-score-badge" style={{
+                      background: getQuizScoreStats().passed ? '#DCFCE7' : '#FEE2E2',
+                      color: getQuizScoreStats().passed ? '#166534' : '#991B1B',
+                      border: `1px solid ${getQuizScoreStats().passed ? '#86EFAC' : '#FCA5A5'}`
+                    }}>
+                      Kết quả: <strong>{getQuizScoreStats().correct} / {getQuizScoreStats().total}</strong> câu đúng ({getQuizScoreStats().score}%) - <strong>{getQuizScoreStats().passed ? 'ĐẠT YÊU CẦU' : 'CHƯA ĐẠT'}</strong>
                     </div>
                   )}
                 </div>
 
-                <div className="quiz-questions-list">
-                  {sampleQuiz.map((q, qIndex) => {
-                    const selected = quizAnswers[q.id];
-                    return (
-                      <div key={q.id} className="quiz-card">
-                        <div className="quiz-question-title">
-                          <span className="q-number">Câu {qIndex + 1}:</span>
-                          <span>{q.question}</span>
-                        </div>
+                {quizQuestions.length === 0 ? (
+                  <div style={{ padding: '40px 20px', textAlign: 'center', background: '#fff', borderRadius: '10px', border: '1px solid #E2E8F0', marginTop: '16px' }}>
+                    <FileQuestion size={48} style={{ margin: '0 auto 16px', color: '#94A3B8' }} />
+                    <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#0B1E36', marginBottom: '8px' }}>Chưa có câu hỏi trắc nghiệm cho bài giảng này</h4>
+                    <p style={{ fontSize: '13px', color: '#64748B', maxWidth: '480px', margin: '0 auto' }}>
+                      Giảng viên phụ trách chuyên đề chưa thiết lập ngân hàng câu hỏi ôn tập trên CSDL hệ thống.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="quiz-questions-list">
+                      {quizQuestions.map((q, qIndex) => {
+                        const selected = quizAnswers[q.id];
+                        return (
+                          <div key={q.id} className="quiz-card">
+                            <div className="quiz-question-title">
+                              <span className="q-number">Câu {qIndex + 1}:</span>
+                              <span>{q.question}</span>
+                            </div>
 
-                        <div className="quiz-options-list">
-                          {q.options.map((opt, optIndex) => {
-                            const isChosen = selected === optIndex;
-                            let optionClass = 'quiz-option';
-                            if (isChosen) optionClass += ' chosen';
-                            if (showQuizResults) {
-                              if (optIndex === q.correct) optionClass += ' correct';
-                              else if (isChosen && optIndex !== q.correct) optionClass += ' wrong';
-                            }
+                            <div className="quiz-options-list">
+                              {q.options.map((opt, optIndex) => {
+                                const isChosen = selected === optIndex;
+                                let optionClass = 'quiz-option';
+                                if (isChosen) optionClass += ' chosen';
+                                if (showQuizResults) {
+                                  if (optIndex === q.correctIndex) optionClass += ' correct';
+                                  else if (isChosen && optIndex !== q.correctIndex) optionClass += ' wrong';
+                                }
 
-                            return (
-                              <button
-                                key={optIndex}
-                                className={optionClass}
-                                onClick={() => handleSelectAnswer(q.id, optIndex)}
-                              >
-                                <span className="option-radio">
-                                  {isChosen && <span className="radio-dot"></span>}
-                                </span>
-                                <span>{opt}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
+                                return (
+                                  <button
+                                    key={optIndex}
+                                    className={optionClass}
+                                    onClick={() => handleSelectAnswer(q.id, optIndex)}
+                                  >
+                                    <span className="option-radio">
+                                      {isChosen && <span className="radio-dot"></span>}
+                                    </span>
+                                    <span>{opt}</span>
+                                  </button>
+                                );
+                              })}
+                            </div>
 
-                        {showQuizResults && (
-                          <div className="quiz-explanation">
-                            <strong>💡 Giải thích nghiệp vụ:</strong> {q.explanation}
+                            {showQuizResults && q.explanation && (
+                              <div className="quiz-explanation">
+                                <strong>💡 Giải thích nghiệp vụ:</strong> {q.explanation}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                        );
+                      })}
+                    </div>
 
-                <div className="quiz-action-bar">
-                  <button
-                    className="btn-submit-quiz"
-                    onClick={() => setShowQuizResults(true)}
-                  >
-                    <CheckCircle2 size={16} />
-                    Chấm điểm & Xem đáp án chi tiết
-                  </button>
-                  {showQuizResults && (
-                    <button
-                      className="btn-reset-quiz"
-                      onClick={() => {
-                        setShowQuizResults(false);
-                        setQuizAnswers({});
-                      }}
-                    >
-                      <RefreshCw size={15} />
-                      Làm lại bài kiểm tra
-                    </button>
-                  )}
-                </div>
+                    <div className="quiz-action-bar">
+                      <button
+                        className="btn-submit-quiz"
+                        onClick={handleSubmitQuiz}
+                        disabled={isSubmittingQuiz || showQuizResults || !currentUser?.id || quizQuestions.some(q => quizAnswers[q.id] === undefined)}
+                      >
+                        <CheckCircle2 size={16} />
+                        {isSubmittingQuiz ? 'Đang chấm điểm trên CSDL...' : 'Chấm điểm & Lưu kết quả CSDL'}
+                      </button>
+                      {showQuizResults && (
+                        <button
+                          className="btn-reset-quiz"
+                          onClick={() => {
+                            setShowQuizResults(false);
+                            setQuizResult(null);
+                            setQuizAnswers({});
+                            submissionId.current = crypto.randomUUID();
+                            localStorage.setItem(draftKey, JSON.stringify({ answers: {}, submissionId: submissionId.current }));
+                          }}
+                        >
+                          <RefreshCw size={15} />
+                          Làm lại bài kiểm tra
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
         </main>
 
-        {/* CỘT PHẢI: SỔ TAY GHI CHÚ NGHIỆP VỤ HỌC VIÊN */}
+        {/* CỘT PHẢI: SỔ TAY GHI CHÚ NGHIỆP VỤ (Ẩn theo yêu cầu người dùng, giữ nguyên component PageNotes để tái kích hoạt khi cần) */}
+        {/*
         <aside className="study-notes-sidebar">
           <div className="notes-card-header">
             <div className="notes-header-left">
               <ShieldCheck size={16} color="#991B1B" />
               <h4>SỔ TAY GHI CHÚ SĨ QUAN</h4>
             </div>
-            {savedStatus && (
-              <span className="notes-saved-tag">
-                <Check size={11} /> Đã lưu
-              </span>
-            )}
           </div>
-
-          <p className="notes-caption">
-            Ghi chép tự động lưu trữ cho <strong>Phần {activePart}</strong> của bài giảng này.
-          </p>
-
-          <textarea
-            className="study-notes-editor"
-            placeholder={`Nhập tóm tắt nghiệp vụ, nhận xét hoặc điểm cần lưu ý của Phần ${activePart}...`}
-            value={noteContent}
-            onChange={(e) => handleSaveNote(e.target.value)}
-          />
-
-          <div className="notes-card-footer">
-            <button
-              className="btn-notes-tool"
-              onClick={handleCopyNote}
-              title="Sao chép nội dung ghi chú"
-            >
-              {copiedNote ? <Check size={13} color="#059669" /> : <Copy size={13} />}
-              <span>{copiedNote ? 'Đã sao chép' : 'Sao chép'}</span>
-            </button>
-
-            <button
-              className="btn-notes-tool"
-              onClick={() => handleSaveNote('')}
-              title="Xóa toàn bộ ghi chú của phần này"
-            >
-              <Trash2 size={13} />
-              <span>Xóa ghi chú</span>
-            </button>
-          </div>
+          <PageNotes key={currentUser?.id} lectureId={effectiveId} fileId={activePdfId} pdfPage={activePdfId ? pdfPage : null} />
 
           <div className="security-notice-box">
             <AlertTriangle size={14} />
             <span>Mọi ghi chép bài học lưu hành trên hệ thống Intranet đào tạo T04. Nghiêm cấm trích xuất ra ngoài.</span>
           </div>
         </aside>
+        */}
       </div>
     </div>
   );

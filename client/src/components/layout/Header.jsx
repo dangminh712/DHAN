@@ -124,9 +124,10 @@ export default function Header({
             <button
               className="btn-upload-primary"
               onClick={onOpenUpload}
+              title="Nhập liệu và lưu trữ file nội bộ: PDF giáo trình, slide PPT, video MP4, ảnh, âm thanh"
             >
               <UploadCloud size={16} />
-              Đăng tải bài giảng mới
+              <span>Nạp File Học Liệu Mới</span>
             </button>
           </div>
         </div>

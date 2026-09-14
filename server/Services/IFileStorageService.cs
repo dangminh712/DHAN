@@ -13,6 +13,6 @@ public class StoredFileInfo
 
 public interface IFileStorageService
 {
-    Task<StoredFileInfo> SavePhysicalFileAsync(IFormFile formFile);
+    Task<StoredFileInfo> SavePhysicalFileAsync(IFormFile formFile, string? categoryFolder = null);
     string GetPhysicalFullPath(string relativeStoragePath);
 }

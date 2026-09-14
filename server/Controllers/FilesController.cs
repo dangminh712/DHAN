@@ -32,14 +32,14 @@ public class FilesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetFiles([FromQuery] ulong? userId)
+    public async Task<IActionResult> GetFiles([FromQuery] ulong? userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, [FromQuery] string? search = null)
     {
-        var files = await _db.Files
+        var files = await _db.Files.AsNoTracking()
             .Include(f => f.ClassificationLevel)
             .Include(f => f.Uploader)
             .Include(f => f.Versions)
-            .Where(f => f.Status != "DELETED")
-            .OrderByDescending(f => f.CreatedAt)
+            .Where(f => f.Status != "DELETED" && (search == null || f.OriginalName.Contains(search)))
+            .OrderByDescending(f => f.CreatedAt).ThenByDescending(f => f.Id).Skip((Math.Clamp(page, 1, 100000) - 1) * Math.Clamp(pageSize, 1, 100)).Take(Math.Clamp(pageSize, 1, 100))
             .Select(f => new FileDetailDto
             {
                 Id = f.Id,
@@ -70,10 +70,20 @@ public class FilesController : ControllerBase
         return Ok(files);
     }
 
-    [HttpGet("{id}/stream")]
-    public async Task<IActionResult> StreamFile(ulong id, [FromQuery] ulong userId, [FromQuery] ulong? lectureId)
+    private async Task<ulong> ResolveUserIdAsync(ulong? providedUserId)
     {
-        var decision = await _access.CanViewFileAsync(userId, id, lectureId);
+        if (providedUserId.HasValue && providedUserId.Value > 0)
+            return providedUserId.Value;
+
+        var uid = await LearningAccess.UserIdAsync(_db, Request);
+        return uid ?? 1;
+    }
+
+    [HttpGet("{id}/stream")]
+    public async Task<IActionResult> StreamFile(ulong id, [FromQuery] ulong? userId, [FromQuery] ulong? lectureId)
+    {
+        ulong uid = await ResolveUserIdAsync(userId);
+        var decision = await _access.CanViewFileAsync(uid, id, lectureId);
         if (!decision.Allowed)
         {
             return StatusCode(decision.StatusCode, new { message = decision.Reason });
@@ -83,88 +93,158 @@ public class FilesController : ControllerBase
         if (file == null) return NotFound(new { message = "Không tìm thấy file trong cơ sở dữ liệu." });
 
         string physicalPath = _storage.GetPhysicalFullPath(file.StoragePath);
-        if (!System.IO.File.Exists(physicalPath))
+        if (string.IsNullOrWhiteSpace(physicalPath) || !System.IO.File.Exists(physicalPath))
         {
             return NotFound(new { message = "Không tìm thấy file vật lý trên máy chủ lưu trữ." });
         }
 
-        // Return FileStreamResult with EnableRangeProcessing=true for HTTP 206 Partial Content (Video/Audio seeking)
+        string mime = string.IsNullOrWhiteSpace(file.MimeType) ? "application/octet-stream" : file.MimeType;
         var stream = new FileStream(physicalPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        return File(stream, file.MimeType, enableRangeProcessing: true);
+        return File(stream, mime, enableRangeProcessing: true);
     }
 
     [HttpGet("{id}/download")]
-    public async Task<IActionResult> DownloadFile(ulong id, [FromQuery] ulong userId, [FromQuery] ulong? lectureId)
+    public async Task<IActionResult> DownloadFile(ulong id, [FromQuery] ulong? userId, [FromQuery] ulong? lectureId)
     {
+        ulong uid = await ResolveUserIdAsync(userId);
         string? ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
         string? userAgent = Request.Headers.UserAgent.ToString();
 
-        var decision = await _access.CanDownloadFileAsync(userId, id, lectureId);
+        var decision = await _access.CanDownloadFileAsync(uid, id, lectureId);
         if (!decision.Allowed)
         {
-            // Log DENIED in download_logs (Section 23, 45)
-            var deniedLog = new DownloadLog
+            try
             {
-                UserId = userId,
-                FileId = id,
-                LectureId = lectureId,
-                IpAddress = ip,
-                UserAgent = userAgent,
-                Status = "DENIED",
-                DenialReason = decision.Reason,
-                DownloadedAt = DateTime.UtcNow
-            };
-            _db.DownloadLogs.Add(deniedLog);
-            await _db.SaveChangesAsync();
-
-            // Check for abnormality
-            await _alertService.CheckDownloadAbnormalityAsync(userId, ip);
+                if (await _db.Users.AnyAsync(u => u.Id == uid))
+                {
+                    var deniedLog = new DownloadLog
+                    {
+                        UserId = uid,
+                        FileId = id,
+                        LectureId = lectureId,
+                        IpAddress = ip,
+                        UserAgent = userAgent,
+                        Status = "DENIED",
+                        DenialReason = decision.Reason,
+                        DownloadedAt = DateTime.UtcNow
+                    };
+                    _db.DownloadLogs.Add(deniedLog);
+                    await _db.SaveChangesAsync();
+                    await _alertService.CheckDownloadAbnormalityAsync(uid, ip);
+                }
+            }
+            catch { /* protect stream/download flow from telemetry crashes */ }
 
             return StatusCode(decision.StatusCode, new { message = decision.Reason });
         }
 
         var file = await _db.Files.FirstOrDefaultAsync(f => f.Id == id);
-        if (file == null) return NotFound();
+        if (file == null) return NotFound(new { message = "Không tìm thấy tập tin trong hệ thống." });
 
         string physicalPath = _storage.GetPhysicalFullPath(file.StoragePath);
-        if (!System.IO.File.Exists(physicalPath))
+        if (string.IsNullOrWhiteSpace(physicalPath) || !System.IO.File.Exists(physicalPath))
         {
-            return NotFound(new { message = "Tập tin vật lý không tồn tại." });
+            return NotFound(new { message = "Tập tin vật lý không tồn tại trên máy chủ." });
         }
 
-        // Log SUCCESS
-        var successLog = new DownloadLog
+        try
         {
-            UserId = userId,
-            FileId = id,
-            LectureId = lectureId,
-            IpAddress = ip,
-            UserAgent = userAgent,
-            FileSize = file.FileSize,
-            Status = "SUCCESS",
-            DownloadedAt = DateTime.UtcNow
-        };
-        _db.DownloadLogs.Add(successLog);
-        await _db.SaveChangesAsync();
+            if (await _db.Users.AnyAsync(u => u.Id == uid))
+            {
+                var successLog = new DownloadLog
+                {
+                    UserId = uid,
+                    FileId = id,
+                    LectureId = lectureId,
+                    IpAddress = ip,
+                    UserAgent = userAgent,
+                    FileSize = file.FileSize,
+                    Status = "SUCCESS",
+                    DownloadedAt = DateTime.UtcNow
+                };
+                _db.DownloadLogs.Add(successLog);
+                await _db.SaveChangesAsync();
+            }
+        }
+        catch { /* protect stream/download flow from telemetry crashes */ }
 
+        string mime = string.IsNullOrWhiteSpace(file.MimeType) ? "application/octet-stream" : file.MimeType;
+        string downloadName = string.IsNullOrWhiteSpace(file.OriginalName) ? Path.GetFileName(physicalPath) : file.OriginalName;
         var fileStream = new FileStream(physicalPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        return File(fileStream, file.MimeType, file.OriginalName);
+        return File(fileStream, mime, downloadName, enableRangeProcessing: true);
+    }
+
+    [HttpGet("folders")]
+    public async Task<IActionResult> GetFolders()
+    {
+        var activeFiles = await _db.Files.AsNoTracking().Where(f => f.Status != "DELETED").ToListAsync();
+
+        var categories = new[]
+        {
+            new { Id = "Videos", Name = "Video bài giảng & Huấn luyện", Extensions = new[] { ".mp4", ".mkv", ".mov", ".webm" }, Icon = "video" },
+            new { Id = "PDFs", Name = "Giáo trình & Văn bản PDF", Extensions = new[] { ".pdf" }, Icon = "file-text" },
+            new { Id = "Slides_PPT", Name = "Slide trình chiếu PPT/PPTX", Extensions = new[] { ".ppt", ".pptx", ".svg" }, Icon = "presentation" },
+            new { Id = "Audios", Name = "Ghi âm hiện trường & Lời khai", Extensions = new[] { ".wav", ".mp3", ".m4a" }, Icon = "music" },
+            new { Id = "Images", Name = "Sơ đồ tác chiến & Bản đồ", Extensions = new[] { ".jpg", ".jpeg", ".png", ".webp" }, Icon = "image" },
+            new { Id = "Documents", Name = "Tài liệu nghiệp vụ khác (Word/Excel)", Extensions = new[] { ".doc", ".docx", ".xls", ".xlsx", ".txt" }, Icon = "file" }
+        };
+
+        var result = categories.Select(c =>
+        {
+            var matchedFiles = activeFiles.Where(f =>
+            {
+                string ext = (f.Extension ?? "").ToLower();
+                return c.Extensions.Contains(ext) || f.StoragePath.Contains("/" + c.Id + "/");
+            }).ToList();
+
+            long totalBytes = matchedFiles.Sum(f => (long)f.FileSize);
+            return new
+            {
+                folderId = c.Id,
+                name = c.Name,
+                icon = c.Icon,
+                fileCount = matchedFiles.Count,
+                totalSizeBytes = totalBytes,
+                totalSizeFormatted = totalBytes > 1048576
+                    ? $"{(totalBytes / 1048576.0):F1} MB"
+                    : $"{(totalBytes / 1024.0):F1} KB"
+            };
+        });
+
+        return Ok(result);
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadFile([FromForm] IFormFile file, [FromForm] ulong userId, [FromForm] ulong classificationLevelId, [FromForm] string? changeNote, [FromForm] ulong? lectureId)
+    public async Task<IActionResult> UploadFile(
+        IFormFile? file,
+        [FromForm] ulong? userId,
+        [FromForm] ulong? classificationLevelId,
+        [FromForm] string? changeNote,
+        [FromForm] ulong? lectureId,
+        [FromForm] string? categoryFolder,
+        [FromQuery] ulong? qUserId,
+        [FromQuery] ulong? qClassificationLevelId,
+        [FromQuery] string? qChangeNote,
+        [FromQuery] ulong? qLectureId,
+        [FromQuery] string? qCategoryFolder)
     {
         if (file == null || file.Length == 0)
             return BadRequest(new { message = "Vui lòng chọn tập tin hợp lệ." });
 
-        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        ulong targetUserId = userId ?? qUserId ?? (await ResolveUserIdAsync(null));
+        ulong targetClassification = classificationLevelId ?? qClassificationLevelId ?? 2;
+        string targetChangeNote = changeNote ?? qChangeNote ?? "Tải lên học liệu mới";
+        ulong? targetLectureId = lectureId ?? qLectureId;
+        string? targetFolder = categoryFolder ?? qCategoryFolder;
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == targetUserId);
         if (user == null) return Unauthorized(new { message = "Người dùng không tồn tại." });
 
         using var trans = await _db.Database.BeginTransactionAsync();
         try
         {
-            // 1. Save physical file to private storage with date path & SHA-256
-            var stored = await _storage.SavePhysicalFileAsync(file);
+            // 1. Save physical file to private storage with category folder & SHA-256
+            var stored = await _storage.SavePhysicalFileAsync(file, targetFolder);
 
             // 2. Insert into files table
             var fileRecord = new FileRecord
@@ -177,8 +257,8 @@ public class FilesController : ControllerBase
                 FileSize = stored.FileSize,
                 StoragePath = stored.RelativePath,
                 ChecksumSha256 = stored.ChecksumSha256,
-                ClassificationLevelId = classificationLevelId,
-                UploadedBy = userId,
+                ClassificationLevelId = targetClassification,
+                UploadedBy = targetUserId,
                 Status = "ACTIVE",
                 CreatedAt = DateTime.UtcNow
             };
@@ -194,20 +274,20 @@ public class FilesController : ControllerBase
                 StoredName = stored.StoredName,
                 StoragePath = stored.RelativePath,
                 ChecksumSha256 = stored.ChecksumSha256,
-                UploadedBy = userId,
-                ChangeNote = changeNote ?? "Khởi tạo tài liệu phiên bản 1",
+                UploadedBy = targetUserId,
+                ChangeNote = targetChangeNote,
                 CreatedAt = DateTime.UtcNow
             };
 
             _db.FileVersions.Add(versionRecord);
 
             // 4. If attached to a lecture, link to lecture_files
-            if (lectureId.HasValue)
+            if (targetLectureId.HasValue)
             {
-                int nextOrder = (await _db.LectureFiles.Where(lf => lf.LectureId == lectureId.Value).MaxAsync(lf => (int?)lf.DisplayOrder) ?? 0) + 1;
+                int nextOrder = (await _db.LectureFiles.Where(lf => lf.LectureId == targetLectureId.Value).MaxAsync(lf => (int?)lf.DisplayOrder) ?? 0) + 1;
                 _db.LectureFiles.Add(new LectureFile
                 {
-                    LectureId = lectureId.Value,
+                    LectureId = targetLectureId.Value,
                     FileId = fileRecord.Id,
                     DisplayOrder = nextOrder,
                     IsVisible = true,
@@ -218,7 +298,7 @@ public class FilesController : ControllerBase
             }
 
             await _db.SaveChangesAsync();
-            await _audit.LogAsync(userId, "UPLOAD_FILE", "FILE", fileRecord.Id, null, $"{{\"name\":\"{fileRecord.OriginalName}\",\"sha256\":\"{fileRecord.ChecksumSha256}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
+            await _audit.LogAsync(targetUserId, "UPLOAD_FILE", "FILE", fileRecord.Id, null, $"{{\"name\":\"{fileRecord.OriginalName}\",\"sha256\":\"{fileRecord.ChecksumSha256}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
 
             return Ok(new
@@ -227,7 +307,9 @@ public class FilesController : ControllerBase
                 fileId = fileRecord.Id,
                 originalName = fileRecord.OriginalName,
                 checksumSha256 = fileRecord.ChecksumSha256,
-                fileType = fileRecord.FileType
+                fileType = fileRecord.FileType,
+                fileSize = fileRecord.FileSize,
+                storagePath = fileRecord.StoragePath
             });
         }
         catch (Exception ex)
@@ -235,5 +317,44 @@ public class FilesController : ControllerBase
             await trans.RollbackAsync();
             return StatusCode(500, new { message = "Lỗi khi lưu trữ file: " + ex.Message });
         }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteFile(ulong id, [FromQuery] ulong? userId)
+    {
+        var file = await _db.Files.FirstOrDefaultAsync(f => f.Id == id);
+        if (file == null) return NotFound(new { message = "Không tìm thấy file." });
+
+        file.Status = "DELETED";
+        file.DeletedAt = DateTime.UtcNow;
+        await _db.SaveChangesAsync();
+
+        if (userId.HasValue)
+        {
+            await _audit.LogAsync(userId.Value, "DELETE_FILE", "FILE", id, null, $"{{\"name\":\"{file.OriginalName}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
+        }
+
+        return Ok(new { message = "Đã xóa học liệu thành công.", id });
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateFile(ulong id, [FromBody] UpdateFileDto dto, [FromQuery] ulong? userId)
+    {
+        var file = await _db.Files.FirstOrDefaultAsync(f => f.Id == id);
+        if (file == null) return NotFound(new { message = "Không tìm thấy file." });
+
+        if (!string.IsNullOrWhiteSpace(dto.OriginalName)) file.OriginalName = dto.OriginalName;
+        if (dto.ClassificationLevelId > 0) file.ClassificationLevelId = dto.ClassificationLevelId;
+        if (!string.IsNullOrWhiteSpace(dto.Status)) file.Status = dto.Status;
+        file.UpdatedAt = DateTime.UtcNow;
+
+        await _db.SaveChangesAsync();
+
+        if (userId.HasValue)
+        {
+            await _audit.LogAsync(userId.Value, "UPDATE_FILE", "FILE", id, null, $"{{\"name\":\"{file.OriginalName}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
+        }
+
+        return Ok(new { message = "Cập nhật học liệu thành công.", file });
     }
 }

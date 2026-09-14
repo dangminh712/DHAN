@@ -94,12 +94,41 @@ public class SystemController : ControllerBase
     }
 
     [HttpGet("audit-logs")]
-    public async Task<IActionResult> GetAuditLogs([FromQuery] int limit = 50)
+    public async Task<IActionResult> GetAuditLogs(
+        [FromQuery] string? search,
+        [FromQuery] string? action,
+        [FromQuery] string? entityType,
+        [FromQuery] int? page,
+        [FromQuery] int? pageSize,
+        [FromQuery] int limit = 50)
     {
-        var logs = await _db.AuditLogs
+        var query = _db.AuditLogs
             .Include(a => a.User)
+            .AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(action))
+        {
+            query = query.Where(a => a.Action == action.Trim());
+        }
+
+        if (!string.IsNullOrWhiteSpace(entityType))
+        {
+            query = query.Where(a => a.EntityType == entityType.Trim());
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            string s = search.Trim().ToLower();
+            query = query.Where(a =>
+                a.Action.ToLower().Contains(s) ||
+                (a.EntityType != null && a.EntityType.ToLower().Contains(s)) ||
+                (a.IpAddress != null && a.IpAddress.Contains(s)) ||
+                (a.User != null && a.User.Username.ToLower().Contains(s)) ||
+                (a.NewValue != null && a.NewValue.ToLower().Contains(s)));
+        }
+
+        var selectQuery = query
             .OrderByDescending(a => a.CreatedAt)
-            .Take(limit)
             .Select(a => new AuditLogItemDto
             {
                 Id = a.Id,
@@ -112,19 +141,34 @@ public class SystemController : ControllerBase
                 AccessReason = a.AccessReason,
                 IpAddress = a.IpAddress,
                 CreatedAt = a.CreatedAt
-            })
-            .ToListAsync();
+            });
 
+        if (page.HasValue && page.Value > 0)
+        {
+            int size = Math.Clamp(pageSize ?? 20, 1, 100);
+            int total = await query.CountAsync();
+            var items = await selectQuery.Skip((page.Value - 1) * size).Take(size).ToListAsync();
+            return Ok(new
+            {
+                items,
+                totalCount = total,
+                page = page.Value,
+                pageSize = size,
+                totalPages = (int)Math.Ceiling((double)total / size)
+            });
+        }
+
+        var logs = await selectQuery.Take(Math.Clamp(limit, 1, 100)).ToListAsync();
         return Ok(logs);
     }
 
     [HttpGet("security-alerts")]
-    public async Task<IActionResult> GetSecurityAlerts()
+    public async Task<IActionResult> GetSecurityAlerts([FromQuery] int page = 1)
     {
         var alerts = await _db.SecurityAlerts
             .Include(s => s.User)
             .Include(s => s.Resolver)
-            .OrderByDescending(s => s.CreatedAt)
+            .OrderByDescending(s => s.CreatedAt).ThenByDescending(s => s.Id).Skip((Math.Clamp(page, 1, 100000) - 1) * 50).Take(50)
             .Select(s => new SecurityAlertItemDto
             {
                 Id = s.Id,
@@ -144,7 +188,7 @@ public class SystemController : ControllerBase
     }
 
     [HttpGet("sessions")]
-    public async Task<IActionResult> GetUserSessions([FromQuery] ulong? userId)
+    public async Task<IActionResult> GetUserSessions([FromQuery] ulong? userId, [FromQuery] int page = 1)
     {
         var query = _db.UserSessions.Include(s => s.User).AsQueryable();
         if (userId.HasValue)
@@ -187,11 +231,11 @@ public class SystemController : ControllerBase
     }
 
     [HttpGet("notifications")]
-    public async Task<IActionResult> GetNotifications([FromQuery] ulong userId)
+    public async Task<IActionResult> GetNotifications([FromQuery] ulong userId, [FromQuery] int page = 1)
     {
         var notifications = await _db.Notifications
             .Where(n => n.UserId == userId)
-            .OrderByDescending(n => n.CreatedAt)
+            .OrderByDescending(n => n.CreatedAt).ThenByDescending(n => n.Id).Skip((Math.Clamp(page, 1, 100000) - 1) * 50).Take(50)
             .ToListAsync();
 
         return Ok(notifications);

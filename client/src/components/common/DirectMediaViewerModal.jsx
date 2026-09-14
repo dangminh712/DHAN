@@ -28,10 +28,19 @@ export default function DirectMediaViewerModal({
 
   if (!isOpen || !file) return null;
 
-  const isDoc = file.category === 'document' || file.originalFileName?.toLowerCase().endsWith('.pdf');
-  const isVideo = file.category === 'video' || file.originalFileName?.toLowerCase().endsWith('.mp4');
-  const isImage = file.category === 'image' || file.originalFileName?.toLowerCase().endsWith('.png') || file.originalFileName?.toLowerCase().endsWith('.jpg');
-  const isAudio = file.category === 'audio' || file.originalFileName?.toLowerCase().endsWith('.mp3');
+  const fileId = file.id || file.fileId;
+  const fileName = file.originalFileName || file.originalName || 'Tập tin';
+  const fileCat = file.category || (
+    file.fileType?.toLowerCase().includes('video') || fileName.toLowerCase().match(/\.(mp4|mov|mkv|webm)$/) ? 'video' :
+    file.fileType?.toLowerCase().includes('image') || fileName.toLowerCase().match(/\.(png|jpg|jpeg|gif|webp|svg)$/) ? 'image' :
+    file.fileType?.toLowerCase().includes('audio') || fileName.toLowerCase().match(/\.(mp3|wav|ogg)$/) ? 'audio' : 'document'
+  );
+  const fileClassification = file.classification || file.classificationName || 'Nội bộ';
+
+  const isDoc = fileCat === 'document' || fileName.toLowerCase().endsWith('.pdf');
+  const isVideo = fileCat === 'video' || fileName.toLowerCase().endsWith('.mp4');
+  const isImage = fileCat === 'image' || fileName.toLowerCase().endsWith('.png') || fileName.toLowerCase().endsWith('.jpg');
+  const isAudio = fileCat === 'audio' || fileName.toLowerCase().endsWith('.mp3');
 
   const formatFileSize = (bytes) => {
     if (!bytes || bytes === 0) return '0 B';
@@ -68,11 +77,25 @@ export default function DirectMediaViewerModal({
             {isImage && <ImageIcon size={20} color="#34D399" />}
             {isAudio && <Music size={20} color="#FBBF24" />}
             <div>
-              <h3 title={file.originalFileName} style={{ fontSize: '15px', color: '#FFFFFF', margin: 0 }}>
-                {file.originalFileName}
-              </h3>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <span>Định dạng: <strong>{file.category?.toUpperCase() || 'TẬP TIN'}</strong></span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 title={fileName} style={{ fontSize: '15px', color: '#FFFFFF', margin: 0 }}>
+                  {fileName}
+                </h3>
+                <span style={{
+                  fontSize: '10.5px',
+                  fontWeight: 800,
+                  padding: '2px 8px',
+                  borderRadius: '4px',
+                  background: fileClassification.toLowerCase().includes('tuyệt mật') ? '#991B1B' :
+                              fileClassification.toLowerCase().includes('tối mật') ? '#C2410C' :
+                              fileClassification.toLowerCase().includes('mật') ? '#D97706' : '#1E40AF',
+                  color: '#FFFFFF'
+                }}>
+                  {fileClassification}
+                </span>
+              </div>
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', display: 'flex', gap: '8px', alignItems: 'center', marginTop: '3px' }}>
+                <span>Định dạng: <strong>{fileCat?.toUpperCase() || 'TẬP TIN'}</strong></span>
                 <span>•</span>
                 <span>Dung lượng: <strong>{formatFileSize(file.fileSize)}</strong></span>
                 <span>•</span>
@@ -83,7 +106,7 @@ export default function DirectMediaViewerModal({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <a
-              href={`/api/media/stream/${file.id}`}
+              href={`/api/media/stream/${fileId}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-icon-secondary"
@@ -179,8 +202,8 @@ export default function DirectMediaViewerModal({
               </div>
 
               <iframe
-                title={file.originalFileName}
-                src={createMediaViewerUrl(file.id, 'document', pdfPage)}
+                title={fileName}
+                src={createMediaViewerUrl(fileId, 'document', pdfPage)}
                 style={{ width: '100%', flex: 1, border: 'none', background: '#525659' }}
               />
             </div>
@@ -193,7 +216,7 @@ export default function DirectMediaViewerModal({
                 controls
                 autoPlay
                 className="video-player-frame"
-                src={`/api/media/stream/${file.id}`}
+                src={`/api/media/stream/${fileId}`}
                 style={{ maxHeight: '70vh', maxWidth: '100%', width: '100%' }}
               >
                 Trình duyệt của bạn không hỗ trợ thẻ video HTML5.
@@ -205,8 +228,8 @@ export default function DirectMediaViewerModal({
           {isImage && (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
               <img
-                src={`/api/media/stream/${file.id}`}
-                alt={file.originalFileName}
+                src={`/api/media/stream/${fileId}`}
+                alt={fileName}
                 className="image-viewer-frame"
                 style={{ maxHeight: '72vh', maxWidth: '100%', objectFit: 'contain', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
               />
@@ -219,9 +242,9 @@ export default function DirectMediaViewerModal({
               <div className="audio-icon-pulse">
                 <Music size={40} color="#FBBF24" />
               </div>
-              <h4 style={{ fontSize: '16px', color: '#FFFFFF', marginBottom: '8px' }}>{file.originalFileName}</h4>
+              <h4 style={{ fontSize: '16px', color: '#FFFFFF', marginBottom: '8px' }}>{fileName}</h4>
               <p style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '20px' }}>Bản ghi âm bài giảng lưu hành nội bộ T04</p>
-              <audio controls autoPlay src={`/api/media/stream/${file.id}`} style={{ width: '380px' }} />
+              <audio controls autoPlay src={`/api/media/stream/${fileId}`} style={{ width: '380px' }} />
             </div>
           )}
         </div>
@@ -235,23 +258,23 @@ export default function DirectMediaViewerModal({
               <span>Ngày cập nhật: <strong>{formatDate(file.createdAt)}</strong></span>
             </div>
             <div className="spec-hash" style={{ fontSize: '11px', color: '#64748B', fontFamily: 'monospace', marginTop: '2px' }}>
-              SHA-256: <code>{file.checksum || 'N/A'}</code>
+              SHA-256: <code>{file.checksum || file.checksumSha256 || file.sha256Hash || 'N/A'}</code>
             </div>
           </div>
 
           <div className="modal-action-btns" style={{ display: 'flex', gap: '8px' }}>
             <button
               className="btn-icon-secondary"
-              onClick={() => onCopyHash(file.checksum, file.id)}
+              onClick={() => onCopyHash(file.checksum || file.checksumSha256 || file.sha256Hash, fileId)}
               style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px', fontSize: '12px' }}
             >
-              {copiedHash === file.id ? <Check size={14} color="#059669" /> : <Copy size={14} />}
-              <span>{copiedHash === file.id ? 'Đã sao chép' : 'Sao chép SHA-256'}</span>
+              {copiedHash === fileId ? <Check size={14} color="#059669" /> : <Copy size={14} />}
+              <span>{copiedHash === fileId ? 'Đã sao chép' : 'Sao chép SHA-256'}</span>
             </button>
 
             <a
-              href={`/api/media/download/${file.id}`}
-              download={file.originalFileName}
+              href={`/api/media/download/${fileId}`}
+              download={fileName}
               className="btn-download-gold"
               style={{
                 textDecoration: 'none',

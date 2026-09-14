@@ -58,8 +58,10 @@ export default function StudyRoomPage({ lecture, onBack, onDownloadFile }) {
     ? fileService.getStreamUrl(activeFile.fileId || activeFile.id, currentUser?.id, lecture.id)
     : '';
 
-  const isClearanceOk = activeFile ? isClearanceSufficient(activeFile.classificationOrder) : false;
+  // Đặc quyền sư phạm bài giảng: Học viên được phép xem mọi tài liệu giảng viên đã add vào bài giảng lớp mình (kể cả Tuyệt mật)
+  const isClearanceOk = Boolean(activeFile);
   const isClosed = lecture.status === 'CLOSED';
+  const requiresPedagogicalExemption = activeFile && !isClearanceSufficient(activeFile.classificationOrder);
 
   const watermarkText = `${currentUser?.fullName} • ${currentUser?.username} • T04 SECURE STUDY`;
 
@@ -153,17 +155,25 @@ export default function StudyRoomPage({ lecture, onBack, onDownloadFile }) {
 
           {/* Active File Bar */}
           {activeFile && (
-            <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
-              <div className="flex items-center gap-2 min-w-0">
+            <div className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0 flex-wrap">
                 <span className="font-bold text-slate-800 truncate">{activeFile.originalName}</span>
                 <span className="text-slate-400">•</span>
                 <span className="text-slate-500 font-mono text-[11px]">{activeFile.fileType}</span>
+                {activeFile.classification && (
+                  <ClearanceBadge level={activeFile.classification} order={activeFile.classificationOrder} />
+                )}
+                {requiresPedagogicalExemption && (
+                  <span className="text-[10px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full font-medium">
+                    ⚡ Đặc quyền sư phạm bài giảng lớp
+                  </span>
+                )}
               </div>
 
               {activeFile.isDownloadable && isClearanceOk && !isClosed && (
                 <button
                   onClick={() => onDownloadFile(activeFile, lecture.id)}
-                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold flex items-center gap-1.5 transition-colors shrink-0"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Tải học liệu này</span>

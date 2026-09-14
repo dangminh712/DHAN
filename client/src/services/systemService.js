@@ -6,8 +6,19 @@ export const systemService = {
     return res.data;
   },
 
-  async getAuditLogs(limit = 50) {
-    const res = await api.get('/training/system/audit-logs', { params: { limit } });
+  async getAuditLogs(options = 50) {
+    let params = {};
+    if (typeof options === 'number') {
+      params = { limit: options };
+    } else if (typeof options === 'object') {
+      if (options.limit) params.limit = options.limit;
+      if (options.page) params.page = options.page;
+      if (options.pageSize) params.pageSize = options.pageSize;
+      if (options.search) params.search = options.search;
+      if (options.action) params.action = options.action;
+      if (options.entityType) params.entityType = options.entityType;
+    }
+    const res = await api.get('/training/system/audit-logs', { params });
     return res.data;
   },
 
