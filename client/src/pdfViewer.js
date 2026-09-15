@@ -16,9 +16,18 @@ export function createPdfNoteKey(fileId, page) {
   return `dhan:pdf-note:${fileId}:page:${normalizePdfPage(page)}`;
 }
 
+export function getMediaStreamUrl(fileId) {
+  if (!fileId) return '';
+  if (typeof window !== 'undefined' && window.location.port === '5173') {
+    return `http://${window.location.hostname}:5000/api/media/stream/${fileId}`;
+  }
+  return `/api/media/stream/${fileId}`;
+}
+
 export function createMediaViewerUrl(fileId, category, page = 1) {
-  const streamUrl = `/api/media/stream/${fileId}`;
+  const streamUrl = getMediaStreamUrl(fileId);
   return category === 'document'
     ? `${streamUrl}#page=${normalizePdfPage(page)}&zoom=page-width&toolbar=0&navpanes=0&scrollbar=0`
     : streamUrl;
 }
+

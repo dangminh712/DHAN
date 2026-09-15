@@ -9,19 +9,21 @@ export const academicService = {
       if (options.search) params.search = options.search;
       if (options.page) params.page = options.page;
       if (options.pageSize) params.pageSize = options.pageSize;
+      if (options.sortBy) params.sortBy = options.sortBy;
+      if (options.sortDir) params.sortDir = options.sortDir;
     }
     const res = await api.get('/training/academic/classes', { params });
     return res.data;
   },
 
   async getClassStudents(classId, search) {
-    const params = search ? { search } : {};
+    const params = typeof search === 'object' ? search : search ? { search } : {};
     const res = await api.get(`/training/academic/classes/${classId}/students`, { params });
     return res.data;
   },
 
-  async getSubjects() {
-    const res = await api.get('/training/academic/subjects');
+  async getSubjects(options = {}) {
+    const res = await api.get('/training/academic/subjects', { params: options });
     return res.data;
   },
 

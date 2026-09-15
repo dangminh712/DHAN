@@ -1,3 +1,4 @@
+using Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
@@ -32,14 +33,13 @@ public class FilesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetFiles([FromQuery] ulong? userId, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, [FromQuery] string? search = null)
+    public async Task<IActionResult> GetFiles([FromQuery] ulong? userId, [FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
-        var files = await _db.Files.AsNoTracking()
+        var query = _db.Files.AsNoTracking()
             .Include(f => f.ClassificationLevel)
             .Include(f => f.Uploader)
             .Include(f => f.Versions)
             .Where(f => f.Status != "DELETED" && (search == null || f.OriginalName.Contains(search)))
-            .OrderByDescending(f => f.CreatedAt).ThenByDescending(f => f.Id).Skip((Math.Clamp(page, 1, 100000) - 1) * Math.Clamp(pageSize, 1, 100)).Take(Math.Clamp(pageSize, 1, 100))
             .Select(f => new FileDetailDto
             {
                 Id = f.Id,
@@ -64,10 +64,9 @@ public class FilesController : ControllerBase
                     ChangeNote = fv.ChangeNote,
                     CreatedAt = fv.CreatedAt
                 }).ToList()
-            })
-            .ToListAsync();
+            });
 
-        return Ok(files);
+        return Ok(await query.Sort(sortBy, sortDir, "CreatedAt", "Id,OriginalName,originalFileName:OriginalName,FileType,category:FileType,FileSize,ClassificationName,classification:ClassificationOrder,UploaderName,uploader:UploaderName,Status,CreatedAt").ResultAsync(page, pageSize));
     }
 
     private async Task<ulong> ResolveUserIdAsync(ulong? providedUserId)

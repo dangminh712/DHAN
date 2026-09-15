@@ -14,6 +14,8 @@ export const systemService = {
       if (options.limit) params.limit = options.limit;
       if (options.page) params.page = options.page;
       if (options.pageSize) params.pageSize = options.pageSize;
+      if (options.sortBy) params.sortBy = options.sortBy;
+      if (options.sortDir) params.sortDir = options.sortDir;
       if (options.search) params.search = options.search;
       if (options.action) params.action = options.action;
       if (options.entityType) params.entityType = options.entityType;
@@ -22,13 +24,13 @@ export const systemService = {
     return res.data;
   },
 
-  async getSecurityAlerts() {
-    const res = await api.get('/training/system/security-alerts');
+  async getSecurityAlerts(options = {}) {
+    const res = await api.get('/training/system/security-alerts', { params: options });
     return res.data;
   },
 
-  async getUserSessions(userId) {
-    const params = userId ? { userId } : {};
+  async getUserSessions(userId, options = {}) {
+    const params = { ...options, ...(userId ? { userId } : {}) };
     const res = await api.get('/training/system/sessions', { params });
     return res.data;
   },

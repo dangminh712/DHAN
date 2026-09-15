@@ -30,16 +30,17 @@ import {
   RefreshCw,
   Printer
 } from 'lucide-react';
-import { createMediaViewerUrl } from './pdfViewer';
+import { createMediaViewerUrl, getMediaStreamUrl } from './pdfViewer';
 import { learningService } from './services/learningService';
 import { createQuizDraftKey } from './learningProgress';
 import PageNotes from './components/lecture/PageNotes';
 import { StudyPdf, ResumeVideo } from './components/lecture/StudyMedia';
+import { getMediaKind, selectStudyMedia } from './mediaType';
 import { lectureService } from './services/lectureService';
 
 export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [], currentUser }) {
-  const [activePart, setActivePart] = useState(2); // Mặc định mở Phần 2 (Lý thuyết & Video)
-  const [mediaTab, setMediaTab] = useState('video'); // 'video' | 'slide' | 'doc' | 'image' | 'quiz'
+  const [activePart, setActivePart] = useState(1); // Luôn bắt đầu từ mục tiêu và yêu cầu của bài học
+  const [mediaTab, setMediaTab] = useState('doc'); // 'video' | 'slide' | 'doc' | 'image' | 'quiz'
   const [pdfPage, setPdfPage] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [completedParts, setCompletedParts] = useState([]);
@@ -108,45 +109,27 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
 
   const fileId = lectureObj?.id || effectiveId;
   const fileName = lectureObj?.title || lectureObj?.originalFileName || 'Bài giảng Nghiệp vụ An ninh T04';
-  const category = lectureObj?.category || 'document';
+  const category = getMediaKind(lectureObj);
 
   const filesList = lectureObj?.files || [];
   const mediaItems = lectureObj?.mediaItems || [];
   const isLecture = Boolean(filesList.length > 0 || mediaItems.length > 0);
 
-  const lecturerName = lectureObj?.teacherName || lectureObj?.lecturer || 'Đại tá Trần Minh Quang (Trưởng Khoa ANDT)';
-  const deptName = lectureObj?.departmentName || lectureObj?.subject || 'Khoa An ninh điều tra';
-  const subjectCode = lectureObj?.subjectCode || lectureObj?.code || 'ANDT_301';
+  const lecturerName = lectureObj?.teacherName || lectureObj?.lecturer || 'Giảng viên phụ trách';
+  const deptName = lectureObj?.departmentName || lectureObj?.subject || 'Khoa / Bộ môn đào tạo';
+  const subjectCode = lectureObj?.subjectCode || lectureObj?.code || '';
 
   // Định tuyến tài liệu thực tế cho từng phân hệ từ CSDL MySQL
-  const videoFromFiles = filesList.find(f => {
-    const type = (f.fileType || '').toLowerCase();
-    const name = (f.originalName || '').toLowerCase();
-    return type === 'video' || type === 'mp4' || type === 'audio' || type.startsWith('video/') ||
-           name.endsWith('.mp4') || name.endsWith('.webm') || name.endsWith('.mov') || name.endsWith('.mkv') || name.endsWith('.mp3');
-  });
-  const videoItem = mediaItems.find(m => m.role === 'video' || m.type === 'video');
-  const videoFileId = videoFromFiles?.fileId || videoItem?.mediaFileId || null;
+  const studyMedia = useMemo(() => selectStudyMedia(filesList), [filesList]);
+  const videoFromFiles = studyMedia.video;
+  const videoItem = mediaItems.find(m => m.role?.toLowerCase() === 'video' || ['video', 'audio'].includes(getMediaKind(m)));
+  const videoFileId = videoFromFiles?.fileId || videoFromFiles?.id || videoItem?.mediaFileId || null;
   const videoLabel = videoFromFiles?.originalName || videoItem?.label || fileName;
-
-  const slideFromFiles = filesList.find(f => {
-    const type = (f.fileType || '').toLowerCase();
-    const name = (f.originalName || '').toLowerCase();
-    return type === 'pdf' || type === 'ppt' || type === 'pptx' || type === 'slide' ||
-           name.endsWith('.pdf') || name.endsWith('.ppt') || name.endsWith('.pptx');
-  }) || filesList.find(f => f.fileId !== videoFromFiles?.fileId) || filesList[0];
-  const slideItem = mediaItems.find(m => m.role === 'slide');
-  const slideFileId = slideFromFiles?.fileId || slideItem?.mediaFileId || null;
+  const slideFromFiles = studyMedia.slide;
+  const slideItem = mediaItems.find(m => m.role?.toLowerCase() === 'slide');
+  const slideFileId = slideFromFiles?.fileId || slideFromFiles?.id || slideItem?.mediaFileId || null;
   const slideLabel = slideFromFiles?.originalName || slideItem?.label || 'Slide trình chiếu bài giảng điện tử';
-
-  const docFilesList = useMemo(() => {
-    return filesList.filter(f => {
-      const type = (f.fileType || '').toLowerCase();
-      const name = (f.originalName || '').toLowerCase();
-      return type === 'pdf' || type === 'document' || type === 'slide' ||
-             name.endsWith('.pdf') || name.endsWith('.doc') || name.endsWith('.docx') || name.endsWith('.txt');
-    });
-  }, [filesList]);
+  const docFilesList = studyMedia.documents;
 
   const currentDocFile = useMemo(() => {
     if (selectedDocId) {
@@ -156,47 +139,30 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
     return docFilesList[0] || slideFromFiles;
   }, [selectedDocId, docFilesList, slideFromFiles]);
 
-  const isCurrentDocPdf = useMemo(() => {
-    const name = (currentDocFile?.originalName || '').toLowerCase();
-    const type = (currentDocFile?.fileType || '').toLowerCase();
-    return type === 'pdf' || name.endsWith('.pdf');
-  }, [currentDocFile]);
+  const currentDocKind = getMediaKind(currentDocFile);
+  const isCurrentDocPdf = currentDocKind === 'pdf' || currentDocFile?.fileType?.toLowerCase()?.includes('pdf') || currentDocFile?.originalName?.toLowerCase()?.endsWith('.pdf');
+  const isCurrentDocVideo = currentDocKind === 'video' || currentDocFile?.fileType?.toLowerCase()?.includes('video') || Boolean(currentDocFile?.originalName?.match(/\.(mp4|webm|mov|mkv|avi|m4v)$/i));
+  const isCurrentDocAudio = currentDocKind === 'audio' || currentDocFile?.fileType?.toLowerCase()?.includes('audio') || Boolean(currentDocFile?.originalName?.match(/\.(mp3|wav|ogg|m4a|aac)$/i));
+  const isCurrentDocImage = currentDocKind === 'image' || currentDocFile?.fileType?.toLowerCase()?.includes('image') || Boolean(currentDocFile?.originalName?.match(/\.(png|jpg|jpeg|gif|webp|svg)$/i));
 
   const docFileId = currentDocFile?.fileId || null;
   const docLabel = currentDocFile?.originalName || (activePart === 4 ? 'Văn bản quy phạm pháp luật ngành' : 'Đề cương chi tiết học phần');
 
-  const imageFromFiles = filesList.find(f => ['image', 'png', 'jpg'].includes(f.fileType?.toLowerCase()));
+  const imageFromFiles = studyMedia.image;
   const imageItem = mediaItems.find(m => m.role === 'situation_diagram' || m.type === 'image');
   const imageFileId = imageFromFiles?.fileId || imageItem?.mediaFileId || null;
   const imageLabel = imageFromFiles?.originalName || imageItem?.label || 'Sơ đồ hiện trường & Bản đồ tác chiến';
 
-  // Đồng bộ định dạng hiển thị phù hợp: nếu bài giảng có video thì luôn ưu tiên giữ tab video ở Phần 2
+  // Reset only when entering another lecture/user; fetched metadata must not override navigation.
   useEffect(() => {
-    if (backendLecture) {
-      const hasVideo = Boolean(videoFileId || videoFromFiles);
-      if (hasVideo) {
-        setMediaTab('video');
-        setActivePart(2);
-      } else if (slideFileId) {
-        setMediaTab('slide');
-        setActivePart(2);
-      }
-    } else if (file) {
-      if (category === 'video' || category === 'audio') {
-        setMediaTab('video');
-        setActivePart(2);
-      } else if (category === 'document') {
-        setMediaTab('slide');
-        setActivePart(2);
-      } else if (category === 'image') {
-        setMediaTab('image');
-        setActivePart(3);
-      }
-    }
-  }, [backendLecture, file]);
+    setActivePart(1);
+    setMediaTab('doc');
+    setSelectedDocId(null);
+    setPdfPage(1);
+  }, [effectiveId, currentUser?.id]);
 
   const activePdfFile = mediaTab === 'slide' ? slideFromFiles : currentDocFile;
-  const activePdfId = ['slide', 'doc'].includes(mediaTab) && activePdfFile?.originalName?.toLowerCase().endsWith('.pdf') ? activePdfFile.fileId : null;
+  const activePdfId = ['slide', 'doc'].includes(mediaTab) && getMediaKind(activePdfFile) === 'pdf' ? activePdfFile.fileId : null;
   const mediaProgress = id => learning?.files.find(p => String(p.fileId) === String(id));
   const togglePartCompletion = async partId => {
     if (!learning || partId === 5 || (partId === 2 && videoFileId)) return;
@@ -207,49 +173,37 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
     } catch (e) { setLearningError(e.response?.data?.message || 'Không lưu được tiến độ.'); }
   };
 
-  // 5 Phần chuẩn cấu trúc bài giảng đào tạo Sĩ quan CAND
-  const partsConfig = [
-    {
-      id: 1,
-      title: 'Phần 1: Mục tiêu & Yêu cầu Nghiệp vụ',
-      subtitle: 'Đề cương, căn cứ pháp lý & yêu cầu đào tạo',
-      icon: BookOpen,
-      defaultTab: 'doc',
-      duration: '15 phút'
-    },
-    {
-      id: 2,
-      title: 'Phần 2: Lý thuyết Chuyên đề & Trình chiếu',
-      subtitle: 'Slide bài giảng PPT/PDF & Video ghi hình giảng viên',
-      icon: Video,
-      defaultTab: (videoFileId || videoFromFiles) ? 'video' : 'slide',
-      duration: '45 phút'
-    },
-    {
-      id: 3,
-      title: 'Phần 3: Tình huống Thực địa & Sơ đồ Chiến thuật',
-      subtitle: 'Tư liệu ảnh hiện trường, bản đồ & diễn biến vụ việc',
-      icon: ImageIcon,
-      defaultTab: 'image',
-      duration: '30 phút'
-    },
-    {
-      id: 4,
-      title: 'Phần 4: Tài liệu Nghiên cứu & Văn bản Quy phạm',
-      subtitle: 'Bộ luật TTHS, Luật CAND & Thông tư Bộ Công An',
-      icon: FileText,
-      defaultTab: 'doc',
-      duration: '25 phút'
-    },
-    {
-      id: 5,
-      title: 'Phần 5: Câu hỏi Ôn tập & Sổ tay Thu hoạch',
-      subtitle: 'Đánh giá nhận thức & Ghi chép nghiệp vụ',
-      icon: HelpCircle,
-      defaultTab: 'quiz',
-      duration: '20 phút'
+  // 5 Phần cấu trúc bài giảng đào tạo Sĩ quan CAND lấy trực tiếp từ MySQL CSDL (lecture_parts)
+  const iconMap = {
+    BookOpen,
+    Video,
+    ImageIcon,
+    FileText,
+    HelpCircle
+  };
+
+  const dbParts = backendLecture?.parts || [];
+  const partsConfig = useMemo(() => {
+    if (dbParts.length > 0) {
+      return dbParts.map(p => {
+        let defTab = p.defaultTab || 'doc';
+        if (p.partNumber === 2) {
+          defTab = (videoFileId || videoFromFiles) ? 'video' : 'slide';
+        }
+        return {
+          id: p.partNumber,
+          title: p.title,
+          subtitle: p.subtitle || '',
+          icon: iconMap[p.iconName] || (p.partNumber === 2 ? Video : (p.partNumber === 3 ? ImageIcon : (p.partNumber === 5 ? HelpCircle : BookOpen))),
+          defaultTab: defTab,
+          duration: p.durationText || `${p.durationMinutes || 30} phút`,
+          description: p.description
+        };
+      });
     }
-  ];
+
+    return [];
+  }, [dbParts, videoFileId, videoFromFiles]);
 
   // Câu hỏi trắc nghiệm lấy trực tiếp từ MySQL CSDL
   const quizQuestions = (backendLecture?.quizQuestions && backendLecture.quizQuestions.length > 0)
@@ -639,8 +593,9 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                     key={`${currentUser?.id}:${videoFileId}`}
                     lectureId={effectiveId}
                     fileId={videoFileId}
+                    mediaKind={getMediaKind(videoFromFiles || videoItem)}
                     initialSecond={Number(mediaProgress(videoFileId)?.lastVideoSecond || 0)}
-                    url={`/api/media/stream/${videoFileId}`}
+                    url={getMediaStreamUrl(videoFileId)}
                     onComplete={() => setCompletedParts(previous => [...new Set([...previous, 2])])}
                     onError={setLearningError}
                   />
@@ -667,11 +622,11 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                   <div className="video-info-strip">
                     <div className="video-title">
                       <h4>🎥 Video bài giảng: {videoLabel}</h4>
-                      <p>Chuẩn truyền phát HTTP 206 Partial Content mượt mà, hỗ trợ tua thời gian tức thì.</p>
+                      <p>Theo dõi bài giảng và tiếp tục từ vị trí đã lưu.</p>
                     </div>
                     <div className="video-actions">
                       <a
-                        href={`/api/media/stream/${videoFileId}`}
+                        href={getMediaStreamUrl(videoFileId)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-sub-action"
@@ -688,14 +643,14 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
             {/* 2. TAB SLIDE TRÌNH CHIẾU */}
             {mediaTab === 'slide' && (
               <div className="study-doc-container">
-                {slideFileId && learning ? (
+                {slideFileId && getMediaKind(slideFromFiles || slideItem) === 'pdf' ? (
                   <StudyPdf
                     key={`${currentUser?.id}:${effectiveId}:${slideFileId}:slide`}
                     lectureId={effectiveId}
                     fileId={slideFileId}
                     partId={2}
                     initialPage={mediaProgress(slideFileId)?.lastPdfPage || 1}
-                    url={`/api/media/stream/${slideFileId}`}
+                    url={getMediaStreamUrl(slideFileId)}
                     fileName={slideFromFiles?.originalName || 'Slide bài giảng điện tử'}
                     downloadUrl={`/api/media/download/${slideFileId}`}
                     canDownload={slideFromFiles?.isDownloadable ?? isDownloadAllowed}
@@ -723,7 +678,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                     <div className="attached-docs-pills">
                       {docFilesList.map(doc => {
                         const isChosen = String(doc.fileId) === String(currentDocFile?.fileId);
-                        const isPdf = (doc.originalName || '').toLowerCase().endsWith('.pdf') || doc.fileType === 'PDF';
+                        const isPdf = getMediaKind(doc) === 'pdf';
                         return (
                           <button
                             key={doc.fileId}
@@ -744,15 +699,155 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                   </div>
                 )}
 
-                {currentDocFile ? (
-                  isCurrentDocPdf ? (
+                {activePart === 1 ? (
+                  <div style={{ background: '#fff', borderRadius: '12px', padding: '32px 28px', border: '1px solid #E2E8F0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px', borderBottom: '1px solid #F1F5F9', paddingBottom: '16px' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FEF2F2', color: '#991B1B', display: 'flex', alignItems: 'center', justifyContent: 'center', shrink: 0 }}>
+                        <BookOpen size={26} />
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0B1E36', margin: 0 }}>
+                          {partsConfig.find(p => p.id === 1)?.title || 'Phần 1: Mục tiêu & Yêu cầu Nghiệp vụ'}
+                        </h3>
+                        <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0' }}>
+                          {partsConfig.find(p => p.id === 1)?.subtitle || 'Khung chương trình, đề cương chuẩn hóa và yêu cầu huấn luyện thực hành Sĩ quan CAND'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {partsConfig.find(p => p.id === 1)?.description && (
+                      <div style={{ fontSize: '13.5px', color: '#334155', lineHeight: '1.6', margin: '0 0 20px', background: '#F8FAFC', padding: '12px 16px', borderRadius: '8px', borderLeft: '4px solid #991B1B' }}>
+                        <strong>Nội dung trọng tâm: </strong>
+                        <span>{partsConfig.find(p => p.id === 1)?.description}</span>
+                      </div>
+                    )}
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                      <div style={{ background: '#F8FAFC', padding: '16px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                        <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1E293B', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Award size={16} color="#991B1B" /> 1. Mục tiêu đào tạo
+                        </h4>
+                        <ul style={{ fontSize: '12.5px', color: '#475569', margin: 0, paddingLeft: '18px', lineHeight: '1.7' }}>
+                          <li>Nắm vững phương pháp luận, nguyên tắc nghiệp vụ bảo vệ an ninh trật tự.</li>
+                          <li>Nâng cao kỹ năng phân tích, nhận định tình huống nghiệp vụ thực tế.</li>
+                          <li>Chấp hành nghiêm quy trình công tác và pháp luật hiện hành.</li>
+                        </ul>
+                      </div>
+
+                      <div style={{ background: '#F8FAFC', padding: '16px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                        <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#1E293B', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <ShieldCheck size={16} color="#0284C7" /> 2. Căn cứ pháp lý & Quy chế
+                        </h4>
+                        <ul style={{ fontSize: '12.5px', color: '#475569', margin: 0, paddingLeft: '18px', lineHeight: '1.7' }}>
+                          <li>Bộ luật Tố tụng Hình sự và các văn bản hướng dẫn thi hành.</li>
+                          <li>Luật Công an nhân dân & Thông tư nghiệp vụ của Bộ Công An.</li>
+                          <li>Quy chế bảo vệ bí mật nhà nước trong toàn lực lượng.</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    {currentDocFile && isCurrentDocPdf && (
+                      <div style={{ marginTop: '20px', borderTop: '1px solid #F1F5F9', paddingTop: '20px' }}>
+                        <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#0B1E36', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <FileText size={16} color="#991B1B" /> Đề cương chi tiết học phần: {currentDocFile.originalName}
+                        </h4>
+                        <StudyPdf
+                          key={`${currentUser?.id}:${effectiveId}:${currentDocFile.fileId}:part1`}
+                          lectureId={effectiveId}
+                          fileId={currentDocFile.fileId}
+                          partId={1}
+                          initialPage={mediaProgress(currentDocFile.fileId)?.lastPdfPage || 1}
+                          url={getMediaStreamUrl(currentDocFile.fileId)}
+                          fileName={currentDocFile.originalName}
+                          downloadUrl={`/api/media/download/${currentDocFile.fileId}`}
+                          canDownload={currentDocFile.isDownloadable ?? isDownloadAllowed}
+                          onPage={setPdfPage}
+                          onError={setLearningError}
+                        />
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #F1F5F9' }}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActivePart(2);
+                          setMediaTab((videoFileId || videoFromFiles) ? 'video' : 'slide');
+                        }}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          background: '#991B1B',
+                          color: '#fff',
+                          border: 'none',
+                          padding: '10px 20px',
+                          borderRadius: '8px',
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 6px rgba(153,27,27,0.25)'
+                        }}
+                      >
+                        <span>Bắt đầu học Phần 2: Lý thuyết & Trình chiếu</span>
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ) : currentDocFile ? (
+                  isCurrentDocVideo ? (
+                    <div className="study-video-container" style={{ background: '#0F172A', borderRadius: '12px', padding: '16px' }}>
+                      <ResumeVideo
+                        key={`${currentUser?.id}:${currentDocFile.fileId}:docvid`}
+                        lectureId={effectiveId}
+                        fileId={currentDocFile.fileId}
+                        mediaKind="video"
+                        initialSecond={Number(mediaProgress(currentDocFile.fileId)?.lastVideoSecond || 0)}
+                        url={getMediaStreamUrl(currentDocFile.fileId)}
+                        onComplete={() => setCompletedParts(previous => [...new Set([...previous, activePart])])}
+                        onError={setLearningError}
+                      />
+                      <div className="video-info-strip" style={{ marginTop: '12px' }}>
+                        <div className="video-title">
+                          <h4>🎥 {currentDocFile.originalName}</h4>
+                          <p>Tệp video tài liệu thuộc bài giảng. Theo dõi và tiếp tục bài học.</p>
+                        </div>
+                        <div className="video-actions">
+                          <a
+                            href={getMediaStreamUrl(currentDocFile.fileId)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-sub-action"
+                          >
+                            <ExternalLink size={13} />
+                            Mở luồng video gốc
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ) : isCurrentDocAudio ? (
+                    <div style={{ background: '#fff', borderRadius: '12px', padding: '32px', textAlign: 'center', border: '1px solid #E2E8F0' }}>
+                      <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#0B1E36', marginBottom: '8px' }}>🎧 {currentDocFile.originalName}</h4>
+                      <p style={{ fontSize: '13px', color: '#64748B', marginBottom: '20px' }}>Tệp âm thanh nghiệp vụ phục vụ nghe giảng hoặc ghi âm thực địa.</p>
+                      <audio controls autoPlay src={getMediaStreamUrl(currentDocFile.fileId)} style={{ width: '100%', maxWidth: '500px', margin: '0 auto' }} />
+                    </div>
+                  ) : isCurrentDocImage ? (
+                    <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', textAlign: 'center', border: '1px solid #E2E8F0' }}>
+                      <img
+                        src={getMediaStreamUrl(currentDocFile.fileId)}
+                        alt={currentDocFile.originalName}
+                        style={{ maxHeight: '550px', maxWidth: '100%', objectFit: 'contain', margin: '0 auto', borderRadius: '8px' }}
+                      />
+                      <p style={{ fontSize: '12.5px', color: '#64748B', marginTop: '12px' }}>{currentDocFile.originalName}</p>
+                    </div>
+                  ) : isCurrentDocPdf ? (
                     <StudyPdf
                       key={`${currentUser?.id}:${effectiveId}:${currentDocFile.fileId}:doc`}
                       lectureId={effectiveId}
                       fileId={currentDocFile.fileId}
-                      partId={4}
+                      partId={activePart}
                       initialPage={mediaProgress(currentDocFile.fileId)?.lastPdfPage || 1}
-                      url={`/api/media/stream/${currentDocFile.fileId}`}
+                      url={getMediaStreamUrl(currentDocFile.fileId)}
                       fileName={currentDocFile.originalName}
                       downloadUrl={`/api/media/download/${currentDocFile.fileId}`}
                       canDownload={currentDocFile.isDownloadable ?? isDownloadAllowed}
@@ -786,7 +881,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                           <span>Tải tài liệu về máy tính</span>
                         </a>
                         <a
-                          href={`/api/media/stream/${currentDocFile.fileId}`}
+                          href={getMediaStreamUrl(currentDocFile.fileId)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn-study-action"
@@ -817,7 +912,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                 </div>
                 <div className="image-viewport">
                   <img
-                    src={`/api/media/stream/${imageFileId}`}
+                    src={getMediaStreamUrl(imageFileId)}
                     alt="Tư liệu nghiệp vụ"
                     className="case-study-img"
                     onError={(e) => {

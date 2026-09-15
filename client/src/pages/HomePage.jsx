@@ -532,13 +532,9 @@ export default function HomePage({
                               <span style={{ fontSize: '11px', fontWeight: 800, background: '#A31A1A', color: '#fff', padding: '3px 8px', borderRadius: '4px' }}>
                                 {lec.subjectCode || 'T04-BG'}
                               </span>
-                              {isPublic ? (
+                              {isPublic && (
                                 <span style={{ fontSize: '10.5px', background: '#F1F5F9', color: '#475569', padding: '2px 6px', borderRadius: '4px', fontWeight: 700, border: '1px solid #CBD5E1' }}>
                                   🌐 Công khai
-                                </span>
-                              ) : (
-                                <span style={{ fontSize: '10.5px', background: '#EFF6FF', color: '#1E40AF', padding: '2px 6px', borderRadius: '4px', fontWeight: 700, border: '1px solid #BFDBFE' }}>
-                                  🎓 Lớp {lec.assignedClasses?.join(', ')}
                                 </span>
                               )}
                             </div>

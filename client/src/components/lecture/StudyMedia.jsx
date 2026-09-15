@@ -44,7 +44,7 @@ export function StudyPdf({
   );
 }
 
-export function ResumeVideo({ lectureId, fileId, initialSecond = 0, url, onComplete, onError }) {
+export function ResumeVideo({ lectureId, fileId, initialSecond = 0, mediaKind = 'video', url, onComplete, onError }) {
   const saver = useSaver(lectureId, 60000, onError);
   const resumed = useRef(false), lastSent = useRef(Date.now()), completed = useRef(false);
   const lastPosition = useRef(null);
@@ -59,8 +59,36 @@ export function ResumeVideo({ lectureId, fileId, initialSecond = 0, url, onCompl
     }
     if (force || Date.now() - lastSent.current >= 30000) { lastSent.current = Date.now(); saver.flush(); }
   };
-  return <video controls preload="metadata" className="study-video-player" src={url}
-    onLoadedMetadata={e => { e.currentTarget.currentTime = Math.min(Math.max(0, initialSecond), Math.max(0, e.currentTarget.duration - .1)); resumed.current = true; }}
-    onTimeUpdate={e => sample(e.currentTarget)} onPause={e => sample(e.currentTarget, true)} onEnded={e => sample(e.currentTarget, true)}
-    onError={() => onError?.('Không thể phát video. Kiểm tra file hoặc định dạng video.')} />;
+  const Player = mediaKind === 'audio' ? 'audio' : 'video';
+  return (
+    <Player
+      controls
+      preload="metadata"
+      className="study-video-player"
+      src={url}
+      onLoadedMetadata={e => {
+        const vid = e.currentTarget;
+        if (initialSecond > 0 && Number.isFinite(vid.duration) && vid.duration > 0) {
+          vid.currentTime = Math.min(initialSecond, Math.max(0, vid.duration - 0.5));
+        }
+        resumed.current = true;
+        onError?.('');
+      }}
+      onCanPlay={() => onError?.('')}
+      onTimeUpdate={e => sample(e.currentTarget)}
+      onPause={e => sample(e.currentTarget, true)}
+      onEnded={e => sample(e.currentTarget, true)}
+      onError={e => {
+        const err = e.currentTarget.error;
+        console.error('Video Error Details:', {
+          code: err?.code,
+          message: err?.message,
+          src: e.currentTarget.src,
+          networkState: e.currentTarget.networkState,
+          readyState: e.currentTarget.readyState
+        });
+        onError?.(`Không thể phát video (Mã lỗi ${err?.code || 'N/A'}: ${err?.message || 'Kiểm tra file hoặc định dạng video'}).`);
+      }}
+    />
+  );
 }

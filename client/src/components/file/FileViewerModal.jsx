@@ -11,6 +11,7 @@ import {
   Maximize2,
   ExternalLink
 } from 'lucide-react';
+import { getMediaKind } from '../../mediaType';
 import Modal from '../common/Modal';
 import { ClearanceBadge } from '../common/Badge';
 import { fileService } from '../../services/fileService';
@@ -23,8 +24,8 @@ export default function FileViewerModal({ isOpen, onClose, file, lectureId, onDo
   if (!file) return null;
 
   const streamUrl = fileService.getStreamUrl(file.fileId || file.id, currentUser?.id, lectureId);
-  const fileType = file.fileType?.toUpperCase() || 'DOCUMENT';
-  const fileName = file.originalName || 'Tài liệu học tập';
+  const fileType = getMediaKind(file).toUpperCase();
+  const fileName = file.originalName || file.originalFileName || 'Tài liệu học tập';
 
   const watermarkText = `${currentUser?.fullName} • ${currentUser?.username} • ${new Date().toLocaleDateString('vi-VN')} • T04 SECURE INTRANET`;
 
@@ -92,7 +93,7 @@ export default function FileViewerModal({ isOpen, onClose, file, lectureId, onDo
               className="max-h-[65vh] max-w-full object-contain z-10"
               onError={() => setLoadError(true)}
             />
-          ) : fileType === 'OTHER' && (fileName.endsWith('.wav') || fileName.endsWith('.mp3')) ? (
+          ) : fileType === 'AUDIO' ? (
             <div className="flex flex-col items-center justify-center p-12 text-white z-10 space-y-4">
               <div className="w-16 h-16 rounded-full bg-red-600/30 flex items-center justify-center border border-red-500/50">
                 <Music className="w-8 h-8 text-red-400" />

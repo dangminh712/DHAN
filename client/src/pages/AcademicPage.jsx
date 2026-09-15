@@ -15,6 +15,8 @@ import {
 import { academicService } from '../services/academicService';
 import AcademicModal from '../components/common/AcademicModal';
 import ClassRosterModal from '../components/common/ClassRosterModal';
+import Pagination from '../components/common/Pagination';
+import { useRemoteTable } from '../utils/useRemoteTable';
 import { SortableTh, useTableSort } from '../utils/tableSort';
 
 export default function AcademicPage({ academicUnits: propUnits = [], academicSubjects: propSubjects = [] }) {
@@ -33,47 +35,12 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
   const [rosterModalOpen, setRosterModalOpen] = useState(false);
   const [classSearch, setClassSearch] = useState('');
 
-  const {
-    sortedData: sortedSubjects,
-    sortField: subjectSortField,
-    sortDirection: subjectSortDirection,
-    handleSort: handleSubjectSort
-  } = useTableSort(subjects, 'code', 'asc');
-
-  const filteredClasses = classes.filter(c =>
-    !classSearch ||
-    c.code?.toLowerCase().includes(classSearch.toLowerCase()) ||
-    c.name?.toLowerCase().includes(classSearch.toLowerCase())
-  );
-
-  const {
-    sortedData: sortedClasses,
-    sortField: classSortField,
-    sortDirection: classSortDirection,
-    handleSort: handleClassSort
-  } = useTableSort(filteredClasses, 'code', 'asc');
-
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const [uRes, sRes, cRes] = await Promise.all([
-        academicService.getUnits().catch(() => propUnits),
-        academicService.getSubjects().catch(() => propSubjects),
-        academicService.getClasses().catch(() => [])
-      ]);
-      setUnits(uRes || propUnits);
-      setSubjects(sRes || propSubjects);
-      setClasses(cRes || []);
-    } catch (err) {
-      console.error('Error loading academic data:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const subjectTable = useRemoteTable(academicService.getSubjects, { sortKey: 'code' });
+  const classTable = useRemoteTable(academicService.getClasses, { sortKey: 'code', filters: { search: classSearch } });
+  const { items: sortedSubjects, sortKey: subjectSortField, sortDir: subjectSortDirection, requestSort: handleSubjectSort } = subjectTable;
+  const { items: sortedClasses, sortKey: classSortField, sortDir: classSortDirection, requestSort: handleClassSort } = classTable;
+  const loadData = () => { subjectTable.reload(); classTable.reload(); };
+  useEffect(() => { academicService.getUnits().then(setUnits).catch(console.error); }, []);
 
   const showToast = (type, text) => {
     setMessage({ type, text });
@@ -347,7 +314,7 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <h4 style={{ fontSize: '15.5px', fontWeight: 800, color: '#0B1E36', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <BookOpen size={18} color="#A31A1A" />
-                2. Học Phần & Môn Học Nghiệp Vụ Chuyên Sâu ({subjects.length} môn)
+                2. Học Phần & Môn Học Nghiệp Vụ Chuyên Sâu ({subjectTable.totalCount} môn)
               </h4>
               <button
                 onClick={handleOpenCreateSubject}
@@ -404,6 +371,7 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
                   ))}
                 </tbody>
               </table>
+              <Pagination page={subjectTable.page} pageSize={subjectTable.pageSize} totalCount={subjectTable.totalCount} onPageChange={subjectTable.setPage} onPageSizeChange={subjectTable.setPageSize} />
             </div>
           </div>
 
@@ -412,7 +380,7 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
               <h4 style={{ fontSize: '15.5px', fontWeight: 800, color: '#0B1E36', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <GraduationCap size={18} color="#2563EB" />
-                3. Danh Sách Lớp Học Vụ & Niên Khóa Đào Tạo ({classes.length} lớp)
+                3. Danh Sách Lớp Học Vụ & Niên Khóa Đào Tạo ({classTable.totalCount} lớp)
               </h4>
 
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -525,6 +493,7 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
                   )}
                 </tbody>
               </table>
+              <Pagination page={classTable.page} pageSize={classTable.pageSize} totalCount={classTable.totalCount} onPageChange={classTable.setPage} onPageSizeChange={classTable.setPageSize} />
             </div>
           </div>
         </div>

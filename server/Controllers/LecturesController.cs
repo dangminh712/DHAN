@@ -1,9 +1,12 @@
+using Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.DTOs;
 using Server.Models.Training;
 using Server.Services;
+
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Server.Controllers;
 
@@ -14,12 +17,17 @@ public class LecturesController : ControllerBase
     private readonly TrainingDbContext _db;
     private readonly IAuditService _audit;
     private readonly IAccessDecisionService _access;
+    private readonly IMemoryCache _cache;
+    private static long _cacheVersion = 0;
 
-    public LecturesController(TrainingDbContext db, IAuditService audit, IAccessDecisionService access)
+    public static void InvalidateCache() => Interlocked.Increment(ref _cacheVersion);
+
+    public LecturesController(TrainingDbContext db, IAuditService audit, IAccessDecisionService access, IMemoryCache cache)
     {
         _db = db;
         _audit = audit;
         _access = access;
+        _cache = cache;
     }
 
     [HttpGet]
@@ -29,7 +37,7 @@ public class LecturesController : ControllerBase
         [FromQuery] string? search,
         [FromQuery] ulong? subjectId,
         [FromQuery] int? page,
-        [FromQuery] int? pageSize)
+        [FromQuery] int? pageSize, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null, [FromQuery] string? scope = null)
     {
         var query = _db.Lectures
             .Include(l => l.Subject)
@@ -83,7 +91,8 @@ public class LecturesController : ControllerBase
             }
         }
 
-        query = query.OrderByDescending(l => l.CreatedAt);
+        if (scope == "PUBLIC") query = query.Where(l => !l.Permissions.Any() || l.Permissions.Any(p => p.ClassId == 0));
+        if (scope == "RESTRICTED") query = query.Where(l => l.Permissions.Any() && !l.Permissions.Any(p => p.ClassId == 0));
 
         var selectExpression = (IQueryable<Lecture> q) => q.Select(l => new LectureSummaryDto
         {
@@ -101,7 +110,7 @@ public class LecturesController : ControllerBase
             CloseAt = l.CloseAt,
             CreatedAt = l.CreatedAt,
             IsPublicAll = !l.Permissions.Any() || l.Permissions.Any(lp => lp.ClassId == 0),
-            AssignedClasses = l.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class.Name).ToList(),
+            AssignedClasses = l.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class.Code).ToList(),
             AssignedClassIds = l.Permissions.Select(lp => lp.ClassId).ToList(),
             FileCount = l.LectureFiles.Count(lf => lf.IsVisible),
             Files = l.LectureFiles
@@ -121,23 +130,15 @@ public class LecturesController : ControllerBase
                 }).ToList()
         });
 
-        if (page.HasValue && page.Value > 0)
+        string cacheKey = $"lectures:{Interlocked.Read(ref _cacheVersion)}:{userId}:{status}:{search}:{subjectId}:{page}:{pageSize}:{sortBy}:{sortDir}:{scope}";
+        if (_cache.TryGetValue(cacheKey, out object? cachedResult) && cachedResult != null)
         {
-            int size = Math.Clamp(pageSize ?? 10, 1, 100);
-            int total = await query.CountAsync();
-            var items = await selectExpression(query.Skip((page.Value - 1) * size).Take(size)).ToListAsync();
-            return Ok(new
-            {
-                items,
-                totalCount = total,
-                page = page.Value,
-                pageSize = size,
-                totalPages = (int)Math.Ceiling((double)total / size)
-            });
+            return Ok(cachedResult);
         }
 
-        var list = await selectExpression(query.Take(100)).ToListAsync();
-        return Ok(list);
+        var result = await selectExpression(query).Sort(sortBy, sortDir ?? "desc", "CreatedAt", "Id,Title,Subject,SubjectCode,DepartmentName,TeacherName,Status,Version,FileCount,scope:IsPublicAll,IsPublicAll,PublishAt,CloseAt,CreatedAt").ResultAsync(page, pageSize);
+        _cache.Set(cacheKey, result, TimeSpan.FromSeconds(15));
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
@@ -175,7 +176,7 @@ public class LecturesController : ControllerBase
             CloseAt = lecture.CloseAt,
             CreatedAt = lecture.CreatedAt,
             IsPublicAll = !lecture.Permissions.Any() || lecture.Permissions.Any(lp => lp.ClassId == 0),
-            AssignedClasses = lecture.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class.Name).ToList(),
+            AssignedClasses = lecture.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class.Code).ToList(),
             AssignedClassIds = lecture.Permissions.Select(lp => lp.ClassId).ToList(),
             FileCount = lecture.LectureFiles.Count(lf => lf.IsVisible),
             Files = lecture.LectureFiles
@@ -204,7 +205,23 @@ public class LecturesController : ControllerBase
                     CorrectIndex = q.CorrectIndex,
                     Explanation = q.Explanation,
                     OrderIndex = q.OrderIndex
-                }).ToList()
+                }).ToList(),
+            Parts = await _db.LectureParts
+                .Where(p => p.LectureId == id)
+                .OrderBy(p => p.PartNumber)
+                .Select(p => new LecturePartDto
+                {
+                    Id = p.Id,
+                    LectureId = p.LectureId,
+                    PartNumber = p.PartNumber,
+                    Title = p.Title,
+                    Subtitle = p.Subtitle,
+                    DurationText = p.DurationText,
+                    DurationMinutes = p.DurationMinutes,
+                    DefaultTab = p.DefaultTab,
+                    IconName = p.IconName,
+                    Description = p.Description
+                }).ToListAsync()
         };
 
         if (userId.HasValue && userId.Value > 0)
@@ -235,6 +252,62 @@ public class LecturesController : ControllerBase
 
         return Ok(dto);
     }
+
+    [HttpGet("{id}/parts")]
+    public async Task<IActionResult> GetLectureParts(ulong id)
+    {
+        var parts = await _db.LectureParts
+            .Where(p => p.LectureId == id)
+            .OrderBy(p => p.PartNumber)
+            .Select(p => new LecturePartDto
+            {
+                Id = p.Id,
+                LectureId = p.LectureId,
+                PartNumber = p.PartNumber,
+                Title = p.Title,
+                Subtitle = p.Subtitle,
+                DurationText = p.DurationText,
+                DurationMinutes = p.DurationMinutes,
+                DefaultTab = p.DefaultTab,
+                IconName = p.IconName,
+                Description = p.Description
+            }).ToListAsync();
+
+        return Ok(parts);
+    }
+
+    [HttpPut("{id}/parts")]
+    public async Task<IActionResult> UpdateLectureParts(ulong id, [FromBody] List<UpdateLecturePartDto> updatedParts)
+    {
+        var lectureExists = await _db.Lectures.AnyAsync(l => l.Id == id);
+        if (!lectureExists) return NotFound(new { message = "Không tìm thấy bài giảng." });
+
+        var existing = await _db.LectureParts.Where(p => p.LectureId == id).ToListAsync();
+        _db.LectureParts.RemoveRange(existing);
+
+        foreach (var p in updatedParts)
+        {
+            _db.LectureParts.Add(new LecturePart
+            {
+                LectureId = id,
+                PartNumber = p.PartNumber,
+                Title = p.Title,
+                Subtitle = p.Subtitle,
+                DurationText = p.DurationText,
+                DurationMinutes = p.DurationMinutes,
+                DefaultTab = p.DefaultTab,
+                IconName = p.IconName,
+                Description = p.Description,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            });
+        }
+
+        await _db.SaveChangesAsync();
+        InvalidateCache();
+        return Ok(new { success = true, message = "Cập nhật các phần bài giảng thành công." });
+    }
+
 
     [HttpGet("{id}/progress")]
     public async Task<IActionResult> GetProgress(ulong id, [FromQuery] ulong userId)
@@ -416,20 +489,23 @@ public class LecturesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateLecture([FromBody] CreateLectureDto dto, [FromQuery] ulong? userId)
     {
-        ulong uid = (userId.HasValue && userId.Value > 0) ? userId.Value : ((await LearningAccess.UserIdAsync(_db, Request)) ?? 1);
+        ulong uid = (dto.TeacherId.HasValue && dto.TeacherId.Value > 0)
+            ? dto.TeacherId.Value
+            : ((userId.HasValue && userId.Value > 0) ? userId.Value : ((await LearningAccess.UserIdAsync(_db, Request)) ?? 1));
+
         var teacher = await _db.Users.FirstOrDefaultAsync(u => u.Id == uid);
-        if (teacher == null) return Unauthorized(new { message = "Người dùng không hợp lệ." });
+        if (teacher == null) return Unauthorized(new { message = "Người dùng hoặc giảng viên không hợp lệ." });
 
         using var trans = await _db.Database.BeginTransactionAsync();
         try
         {
             var lecture = new Lecture
             {
-                SubjectId = dto.SubjectId,
+                SubjectId = dto.SubjectId > 0 ? dto.SubjectId : 1,
                 TeacherId = uid,
                 Title = dto.Title,
                 Description = dto.Description,
-                Status = "PUBLISHED",
+                Status = !string.IsNullOrWhiteSpace(dto.Status) ? dto.Status : "PUBLISHED",
                 PublishAt = DateTime.UtcNow,
                 Version = 1,
                 CreatedAt = DateTime.UtcNow
@@ -439,39 +515,108 @@ public class LecturesController : ControllerBase
             await _db.SaveChangesAsync();
 
             // Assign classes
-            foreach (var classId in dto.ClassIds)
+            if (!dto.IsPublicAll && dto.ClassIds != null && dto.ClassIds.Count > 0)
             {
-                _db.LecturePermissions.Add(new LecturePermission
+                foreach (var classId in dto.ClassIds.Where(cid => cid > 0).Distinct())
                 {
-                    LectureId = lecture.Id,
-                    ClassId = classId,
-                    CanView = true,
-                    PublishAt = DateTime.UtcNow,
-                    CreatedAt = DateTime.UtcNow
-                });
+                    _db.LecturePermissions.Add(new LecturePermission
+                    {
+                        LectureId = lecture.Id,
+                        ClassId = classId,
+                        CanView = true,
+                        PublishAt = DateTime.UtcNow,
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
             }
 
             // Attach files
-            int order = 1;
-            foreach (var fileId in dto.FileIds)
+            if (dto.FileIds != null)
             {
-                var fileRec = await _db.Files.FirstOrDefaultAsync(f => f.Id == fileId);
-                bool canDownload = fileRec?.FileType != "VIDEO"; // Videos default stream only
-                _db.LectureFiles.Add(new LectureFile
+                int order = 1;
+                foreach (var fileId in dto.FileIds.Distinct())
                 {
-                    LectureId = lecture.Id,
-                    FileId = fileId,
-                    DisplayOrder = order++,
-                    IsVisible = true,
-                    IsDownloadable = canDownload,
-                    IsPrintable = fileRec?.FileType == "PDF",
-                    CreatedAt = DateTime.UtcNow
-                });
+                    var fileRec = await _db.Files.FirstOrDefaultAsync(f => f.Id == fileId);
+                    bool canDownload = dto.FileDownloadSettings != null && dto.FileDownloadSettings.ContainsKey(fileId)
+                        ? dto.FileDownloadSettings[fileId]
+                        : (fileRec?.FileType != "VIDEO");
+                    bool canPrint = dto.FilePrintSettings != null && dto.FilePrintSettings.ContainsKey(fileId)
+                        ? dto.FilePrintSettings[fileId]
+                        : (fileRec?.FileType == "PDF");
+
+                    _db.LectureFiles.Add(new LectureFile
+                    {
+                        LectureId = lecture.Id,
+                        FileId = fileId,
+                        DisplayOrder = order++,
+                        IsVisible = true,
+                        IsDownloadable = canDownload,
+                        IsPrintable = canPrint,
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+            }
+
+            // Save lecture parts (Mục / Phần bài giảng)
+            if (dto.Parts != null && dto.Parts.Count > 0)
+            {
+                foreach (var p in dto.Parts)
+                {
+                    _db.LectureParts.Add(new LecturePart
+                    {
+                        LectureId = lecture.Id,
+                        PartNumber = p.PartNumber,
+                        Title = p.Title,
+                        Subtitle = p.Subtitle,
+                        DurationText = p.DurationText ?? $"{p.DurationMinutes} phút",
+                        DurationMinutes = p.DurationMinutes > 0 ? p.DurationMinutes : 30,
+                        DefaultTab = !string.IsNullOrWhiteSpace(p.DefaultTab) ? p.DefaultTab : "doc",
+                        IconName = !string.IsNullOrWhiteSpace(p.IconName) ? p.IconName : "BookOpen",
+                        Description = p.Description,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
+                }
+            }
+            else
+            {
+                // Tự động khởi tạo 5 mục chuẩn CAND lưu thẳng vào MySQL
+                var defaultParts = new List<LecturePart>
+                {
+                    new() { LectureId = lecture.Id, PartNumber = 1, Title = "Phần 1: Mục tiêu & Yêu cầu Nghiệp vụ", Subtitle = "Căn cứ pháp lý, chuẩn đầu ra & yêu cầu huấn luyện", DurationText = "15 phút", DurationMinutes = 15, DefaultTab = "doc", IconName = "BookOpen", Description = "Mục tiêu bài học, văn bản chỉ đạo và yêu cầu đạt được của học viên CAND." },
+                    new() { LectureId = lecture.Id, PartNumber = 2, Title = "Phần 2: Lý thuyết Chuyên đề & Trình chiếu", Subtitle = "Slide bài giảng PPT/PDF & Video ghi hình giảng viên", DurationText = "45 phút", DurationMinutes = 45, DefaultTab = "video", IconName = "Video", Description = "Nội dung lý thuyết trọng tâm, video phân tích tình huống của giảng viên." },
+                    new() { LectureId = lecture.Id, PartNumber = 3, Title = "Phần 3: Tình huống Thực địa & Sơ đồ Chiến thuật", Subtitle = "Tư liệu ảnh hiện trường, bản đồ tác chiến & mô phỏng vụ việc", DurationText = "30 phút", DurationMinutes = 30, DefaultTab = "image", IconName = "ImageIcon", Description = "Hình ảnh sơ đồ, biểu đồ phân tích phương thức thủ đoạn đối tượng." },
+                    new() { LectureId = lecture.Id, PartNumber = 4, Title = "Phần 4: Tài liệu Nghiên cứu & Văn bản Quy phạm", Subtitle = "Bộ luật TTHS, Luật CAND & Thông tư nghiệp vụ của Bộ", DurationText = "25 phút", DurationMinutes = 25, DefaultTab = "doc", IconName = "FileText", Description = "Hệ thống văn bản quy phạm pháp luật, biểu mẫu nghiệp vụ liên quan." },
+                    new() { LectureId = lecture.Id, PartNumber = 5, Title = "Phần 5: Câu hỏi Ôn tập & Sổ tay Thu hoạch", Subtitle = "Đánh giá nhận thức nghiệp vụ & Ghi chép thu hoạch", DurationText = "20 phút", DurationMinutes = 20, DefaultTab = "quiz", IconName = "HelpCircle", Description = "Bộ câu hỏi kiểm tra đánh giá mức độ tiếp thu kiến thức của học viên." }
+                };
+                _db.LectureParts.AddRange(defaultParts);
+            }
+
+            // Save quiz questions if provided
+            if (dto.QuizQuestions != null && dto.QuizQuestions.Count > 0)
+            {
+                int qOrder = 1;
+                foreach (var q in dto.QuizQuestions)
+                {
+                    _db.QuizQuestions.Add(new QuizQuestion
+                    {
+                        LectureId = lecture.Id,
+                        Question = q.Question,
+                        OptionsJson = System.Text.Json.JsonSerializer.Serialize(q.Options ?? new List<string>()),
+                        CorrectIndex = q.CorrectIndex,
+                        Explanation = q.Explanation,
+                        OrderIndex = qOrder++,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
+                }
             }
 
             await _db.SaveChangesAsync();
             await _audit.LogAsync(uid, "CREATE_LECTURE", "LECTURE", lecture.Id, null, $"{{\"title\":\"{lecture.Title}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
+
+            InvalidateCache();
 
             return CreatedAtAction(nameof(GetLectureDetail), new { id = lecture.Id }, lecture);
         }
@@ -506,6 +651,8 @@ public class LecturesController : ControllerBase
         await _db.SaveChangesAsync();
         await _audit.LogAsync(uid, "UPDATE_LECTURE_STATUS", "LECTURE", id, $"{{\"status\":\"{oldStatus}\"}}", $"{{\"status\":\"{dto.Status}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
 
+        InvalidateCache();
+
         return Ok(new { message = $"Đã cập nhật trạng thái bài giảng thành {dto.Status}", lectureId = id, status = dto.Status });
     }
 
@@ -524,6 +671,7 @@ public class LecturesController : ControllerBase
         try
         {
             if (dto.SubjectId > 0) lecture.SubjectId = dto.SubjectId;
+            if (dto.TeacherId.HasValue && dto.TeacherId.Value > 0) lecture.TeacherId = dto.TeacherId.Value;
             if (!string.IsNullOrWhiteSpace(dto.Title)) lecture.Title = dto.Title;
             lecture.Description = dto.Description;
             if (!string.IsNullOrWhiteSpace(dto.Status)) lecture.Status = dto.Status;
@@ -534,16 +682,19 @@ public class LecturesController : ControllerBase
             if (dto.ClassIds != null)
             {
                 _db.LecturePermissions.RemoveRange(lecture.Permissions);
-                foreach (var cid in dto.ClassIds)
+                if (!dto.IsPublicAll)
                 {
-                    _db.LecturePermissions.Add(new LecturePermission
+                    foreach (var cid in dto.ClassIds.Where(c => c > 0).Distinct())
                     {
-                        LectureId = lecture.Id,
-                        ClassId = cid,
-                        CanView = true,
-                        PublishAt = DateTime.UtcNow,
-                        CreatedAt = DateTime.UtcNow
-                    });
+                        _db.LecturePermissions.Add(new LecturePermission
+                        {
+                            LectureId = lecture.Id,
+                            ClassId = cid,
+                            CanView = true,
+                            PublishAt = DateTime.UtcNow,
+                            CreatedAt = DateTime.UtcNow
+                        });
+                    }
                 }
             }
 
@@ -552,18 +703,71 @@ public class LecturesController : ControllerBase
             {
                 _db.LectureFiles.RemoveRange(lecture.LectureFiles);
                 int order = 1;
-                foreach (var fid in dto.FileIds)
+                foreach (var fid in dto.FileIds.Distinct())
                 {
                     var fileRec = await _db.Files.FirstOrDefaultAsync(f => f.Id == fid);
+                    bool canDownload = dto.FileDownloadSettings != null && dto.FileDownloadSettings.ContainsKey(fid)
+                        ? dto.FileDownloadSettings[fid]
+                        : (fileRec?.FileType != "VIDEO");
+                    bool canPrint = dto.FilePrintSettings != null && dto.FilePrintSettings.ContainsKey(fid)
+                        ? dto.FilePrintSettings[fid]
+                        : (fileRec?.FileType == "PDF");
+
                     _db.LectureFiles.Add(new LectureFile
                     {
                         LectureId = lecture.Id,
                         FileId = fid,
                         DisplayOrder = order++,
                         IsVisible = true,
-                        IsDownloadable = fileRec?.FileType != "VIDEO",
-                        IsPrintable = fileRec?.FileType == "PDF",
+                        IsDownloadable = canDownload,
+                        IsPrintable = canPrint,
                         CreatedAt = DateTime.UtcNow
+                    });
+                }
+            }
+
+            // Update parts if provided
+            if (dto.Parts != null && dto.Parts.Count > 0)
+            {
+                var existingParts = await _db.LectureParts.Where(p => p.LectureId == id).ToListAsync();
+                _db.LectureParts.RemoveRange(existingParts);
+                foreach (var p in dto.Parts)
+                {
+                    _db.LectureParts.Add(new LecturePart
+                    {
+                        LectureId = lecture.Id,
+                        PartNumber = p.PartNumber,
+                        Title = p.Title,
+                        Subtitle = p.Subtitle,
+                        DurationText = p.DurationText ?? $"{p.DurationMinutes} phút",
+                        DurationMinutes = p.DurationMinutes > 0 ? p.DurationMinutes : 30,
+                        DefaultTab = !string.IsNullOrWhiteSpace(p.DefaultTab) ? p.DefaultTab : "doc",
+                        IconName = !string.IsNullOrWhiteSpace(p.IconName) ? p.IconName : "BookOpen",
+                        Description = p.Description,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
+                }
+            }
+
+            // Update quiz questions if provided
+            if (dto.QuizQuestions != null)
+            {
+                var existingQuestions = await _db.QuizQuestions.Where(q => q.LectureId == id).ToListAsync();
+                _db.QuizQuestions.RemoveRange(existingQuestions);
+                int qOrder = 1;
+                foreach (var q in dto.QuizQuestions)
+                {
+                    _db.QuizQuestions.Add(new QuizQuestion
+                    {
+                        LectureId = lecture.Id,
+                        Question = q.Question,
+                        OptionsJson = System.Text.Json.JsonSerializer.Serialize(q.Options ?? new List<string>()),
+                        CorrectIndex = q.CorrectIndex,
+                        Explanation = q.Explanation,
+                        OrderIndex = qOrder++,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
                     });
                 }
             }
@@ -571,6 +775,8 @@ public class LecturesController : ControllerBase
             await _db.SaveChangesAsync();
             await _audit.LogAsync(userId, "UPDATE_LECTURE", "LECTURE", lecture.Id, null, $"{{\"title\":\"{lecture.Title}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
+
+            InvalidateCache();
 
             return Ok(new { message = "Cập nhật bài giảng thành công!", lectureId = lecture.Id });
         }
@@ -592,9 +798,15 @@ public class LecturesController : ControllerBase
         {
             _db.LecturePermissions.RemoveRange(lecture.Permissions);
 
-            if (dto.Scope == "SPECIFIC" && dto.ClassIds != null && dto.ClassIds.Count > 0)
+            var validClassIds = (dto.ClassIds ?? new List<ulong>()).Where(cid => cid > 0).Distinct().ToList();
+
+            if (dto.Scope == "SPECIFIC")
             {
-                foreach (var cid in dto.ClassIds)
+                if (validClassIds.Count == 0)
+                {
+                    validClassIds.Add(1);
+                }
+                foreach (var cid in validClassIds)
                 {
                     _db.LecturePermissions.Add(new LecturePermission
                     {
@@ -612,17 +824,19 @@ public class LecturesController : ControllerBase
             await _db.SaveChangesAsync();
 
             await _audit.LogAsync(userId, "UPDATE_LECTURE_PERMISSIONS", "LECTURE", lecture.Id, null,
-                $"{{\"scope\":\"{dto.Scope}\",\"classCount\":{dto.ClassIds?.Count ?? 0}}}",
+                $"{{\"scope\":\"{dto.Scope}\",\"classCount\":{validClassIds.Count}}}",
                 HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
+
+            InvalidateCache();
 
             return Ok(new
             {
                 message = dto.Scope == "ALL"
                     ? "Đã mở công khai bài giảng cho tất cả học viên trong học viện!"
-                    : $"Đã giới hạn quyền xem bài giảng cho {dto.ClassIds?.Count ?? 0} lớp học vụ chỉ định.",
+                    : $"Đã giới hạn quyền xem bài giảng cho {validClassIds.Count} lớp học vụ chỉ định.",
                 isPublicAll = dto.Scope == "ALL",
-                assignedClassIds = dto.Scope == "ALL" ? new List<ulong>() : (dto.ClassIds ?? new List<ulong>())
+                assignedClassIds = dto.Scope == "ALL" ? new List<ulong>() : validClassIds
             });
         }
         catch (Exception ex)
@@ -649,6 +863,8 @@ public class LecturesController : ControllerBase
             $"LectureId={id}",
             $"{{\"isDownloadable\":{dto.IsDownloadable.ToString().ToLowerInvariant()}}}",
             HttpContext.Connection.RemoteIpAddress?.ToString());
+
+        InvalidateCache();
 
         return Ok(new
         {
@@ -681,6 +897,8 @@ public class LecturesController : ControllerBase
             await _audit.LogAsync(userId, "DELETE_LECTURE", "LECTURE", lecture.Id, null, $"{{\"title\":\"{lecture.Title}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
 
+            InvalidateCache();
+
             return Ok(new { message = "Đã lưu trữ/xóa bài giảng thành công.", lectureId = id });
         }
         catch (Exception ex)
@@ -688,5 +906,60 @@ public class LecturesController : ControllerBase
             await trans.RollbackAsync();
             return StatusCode(500, new { message = "Lỗi khi xóa bài giảng: " + ex.Message });
         }
+    }
+
+    [HttpGet("{id}/quiz-questions")]
+    public async Task<IActionResult> GetQuizQuestions(ulong id)
+    {
+        var rawQuestions = await _db.QuizQuestions
+            .Where(q => q.LectureId == id)
+            .OrderBy(q => q.OrderIndex)
+            .ToListAsync();
+
+        var questions = rawQuestions.Select(q => new QuizQuestionDto
+        {
+            Id = q.Id,
+            LectureId = q.LectureId,
+            Question = q.Question,
+            Options = !string.IsNullOrEmpty(q.OptionsJson)
+                ? (System.Text.Json.JsonSerializer.Deserialize<List<string>>(q.OptionsJson, (System.Text.Json.JsonSerializerOptions?)null) ?? new())
+                : new(),
+            CorrectIndex = q.CorrectIndex,
+            Explanation = q.Explanation,
+            OrderIndex = q.OrderIndex
+        }).ToList();
+
+        return Ok(questions);
+    }
+
+    [HttpPut("{id}/quiz-questions")]
+    public async Task<IActionResult> UpdateQuizQuestions(ulong id, [FromBody] List<QuizQuestionDto> questions)
+    {
+        var lectureExists = await _db.Lectures.AnyAsync(l => l.Id == id);
+        if (!lectureExists) return NotFound(new { message = "Không tìm thấy bài giảng." });
+
+        var existing = await _db.QuizQuestions.Where(q => q.LectureId == id).ToListAsync();
+        _db.QuizQuestions.RemoveRange(existing);
+
+        int order = 1;
+        foreach (var q in questions)
+        {
+            _db.QuizQuestions.Add(new QuizQuestion
+            {
+                LectureId = id,
+                Question = q.Question,
+                OptionsJson = System.Text.Json.JsonSerializer.Serialize(q.Options ?? new List<string>()),
+                CorrectIndex = q.CorrectIndex,
+                Explanation = q.Explanation,
+                OrderIndex = order++,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            });
+        }
+
+        await _db.SaveChangesAsync();
+        InvalidateCache();
+
+        return Ok(new { message = "Cập nhật ngân hàng câu hỏi ôn tập thành công!", count = questions.Count });
     }
 }

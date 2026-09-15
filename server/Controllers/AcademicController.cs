@@ -1,3 +1,4 @@
+using Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
@@ -19,7 +20,7 @@ public class AcademicController : ControllerBase
     }
 
     [HttpGet("classes")]
-    public async Task<IActionResult> GetClasses([FromQuery] string? search, [FromQuery] int? page, [FromQuery] int? pageSize)
+    public async Task<IActionResult> GetClasses([FromQuery] string? search, [FromQuery] int? page, [FromQuery] int? pageSize, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
         var query = _db.Classes
             .Include(c => c.OrganizationalUnit)
@@ -47,27 +48,11 @@ public class AcademicController : ControllerBase
                 StudentCount = c.StudentClasses.Count(sc => sc.Status == "ACTIVE")
             });
 
-        if (page.HasValue && page.Value > 0)
-        {
-            int size = Math.Clamp(pageSize ?? 15, 1, 100);
-            int total = await query.CountAsync();
-            var items = await selectQuery.Skip((page.Value - 1) * size).Take(size).ToListAsync();
-            return Ok(new
-            {
-                items,
-                totalCount = total,
-                page = page.Value,
-                pageSize = size,
-                totalPages = (int)Math.Ceiling((double)total / size)
-            });
-        }
-
-        var classes = await selectQuery.Take(100).ToListAsync();
-        return Ok(classes);
+        return Ok(await selectQuery.Sort(sortBy, sortDir ?? "asc", "Code", "Id,Code,Name,AcademicYear,Semester,Status,FacultyName,StudentCount").ResultAsync(page, pageSize));
     }
 
     [HttpGet("classes/{id}/students")]
-    public async Task<IActionResult> GetClassStudents(ulong id, [FromQuery] string? search)
+    public async Task<IActionResult> GetClassStudents(ulong id, [FromQuery] string? search, [FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
         var cls = await _db.Classes.FirstOrDefaultAsync(c => c.Id == id);
         if (cls == null) return NotFound(new { message = "Không tìm thấy lớp học vụ." });
@@ -86,7 +71,7 @@ public class AcademicController : ControllerBase
                 (sc.Student.StudentCode != null && sc.Student.StudentCode.ToLower().Contains(s)));
         }
 
-        var list = await query
+        var selected = query
             .OrderBy(sc => sc.Student.StudentCode)
             .Select(sc => new
             {
@@ -98,23 +83,26 @@ public class AcademicController : ControllerBase
                 Phone = sc.Student.Phone,
                 sc.Status,
                 sc.JoinedAt
-            })
-            .ToListAsync();
+            });
+        var sorted = selected.Sort(sortBy, sortDir, "StudentCode", "StudentId,Username,FullName,StudentCode,Email,Phone,Status,JoinedAt", "StudentId");
+        if (page.HasValue) return Ok(await sorted.ResultAsync(page, pageSize));
+        var total = await query.CountAsync();
+        var list = await sorted.Take(100).ToListAsync();
 
         return Ok(new
         {
             classId = cls.Id,
             classCode = cls.Code,
             className = cls.Name,
-            totalStudents = list.Count,
+            totalStudents = total,
             students = list
         });
     }
 
     [HttpGet("subjects")]
-    public async Task<IActionResult> GetSubjects()
+    public async Task<IActionResult> GetSubjects([FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
-        var subjects = await _db.Subjects
+        var query = _db.Subjects
             .Include(s => s.OrganizationalUnit)
             .Include(s => s.TeacherSubjects)
                 .ThenInclude(ts => ts.Teacher)
@@ -128,15 +116,27 @@ public class AcademicController : ControllerBase
                 Status = s.Status,
                 FacultyName = s.OrganizationalUnit != null ? s.OrganizationalUnit.Name : "T04",
                 AssignedTeachers = s.TeacherSubjects.Select(ts => ts.Teacher.FullName).ToList()
-            })
-            .ToListAsync();
+            });
 
-        return Ok(subjects);
+        if (!string.IsNullOrWhiteSpace(search)) query = query.Where(s => s.Code.Contains(search) || s.Name.Contains(search));
+        return Ok(await query.Sort(sortBy, sortDir, "Code", "Id,Code,Name,Credits,Status,FacultyName,unitName:FacultyName").ResultAsync(page, pageSize));
     }
 
     [HttpGet("units")]
-    public async Task<IActionResult> GetOrganizationalUnits([FromQuery] bool tree = false)
+    public async Task<IActionResult> GetOrganizationalUnits([FromQuery] bool tree = false, [FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
+        if (!tree || page.HasValue)
+        {
+            var query = _db.OrganizationalUnits.AsNoTracking().Select(u => new OrganizationalUnitDto
+            {
+                Id = u.Id, ParentId = u.ParentId, Code = u.Code, Name = u.Name,
+                UnitType = u.UnitType, Status = u.Status,
+                ParentName = _db.OrganizationalUnits.Where(p => p.Id == u.ParentId).Select(p => p.Name).FirstOrDefault() ?? "Trường Đại học An ninh Nhân dân",
+                ChildCount = _db.OrganizationalUnits.Count(c => c.ParentId == u.Id)
+            });
+            if (!string.IsNullOrWhiteSpace(search)) query = query.Where(u => u.Code.Contains(search) || u.Name.Contains(search));
+            return Ok(await query.Sort(sortBy, sortDir, "Code", "Id,Code,Name,UnitType,Status,ParentName,ChildCount").ResultAsync(page, pageSize));
+        }
         var allUnits = await _db.OrganizationalUnits
             .OrderBy(u => u.ParentId)
             .ThenBy(u => u.Id)

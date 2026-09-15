@@ -1,8 +1,8 @@
 import api from './api';
 
 export const authService = {
-  async getAvailableUsers() {
-    const res = await api.get('/auth/users');
+  async getAvailableUsers(options = {}) {
+    const res = await api.get('/auth/users', { params: options });
     return res.data;
   },
 
@@ -61,6 +61,8 @@ export const authService = {
       if (options.status) params.status = options.status;
       if (options.page) params.page = options.page;
       if (options.pageSize) params.pageSize = options.pageSize;
+      if (options.sortBy) params.sortBy = options.sortBy;
+      if (options.sortDir) params.sortDir = options.sortDir;
     }
     const res = await api.get('/auth/provisioned-students', { params });
     return res.data;

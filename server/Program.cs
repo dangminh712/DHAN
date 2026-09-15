@@ -19,6 +19,7 @@ builder.Services.AddScoped<IAccessDecisionService, AccessDecisionService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 builder.Services.AddScoped<ISecurityAlertService, SecurityAlertService>();
 builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
+builder.Services.AddMemoryCache();
 builder.Services.Configure<FormOptions>(o => { o.MemoryBufferThreshold = 65536; o.MultipartBodyLengthLimit = 1073741824; });
 builder.Services.AddControllers(o => o.Filters.Add<ApiErrorFilter>()).AddJsonOptions(o =>
 {

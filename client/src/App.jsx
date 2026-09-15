@@ -21,6 +21,7 @@ import AcademicPage from './pages/AcademicPage';
 import ProvisioningPage from './pages/ProvisioningPage';
 import DbmsAdminPage from './pages/DbmsAdminPage';
 import LectureStudyPage from './LectureStudyPage';
+import LectureCreatorPage from './pages/LectureCreatorPage';
 import DirectMediaViewerModal from './components/common/DirectMediaViewerModal';
 
 export default function App() {
@@ -80,16 +81,9 @@ export default function App() {
       }
     } catch (err) {
       console.warn('Chưa nạp được danh sách người dùng MySQL:', err.message);
-      const defaultAdmin = {
-        id: 1,
-        username: 'admin',
-        fullName: 'Đại tá Trần Văn Quyết (Quản trị T04)',
-        role: 'SUPER_ADMIN',
-        clearanceLevelOrder: 4,
-        maxClearance: 'Tuyệt mật'
-      };
-      setAvailableUsers([defaultAdmin]);
-      setCurrentUser(defaultAdmin);
+      setAvailableUsers([]);
+      setCurrentUser(null);
+      showToast('error', 'Chưa kết nối được máy chủ CSDL MySQL để nạp danh sách tài khoản.');
     }
   };
 
@@ -372,6 +366,19 @@ export default function App() {
         />
       )}
 
+      {/* 2b. STUDIO BIÊN SOẠN & TẠO BÀI GIẢNG ĐIỆN TỬ */}
+      {(route === '/tao-bai-giang' || route === '/lecture-creator' || route.startsWith('/lecture-editor')) && (
+        <LectureCreatorPage
+          lectureId={route.match(/^\/lecture-editor\/(\d+)/)?.[1] || null}
+          currentUser={currentUser}
+          onBack={() => { window.location.hash = '#/giang-vien'; }}
+          onSaved={() => {
+            fetchLectures();
+            fetchFiles();
+          }}
+        />
+      )}
+
       {/* 3. TRUNG TÂM QUẢN TRỊ HỆ THỐNG (DÀNH CHO ADMIN & BGH) */}
       {(route === '/admin' || route === '/audit') && (
         <AdminPortalPage
@@ -420,7 +427,7 @@ export default function App() {
           currentUser={currentUser}
           onSearch={fetchFiles}
           onOpenUpload={() => setIsUploadModalOpen(true)}
-          onOpenCreateLecture={() => setIsLectureModalOpen(true)}
+          onOpenCreateLecture={() => { window.location.hash = '#/tao-bai-giang'; }}
           onCopyHash={copyToClipboard}
           copiedHash={copiedHash}
           onDeleteFile={handleDeleteFile}

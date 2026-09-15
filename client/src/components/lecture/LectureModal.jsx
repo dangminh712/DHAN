@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Check, AlertCircle, Layers, FileText, CheckCircle2, Search, Flame, ArrowUpDown, Filter, Shield, GraduationCap, ExternalLink, ShieldCheck, Eye } from 'lucide-react';
+import { getMediaKind } from '../../mediaType';
+import './LectureModal.css';
 import Modal from '../common/Modal';
 import { lectureService } from '../../services/lectureService';
 import { academicService } from '../../services/academicService';
@@ -202,19 +204,25 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
       isOpen={isOpen}
       onClose={onClose}
       title={lectureToEdit ? `Chỉnh sửa Bài giảng: ${lectureToEdit.title}` : 'Khởi tạo Bài giảng Điện tử Mới'}
-      maxWidth="max-w-3xl"
+      maxWidth="max-w-4xl"
     >
-      <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+      <form onSubmit={handleSubmit} className="lecture-editor">
+        <div className="lecture-editor-intro">
+          <div className="lecture-editor-emblem"><BookOpen size={24} /></div>
+          <div><span className="lecture-editor-eyebrow">KHÔNG GIAN BIÊN SOẠN</span><h2>{lectureToEdit ? 'Hoàn thiện bài giảng của bạn' : 'Xây dựng bài học, kết nối tri thức'}</h2><p>Thiết lập nội dung, chọn học viên và bổ sung học liệu cho bài giảng.</p></div>
+        </div>
+        <section className="lecture-editor-section">
+          <div className="lecture-editor-section-heading"><span>01</span><div><h3>Thông tin bài giảng</h3><p>Những thông tin giúp học viên hiểu rõ nội dung và mục tiêu bài học.</p></div></div>
         {/* Row 1: Subject & Status */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="lecture-editor-main-grid">
           <div className="md:col-span-2">
-            <label className="block font-bold text-slate-800 mb-1.5 flex items-center gap-1.5 text-xs">
+            <label htmlFor="lecture-subject" className="block font-bold text-slate-800 mb-1.5 flex items-center gap-1.5 text-xs">
               <GraduationCap className="w-4 h-4 text-red-700 shrink-0" />
               <span>Môn học / Học phần Nghiệp vụ</span>
               <span className="text-red-500 font-bold">*</span>
             </label>
             <select
-              value={subjectId}
+              id="lecture-subject" required value={subjectId}
               onChange={(e) => setSubjectId(e.target.value)}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-600 text-xs bg-white font-semibold text-slate-800 shadow-2xs transition-all"
             >
@@ -242,31 +250,31 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
           </div>
 
           <div>
-            <label className="block font-bold text-slate-800 mb-1.5 flex items-center gap-1.5 text-xs">
+            <label htmlFor="lecture-status" className="block font-bold text-slate-800 mb-1.5 flex items-center gap-1.5 text-xs">
               <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
               <span>Trạng thái phát hành</span>
             </label>
             <select
-              value={status}
+              id="lecture-status" value={status}
               onChange={(e) => setStatus(e.target.value)}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs bg-white font-semibold text-slate-800 shadow-2xs transition-all"
             >
-              <option value="PUBLISHED">🟢 Đang phát hành (PUBLISHED)</option>
-              <option value="LOCKED">🔒 Khóa bài giảng (LOCKED)</option>
-              <option value="DRAFT">🟡 Bản nháp (DRAFT)</option>
-              <option value="CLOSED">🔴 Đã kết thúc (CLOSED)</option>
+              <option value="PUBLISHED">Đang phát hành</option>
+              <option value="LOCKED">Tạm khóa</option>
+              <option value="DRAFT">Bản nháp</option>
+              <option value="CLOSED">Đã kết thúc</option>
             </select>
           </div>
         </div>
 
         {/* Row 2: Title */}
         <div>
-          <label className="block font-bold text-slate-700 mb-1">
+          <label htmlFor="lecture-title" className="block font-bold text-slate-700 mb-1">
             Tiêu đề Bài giảng Điện tử <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
-            placeholder="Ví dụ: Chuyên đề 4: Phương pháp bảo vệ hiện trường và thu thập dấu vết điện tử..."
+            id="lecture-title" required placeholder="Ví dụ: Chuyên đề 4: Phương pháp bảo vệ hiện trường và thu thập dấu vết điện tử..."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-red-500 text-xs font-semibold"
@@ -275,9 +283,9 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
 
         {/* Row 3: Description */}
         <div>
-          <label className="block font-bold text-slate-700 mb-1">Mục tiêu & Tóm tắt nội dung bài học</label>
+          <label htmlFor="lecture-description" className="block font-bold text-slate-700 mb-1">Mục tiêu & Tóm tắt nội dung bài học</label>
           <textarea
-            rows={2}
+            id="lecture-description" rows={3}
             placeholder="Mô tả tóm tắt nội dung trọng tâm bài giảng, kỹ năng cần đạt và tài liệu bắt buộc..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -285,15 +293,18 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
           />
         </div>
 
+        </section>
+        <section className="lecture-editor-section">
+          <div className="lecture-editor-section-heading"><span>02</span><div><h3>Đối tượng học tập</h3><p>Chọn phạm vi truy cập phù hợp với kế hoạch đào tạo.</p></div></div>
         {/* Row 4: Visibility & Class Permissions */}
-        <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+        <div className="lecture-editor-access">
           <label className="block font-bold text-slate-700 mb-2 flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-red-600" />
             Phân quyền Tiếp cận Bài giảng <span className="text-red-500">*</span>
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2.5">
-            <div
+            <label
               onClick={() => setIsPublicAll(true)}
               className={`flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all ${
                 isPublicAll ? 'bg-emerald-50 border-emerald-400 text-emerald-900 font-bold shadow-sm' : 'bg-white border-slate-200 text-slate-600'
@@ -301,12 +312,12 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
             >
               <input type="radio" name="visibilityScope" checked={isPublicAll} onChange={() => setIsPublicAll(true)} className="mt-0.5 accent-emerald-600" />
               <div>
-                <div className="text-xs">🌐 Công khai toàn học viện</div>
+                <div className="text-xs">Toàn bộ học viên</div>
                 <div className="text-[10.5px] font-normal text-slate-500">Tất cả học viên mọi khóa/lớp trong trường đều xem được bài giảng này</div>
               </div>
-            </div>
+            </label>
 
-            <div
+            <label
               onClick={() => setIsPublicAll(false)}
               className={`flex items-start gap-2.5 p-2.5 rounded-lg border cursor-pointer transition-all ${
                 !isPublicAll ? 'bg-blue-50 border-blue-400 text-blue-900 font-bold shadow-sm' : 'bg-white border-slate-200 text-slate-600'
@@ -314,10 +325,10 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
             >
               <input type="radio" name="visibilityScope" checked={!isPublicAll} onChange={() => setIsPublicAll(false)} className="mt-0.5 accent-blue-600" />
               <div>
-                <div className="text-xs">🔒 Chỉ định lớp học vụ cụ thể</div>
+                <div className="text-xs">Các lớp được chỉ định</div>
                 <div className="text-[10.5px] font-normal text-slate-500">Chỉ các lớp được chọn mới có quyền tiếp cận học liệu</div>
               </div>
-            </div>
+            </label>
           </div>
 
           {!isPublicAll && (
@@ -334,7 +345,7 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
                 <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
-                  value={classSearchQuery}
+                  aria-label="Tìm lớp học" value={classSearchQuery}
                   onChange={(e) => setClassSearchQuery(e.target.value)}
                   placeholder="Tìm kiếm mã lớp, tên lớp học vụ (VD: D31, An ninh điều tra)..."
                   className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition"
@@ -356,20 +367,14 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
                     return (
                       <label
                         key={c.id}
-                        onClick={() => handleToggleClass(c.id)}
+                        
                         className={`flex items-center gap-2 p-1.5 rounded cursor-pointer transition-colors text-[11px] border ${
                           checked
                             ? 'bg-red-50 border-red-200 text-red-900 font-semibold'
                             : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
                         }`}
                       >
-                        <div
-                          className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${
-                            checked ? 'bg-red-600 border-red-600 text-white' : 'border-slate-300 bg-white'
-                          }`}
-                        >
-                          {checked && <Check className="w-2.5 h-2.5 stroke-[3]" />}
-                        </div>
+                        <input type="checkbox" checked={checked} onChange={() => handleToggleClass(c.id)} />
                         <span className="truncate" title={`${c.code} - ${c.name}`}>{c.code} - {c.name}</span>
                       </label>
                     );
@@ -379,6 +384,9 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
           )}
         </div>
 
+        </section>
+        <section className="lecture-editor-section">
+          <div className="lecture-editor-section-heading"><span>03</span><div><h3>Học liệu đính kèm</h3><p>Chọn tài liệu trong kho và thiết lập quyền tải cho từng tệp.</p></div></div>
         {/* Row 5: Attach Files from Repository with Download Toggle (Requirement 4) */}
         <div>
           <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
@@ -393,13 +401,13 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
           </div>
 
           {/* SEARCH, FILTER & SORT TOOLBAR */}
-          <div className="p-2 mb-2 bg-slate-100/80 border border-slate-200 rounded-lg flex flex-wrap items-center gap-2 text-[11.5px]">
+          <div className="lecture-editor-toolbar">
             {/* Search */}
             <div className="relative flex-1 min-w-[140px]">
               <Search className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="Tìm học liệu..."
+                aria-label="Tìm học liệu" placeholder="Tìm theo tên học liệu..."
                 value={fileSearch}
                 onChange={(e) => setFileSearch(e.target.value)}
                 className="w-full pl-7 pr-2 py-1 bg-white border border-slate-300 rounded text-[11px] focus:outline-none focus:border-sky-500"
@@ -410,7 +418,7 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
             <div className="flex items-center gap-1">
               <Filter className="w-3 h-3 text-slate-500" />
               <select
-                value={fileTypeFilter}
+                aria-label="Loại học liệu" value={fileTypeFilter}
                 onChange={(e) => setFileTypeFilter(e.target.value)}
                 className="bg-white border border-slate-300 rounded px-2 py-1 text-[11px] font-medium text-slate-700 focus:outline-none focus:border-sky-500"
               >
@@ -426,7 +434,7 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
             <div className="flex items-center gap-1">
               <ArrowUpDown className="w-3 h-3 text-slate-500" />
               <select
-                value={fileSortBy}
+                aria-label="Sắp xếp học liệu" value={fileSortBy}
                 onChange={(e) => setFileSortBy(e.target.value)}
                 className="bg-white border border-slate-300 rounded px-2 py-1 text-[11px] font-medium text-slate-700 focus:outline-none focus:border-sky-500"
               >
@@ -442,7 +450,7 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
           </div>
 
           {/* FILES LIST */}
-          <div className="space-y-1.5 p-2 bg-slate-50 border border-slate-200 rounded-lg max-h-56 overflow-y-auto">
+          <div className="lecture-editor-files">
             {(() => {
               const isWithin2Days = (dateStr) => {
                 if (!dateStr) return false;
@@ -473,13 +481,8 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
                 if (!matchSearch) return false;
 
                 if (fileTypeFilter === 'ALL') return true;
-                const fType = (f.fileType || '').toLowerCase();
-                const ext = (f.originalName || '').toLowerCase();
-                if (fileTypeFilter === 'video') return fType.includes('video') || ext.match(/\.(mp4|mov|mkv|webm)$/);
-                if (fileTypeFilter === 'document') return fType.includes('document') || ext.match(/\.(pdf|doc|docx)$/);
-                if (fileTypeFilter === 'image') return fType.includes('image') || ext.match(/\.(png|jpg|jpeg|gif|svg)$/);
-                if (fileTypeFilter === 'audio') return fType.includes('audio') || ext.match(/\.(mp3|wav|ogg)$/);
-                return true;
+                const kind = getMediaKind(f);
+                return fileTypeFilter === 'document' ? ['document', 'pdf', 'slide'].includes(kind) : kind === fileTypeFilter;
               });
 
               const sorted = [...filtered].sort((a, b) => {
@@ -541,7 +544,7 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
                   <div
                     key={f.id}
                     onClick={() => handleToggleFile(f.id)}
-                    className={`flex items-center justify-between p-2 rounded cursor-pointer transition-colors text-[11px] border ${
+                    className={`lecture-editor-file flex items-center justify-between p-2 rounded cursor-pointer transition-colors text-[11px] border ${
                       checked
                         ? 'bg-sky-50 border-sky-300 text-sky-900 font-semibold'
                         : isRecent
@@ -550,13 +553,7 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
-                      <div
-                        className={`w-4 h-4 rounded flex items-center justify-center border shrink-0 ${
-                          checked ? 'bg-sky-600 border-sky-600 text-white' : 'border-slate-300 bg-white'
-                        }`}
-                      >
-                        {checked && <Check className="w-3 h-3 stroke-[3]" />}
-                      </div>
+                      <input type="checkbox" checked={checked} aria-label={`Chọn ${f.originalName}`} onClick={e => e.stopPropagation()} onChange={() => handleToggleFile(f.id)} />
 
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -641,16 +638,17 @@ export default function LectureModal({ isOpen, onClose, lectureToEdit = null, on
           </div>
         </div>
 
+        </section>
         {/* Error Notification */}
         {errorMsg && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-xs">
+          <div role="alert" className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-xs">
             <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-200">
+        <div className="lecture-editor-actions">
           <button
             type="button"
             onClick={onClose}

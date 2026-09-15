@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import { nextTableSort } from './tableState';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 
 /**
@@ -73,20 +74,10 @@ export function useTableSort(arg1 = '', arg2 = 'asc', arg3 = {}, arg4 = {}) {
   const initialDir = isDataMode ? (typeof arg3 === 'string' ? arg3 : 'asc') : (typeof arg2 === 'string' ? arg2 : 'asc');
   const customGetters = isDataMode ? (typeof arg4 === 'object' && arg4 !== null ? arg4 : {}) : (typeof arg3 === 'object' && arg3 !== null ? arg3 : {});
 
-  const [sortKey, setSortKey] = useState(initialKey);
-  const [sortDir, setSortDir] = useState(initialDir);
-
-  const requestSort = useCallback((key) => {
-    setSortKey((prevKey) => {
-      if (prevKey === key) {
-        setSortDir((prevDir) => (prevDir === 'asc' ? 'desc' : 'asc'));
-        return key;
-      } else {
-        setSortDir('asc');
-        return key;
-      }
-    });
-  }, []);
+  const [{ sortKey, sortDir }, setSort] = useState({ sortKey: initialKey, sortDir: initialDir });
+  const setSortKey = key => setSort(s => ({ ...s, sortKey: key }));
+  const setSortDir = dir => setSort(s => ({ ...s, sortDir: dir }));
+  const requestSort = useCallback(key => setSort(s => nextTableSort(s, key)), []);
 
   const sortItems = useCallback(
     (items, overrides = {}) => {
@@ -151,6 +142,10 @@ export function SortableTh({
 
   return (
     <th
+      scope="col"
+      aria-sort={isAsc ? 'ascending' : isDesc ? 'descending' : 'none'}
+      tabIndex={0}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } }}
       onClick={handleClick}
       title={title || `Bấm để sắp xếp theo ${typeof children === 'string' ? children : 'cột này'}`}
       className={`sortable-th select-none ${className}`}

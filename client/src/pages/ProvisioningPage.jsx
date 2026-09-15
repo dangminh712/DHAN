@@ -51,11 +51,12 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
   };
 
   const {
-    sortedData: sortedStudents,
+    
     sortField: studentSortField,
     sortDirection: studentSortDirection,
-    handleSort: handleStudentSort
-  } = useTableSort(students, 'username', 'desc');
+    handleSort: toggleStudentSort
+  } = useTableSort('username', 'desc');
+  const sortedStudents = students;
 
   const {
     sortedData: sortedExcelStudents,
@@ -63,6 +64,8 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
     sortDirection: excelSortDirection,
     handleSort: handleExcelSort
   } = useTableSort(parsedExcelStudents, 'index', 'asc');
+
+  const handleStudentSort = key => { setCurrentPage(1); toggleStudentSort(key); };
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -104,6 +107,8 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
       const data = await authService.getProvisionedStudents({
         page: p,
         pageSize: sz,
+        sortBy: studentSortField,
+        sortDir: studentSortDirection,
         search: q,
         classCode: cls === 'ALL' ? '' : cls
       });
@@ -124,7 +129,7 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
 
   useEffect(() => {
     loadStudents(currentPage, pageSize, searchQuery, selectedClassFilter);
-  }, [currentPage, pageSize, selectedClassFilter]);
+  }, [currentPage, pageSize, selectedClassFilter, studentSortField, studentSortDirection]);
 
   const handleSearchSubmit = (e) => {
     e?.preventDefault();
@@ -1451,7 +1456,15 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
             {/* Table */}
             <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden', background: '#FFFFFF' }}>
               <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                <table style={{ width: '100%', minWidth: '1060px', tableLayout: 'fixed', borderCollapse: 'collapse', fontSize: '13px' }}>
+                  <colgroup>
+                    <col style={{ width: '60px' }} />
+                    <col style={{ width: '180px' }} />
+                    <col style={{ width: '220px' }} />
+                    <col style={{ width: '130px' }} />
+                    <col style={{ width: '190px' }} />
+                    <col style={{ width: '280px' }} />
+                  </colgroup>
                   <thead>
                     <tr style={{ background: '#F8FAFC', borderBottom: '2px solid #E2E8F0' }}>
                       <SortableTh field="id" sortField={studentSortField} sortDirection={studentSortDirection} onSort={handleStudentSort} style={{ padding: '12px 14px', textAlign: 'left', fontWeight: 800, color: '#475569', fontSize: '11.5px', textTransform: 'uppercase' }}>STT</SortableTh>
@@ -1459,7 +1472,7 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
                       <SortableTh field="fullName" sortField={studentSortField} sortDirection={studentSortDirection} onSort={handleStudentSort} style={{ padding: '12px 14px', fontWeight: 800, color: '#475569', fontSize: '11.5px', textTransform: 'uppercase' }}>Họ và tên</SortableTh>
                       <SortableTh field="classCode" sortField={studentSortField} sortDirection={studentSortDirection} onSort={handleStudentSort} style={{ padding: '12px 14px', fontWeight: 800, color: '#475569', fontSize: '11.5px', textTransform: 'uppercase', textAlign: 'center' }}>Lớp học vụ</SortableTh>
                       <SortableTh field="mustChangePassword" sortField={studentSortField} sortDirection={studentSortDirection} onSort={handleStudentSort} style={{ padding: '12px 14px', fontWeight: 800, color: '#475569', fontSize: '11.5px', textTransform: 'uppercase', textAlign: 'center' }}>Trạng thái hồ sơ</SortableTh>
-                      <th style={{ padding: '12px 14px', textAlign: 'center', fontWeight: 800, color: '#475569', fontSize: '11.5px', textTransform: 'uppercase' }}>Thao tác kiểm thử</th>
+                      <th style={{ padding: '12px 14px', textAlign: 'center', fontWeight: 800, color: '#475569', fontSize: '11.5px', textTransform: 'uppercase' }}>Chức năng</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1502,6 +1515,24 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
                                 <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: '#DBEAFE', color: '#1E40AF' }}>
                                   {st.classCode || 'DT5B'}
                                 </span>
+
+                              </div>
+                            </td>
+                            <td style={{ padding: '10px 14px', textAlign: 'center' }}>
+                              {st.mustChangePassword ? (
+                                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: '#FEF3C7', color: '#92400E', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                  <Unlock size={12} />
+                                  <span>Chờ đổi pass lần đầu</span>
+                                </span>
+                              ) : (
+                                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: '#DEF7EC', color: '#03543F', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                  <Lock size={12} />
+                                  <span>Đã khóa hồ sơ cố định</span>
+                                </span>
+                              )}
+                            </td>
+                            <td style={{ padding: '10px 14px', textAlign: 'center' }}>
+                              <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '6px' }}>
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -1522,23 +1553,6 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
                                 >
                                   Đổi lớp
                                 </button>
-                              </div>
-                            </td>
-                            <td style={{ padding: '10px 14px', textAlign: 'center' }}>
-                              {st.mustChangePassword ? (
-                                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: '#FEF3C7', color: '#92400E', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                                  <Unlock size={12} />
-                                  <span>Chờ đổi pass lần đầu</span>
-                                </span>
-                              ) : (
-                                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: '#DEF7EC', color: '#03543F', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                                  <Lock size={12} />
-                                  <span>Đã khóa hồ sơ cố định</span>
-                                </span>
-                              )}
-                            </td>
-                            <td style={{ padding: '10px 14px', textAlign: 'center' }}>
-                              <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
                                 {/* Quick Test Switch Login */}
                                 <button
                                   onClick={() => {

@@ -27,6 +27,17 @@ export default function Navbar({ currentRoute }) {
           Phòng Giảng viên
         </a>
         <a
+          href="#/tao-bai-giang"
+          className={`nav-item ${currentRoute === '/tao-bai-giang' || currentRoute === '/lecture-creator' ? 'active' : ''}`}
+          style={{ position: 'relative' }}
+        >
+          <BookOpen size={15} />
+          Biên Soạn Bài Giảng
+          <span style={{ fontSize: '9.5px', background: '#10B981', color: '#fff', padding: '1px 5px', borderRadius: '4px', fontWeight: 800, marginLeft: '4px' }}>
+            STUDIO
+          </span>
+        </a>
+        <a
           href="#/admin"
           className={`nav-item ${currentRoute === '/admin' ? 'active' : ''}`}
         >

@@ -8,10 +8,13 @@ export const lectureService = {
       if (options !== 'ALL') params.status = options;
     } else {
       if (options.status && options.status !== 'ALL') params.status = options.status;
+      if (options.scope) params.scope = options.scope;
       if (options.search) params.search = options.search;
       if (options.subjectId) params.subjectId = options.subjectId;
       if (options.page) params.page = options.page;
       if (options.pageSize) params.pageSize = options.pageSize;
+      if (options.sortBy) params.sortBy = options.sortBy;
+      if (options.sortDir) params.sortDir = options.sortDir;
     }
     const res = await api.get('/training/lectures', { params });
     return res.data;
@@ -67,5 +70,26 @@ export const lectureService = {
     const res = await api.post(`/training/lectures/${id}/quiz/submit`, { userId, answers });
     return res.data;
   },
+
+  async getLectureParts(id) {
+    const res = await api.get(`/training/lectures/${id}/parts`);
+    return res.data;
+  },
+
+  async updateLectureParts(id, parts) {
+    const res = await api.put(`/training/lectures/${id}/parts`, parts);
+    return res.data;
+  },
+
+  async getQuizQuestions(id) {
+    const res = await api.get(`/training/lectures/${id}/quiz-questions`);
+    return res.data;
+  },
+
+  async updateQuizQuestions(id, questions) {
+    const res = await api.put(`/training/lectures/${id}/quiz-questions`, questions);
+    return res.data;
+  },
 };
+
 

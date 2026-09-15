@@ -37,10 +37,12 @@ public class TrainingDbContext : DbContext
     public DbSet<NotificationRecord> Notifications => Set<NotificationRecord>();
     public DbSet<RetentionPolicy> RetentionPolicies => Set<RetentionPolicy>();
     public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
+    public DbSet<LecturePart> LectureParts => Set<LecturePart>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<LecturePart>().HasIndex(p => new { p.LectureId, p.PartNumber }).IsUnique();
         modelBuilder.Entity<PdfNote>().HasIndex(n => new { n.UserId, n.FileId, n.PdfPage });
         modelBuilder.Entity<LearningPartProgress>().HasIndex(p => new { p.UserId, p.LectureId, p.PartId }).IsUnique();
         modelBuilder.Entity<QuizAttempt>().HasIndex(a => new { a.UserId, a.LectureId, a.SubmittedAt });

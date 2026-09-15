@@ -1,3 +1,4 @@
+using Server.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
@@ -60,6 +61,8 @@ public class SystemController : ControllerBase
             new() { TableName = "classification_levels", Module = "Security", RowCount = await _db.ClassificationLevels.CountAsync(), Description = "4 Cấp độ mật (Normal->Secret)" },
             new() { TableName = "user_clearance_levels", Module = "Security", RowCount = await _db.UserClearanceLevels.CountAsync(), Description = "Clearance phân loại của người dùng" },
             new() { TableName = "lectures", Module = "Lecture", RowCount = lecturesCount, Description = "Bài giảng điện tử nghiệp vụ" },
+            new() { TableName = "lecture_parts", Module = "Lecture", RowCount = await _db.LectureParts.CountAsync(), Description = "Cấu trúc 5 phần chuẩn đào tạo CAND" },
+            new() { TableName = "quiz_questions", Module = "Lecture", RowCount = await _db.QuizQuestions.CountAsync(), Description = "Ngân hàng câu hỏi trắc nghiệm nghiệp vụ" },
             new() { TableName = "lecture_permissions", Module = "Lecture", RowCount = await _db.LecturePermissions.CountAsync(), Description = "Phân quyền bài giảng theo lớp" },
             new() { TableName = "lecture_files", Module = "Lecture", RowCount = await _db.LectureFiles.CountAsync(), Description = "Đính kèm học liệu vào bài giảng" },
             new() { TableName = "files", Module = "File", RowCount = filesCount, Description = "Metadata kho lưu trữ số hóa" },
@@ -100,7 +103,7 @@ public class SystemController : ControllerBase
         [FromQuery] string? entityType,
         [FromQuery] int? page,
         [FromQuery] int? pageSize,
-        [FromQuery] int limit = 50)
+        [FromQuery] int limit = 50, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
         var query = _db.AuditLogs
             .Include(a => a.User)
@@ -143,32 +146,15 @@ public class SystemController : ControllerBase
                 CreatedAt = a.CreatedAt
             });
 
-        if (page.HasValue && page.Value > 0)
-        {
-            int size = Math.Clamp(pageSize ?? 20, 1, 100);
-            int total = await query.CountAsync();
-            var items = await selectQuery.Skip((page.Value - 1) * size).Take(size).ToListAsync();
-            return Ok(new
-            {
-                items,
-                totalCount = total,
-                page = page.Value,
-                pageSize = size,
-                totalPages = (int)Math.Ceiling((double)total / size)
-            });
-        }
-
-        var logs = await selectQuery.Take(Math.Clamp(limit, 1, 100)).ToListAsync();
-        return Ok(logs);
+        return Ok(await selectQuery.Sort(sortBy, sortDir ?? "asc", "CreatedAt", "Id,Username,Action,EntityType,EntityId,IpAddress,CreatedAt").ResultAsync(page, pageSize));
     }
 
     [HttpGet("security-alerts")]
-    public async Task<IActionResult> GetSecurityAlerts([FromQuery] int page = 1)
+    public async Task<IActionResult> GetSecurityAlerts([FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
-        var alerts = await _db.SecurityAlerts
+        var selected = _db.SecurityAlerts
             .Include(s => s.User)
             .Include(s => s.Resolver)
-            .OrderByDescending(s => s.CreatedAt).ThenByDescending(s => s.Id).Skip((Math.Clamp(page, 1, 100000) - 1) * 50).Take(50)
             .Select(s => new SecurityAlertItemDto
             {
                 Id = s.Id,
@@ -181,14 +167,14 @@ public class SystemController : ControllerBase
                 ResolverName = s.Resolver != null ? s.Resolver.FullName : null,
                 ResolvedAt = s.ResolvedAt,
                 CreatedAt = s.CreatedAt
-            })
-            .ToListAsync();
+            });
 
-        return Ok(alerts);
+        if (!string.IsNullOrWhiteSpace(search)) selected = selected.Where(s => s.Username.Contains(search));
+        return Ok(await selected.Sort(sortBy, sortDir ?? "desc", "CreatedAt", "Id,Username,AlertType,Severity,Description,SourceIp,Status,ResolverName,ResolvedAt,CreatedAt").ResultAsync(page, pageSize));
     }
 
     [HttpGet("sessions")]
-    public async Task<IActionResult> GetUserSessions([FromQuery] ulong? userId, [FromQuery] int page = 1)
+    public async Task<IActionResult> GetUserSessions([FromQuery] ulong? userId, [FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
         var query = _db.UserSessions.Include(s => s.User).AsQueryable();
         if (userId.HasValue)
@@ -196,8 +182,7 @@ public class SystemController : ControllerBase
             query = query.Where(s => s.UserId == userId.Value);
         }
 
-        var list = await query
-            .OrderByDescending(s => s.CreatedAt)
+        var selected = query
             .Select(s => new UserSessionDto
             {
                 Id = s.Id,
@@ -210,10 +195,10 @@ public class SystemController : ControllerBase
                 LastActivityAt = s.LastActivityAt,
                 ExpiresAt = s.ExpiresAt,
                 RevokedAt = s.RevokedAt
-            })
-            .ToListAsync();
+            });
 
-        return Ok(list);
+        if (!string.IsNullOrWhiteSpace(search)) selected = selected.Where(s => s.Username.Contains(search));
+        return Ok(await selected.Sort(sortBy, sortDir ?? "desc", "LastActivityAt", "Id,UserId,Username,DeviceId,DeviceName,IpAddress,LastActivityAt,lastSeenAt:LastActivityAt,ExpiresAt,RevokedAt").ResultAsync(page, pageSize));
     }
 
     [HttpPost("sessions/{id}/revoke")]
@@ -231,13 +216,10 @@ public class SystemController : ControllerBase
     }
 
     [HttpGet("notifications")]
-    public async Task<IActionResult> GetNotifications([FromQuery] ulong userId, [FromQuery] int page = 1)
+    public async Task<IActionResult> GetNotifications([FromQuery] ulong userId, [FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
-        var notifications = await _db.Notifications
-            .Where(n => n.UserId == userId)
-            .OrderByDescending(n => n.CreatedAt).ThenByDescending(n => n.Id).Skip((Math.Clamp(page, 1, 100000) - 1) * 50).Take(50)
-            .ToListAsync();
-
-        return Ok(notifications);
+        var query = _db.Notifications.AsNoTracking().Where(n => n.UserId == userId);
+        if (!string.IsNullOrWhiteSpace(search)) query = query.Where(n => n.Title.Contains(search));
+        return Ok(await query.Sort(sortBy, sortDir ?? "desc", "CreatedAt", "Id,Title,CreatedAt").ResultAsync(page, pageSize));
     }
 }

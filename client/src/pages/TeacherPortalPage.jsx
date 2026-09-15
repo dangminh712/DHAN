@@ -35,13 +35,16 @@ import {
   Shield
 } from 'lucide-react';
 import { lectureService } from '../services/lectureService';
+import api from '../services/api';
+import { authService } from '../services/authService';
+import { useRemoteTable } from '../utils/useRemoteTable';
 import LectureModal from '../components/lecture/LectureModal';
 import Pagination from '../components/common/Pagination';
 import { SortableTh, useTableSort } from '../utils/tableSort';
 
 export default function TeacherPortalPage({
-  files,
-  teachersList,
+  files: initialFiles,
+  teachersList: initialTeachers,
   currentUser,
   onOpenUpload,
   onDeleteFile,
@@ -51,8 +54,6 @@ export default function TeacherPortalPage({
   onSwitchUser
 }) {
   const [activeTab, setActiveTab] = useState('lectures'); // 'lectures' | 'materials' | 'colleagues'
-  const [lectures, setLectures] = useState([]);
-  const [loadingLectures, setLoadingLectures] = useState(false);
   const [lectureModalOpen, setLectureModalOpen] = useState(false);
   const [lectureToEdit, setLectureToEdit] = useState(null);
   const [actionNotice, setActionNotice] = useState(null);
@@ -61,25 +62,10 @@ export default function TeacherPortalPage({
   const [lectureSearch, setLectureSearch] = useState('');
   const [lectureStatusFilter, setLectureStatusFilter] = useState('ALL');
   const [lectureScopeFilter, setLectureScopeFilter] = useState('ALL');
-  const [lecturePage, setLecturePage] = useState(1);
-  const [lecturePageSize, setLecturePageSize] = useState(8);
   const [expandedLectureFilesId, setExpandedLectureFilesId] = useState(null);
+  const [togglingScopeId, setTogglingScopeId] = useState(null);
 
   // Sorting hooks for tables
-  const {
-    sortKey: lectureSortKey,
-    sortDir: lectureSortDir,
-    requestSort: requestLectureSort,
-    sortItems: sortLectures
-  } = useTableSort('id', 'desc', {
-    subject: (l) => `${l.subjectCode || ''} ${l.subject || ''} ${l.teacherName || ''}`,
-    title: (l) => l.title || '',
-    scope: (l) => (l.isPublicAll ? 'Công khai' : (l.assignedClasses || []).join(', ')),
-    fileCount: (l) => (l.files ? l.files.length : l.fileCount || 0),
-    status: (l) => l.status || '',
-    version: (l) => l.version || 1
-  });
-
   const {
     sortKey: subFileSortKey,
     sortDir: subFileSortDir,
@@ -93,53 +79,24 @@ export default function TeacherPortalPage({
     isDownloadable: (f) => (f.isDownloadable !== false ? 1 : 0)
   });
 
-  const {
-    sortKey: matSortKey,
-    sortDir: matSortDir,
-    requestSort: requestMatSort,
-    sortItems: sortMaterials
-  } = useTableSort('createdAt', 'desc', {
-    category: (f) => f.category || '',
-    originalFileName: (f) => f.originalFileName || '',
-    classification: (f) => f.classification || 'Lưu hành nội bộ',
-    fileSize: (f) => f.fileSize || 0,
-    uploader: (f) => f.uploaderName || '',
-    createdAt: (f) => f.createdAt || ''
-  });
-
-  const {
-    sortKey: teachSortKey,
-    sortDir: teachSortDir,
-    requestSort: requestTeachSort,
-    sortItems: sortTeachers
-  } = useTableSort('fullName', 'asc', {
-    username: (t) => t.username || '',
-    fullName: (t) => t.fullName || '',
-    department: (t) => t.department || '',
-    maxClearance: (t) => t.clearanceLevelOrder || 1,
-    status: (t) => t.status || ''
-  });
-
   // Filter state for Tab 2: Materials Repository
   const [materialSearch, setMaterialSearch] = useState('');
   const [materialCategoryFilter, setMaterialCategoryFilter] = useState('ALL');
   const [materialClassificationFilter, setMaterialClassificationFilter] = useState('ALL');
 
-  const fetchLectures = async () => {
-    setLoadingLectures(true);
-    try {
-      const res = await lectureService.getLectures(currentUser?.id);
-      setLectures(res || []);
-    } catch (err) {
-      console.error('Error fetching lectures:', err);
-    } finally {
-      setLoadingLectures(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchLectures();
-  }, [currentUser]);
+  const lectureTable = useRemoteTable(q => lectureService.getLectures(currentUser?.id, q), {
+    enabled: activeTab === 'lectures', sortKey: 'id', sortDir: 'desc', pageSize: 8,
+    filters: { userId: currentUser?.id, search: lectureSearch, status: lectureStatusFilter, scope: lectureScopeFilter }
+  });
+  const materialTable = useRemoteTable(q => api.get('/Media', { params: q }).then(r => r.data), {
+    enabled: activeTab === 'materials', sortKey: 'createdAt', sortDir: 'desc',
+    filters: { userId: currentUser?.id, search: materialSearch, category: materialCategoryFilter, classification: materialClassificationFilter }
+  });
+  const teacherTable = useRemoteTable(authService.getAvailableUsers, { enabled: activeTab === 'colleagues', sortKey: 'fullName', filters: { role: 'TEACHER' } });
+  const { items: lectures, loading: loadingLectures, page: lecturePage, pageSize: lecturePageSize, setPage: setLecturePage, setPageSize: setLecturePageSize, sortKey: lectureSortKey, sortDir: lectureSortDir, requestSort: requestLectureSort } = lectureTable;
+  const { items: files, sortKey: matSortKey, sortDir: matSortDir, requestSort: requestMatSort } = materialTable;
+  const { items: teachersList, sortKey: teachSortKey, sortDir: teachSortDir, requestSort: requestTeachSort } = teacherTable;
+  const fetchLectures = lectureTable.reload;
 
   const showNotice = (text, type = 'success') => {
     setActionNotice({ text, type });
@@ -147,13 +104,11 @@ export default function TeacherPortalPage({
   };
 
   const handleOpenCreateLecture = () => {
-    setLectureToEdit(null);
-    setLectureModalOpen(true);
+    window.location.hash = '#/tao-bai-giang';
   };
 
   const handleOpenEditLecture = (lecture) => {
-    setLectureToEdit(lecture);
-    setLectureModalOpen(true);
+    window.location.hash = `#/lecture-editor/${lecture.id}`;
   };
 
   const handleDeleteLecture = async (id, title) => {
@@ -178,16 +133,48 @@ export default function TeacherPortalPage({
   };
 
   const handleToggleScope = async (lecture) => {
-    const nextScope = lecture.isPublicAll ? 'SPECIFIC' : 'ALL';
+    if (!lecture || togglingScopeId === lecture.id) return;
+
+    // Evaluate current public status strictly matching the UI render logic
+    const currentIsPublic = Boolean(lecture.isPublicAll || (!lecture.assignedClasses || lecture.assignedClasses.length === 0));
+    const nextScope = currentIsPublic ? 'SPECIFIC' : 'ALL';
+
+    // Sanitize class IDs (eliminate 0 from legacy records)
+    const validClassIds = (lecture.assignedClassIds || []).map(Number).filter(id => id > 0);
+    const targetClassIds = nextScope === 'ALL' ? [] : (validClassIds.length > 0 ? validClassIds : [1]);
+    const targetClassNames = nextScope === 'ALL' ? [] : ((lecture.assignedClasses || []).length > 0 ? lecture.assignedClasses : ['D31A']);
+
+    // Optimistic UI update: table flips immediately without waiting for network
+    if (lectureTable.updateItem) {
+      lectureTable.updateItem(item => item.id === lecture.id, {
+        isPublicAll: nextScope === 'ALL',
+        assignedClasses: targetClassNames,
+        assignedClassIds: targetClassIds
+      });
+    }
+
+    setTogglingScopeId(lecture.id);
+
     try {
       await lectureService.updatePermissions(lecture.id, {
         scope: nextScope,
-        classIds: nextScope === 'ALL' ? [] : (lecture.assignedClassIds?.length ? lecture.assignedClassIds : [1])
+        classIds: targetClassIds
       }, currentUser?.id || 1);
+
       showNotice(nextScope === 'ALL' ? 'Đã mở công khai toàn học viện!' : 'Đã giới hạn theo lớp học vụ chỉ định.');
       fetchLectures();
     } catch (err) {
+      // Revert optimistic update on failure
+      if (lectureTable.updateItem) {
+        lectureTable.updateItem(item => item.id === lecture.id, {
+          isPublicAll: currentIsPublic,
+          assignedClasses: lecture.assignedClasses || [],
+          assignedClassIds: lecture.assignedClassIds || []
+        });
+      }
       showNotice('Lỗi khi đổi phạm vi tiếp cận.', 'error');
+    } finally {
+      setTogglingScopeId(null);
     }
   };
 
@@ -265,9 +252,9 @@ export default function TeacherPortalPage({
                   STUDIO BIÊN SOẠN & QUẢN TRỊ BÀI GIẢNG ĐIỆN TỬ
                 </h2>
                 <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', marginTop: '3px' }}>
-                  Cán bộ Giảng viên: <strong style={{ color: '#FEF08A' }}>{currentUser?.fullName || 'TS. Nguyễn Văn An'}</strong> •
+                  Cán bộ Giảng viên: <strong style={{ color: '#FEF08A' }}>{currentUser?.fullName || 'Cán bộ Giảng viên'}</strong> •
                   Vai trò: <strong style={{ color: '#86EFAC' }}>{currentUser?.role === 'SUPER_ADMIN' ? 'Chỉ huy / Quản trị' : 'Giảng viên Sĩ quan'}</strong> •
-                  Khoa: <strong style={{ color: '#BFDBFE' }}>{currentUser?.department || 'Khoa An ninh điều tra'}</strong>
+                  Khoa: <strong style={{ color: '#BFDBFE' }}>{currentUser?.department || 'Khoa / Đơn vị nghiệp vụ'}</strong>
                 </div>
               </div>
             </div>
@@ -466,7 +453,7 @@ export default function TeacherPortalPage({
               )}
             </div>
 
-            {loadingLectures ? (
+            {loadingLectures && lectures.length === 0 ? (
               <div style={{ padding: '40px', textAlign: 'center', color: '#64748B' }}>
                 Đang tải danh sách bài giảng...
               </div>
@@ -482,8 +469,21 @@ export default function TeacherPortalPage({
                 </button>
               </div>
             ) : (
-              <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden', background: '#FFFFFF' }}>
-                <div style={{ overflowX: 'auto' }}>
+              <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', overflow: 'hidden', background: '#FFFFFF', position: 'relative' }}>
+                {loadingLectures && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '2.5px',
+                    background: 'linear-gradient(90deg, #2563EB, #60A5FA, #2563EB)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmerBar 1.2s infinite linear',
+                    zIndex: 10
+                  }} />
+                )}
+                <div style={{ overflowX: 'auto', opacity: loadingLectures ? 0.75 : 1, transition: 'opacity 0.15s ease' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                       <tr>
@@ -502,39 +502,17 @@ export default function TeacherPortalPage({
                         <SortableTh columnKey="status" sortKey={lectureSortKey} sortDir={lectureSortDir} onSort={requestLectureSort} style={thStyle} width="140px">
                           Trạng thái
                         </SortableTh>
-                        <SortableTh columnKey="version" sortKey={lectureSortKey} sortDir={lectureSortDir} onSort={requestLectureSort} style={thStyle} width="70px" align="center">
-                          Phiên bản
-                        </SortableTh>
                         <th style={{ ...thStyle, width: '180px', textAlign: 'center' }}>Thao tác</th>
                       </tr>
                     </thead>
                     <tbody>
                       {(() => {
-                        const filtered = lectures.filter((l) => {
-                          const q = lectureSearch.trim().toLowerCase();
-                          const matchesSearch = !q ||
-                            l.title?.toLowerCase().includes(q) ||
-                            l.subjectCode?.toLowerCase().includes(q) ||
-                            l.subject?.toLowerCase().includes(q) ||
-                            l.description?.toLowerCase().includes(q);
-
-                          const matchesStatus = lectureStatusFilter === 'ALL' || l.status === lectureStatusFilter;
-
-                          const isPub = l.isPublicAll || (!l.assignedClasses || l.assignedClasses.length === 0);
-                          const matchesScope = lectureScopeFilter === 'ALL' ||
-                            (lectureScopeFilter === 'PUBLIC' && isPub) ||
-                            (lectureScopeFilter === 'RESTRICTED' && !isPub);
-
-                          return matchesSearch && matchesStatus && matchesScope;
-                        });
-
-                        const sorted = sortLectures(filtered);
-                        const paginated = sorted.slice((lecturePage - 1) * lecturePageSize, lecturePage * lecturePageSize);
+                        const paginated = lectures;
 
                         if (paginated.length === 0) {
                           return (
                             <tr>
-                              <td colSpan={7} style={{ padding: '30px', textAlign: 'center', color: '#64748B' }}>
+                              <td colSpan={6} style={{ padding: '30px', textAlign: 'center', color: '#64748B' }}>
                                 Không tìm thấy bài giảng nào khớp với điều kiện tìm kiếm.
                               </td>
                             </tr>
@@ -566,13 +544,13 @@ export default function TeacherPortalPage({
                                       display: 'inline-block',
                                       width: 'fit-content'
                                     }}>
-                                      {l.subjectCode || 'ANDT_301'}
+                                      {l.subjectCode || '—'}
                                     </span>
                                     <span style={{ fontSize: '11px', color: '#475569', fontWeight: 600 }}>
-                                      {l.subject || 'Nghiệp vụ'}
+                                      {l.subject || 'Chưa phân môn'}
                                     </span>
                                     <span style={{ fontSize: '11px', color: '#0B1E36', fontWeight: 700, marginTop: '2px' }}>
-                                      👨‍🏫 {l.teacherName || 'TS. Nguyễn Văn An'}
+                                      👨‍🏫 {l.teacherName || 'Chưa phân công'}
                                     </span>
                                   </div>
                                 </td>
@@ -651,18 +629,21 @@ export default function TeacherPortalPage({
                                     <button
                                       type="button"
                                       onClick={() => handleToggleScope(l)}
+                                      disabled={togglingScopeId === l.id}
                                       style={{
                                         fontSize: '10.5px',
-                                        color: '#2563EB',
-                                        background: '#F8FAFC',
+                                        color: togglingScopeId === l.id ? '#94A3B8' : '#2563EB',
+                                        background: togglingScopeId === l.id ? '#F1F5F9' : '#F8FAFC',
                                         border: '1px solid #CBD5E1',
                                         borderRadius: '5px',
                                         padding: '3px 8px',
-                                        cursor: 'pointer',
+                                        cursor: togglingScopeId === l.id ? 'wait' : 'pointer',
                                         fontWeight: 600,
                                         width: '108px',
                                         boxSizing: 'border-box',
-                                        textAlign: 'center'
+                                        textAlign: 'center',
+                                        opacity: togglingScopeId === l.id ? 0.7 : 1,
+                                        transition: 'all 0.15s ease'
                                       }}
                                       title={isPublic ? 'Bấm để chuyển sang giới hạn theo lớp học vụ' : 'Bấm để mở công khai toàn học viện'}
                                     >
@@ -834,10 +815,6 @@ export default function TeacherPortalPage({
                                   </div>
                                 </td>
 
-                                <td style={{ ...tdStyle, fontFamily: 'monospace', color: '#64748B', textAlign: 'center', fontSize: '12px' }}>
-                                  v{l.version || 1}
-                                </td>
-
                                 {/* Cột 7: Thao tác xếp dọc, bằng nhau tuyệt đối, chống mất đối xứng */}
                                 <td style={{ ...tdStyle, textAlign: 'center' }}>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
@@ -924,7 +901,7 @@ export default function TeacherPortalPage({
                               {/* SUB-TABLE: EXPANDED LECTURE FILES WITH DOWNLOADABLE PERMISSIONS */}
                               {isExpanded && (
                                 <tr>
-                                  <td colSpan={7} style={{ background: '#F8FAFC', padding: '12px 20px', borderBottom: '2px solid #CBD5E1' }}>
+                                  <td colSpan={6} style={{ background: '#F8FAFC', padding: '12px 20px', borderBottom: '2px solid #CBD5E1' }}>
                                     <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '12px' }}>
                                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                         <strong style={{ fontSize: '12.5px', color: '#0B1E36', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -949,9 +926,6 @@ export default function TeacherPortalPage({
                                               </SortableTh>
                                               <SortableTh columnKey="fileType" sortKey={subFileSortKey} sortDir={subFileSortDir} onSort={requestSubFileSort} style={{ padding: '6px 10px', color: '#475569', fontWeight: 700 }} width="85px">
                                                 Loại
-                                              </SortableTh>
-                                              <SortableTh columnKey="fileSize" sortKey={subFileSortKey} sortDir={subFileSortDir} onSort={requestSubFileSort} style={{ padding: '6px 10px', color: '#475569', fontWeight: 700 }} width="95px">
-                                                Dung lượng
                                               </SortableTh>
                                               <SortableTh columnKey="classification" sortKey={subFileSortKey} sortDir={subFileSortDir} onSort={requestSubFileSort} style={{ padding: '6px 10px', color: '#475569', fontWeight: 700 }} width="110px">
                                                 Bảo mật
@@ -1012,9 +986,6 @@ export default function TeacherPortalPage({
                                                   </td>
                                                   <td style={{ padding: '6px 10px', fontFamily: 'monospace', color: '#64748B' }}>
                                                     {file.fileType}
-                                                  </td>
-                                                  <td style={{ padding: '6px 10px', color: '#64748B' }}>
-                                                    {formatFileSize(file.fileSize)}
                                                   </td>
                                                   <td style={{ padding: '6px 10px' }}>
                                                     <span style={{
@@ -1138,23 +1109,7 @@ export default function TeacherPortalPage({
                 <Pagination
                   page={lecturePage}
                   pageSize={lecturePageSize}
-                  totalCount={lectures.filter((l) => {
-                    const q = lectureSearch.trim().toLowerCase();
-                    const matchesSearch = !q ||
-                      l.title?.toLowerCase().includes(q) ||
-                      l.subjectCode?.toLowerCase().includes(q) ||
-                      l.subject?.toLowerCase().includes(q) ||
-                      l.description?.toLowerCase().includes(q);
-
-                    const matchesStatus = lectureStatusFilter === 'ALL' || l.status === lectureStatusFilter;
-
-                    const isPub = l.isPublicAll || (!l.assignedClasses || l.assignedClasses.length === 0);
-                    const matchesScope = lectureScopeFilter === 'ALL' ||
-                      (lectureScopeFilter === 'PUBLIC' && isPub) ||
-                      (lectureScopeFilter === 'RESTRICTED' && !isPub);
-
-                    return matchesSearch && matchesStatus && matchesScope;
-                  }).length}
+                  totalCount={lectureTable.totalCount}
                   onPageChange={(p) => setLecturePage(p)}
                   onPageSizeChange={(sz) => { setLecturePageSize(sz); setLecturePage(1); }}
                   pageSizeOptions={[5, 8, 12, 20]}
@@ -1173,7 +1128,7 @@ export default function TeacherPortalPage({
                   Kho Lưu Trữ Học Liệu Số (PDF, Slide PPT, Video, Ảnh, Audio)
                 </h4>
                 <span style={{ fontSize: '12.5px', color: '#64748B' }}>
-                  Tổng dung lượng vật lý trên ổ cứng: <strong>{(files.reduce((a, b) => a + (b.fileSize || 0), 0) / (1024 * 1024)).toFixed(2)} MB</strong>
+                  Dung lượng học liệu trong trang: <strong>{(files.reduce((a, b) => a + (b.fileSize || 0), 0) / (1024 * 1024)).toFixed(2)} MB</strong>
                 </span>
               </div>
 
@@ -1278,9 +1233,6 @@ export default function TeacherPortalPage({
                     <SortableTh columnKey="classification" sortKey={matSortKey} sortDir={matSortDir} onSort={requestMatSort} style={thStyle} width="140px">
                       Cấp độ bảo mật
                     </SortableTh>
-                    <SortableTh columnKey="fileSize" sortKey={matSortKey} sortDir={matSortDir} onSort={requestMatSort} style={thStyle} width="110px">
-                      Dung lượng
-                    </SortableTh>
                     <SortableTh columnKey="uploader" sortKey={matSortKey} sortDir={matSortDir} onSort={requestMatSort} style={thStyle} width="170px">
                       Người đăng & Thư mục
                     </SortableTh>
@@ -1292,33 +1244,12 @@ export default function TeacherPortalPage({
                 </thead>
                 <tbody>
                   {(() => {
-                    const filtered = files.filter((file) => {
-                      const q = materialSearch.trim().toLowerCase();
-                      const matchesSearch = !q ||
-                        file.originalFileName?.toLowerCase().includes(q) ||
-                        file.category?.toLowerCase().includes(q);
-
-                      const matchesCat = materialCategoryFilter === 'ALL' || file.category === materialCategoryFilter;
-
-                      let matchesClass = true;
-                      if (materialClassificationFilter !== 'ALL') {
-                        const cName = (file.classification || '').toLowerCase();
-                        if (materialClassificationFilter === 'TUYET_MAT') matchesClass = cName.includes('tuyệt mật');
-                        else if (materialClassificationFilter === 'TOI_MAT') matchesClass = cName.includes('tối mật');
-                        else if (materialClassificationFilter === 'MAT') matchesClass = cName.includes('mật') && !cName.includes('tuyệt') && !cName.includes('tối');
-                        else if (materialClassificationFilter === 'NOI_BO') matchesClass = cName.includes('nội bộ');
-                        else if (materialClassificationFilter === 'CONG_KHAI') matchesClass = cName.includes('công khai');
-                      }
-
-                      return matchesSearch && matchesCat && matchesClass;
-                    });
-
-                    const sorted = sortMaterials(filtered);
+                    const sorted = files;
 
                     if (sorted.length === 0) {
                       return (
                         <tr>
-                          <td colSpan={7} style={{ padding: '30px', textAlign: 'center', color: '#64748B' }}>
+                          <td colSpan={6} style={{ padding: '30px', textAlign: 'center', color: '#64748B' }}>
                             Không tìm thấy học liệu nào phù hợp với bộ lọc.
                           </td>
                         </tr>
@@ -1380,13 +1311,10 @@ export default function TeacherPortalPage({
                               <span>{cName}</span>
                             </span>
                           </td>
-                          <td style={{ ...tdStyle, color: '#475569', fontWeight: 600 }}>
-                            {formatFileSize(file.fileSize)}
-                          </td>
                           <td style={tdStyle}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                               <span style={{ fontWeight: 700, color: '#0B1E36', fontSize: '12px' }}>
-                                {file.uploaderName || 'TS. Nguyễn Văn An'}
+                                {file.uploaderName || file.uploadedByName || 'Cán bộ đăng tải'}
                               </span>
                               <span style={{ fontSize: '10.5px', color: '#64748B', fontFamily: 'monospace' }}>
                                 📁 {file.storagePath?.split('/')[1] || (file.category === 'video' ? 'Videos' : file.category === 'document' ? 'PDFs' : 'Storage')}
@@ -1481,6 +1409,7 @@ export default function TeacherPortalPage({
                   })()}
                 </tbody>
               </table>
+              <Pagination page={materialTable.page} pageSize={materialTable.pageSize} totalCount={materialTable.totalCount} onPageChange={materialTable.setPage} onPageSizeChange={materialTable.setPageSize} />
             </div>
           </div>
         )}
@@ -1512,11 +1441,11 @@ export default function TeacherPortalPage({
                     <SortableTh columnKey="status" sortKey={teachSortKey} sortDir={teachSortDir} onSort={requestTeachSort} style={thStyle} width="120px">
                       Trạng thái
                     </SortableTh>
-                    <th style={{ ...thStyle, textAlign: 'center', width: '130px' }}>Thao tác kiểm thử</th>
+                    <th style={{ ...thStyle, textAlign: 'center', width: '130px' }}>Chức năng</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {sortTeachers(teachersList).map((t) => {
+                  {teachersList.map((t) => {
                     const isSelf = currentUser?.username === t.username;
                     return (
                       <tr key={t.id} style={{ background: isSelf ? '#FEF2F2' : '#FFFFFF' }}>
@@ -1526,7 +1455,7 @@ export default function TeacherPortalPage({
                         <td style={{ ...tdStyle, fontWeight: 700, color: '#0B1E36' }}>
                           {t.fullName} {isSelf && <span style={{ fontSize: '11px', color: '#A31A1A', fontWeight: 800 }}>(Đang chọn)</span>}
                         </td>
-                        <td style={tdStyle}>{t.department || 'Khoa An ninh điều tra'}</td>
+                        <td style={tdStyle}>{t.department || 'Chưa phân khoa'}</td>
                         <td style={tdStyle}>
                           <span style={{
                             padding: '3px 8px',
@@ -1573,6 +1502,7 @@ export default function TeacherPortalPage({
                   })}
                 </tbody>
               </table>
+              <Pagination page={teacherTable.page} pageSize={teacherTable.pageSize} totalCount={teacherTable.totalCount} onPageChange={teacherTable.setPage} onPageSizeChange={teacherTable.setPageSize} />
             </div>
           </div>
         )}

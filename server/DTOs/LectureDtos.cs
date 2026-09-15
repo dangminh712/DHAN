@@ -21,6 +21,7 @@ public class LectureSummaryDto
     public int FileCount { get; set; }
     public List<LectureFileItemDto> Files { get; set; } = new();
     public List<QuizQuestionDto> QuizQuestions { get; set; } = new();
+    public List<LecturePartDto> Parts { get; set; } = new();
     public LearningProgressDto? UserProgress { get; set; }
 }
 
@@ -41,22 +42,33 @@ public class LectureFileItemDto
 public class CreateLectureDto
 {
     public ulong SubjectId { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string? Description { get; set; }
-    public bool IsPublicAll { get; set; }
-    public List<ulong> ClassIds { get; set; } = new();
-    public List<ulong> FileIds { get; set; } = new();
-}
-
-public class UpdateLectureDto
-{
-    public ulong SubjectId { get; set; }
+    public ulong? TeacherId { get; set; }
     public string Title { get; set; } = string.Empty;
     public string? Description { get; set; }
     public string Status { get; set; } = "PUBLISHED";
     public bool IsPublicAll { get; set; }
     public List<ulong> ClassIds { get; set; } = new();
     public List<ulong> FileIds { get; set; } = new();
+    public Dictionary<ulong, bool>? FileDownloadSettings { get; set; }
+    public Dictionary<ulong, bool>? FilePrintSettings { get; set; }
+    public List<UpdateLecturePartDto>? Parts { get; set; }
+    public List<QuizQuestionDto>? QuizQuestions { get; set; }
+}
+
+public class UpdateLectureDto
+{
+    public ulong SubjectId { get; set; }
+    public ulong? TeacherId { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public string Status { get; set; } = "PUBLISHED";
+    public bool IsPublicAll { get; set; }
+    public List<ulong> ClassIds { get; set; } = new();
+    public List<ulong> FileIds { get; set; } = new();
+    public Dictionary<ulong, bool>? FileDownloadSettings { get; set; }
+    public Dictionary<ulong, bool>? FilePrintSettings { get; set; }
+    public List<UpdateLecturePartDto>? Parts { get; set; }
+    public List<QuizQuestionDto>? QuizQuestions { get; set; }
 }
 
 public class UpdateLectureStatusDto
@@ -134,3 +146,30 @@ public class QuizAnswerDetailDto
     public bool IsCorrect { get; set; }
     public string? Explanation { get; set; }
 }
+
+public class LecturePartDto
+{
+    public ulong Id { get; set; }
+    public ulong LectureId { get; set; }
+    public int PartNumber { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string? Subtitle { get; set; }
+    public string DurationText { get; set; } = "30 phút";
+    public int DurationMinutes { get; set; } = 30;
+    public string DefaultTab { get; set; } = "doc";
+    public string IconName { get; set; } = "BookOpen";
+    public string? Description { get; set; }
+}
+
+public class UpdateLecturePartDto
+{
+    public int PartNumber { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string? Subtitle { get; set; }
+    public string DurationText { get; set; } = "30 phút";
+    public int DurationMinutes { get; set; } = 30;
+    public string DefaultTab { get; set; } = "doc";
+    public string IconName { get; set; } = "BookOpen";
+    public string? Description { get; set; }
+}
+

@@ -15,7 +15,8 @@ import {
   Clock,
   Hash
 } from 'lucide-react';
-import { createMediaViewerUrl } from '../../pdfViewer';
+import { getMediaKind } from '../../mediaType';
+import { createMediaViewerUrl, getMediaStreamUrl } from '../../pdfViewer';
 
 export default function DirectMediaViewerModal({
   isOpen,
@@ -30,17 +31,12 @@ export default function DirectMediaViewerModal({
 
   const fileId = file.id || file.fileId;
   const fileName = file.originalFileName || file.originalName || 'Tập tin';
-  const fileCat = file.category || (
-    file.fileType?.toLowerCase().includes('video') || fileName.toLowerCase().match(/\.(mp4|mov|mkv|webm)$/) ? 'video' :
-    file.fileType?.toLowerCase().includes('image') || fileName.toLowerCase().match(/\.(png|jpg|jpeg|gif|webp|svg)$/) ? 'image' :
-    file.fileType?.toLowerCase().includes('audio') || fileName.toLowerCase().match(/\.(mp3|wav|ogg)$/) ? 'audio' : 'document'
-  );
+  const fileCat = getMediaKind(file);
   const fileClassification = file.classification || file.classificationName || 'Nội bộ';
-
-  const isDoc = fileCat === 'document' || fileName.toLowerCase().endsWith('.pdf');
-  const isVideo = fileCat === 'video' || fileName.toLowerCase().endsWith('.mp4');
-  const isImage = fileCat === 'image' || fileName.toLowerCase().endsWith('.png') || fileName.toLowerCase().endsWith('.jpg');
-  const isAudio = fileCat === 'audio' || fileName.toLowerCase().endsWith('.mp3');
+  const isDoc = ['pdf', 'document', 'slide'].includes(fileCat);
+  const isVideo = fileCat === 'video';
+  const isImage = fileCat === 'image';
+  const isAudio = fileCat === 'audio';
 
   const formatFileSize = (bytes) => {
     if (!bytes || bytes === 0) return '0 B';
@@ -216,7 +212,7 @@ export default function DirectMediaViewerModal({
                 controls
                 autoPlay
                 className="video-player-frame"
-                src={`/api/media/stream/${fileId}`}
+                src={getMediaStreamUrl(fileId)}
                 style={{ maxHeight: '70vh', maxWidth: '100%', width: '100%' }}
               >
                 Trình duyệt của bạn không hỗ trợ thẻ video HTML5.
@@ -228,7 +224,7 @@ export default function DirectMediaViewerModal({
           {isImage && (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
               <img
-                src={`/api/media/stream/${fileId}`}
+                src={getMediaStreamUrl(fileId)}
                 alt={fileName}
                 className="image-viewer-frame"
                 style={{ maxHeight: '72vh', maxWidth: '100%', objectFit: 'contain', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
@@ -244,7 +240,7 @@ export default function DirectMediaViewerModal({
               </div>
               <h4 style={{ fontSize: '16px', color: '#FFFFFF', marginBottom: '8px' }}>{fileName}</h4>
               <p style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '20px' }}>Bản ghi âm bài giảng lưu hành nội bộ T04</p>
-              <audio controls autoPlay src={`/api/media/stream/${fileId}`} style={{ width: '380px' }} />
+              <audio controls autoPlay src={getMediaStreamUrl(fileId)} style={{ width: '380px' }} />
             </div>
           )}
         </div>

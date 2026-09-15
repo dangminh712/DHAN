@@ -413,8 +413,8 @@ export default function StudentPortalPage({
                         </p>
 
                         <div style={{ background: '#F8FAFC', borderRadius: '6px', padding: '8px 10px', fontSize: '12px', color: '#334155', marginBottom: '12px' }}>
-                          <div>👨‍🏫 <strong>Giảng viên:</strong> {lec.teacherName || lec.lecturer || 'Đại tá Trần Minh Quang (Trưởng Khoa ANDT)'}</div>
-                          <div>🏛️ <strong>Khoa:</strong> {lec.departmentName || lec.subject || 'Khoa An ninh điều tra'}</div>
+                          <div>👨‍🏫 <strong>Giảng viên:</strong> {lec.teacherName || lec.lecturer || 'Giảng viên phụ trách'}</div>
+                          <div>🏛️ <strong>Khoa:</strong> {lec.departmentName || lec.subject || 'Khoa / Bộ môn đào tạo'}</div>
                         </div>
 
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>

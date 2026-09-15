@@ -9,23 +9,29 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
 endobj
 4 0 obj
-<< /Length 380 >>
+<< /Length 719 >>
 stream
 BT
-/F1 20 Tf
+/F1 16 Tf
 50 720 Td
-(DE CUONG VA QUY CHUAN DO AN KHOA HOC 2026) Tj
-/F1 12 Tf
-0 -36 Td
-(Phan cong giang vien huong dan va hoi dong bao ve) Tj
-0 -28 Td
-(1. YEU CAU SAN PHAM: Hoat dong tron tru trong moi truong mang LAN noi bo.) Tj
-0 -20 Td
-(2. CONG NGHE: Frontend React.js, Backend ASP.NET Core 8 Web API, CSDL MySQL.) Tj
-0 -20 Td
-(3. LUU TRU: Luu tru cac file tai lieu, anh, video truc tiep tren he thong local.) Tj
-0 -20 Td
-(4. TIEU CHI DANH GIA: Tinh kha thi (30%), Giao dien nguoi dung (30%), Bao mat (40%).) Tj
+(GIAO TRINH: CHIEN THUAT TRINH SAT THUC DIA VA BAO VE MUC TIEU - Trang 1/1) Tj
+/F1 11 Tf
+0 -22 Td
+(BO CONG AN - KHOA AN NINH DIEU TRA & TRINH SAT) Tj
+0 -22 Td
+(GIAO TRINH LUU HANH NOI BO NGHIEP VU CAND) Tj
+0 -22 Td
+(------------------------------------------------------------) Tj
+0 -22 Td
+(1. Nguyen tac bo tri luc luong trinh sat ngoai tuyen tai dia ban trong diem.) Tj
+0 -22 Td
+(2. Phuong an phoi hop giua trinh sat va luc luong canh sat co dong.) Tj
+0 -22 Td
+(3. Xu ly cac tinh huong gay roi an ninh trat tu va bao dong cap 1.) Tj
+0 -22 Td
+(4. Ke hoach so tan nguyen thu va bao ve an toan tuyet doi muc tieu A2.) Tj
+0 -22 Td
+(5. Bao cao tinh hinh qua kenh vo tuyen ma hoa chuyen dung.) Tj
 ET
 endstream
 endobj
@@ -35,13 +41,13 @@ endobj
 xref
 0 6
 0000000000 65535 f 
-0000000010 00000 n 
-0000000060 00000 n 
-0000000117 00000 n 
-0000000244 00000 n 
-0000000676 00000 n 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001010 00000 n 
 trailer
 << /Size 6 /Root 1 0 R >>
 startxref
-754
+1080
 %%EOF

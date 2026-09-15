@@ -23,6 +23,8 @@ import { authService } from '../services/authService';
 import { systemService } from '../services/systemService';
 import UserModal from '../components/common/UserModal';
 import Pagination from '../components/common/Pagination';
+import { useRemoteTable } from '../utils/useRemoteTable';
+import { SortableTh } from '../utils/tableSort';
 import { Search } from 'lucide-react';
 
 export default function AdminPortalPage({
@@ -31,57 +33,30 @@ export default function AdminPortalPage({
   onSwitchUser
 }) {
   const [activeTab, setActiveTab] = useState('users'); // 'users' | 'sessions' | 'audit' | 'dbms'
-  const [users, setUsers] = useState(propUsers);
-  const [auditLogs, setAuditLogs] = useState([]);
-  const [auditTotal, setAuditTotal] = useState(0);
-  const [auditPage, setAuditPage] = useState(1);
-  const [auditPageSize, setAuditPageSize] = useState(10);
   const [auditSearch, setAuditSearch] = useState('');
-  const [securityAlerts, setSecurityAlerts] = useState([]);
-  const [userSessions, setUserSessions] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
-
   const [userModalOpen, setUserModalOpen] = useState(false);
   const [userToEdit, setUserToEdit] = useState(null);
-
-  const loadAuditLogs = async (page = 1, search = auditSearch) => {
-    try {
-      const res = await systemService.getAuditLogs({ page, pageSize: auditPageSize, search });
-      if (res && res.items) {
-        setAuditLogs(res.items);
-        setAuditTotal(res.totalCount);
-        setAuditPage(res.page);
-      } else if (Array.isArray(res)) {
-        setAuditLogs(res);
-        setAuditTotal(res.length);
-      }
-    } catch (err) {
-      console.error('Lỗi tải audit logs:', err);
-    }
-  };
-
-  const loadAdminData = async () => {
-    setLoading(true);
-    try {
-      const [uRes, alertsRes, sessRes] = await Promise.all([
-        authService.getAvailableUsers().catch(() => propUsers),
-        systemService.getSecurityAlerts().catch(() => []),
-        systemService.getUserSessions().catch(() => []),
-      ]);
-      setUsers(uRes || propUsers);
-      setSecurityAlerts(alertsRes || []);
-      setUserSessions(sessRes || []);
-      await loadAuditLogs(1, '');
-    } catch (err) {
-      console.error('Lỗi nạp dữ liệu quản trị:', err);
-    } finally {
-      setLoading(false);
-    }
+  const [overview, setOverview] = useState(null);
+  const userTable = useRemoteTable(authService.getAvailableUsers, { enabled: activeTab === 'users', sortKey: 'username' });
+  const sessionTable = useRemoteTable(q => systemService.getUserSessions(null, q), { enabled: activeTab === 'sessions', sortKey: 'lastActivityAt', sortDir: 'desc' });
+  const alertTable = useRemoteTable(systemService.getSecurityAlerts, { enabled: activeTab === 'sessions', sortKey: 'createdAt', sortDir: 'desc' });
+  const auditTable = useRemoteTable(systemService.getAuditLogs, { enabled: activeTab === 'audit', sortKey: 'createdAt', sortDir: 'desc', pageSize: 10, filters: { search: auditSearch } });
+  const users = userTable.items, userSessions = sessionTable.items, securityAlerts = alertTable.items, auditLogs = auditTable.items;
+  const auditTotal = auditTable.totalCount, auditPage = auditTable.page, auditPageSize = auditTable.pageSize;
+  const setAuditPage = auditTable.setPage, setAuditPageSize = auditTable.setPageSize;
+  const loading = userTable.loading || sessionTable.loading || alertTable.loading || auditTable.loading;
+  const loadAuditLogs = (page = 1) => { auditTable.setPage(page); auditTable.reload(); };
+  const loadAdminData = () => {
+    userTable.reload();
+    sessionTable.reload();
+    alertTable.reload();
+    auditTable.reload();
+    systemService.getOverview().then(setOverview).catch(() => {});
   };
 
   useEffect(() => {
-    loadAdminData();
+    systemService.getOverview().then(setOverview).catch(() => {});
   }, []);
 
   const showToast = (type, text) => {
@@ -124,9 +99,7 @@ export default function AdminPortalPage({
 
     try {
       await systemService.revokeSession(sessionId, currentUser?.id || 1);
-      setUserSessions((prev) =>
-        prev.map((s) => (s.id === sessionId ? { ...s, revokedAt: new Date().toISOString() } : s))
-      );
+      sessionTable.reload();
       showToast('success', 'Đã thu hồi phiên thiết bị ngay lập tức!');
     } catch (err) {
       console.error('Lỗi thu hồi phiên:', err);
@@ -148,6 +121,7 @@ export default function AdminPortalPage({
 
   const thStyle = {
     padding: '12px 14px',
+    whiteSpace: 'nowrap',
     textAlign: 'left',
     fontSize: '12px',
     fontWeight: 700,
@@ -161,7 +135,8 @@ export default function AdminPortalPage({
     fontSize: '13px',
     color: '#1E293B',
     borderBottom: '1px solid #E2E8F0',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+    whiteSpace: 'nowrap'
   };
 
   const adminerUrl = 'http://localhost:8080/?server=127.0.0.1%3A3307&username=root&db=training_management';
@@ -192,7 +167,7 @@ export default function AdminPortalPage({
                   TRUNG TÂM CHỈ HUY & QUẢN TRỊ HỆ THỐNG AN NINH (T04)
                 </h2>
                 <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', marginTop: '3px' }}>
-                  Chỉ huy / Quản trị viên: <strong style={{ color: '#FEF08A' }}>{currentUser?.fullName || 'Đại tá Trần Văn Quyết'}</strong> •
+                  Chỉ huy / Quản trị viên: <strong style={{ color: '#FEF08A' }}>{currentUser?.fullName || 'Quản trị viên Hệ thống'}</strong> •
                   Vai trò: <strong style={{ color: '#86EFAC' }}>SUPER_ADMIN</strong> •
                   Cơ quan: <strong style={{ color: '#BFDBFE' }}>Học viện An ninh CAND</strong>
                 </div>
@@ -329,16 +304,23 @@ export default function AdminPortalPage({
             </div>
 
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse' }}>
+                <colgroup>
+                  <col style={{ width: '120px' }} />
+                  <col />
+                  <col style={{ width: '190px' }} />
+                  <col style={{ width: '110px' }} />
+                  <col style={{ width: '120px' }} />
+                  <col style={{ width: '95px' }} />
+                </colgroup>
                 <thead>
                   <tr>
-                    <th style={thStyle}>Tài khoản</th>
-                    <th style={thStyle}>Họ và tên Sĩ quan</th>
-                    <th style={thStyle}>Đơn vị công tác</th>
-                    <th style={thStyle}>Vai trò RBAC</th>
-                    <th style={thStyle}>Cấp độ an ninh</th>
-                    <th style={thStyle}>Trạng thái</th>
-                    <th style={{ ...thStyle, textAlign: 'center' }}>Thao tác CRUD & Kiểm thử</th>
+                    <SortableTh columnKey="username" sortKey={userTable.sortKey} sortDir={userTable.sortDir} onSort={userTable.requestSort} style={{ ...thStyle, padding: '10px 10px' }}>Tài khoản</SortableTh>
+                    <SortableTh columnKey="fullName" sortKey={userTable.sortKey} sortDir={userTable.sortDir} onSort={userTable.requestSort} style={{ ...thStyle, padding: '10px 10px' }}>Họ và tên Sĩ quan</SortableTh>
+                    <SortableTh columnKey="department" sortKey={userTable.sortKey} sortDir={userTable.sortDir} onSort={userTable.requestSort} style={{ ...thStyle, padding: '10px 10px' }}>Đơn vị công tác</SortableTh>
+                    <SortableTh columnKey="role" sortKey={userTable.sortKey} sortDir={userTable.sortDir} onSort={userTable.requestSort} style={{ ...thStyle, padding: '10px 10px' }}>Vai trò RBAC</SortableTh>
+                    <SortableTh columnKey="maxClearance" sortKey={userTable.sortKey} sortDir={userTable.sortDir} onSort={userTable.requestSort} style={{ ...thStyle, padding: '10px 10px' }}>Cấp độ an ninh</SortableTh>
+                    <th style={{ ...thStyle, textAlign: 'center', padding: '10px 6px' }}>Chức năng</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -346,18 +328,22 @@ export default function AdminPortalPage({
                     const isSelf = currentUser?.username === u.username;
                     return (
                       <tr key={u.id} style={{ background: isSelf ? '#FEF2F2' : '#FFFFFF' }}>
-                        <td style={{ ...tdStyle, fontFamily: 'monospace', fontWeight: 700, color: '#A31A1A' }}>
+                        <td style={{ ...tdStyle, padding: '8px 10px', fontFamily: 'monospace', fontWeight: 700, color: '#A31A1A' }}>
                           {u.username}
                         </td>
-                        <td style={{ ...tdStyle, fontWeight: 700, color: '#0B1E36' }}>
+                        <td style={{ ...tdStyle, padding: '8px 10px', fontWeight: 700, color: '#0B1E36', whiteSpace: 'normal', wordBreak: 'break-word' }}>
                           {u.fullName} {isSelf && <span style={{ fontSize: '11px', color: '#A31A1A', fontWeight: 800 }}>(Đang chọn)</span>}
                         </td>
-                        <td style={tdStyle}>{u.department || 'Bộ môn Nghiệp vụ T04'}</td>
-                        <td style={tdStyle}>
+                        <td style={{ ...tdStyle, padding: '8px 10px', whiteSpace: 'normal', wordBreak: 'break-word', fontSize: '12px' }}>
+                          {u.department || 'Bộ môn Nghiệp vụ T04'}
+                        </td>
+                        <td style={{ ...tdStyle, padding: '8px 10px' }}>
                           <span style={{
-                            padding: '3px 8px',
+                            padding: '2px 7px',
                             borderRadius: '4px',
                             fontSize: '11px',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
                             fontWeight: 700,
                             background: u.role === 'SUPER_ADMIN' ? '#FEE2E2' : u.role === 'TEACHER' ? '#DBEAFE' : '#D1FAE5',
                             color: u.role === 'SUPER_ADMIN' ? '#991B1B' : u.role === 'TEACHER' ? '#1E40AF' : '#065F46'
@@ -365,11 +351,13 @@ export default function AdminPortalPage({
                             {u.role}
                           </span>
                         </td>
-                        <td style={tdStyle}>
+                        <td style={{ ...tdStyle, padding: '8px 10px' }}>
                           <span style={{
-                            padding: '3px 8px',
+                            padding: '2px 7px',
                             borderRadius: '10px',
                             fontSize: '11px',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
                             fontWeight: 700,
                             background: u.clearanceLevelOrder === 4 ? '#FEE2E2' : u.clearanceLevelOrder === 3 ? '#FEF3C7' : '#EFF6FF',
                             color: u.clearanceLevelOrder === 4 ? '#991B1B' : u.clearanceLevelOrder === 3 ? '#92400E' : '#1E40AF'
@@ -377,37 +365,35 @@ export default function AdminPortalPage({
                             {u.maxClearance || (u.clearanceLevelOrder === 4 ? 'Tuyệt mật' : 'Lưu hành')}
                           </span>
                         </td>
-                        <td style={tdStyle}>
-                          <span style={{
-                            padding: '2px 8px',
-                            borderRadius: '4px',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            background: u.status === 'ACTIVE' ? '#D1FAE5' : '#FEE2E2',
-                            color: u.status === 'ACTIVE' ? '#065F46' : '#991B1B'
+                        <td style={{ ...tdStyle, textAlign: 'center', padding: '6px 4px', verticalAlign: 'middle' }}>
+                          <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '3px',
+                            alignItems: 'stretch',
+                            justifyContent: 'center',
+                            width: '100%',
+                            maxWidth: '85px',
+                            margin: '0 auto'
                           }}>
-                            {u.status === 'ACTIVE' ? 'HOẠT ĐỘNG' : 'BỊ KHÓA'}
-                          </span>
-                        </td>
-                        <td style={{ ...tdStyle, textAlign: 'center' }}>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'center' }}>
                             <button
                               onClick={() => onSwitchUser(u.username)}
                               className="btn-action-test"
                               disabled={isSelf}
                               style={{
-                                display: 'inline-flex',
+                                display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '4px',
-                                width: '92px',
-                                height: '25px',
+                                width: '100%',
+                                height: '23px',
+                                padding: '0 4px',
                                 fontSize: '11px',
                                 fontWeight: 700,
-                                opacity: isSelf ? 0.6 : 1,
+                                opacity: isSelf ? 0.5 : 1,
                                 cursor: isSelf ? 'default' : 'pointer',
                                 boxSizing: 'border-box',
-                                whiteSpace: 'nowrap'
+                                borderRadius: '4px'
                               }}
                               title="Chuyển sang đăng nhập tài khoản này để kiểm thử nhanh"
                             >
@@ -419,16 +405,17 @@ export default function AdminPortalPage({
                               onClick={() => handleOpenEditUser(u)}
                               className="btn-action-edit"
                               style={{
-                                display: 'inline-flex',
+                                display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '4px',
-                                width: '92px',
-                                height: '25px',
+                                width: '100%',
+                                height: '23px',
+                                padding: '0 4px',
                                 fontSize: '11px',
                                 fontWeight: 700,
                                 boxSizing: 'border-box',
-                                whiteSpace: 'nowrap'
+                                borderRadius: '4px'
                               }}
                               title="Chỉnh sửa thông tin"
                             >
@@ -441,16 +428,17 @@ export default function AdminPortalPage({
                                 onClick={() => handleDeleteUser(u)}
                                 className="btn-action-delete"
                                 style={{
-                                  display: 'inline-flex',
+                                  display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
                                   gap: '4px',
-                                  width: '92px',
-                                  height: '25px',
+                                  width: '100%',
+                                  height: '23px',
+                                  padding: '0 4px',
                                   fontSize: '11px',
                                   fontWeight: 700,
                                   boxSizing: 'border-box',
-                                  whiteSpace: 'nowrap'
+                                  borderRadius: '4px'
                                 }}
                                 title="Khóa/Xóa tài khoản"
                               >
@@ -465,6 +453,7 @@ export default function AdminPortalPage({
                   })}
                 </tbody>
               </table>
+              <Pagination page={userTable.page} pageSize={userTable.pageSize} totalCount={userTable.totalCount} onPageChange={userTable.setPage} onPageSizeChange={userTable.setPageSize} />
             </div>
           </div>
         )}
@@ -481,11 +470,11 @@ export default function AdminPortalPage({
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr>
-                    <th style={thStyle}>Tài khoản</th>
-                    <th style={thStyle}>Tên thiết bị / Device ID</th>
-                    <th style={thStyle}>Địa chỉ IP</th>
-                    <th style={thStyle}>Hoạt động cuối</th>
-                    <th style={thStyle}>Trạng thái phiên</th>
+                    <SortableTh columnKey="username" sortKey={sessionTable.sortKey} sortDir={sessionTable.sortDir} onSort={sessionTable.requestSort} style={thStyle}>Tài khoản</SortableTh>
+                    <SortableTh columnKey="deviceId" sortKey={sessionTable.sortKey} sortDir={sessionTable.sortDir} onSort={sessionTable.requestSort} style={thStyle}>Tên thiết bị / Device ID</SortableTh>
+                    <SortableTh columnKey="ipAddress" sortKey={sessionTable.sortKey} sortDir={sessionTable.sortDir} onSort={sessionTable.requestSort} style={thStyle}>Địa chỉ IP</SortableTh>
+                    <SortableTh columnKey="lastActivityAt" sortKey={sessionTable.sortKey} sortDir={sessionTable.sortDir} onSort={sessionTable.requestSort} style={thStyle}>Hoạt động cuối</SortableTh>
+                    <SortableTh columnKey="revokedAt" sortKey={sessionTable.sortKey} sortDir={sessionTable.sortDir} onSort={sessionTable.requestSort} style={thStyle}>Trạng thái phiên</SortableTh>
                     <th style={{ ...thStyle, textAlign: 'center' }}>Thu hồi phiên</th>
                   </tr>
                 </thead>
@@ -546,6 +535,7 @@ export default function AdminPortalPage({
                   )}
                 </tbody>
               </table>
+              <Pagination page={sessionTable.page} pageSize={sessionTable.pageSize} totalCount={sessionTable.totalCount} onPageChange={sessionTable.setPage} onPageSizeChange={sessionTable.setPageSize} />
             </div>
 
             {/* CẢNH BÁO AN NINH */}
@@ -558,13 +548,13 @@ export default function AdminPortalPage({
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr>
-                    <th style={thStyle}>Tài khoản liên quan</th>
-                    <th style={thStyle}>Loại cảnh báo</th>
-                    <th style={thStyle}>Mức độ nghiêm trọng</th>
-                    <th style={thStyle}>Mô tả sự kiện</th>
-                    <th style={thStyle}>IP Nguồn</th>
-                    <th style={thStyle}>Thời điểm</th>
-                    <th style={thStyle}>Trạng thái</th>
+                    <SortableTh columnKey="username" sortKey={alertTable.sortKey} sortDir={alertTable.sortDir} onSort={alertTable.requestSort} style={thStyle}>Tài khoản liên quan</SortableTh>
+                    <SortableTh columnKey="alertType" sortKey={alertTable.sortKey} sortDir={alertTable.sortDir} onSort={alertTable.requestSort} style={thStyle}>Loại cảnh báo</SortableTh>
+                    <SortableTh columnKey="severity" sortKey={alertTable.sortKey} sortDir={alertTable.sortDir} onSort={alertTable.requestSort} style={thStyle}>Mức độ nghiêm trọng</SortableTh>
+                    <SortableTh columnKey="description" sortKey={alertTable.sortKey} sortDir={alertTable.sortDir} onSort={alertTable.requestSort} style={thStyle}>Mô tả sự kiện</SortableTh>
+                    <SortableTh columnKey="sourceIp" sortKey={alertTable.sortKey} sortDir={alertTable.sortDir} onSort={alertTable.requestSort} style={thStyle}>IP Nguồn</SortableTh>
+                    <SortableTh columnKey="createdAt" sortKey={alertTable.sortKey} sortDir={alertTable.sortDir} onSort={alertTable.requestSort} style={thStyle}>Thời điểm</SortableTh>
+                    <SortableTh columnKey="status" sortKey={alertTable.sortKey} sortDir={alertTable.sortDir} onSort={alertTable.requestSort} style={thStyle}>Trạng thái</SortableTh>
                   </tr>
                 </thead>
                 <tbody>
@@ -584,6 +574,8 @@ export default function AdminPortalPage({
                             padding: '2px 8px',
                             borderRadius: '4px',
                             fontSize: '11px',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
                             fontWeight: 700,
                             background: alert.severity === 'HIGH' || alert.severity === 'CRITICAL' ? '#FEE2E2' : '#FEF3C7',
                             color: alert.severity === 'HIGH' || alert.severity === 'CRITICAL' ? '#991B1B' : '#92400E'
@@ -599,6 +591,8 @@ export default function AdminPortalPage({
                             padding: '2px 8px',
                             borderRadius: '4px',
                             fontSize: '11px',
+                            whiteSpace: 'nowrap',
+                            display: 'inline-block',
                             fontWeight: 700,
                             background: alert.status === 'RESOLVED' ? '#DEF7EC' : '#FEE2E2',
                             color: alert.status === 'RESOLVED' ? '#03543F' : '#991B1B'
@@ -611,6 +605,7 @@ export default function AdminPortalPage({
                   )}
                 </tbody>
               </table>
+              <Pagination page={alertTable.page} pageSize={alertTable.pageSize} totalCount={alertTable.totalCount} onPageChange={alertTable.setPage} onPageSizeChange={alertTable.setPageSize} />
             </div>
           </div>
         )}
@@ -683,12 +678,12 @@ export default function AdminPortalPage({
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr>
-                    <th style={thStyle}>Thời điểm</th>
-                    <th style={thStyle}>Sĩ quan thao tác</th>
-                    <th style={thStyle}>Hành động (Action)</th>
-                    <th style={thStyle}>Đối tượng (Entity)</th>
-                    <th style={thStyle}>Địa chỉ IP</th>
-                    <th style={thStyle}>Chi tiết giá trị mới</th>
+                    <SortableTh columnKey="createdAt" sortKey={auditTable.sortKey} sortDir={auditTable.sortDir} onSort={auditTable.requestSort} style={thStyle}>Thời điểm</SortableTh>
+                    <SortableTh columnKey="username" sortKey={auditTable.sortKey} sortDir={auditTable.sortDir} onSort={auditTable.requestSort} style={thStyle}>Sĩ quan thao tác</SortableTh>
+                    <SortableTh columnKey="action" sortKey={auditTable.sortKey} sortDir={auditTable.sortDir} onSort={auditTable.requestSort} style={thStyle}>Hành động (Action)</SortableTh>
+                    <SortableTh columnKey="entityType" sortKey={auditTable.sortKey} sortDir={auditTable.sortDir} onSort={auditTable.requestSort} style={thStyle}>Đối tượng (Entity)</SortableTh>
+                    <SortableTh columnKey="ipAddress" sortKey={auditTable.sortKey} sortDir={auditTable.sortDir} onSort={auditTable.requestSort} style={thStyle}>Địa chỉ IP</SortableTh>
+                    <SortableTh columnKey="newValues" sortKey={auditTable.sortKey} sortDir={auditTable.sortDir} onSort={auditTable.requestSort} style={thStyle}>Chi tiết giá trị mới</SortableTh>
                   </tr>
                 </thead>
                 <tbody>
@@ -729,14 +724,11 @@ export default function AdminPortalPage({
             </div>
 
             <Pagination
-              currentPage={auditPage}
-              totalPages={Math.max(1, Math.ceil(auditTotal / auditPageSize))}
-              totalItems={auditTotal}
+              page={auditPage}
               pageSize={auditPageSize}
-              onPageChange={(p) => {
-                setAuditPage(p);
-                loadAuditLogs(p, auditSearch);
-              }}
+              totalCount={auditTotal}
+              onPageChange={setAuditPage}
+              onPageSizeChange={setAuditPageSize}
             />
           </div>
         )}
@@ -789,31 +781,52 @@ export default function AdminPortalPage({
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '12px' }}>
-              {[
-                { name: 'users', count: users.length, desc: 'Tài khoản cán bộ, sĩ quan, học viên' },
-                { name: 'roles', count: 4, desc: '4 vai trò chuẩn RBAC' },
-                { name: 'permissions', count: 31, desc: '31 quyền hạn hệ thống' },
-                { name: 'role_permissions', count: 58, desc: 'Ma trận phân quyền vai trò' },
-                { name: 'user_sessions', count: userSessions.length, desc: 'Phiên kết nối & thiết bị' },
-                { name: 'organizational_units', count: 9, desc: '9 Khoa, Phòng và Bộ môn T04' },
-                { name: 'classes', count: 4, desc: 'Lớp học vụ theo niên khóa' },
-                { name: 'subjects', count: 4, desc: 'Môn học đào tạo nghiệp vụ' },
-                { name: 'classification_levels', count: 4, desc: '4 cấp độ bảo mật (Normal->Secret)' },
-                { name: 'lectures', count: 6, desc: 'Bài giảng điện tử CAND' },
-                { name: 'lecture_files', count: 8, desc: 'Đính kèm học liệu vào bài giảng' },
-                { name: 'files', count: 8, desc: 'Metadata kho lưu trữ số hóa' },
-                { name: 'file_versions', count: 8, desc: 'Lịch sử phiên bản tập tin' },
-                { name: 'audit_logs', count: auditLogs.length, desc: 'Nhật ký kiểm toán an ninh' },
-                { name: 'security_alerts', count: securityAlerts.length, desc: 'Cảnh báo an ninh tự động' }
-              ].map((tbl, i) => (
-                <div key={i} style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '14px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                    <code style={{ fontSize: '13px', fontWeight: 800, color: '#A31A1A' }}>{tbl.name}</code>
-                    <span style={{ fontSize: '11px', fontWeight: 800, background: '#EFF6FF', color: '#1D4ED8', padding: '2px 8px', borderRadius: '10px' }}>
-                      {tbl.count} hàng
+              {(overview?.tableStats && overview.tableStats.length > 0 ? overview.tableStats : [
+                { tableName: 'users', rowCount: users.length, description: 'Tài khoản cán bộ, sĩ quan, học viên' },
+                { tableName: 'roles', rowCount: 4, description: '4 vai trò chuẩn RBAC' },
+                { tableName: 'permissions', rowCount: 31, description: '31 quyền hạn hệ thống' },
+                { tableName: 'role_permissions', rowCount: 74, description: 'Ma trận phân quyền vai trò' },
+                { tableName: 'user_sessions', rowCount: userSessions.length, description: 'Phiên kết nối & thiết bị' },
+                { tableName: 'organizational_units', rowCount: 9, description: '9 Khoa, Phòng và Bộ môn T04' },
+                { tableName: 'classes', rowCount: 4, description: 'Lớp học vụ theo niên khóa' },
+                { tableName: 'subjects', rowCount: 5, description: 'Môn học đào tạo nghiệp vụ' },
+                { tableName: 'classification_levels', rowCount: 4, description: '4 cấp độ bảo mật (Normal->Secret)' },
+                { tableName: 'lectures', rowCount: 8, description: 'Bài giảng điện tử CAND' },
+                { tableName: 'lecture_files', rowCount: 27, description: 'Đính kèm học liệu vào bài giảng' },
+                { tableName: 'files', rowCount: 20, description: 'Metadata kho lưu trữ số hóa' },
+                { tableName: 'file_versions', rowCount: 21, description: 'Lịch sử phiên bản tập tin' },
+                { tableName: 'audit_logs', rowCount: auditTotal || auditLogs.length, description: 'Nhật ký kiểm toán an ninh' },
+                { tableName: 'security_alerts', rowCount: securityAlerts.length, description: 'Cảnh báo an ninh tự động' }
+              ]).map((t, i) => (
+                <div key={i} style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '8px',
+                  padding: '12px 14px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+                }}>
+                  <div>
+                    <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '12.5px', color: '#0B1E36' }}>
+                      {t.tableName || t.name}
                     </span>
+                    <p style={{ margin: '2px 0 0', fontSize: '11.5px', color: '#64748B' }}>
+                      {t.description || t.desc}
+                    </p>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#64748B' }}>{tbl.desc}</div>
+                  <span style={{
+                    padding: '3px 8px',
+                    borderRadius: '12px',
+                    background: '#EFF6FF',
+                    color: '#1D4ED8',
+                    fontWeight: 800,
+                    fontSize: '11px',
+                    fontFamily: 'monospace'
+                  }}>
+                    {t.rowCount ?? t.count ?? 0} dòng
+                  </span>
                 </div>
               ))}
             </div>

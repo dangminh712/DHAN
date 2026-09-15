@@ -1,3 +1,4 @@
+using Server.Infrastructure;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,8 @@ using Server.Data;
 using Server.DTOs;
 using Server.Models.Training;
 using Server.Services;
+
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Server.Controllers;
 
@@ -16,20 +19,21 @@ public class AuthController : ControllerBase
     private readonly TrainingDbContext _db;
     private readonly IPasswordHasher _hasher;
     private readonly IAuditService _audit;
+    private readonly IMemoryCache _cache;
 
-    public AuthController(TrainingDbContext db, IPasswordHasher hasher, IAuditService audit)
+    public AuthController(TrainingDbContext db, IPasswordHasher hasher, IAuditService audit, IMemoryCache cache)
     {
         _db = db;
         _hasher = hasher;
         _audit = audit;
+        _cache = cache;
     }
 
     [HttpGet("users")]
-    public async Task<IActionResult> GetSampleUsers([FromQuery] int page = 1, [FromQuery] int pageSize = 50, [FromQuery] string? search = null)
+    public async Task<IActionResult> GetSampleUsers([FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? search = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null, [FromQuery] string? role = null)
     {
-        var users = await _db.Users.AsNoTracking()
+        var query = _db.Users.AsNoTracking()
             .Where(u => search == null || u.Username.Contains(search) || u.FullName.Contains(search))
-            .OrderBy(u => u.Id).Skip((Math.Clamp(page, 1, 100000) - 1) * Math.Clamp(pageSize, 1, 100)).Take(Math.Clamp(pageSize, 1, 100))
             .Include(u => u.Role)
                 .ThenInclude(r => r!.RolePermissions)
                     .ThenInclude(rp => rp.Permission)
@@ -56,10 +60,18 @@ public class AuthController : ControllerBase
                 ClassName = u.StudentClasses.Select(sc => sc.Class!.Code).FirstOrDefault(),
                 AssignedClasses = u.StudentClasses.Where(sc => sc.Class != null).Select(sc => sc.Class!.Code).ToList(),
                 Permissions = u.Role != null ? u.Role.RolePermissions.Select(rp => rp.Permission!.Code).ToList() : new List<string>()
-            })
-            .ToListAsync();
+            });
 
-        return Ok(users);
+        if (!string.IsNullOrWhiteSpace(role)) query = query.Where(u => u.Role == role);
+        string cacheKey = $"users:{page}:{pageSize}:{search}:{sortBy}:{sortDir}:{role}";
+        if (_cache.TryGetValue(cacheKey, out object? cachedResult) && cachedResult != null)
+        {
+            return Ok(cachedResult);
+        }
+
+        var result = await query.Sort(sortBy, sortDir, "Id", "Id,Username,FullName,Role,RoleName,Department,unitName:Department,MaxClearance,clearanceLevel:ClearanceLevelOrder,Status,StudentCode").ResultAsync(page, pageSize);
+        _cache.Set(cacheKey, result, TimeSpan.FromSeconds(15));
+        return Ok(result);
     }
 
     [HttpPost("login")]
@@ -741,7 +753,7 @@ public class AuthController : ControllerBase
         [FromQuery] string? search,
         [FromQuery] string? status,
         [FromQuery] int? page,
-        [FromQuery] int? pageSize)
+        [FromQuery] int? pageSize, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null)
     {
         var query = _db.Users
             .Include(u => u.StudentClasses).ThenInclude(sc => sc.Class)
@@ -790,23 +802,15 @@ public class AuthController : ControllerBase
                 u.LastLoginAt
             });
 
-        if (page.HasValue && page.Value > 0)
+        string cacheKey = $"provisioned-students:{classCode}:{search}:{status}:{page}:{pageSize}:{sortBy}:{sortDir}";
+        if (_cache.TryGetValue(cacheKey, out object? cachedResult) && cachedResult != null)
         {
-            int size = Math.Clamp(pageSize ?? 15, 1, 100);
-            int total = await query.CountAsync();
-            var items = await selectQuery.Skip((page.Value - 1) * size).Take(size).ToListAsync();
-            return Ok(new
-            {
-                items,
-                totalCount = total,
-                page = page.Value,
-                pageSize = size,
-                totalPages = (int)Math.Ceiling((double)total / size)
-            });
+            return Ok(cachedResult);
         }
 
-        var list = await selectQuery.Take(100).ToListAsync();
-        return Ok(list);
+        var result = await selectQuery.Sort(sortBy, sortDir ?? "asc", "CreatedAt", "Id,Username,FullName,Email,Phone,StudentCode,ClassCode,ClassName,Status,MustChangePassword,isFirstLogin:MustChangePassword,CreatedAt,LastLoginAt").ResultAsync(page, pageSize);
+        _cache.Set(cacheKey, result, TimeSpan.FromSeconds(15));
+        return Ok(result);
     }
 
     [HttpPost("enroll-student")]

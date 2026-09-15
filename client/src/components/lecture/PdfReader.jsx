@@ -39,50 +39,78 @@ export default function PdfReader({
   const [scaleMultiplier, setScaleMultiplier] = useState(1.0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const [fallbackMode, setFallbackMode] = useState(false);
+
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const callbacks = useRef({ onPage, onError });
   callbacks.current = { onPage, onError };
 
-  // 1. Tải văn bản PDF
+  // 1. Tải văn bản PDF với cơ chế tự phục hồi đa tầng (Range Stream -> ArrayBuffer -> Native Iframe Fallback)
   useEffect(() => {
     let active = true;
+    let task = null;
     setDocument(null);
     setLoading(true);
     setError('');
 
-    const task = getDocument({
-      url,
-      disableAutoFetch: true,
-      disableStream: true,
-      rangeChunkSize: 65536
-    });
-
-    task.promise
-      .then(doc => {
+    const loadWithFallback = async () => {
+      // Tầng 1: Thử nạp URL tiêu chuẩn
+      try {
+        task = getDocument({
+          url,
+          enableXfa: true,
+          isEvalSupported: false
+        });
+        const doc = await task.promise;
         if (!active) return;
         setDocument(doc);
         const restored = clampPdfPage(initialPage, doc.numPages);
         setPage(restored);
         setJump(String(restored));
         callbacks.current.onPage?.(restored, doc.numPages, false);
-      })
-      .catch(e => {
+        return;
+      } catch (firstErr) {
+        console.warn('PDF stream load encountered issue, attempting ArrayBuffer buffer recovery:', firstErr);
+      }
+
+      // Tầng 2: Tự động tải nguyên vẹn ArrayBuffer để PDF.js tự phục hồi bảng đối chiếu xref
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const arrayBuf = await res.arrayBuffer();
+        task = getDocument({
+          data: new Uint8Array(arrayBuf),
+          enableXfa: true
+        });
+        const doc = await task.promise;
         if (!active) return;
+        setDocument(doc);
+        const restored = clampPdfPage(initialPage, doc.numPages);
+        setPage(restored);
+        setJump(String(restored));
+        callbacks.current.onPage?.(restored, doc.numPages, false);
+        return;
+      } catch (secondErr) {
+        if (!active) return;
+        console.warn('ArrayBuffer PDF parse failed, switching to native embed fallback:', secondErr);
         const message =
-          e.name === 'InvalidPDFException'
-            ? 'Tập tin PDF bị lỗi hoặc không đúng chuẩn định dạng ISO.'
-            : 'Không thể mở tập tin PDF. Vui lòng kiểm tra quyền truy cập hoặc máy chủ lưu trữ.';
+          secondErr?.name === 'InvalidPDFException'
+            ? 'Tập tin PDF bị lỗi cấu trúc ISO. Đang hiển thị qua trình xem dự phòng của trình duyệt.'
+            : 'Không thể kết xuất PDF bằng Canvas. Đang chuyển sang trình xem dự phòng.';
         setError(message);
         callbacks.current.onError?.(message);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
+        setFallbackMode(true);
+      }
+    };
+
+    loadWithFallback().finally(() => {
+      if (active) setLoading(false);
+    });
 
     return () => {
       active = false;
-      task.destroy();
+      task?.destroy?.();
     };
   }, [url]);
 
@@ -321,6 +349,17 @@ export default function PdfReader({
             </a>
           )}
 
+          {/* Nút chuyển đổi chế độ Trình đọc gốc / Trình duyệt */}
+          <button
+            type="button"
+            className={`pdf-btn ${fallbackMode ? 'active' : ''}`}
+            onClick={() => setFallbackMode(prev => !prev)}
+            title={fallbackMode ? 'Chuyển lại trình đọc Canvas tương tác' : 'Chuyển sang trình đọc gốc của trình duyệt (Dự phòng)'}
+          >
+            <FileText size={15} />
+            <span className="btn-label-desktop">{fallbackMode ? 'Bản Canvas' : 'Trình đọc gốc'}</span>
+          </button>
+
           {/* Phóng to toàn màn hình */}
           <button
             type="button"
@@ -334,30 +373,57 @@ export default function PdfReader({
       </div>
 
       {/* THÔNG BÁO LỖI HOẶC TRẠNG THÁI */}
-      {error && (
-        <div className="pdf-alert-banner">
-          <AlertCircle size={16} />
-          <span>{error}</span>
+      {error && !fallbackMode && (
+        <div className="pdf-alert-banner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            className="pdf-btn"
+            style={{ background: '#1D4ED8', color: '#fff', fontSize: '12px', padding: '4px 10px', borderRadius: '4px' }}
+            onClick={() => setFallbackMode(true)}
+          >
+            Mở trình đọc dự phòng (Iframe)
+          </button>
         </div>
       )}
 
-      {/* KHUNG HIỂN THỊ CANVAS TRANG PDF */}
+      {/* KHUNG HIỂN THỊ CANVAS TRANG PDF HOẶC FALLBACK NATIVE IFRAME */}
       <div className="pdf-canvas-stage">
-        {loading && (
-          <div className="pdf-loading-state">
-            <Loader2 className="spinner-rotate" size={36} />
-            <h4>Đang chuẩn bị trang tài liệu điện tử…</h4>
-            <p>Hệ thống đang nạp trang {page} trực tiếp tại trình duyệt (bảo mật CSDL Intranet).</p>
-          </div>
-        )}
-
-        <div className={`pdf-canvas-wrapper ${rendering ? 'rendering' : ''}`}>
-          <canvas
-            ref={canvasRef}
-            aria-label={`Trang PDF ${page}`}
-            className="pdf-rendered-canvas"
+        {fallbackMode ? (
+          <iframe
+            src={url}
+            title={fileName}
+            style={{
+              width: '100%',
+              height: '100%',
+              minHeight: '650px',
+              border: 'none',
+              background: '#FFFFFF',
+              borderRadius: '6px'
+            }}
           />
-        </div>
+        ) : (
+          <>
+            {loading && (
+              <div className="pdf-loading-state">
+                <Loader2 className="spinner-rotate" size={36} />
+                <h4>Đang chuẩn bị trang tài liệu điện tử…</h4>
+                <p>Hệ thống đang nạp trang {page} trực tiếp tại trình duyệt (bảo mật CSDL Intranet).</p>
+              </div>
+            )}
+
+            <div className={`pdf-canvas-wrapper ${rendering ? 'rendering' : ''}`}>
+              <canvas
+                ref={canvasRef}
+                aria-label={`Trang PDF ${page}`}
+                className="pdf-rendered-canvas"
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

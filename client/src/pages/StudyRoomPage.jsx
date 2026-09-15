@@ -17,6 +17,7 @@ import {
 import { fileService } from '../services/fileService';
 import { useAuth } from '../context/AuthContext';
 import { ClearanceBadge } from '../components/common/Badge';
+import { getMediaKind } from '../mediaType';
 
 export default function StudyRoomPage({ lecture, onBack, onDownloadFile }) {
   const { currentUser, isClearanceSufficient } = useAuth();
@@ -119,38 +120,65 @@ export default function StudyRoomPage({ lecture, onBack, onDownloadFile }) {
                     : 'Cấp độ bảo mật của học liệu cao hơn cấp độ Clearance hiện tại của bạn.'}
                 </p>
               </div>
-            ) : activeFile?.fileType === 'VIDEO' ? (
-              <video
-                key={activeFile.fileId}
-                controls
-                controlsList="nodownload"
-                autoPlay
-                className="w-full h-full object-contain z-10"
-                src={streamUrl}
-              >
-                Trình duyệt không hỗ trợ video.
-              </video>
-            ) : activeFile?.fileType === 'PDF' ? (
-              <iframe
-                key={activeFile.fileId}
-                src={streamUrl}
-                title={activeFile.originalName}
-                className="w-full h-full border-0 z-10 bg-white"
-              />
-            ) : activeFile?.fileType === 'IMAGE' ? (
-              <img
-                key={activeFile.fileId}
-                src={streamUrl}
-                alt={activeFile.originalName}
-                className="max-h-full max-w-full object-contain z-10"
-              />
-            ) : (
-              <div className="text-center text-white z-10 p-6">
-                <FileText className="w-12 h-12 text-slate-400 mx-auto mb-2" />
-                <p className="font-semibold text-sm">{activeFile?.originalName}</p>
-                <p className="text-slate-400 mt-1 text-xs">Học liệu đã sẵn sàng tải về nghiên cứu.</p>
-              </div>
-            )}
+            ) : (() => {
+              const activeKind = getMediaKind(activeFile);
+              const ext = (activeFile?.originalName || activeFile?.originalFileName || '').toLowerCase();
+              const ft = (activeFile?.fileType || '').toLowerCase();
+              const isVideo = activeKind === 'video' || ft.includes('video') || Boolean(ext.match(/\.(mp4|webm|mov|mkv|avi|m4v)$/i));
+              const isPdf = activeKind === 'pdf' || ft.includes('pdf') || ext.endsWith('.pdf');
+              const isImage = activeKind === 'image' || ft.includes('image') || Boolean(ext.match(/\.(png|jpg|jpeg|gif|webp|svg)$/i));
+              const isAudio = activeKind === 'audio' || ft.includes('audio') || Boolean(ext.match(/\.(mp3|wav|ogg|m4a|aac)$/i));
+
+              if (isVideo) {
+                return (
+                  <video
+                    key={activeFile.fileId || activeFile.id}
+                    controls
+                    controlsList="nodownload"
+                    autoPlay
+                    className="w-full h-full object-contain z-10"
+                    src={streamUrl}
+                  >
+                    Trình duyệt không hỗ trợ video.
+                  </video>
+                );
+              }
+              if (isPdf) {
+                return (
+                  <iframe
+                    key={activeFile.fileId || activeFile.id}
+                    src={streamUrl}
+                    title={activeFile.originalName}
+                    className="w-full h-full border-0 z-10 bg-white"
+                  />
+                );
+              }
+              if (isImage) {
+                return (
+                  <img
+                    key={activeFile.fileId || activeFile.id}
+                    src={streamUrl}
+                    alt={activeFile.originalName}
+                    className="max-h-full max-w-full object-contain z-10"
+                  />
+                );
+              }
+              if (isAudio) {
+                return (
+                  <div className="text-center text-white z-10 p-6">
+                    <p className="font-semibold text-base mb-3">{activeFile?.originalName}</p>
+                    <audio controls autoPlay src={streamUrl} className="w-full max-w-md mx-auto" />
+                  </div>
+                );
+              }
+              return (
+                <div className="text-center text-white z-10 p-6">
+                  <FileText className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+                  <p className="font-semibold text-sm">{activeFile?.originalName}</p>
+                  <p className="text-slate-400 mt-1 text-xs">Học liệu đã sẵn sàng tải về nghiên cứu.</p>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Active File Bar */}

@@ -1,3 +1,4 @@
+using Server.Infrastructure;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -26,7 +27,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? category, [FromQuery] string? search, [FromQuery] int page = 1, [FromQuery] int pageSize = 50)
+    public async Task<IActionResult> GetAll([FromQuery] string? category, [FromQuery] string? search, [FromQuery] int? page = null, [FromQuery] int? pageSize = null, [FromQuery] string? sortBy = null, [FromQuery] string? sortDir = null, [FromQuery] string? classification = null)
     {
         try
         {
@@ -59,11 +60,12 @@ public class MediaController : ControllerBase
                 query = query.Where(f => f.OriginalName.Contains(s));
             }
 
-            var list = await query.AsNoTracking()
+            var classificationOrder = classification switch { "TUYET_MAT" => 5, "TOI_MAT" => 4, "MAT" => 3, "NOI_BO" => 2, "CONG_KHAI" => 1, _ => 0 };
+            if (classificationOrder > 0) query = query.Where(f => f.ClassificationLevel != null && f.ClassificationLevel.LevelOrder == classificationOrder);
+            var total = page.HasValue ? await query.CountAsync() : 0;
+            var selected = query.AsNoTracking()
                 .Include(f => f.ClassificationLevel)
                 .Include(f => f.Uploader)
-                .OrderByDescending(f => f.CreatedAt).ThenByDescending(f => f.Id)
-                .Skip((Math.Clamp(page, 1, 100000) - 1) * Math.Clamp(pageSize, 1, 100)).Take(Math.Clamp(pageSize, 1, 100))
                 .Select(f => new {
                     f.Id,
                     f.OriginalName,
@@ -78,7 +80,9 @@ public class MediaController : ControllerBase
                     ClassificationOrder = f.ClassificationLevel != null ? f.ClassificationLevel.LevelOrder : 2,
                     ClassificationLevelId = f.ClassificationLevelId,
                     UploaderName = f.Uploader != null ? f.Uploader.FullName : "Cán bộ quản trị T04"
-                }).ToListAsync();
+                });
+            var sorted = selected.Sort(sortBy, sortDir ?? "desc", "CreatedAt", "Id,originalFileName:OriginalName,OriginalName,category:FileType,FileType,FileSize,classification:ClassificationOrder,ClassificationOrder,uploader:UploaderName,UploaderName,CreatedAt");
+            var list = await sorted.Skip(page.HasValue ? (TableQuery.Page(page) - 1) * TableQuery.Size(pageSize) : 0).Take(page.HasValue ? TableQuery.Size(pageSize) : 100).ToListAsync();
 
             var mapped = list.Select(f => new MediaFile
             {
@@ -96,7 +100,7 @@ public class MediaController : ControllerBase
                 UploaderName = f.UploaderName
             }).ToList();
 
-            return Ok(mapped);
+            return Ok(page.HasValue ? TableQuery.Envelope(mapped, total, page, pageSize) : mapped);
         }
         catch (Exception ex)
         {
@@ -134,6 +138,7 @@ public class MediaController : ControllerBase
     }
 
     [HttpGet("stream/{id}")]
+    [HttpHead("stream/{id}")]
     public async Task<IActionResult> Stream(ulong id)
     {
         var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id);
@@ -146,10 +151,12 @@ public class MediaController : ControllerBase
         }
 
         string mime = string.IsNullOrWhiteSpace(file.MimeType) ? "application/octet-stream" : file.MimeType;
+        Response.Headers["Accept-Ranges"] = "bytes";
         return PhysicalFile(physicalPath, mime, enableRangeProcessing: true);
     }
 
     [HttpGet("download/{id}")]
+    [HttpHead("download/{id}")]
     public async Task<IActionResult> Download(ulong id)
     {
         var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id);
@@ -163,6 +170,7 @@ public class MediaController : ControllerBase
 
         string mime = string.IsNullOrWhiteSpace(file.MimeType) ? "application/octet-stream" : file.MimeType;
         string downloadName = string.IsNullOrWhiteSpace(file.OriginalName) ? Path.GetFileName(physicalPath) : file.OriginalName;
+        Response.Headers["Accept-Ranges"] = "bytes";
         return PhysicalFile(physicalPath, mime, downloadName, enableRangeProcessing: true);
     }
 
