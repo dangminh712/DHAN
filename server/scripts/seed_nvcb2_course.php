@@ -58,4 +58,11 @@ while ($file = $files->fetch_assoc()) {
     $index++;
 }
 
-echo "Đã seed môn NVCB2: 8 chương, $index tài liệu.\n";
+// Đảm bảo có tài liệu mẫu theo yêu cầu nghiệm thu: "KẾ HOẠCH GIẢNG DẠY HP NVCB2.pdf" thuộc Chương 3
+$ch3Id = $chapterIds[3];
+$mysqli->query("UPDATE files SET original_name = 'KẾ HOẠCH GIẢNG DẠY HP NVCB2.pdf', classification_level_id = 1 WHERE id = 11");
+$mysqli->query("INSERT INTO chapter_materials (chapter_id, file_id, material_group, display_order, is_visible, is_downloadable, is_printable, created_at, updated_at)
+VALUES ($ch3Id, 11, 'LESSON_PLAN', 1, 1, 1, 1, NOW(), NOW())
+ON DUPLICATE KEY UPDATE material_group='LESSON_PLAN', is_visible=1, is_downloadable=1, is_printable=1, updated_at=NOW()");
+
+echo "Đã seed môn NVCB2: 8 chương, $index tài liệu (bao gồm KẾ HOẠCH GIẢNG DẠY HP NVCB2.pdf).\n";
