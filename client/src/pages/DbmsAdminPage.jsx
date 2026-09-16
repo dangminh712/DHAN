@@ -28,7 +28,7 @@ export default function DbmsAdminPage() {
           databaseEngine: 'MySQL 8.x (InnoDB)',
           charset: 'utf8mb4_0900_ai_ci',
           databaseName: 'training_management',
-          totalTables: 27,
+          totalTables: 29,
           totalRows: 182,
           modules: [
             {
@@ -47,10 +47,10 @@ export default function DbmsAdminPage() {
               tables: ['classes', 'students', 'subjects']
             },
             {
-              name: 'Lecture & Media',
-              count: 12,
+              name: 'Môn học & Học liệu',
+              count: 14,
               tables: [
-                'lectures', 'lecture_media_items', 'media_files', 'media_file_chunks',
+                'subjects', 'chapters', 'chapter_materials', 'lectures', 'lecture_media_items', 'media_files', 'media_file_chunks',
                 'media_access_policies', 'media_view_progress', 'media_notes',
                 'media_transcriptions', 'media_bookmarks', 'media_shares',
                 'media_favorites', 'media_ratings'
@@ -94,7 +94,7 @@ export default function DbmsAdminPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
               <Database size={26} color="#A31A1A" />
               <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0B1E36', margin: 0 }}>
-                HỆ THỐNG QUẢN TRỊ CƠ SỞ DỮ LIỆU MYSQL (27 BẢNG 3NF)
+                HỆ THỐNG QUẢN TRỊ CƠ SỞ DỮ LIỆU MYSQL (29 BẢNG 3NF)
               </h2>
             </div>
             <p style={{ fontSize: '13.5px', color: '#475569', margin: 0 }}>
@@ -161,7 +161,7 @@ export default function DbmsAdminPage() {
 
           <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '4px' }}>Tổng số bảng quan hệ</div>
-            <div style={{ fontSize: '16px', fontWeight: 800, color: '#2563EB' }}>27 Bảng (5 Phân hệ)</div>
+            <div style={{ fontSize: '16px', fontWeight: 800, color: '#2563EB' }}>29 Bảng (5 Phân hệ)</div>
             <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>InnoDB Engine (FK, Index, Soft Delete)</div>
           </div>
 
@@ -227,7 +227,8 @@ export default function DbmsAdminPage() {
                 <span style={{ fontSize: '11px', background: '#FEE2E2', color: '#A31A1A', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>Học Liệu Số</span>
               </div>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#334155', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <li><code>lectures</code> - Thực thể bài giảng số hóa T04</li>
+                <li><code>chapters</code> - Chương linh hoạt thuộc từng môn học</li>
+                <li><code>chapter_materials</code> - Tài liệu và quyền tải theo chương</li>
                 <li><code>lecture_media_items</code> - Đính kèm nhiều PDF, Video, Ảnh vào 1 bài giảng</li>
                 <li><code>media_files</code> - Quản lý tệp tin vật lý, SHA-256</li>
                 <li><code>media_access_policies</code> - Phân quyền theo cấp độ Mật (Level 1-4)</li>

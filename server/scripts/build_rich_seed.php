@@ -14,6 +14,25 @@ if ($mysqli->connect_error) {
 }
 $mysqli->set_charset("utf8mb4");
 
+$mysqli->query("CREATE TABLE IF NOT EXISTS `chapters` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `subject_id` BIGINT UNSIGNED NOT NULL,
+  `chapter_number` INT NOT NULL, `title` VARCHAR(500) NOT NULL, `description` TEXT NULL,
+  `display_order` INT NOT NULL DEFAULT 0, `status` VARCHAR(32) NOT NULL DEFAULT 'PUBLISHED',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` DATETIME NULL, UNIQUE KEY `uk_chapter_number` (`subject_id`,`chapter_number`),
+  CONSTRAINT `fk_chapters_subject` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;");
+$mysqli->query("CREATE TABLE IF NOT EXISTS `chapter_materials` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `chapter_id` BIGINT UNSIGNED NOT NULL,
+  `file_id` BIGINT UNSIGNED NOT NULL, `material_group` VARCHAR(32) NOT NULL DEFAULT 'OTHER',
+  `display_order` INT NOT NULL DEFAULT 0, `is_visible` BOOLEAN NOT NULL DEFAULT TRUE,
+  `is_downloadable` BOOLEAN NOT NULL DEFAULT FALSE, `is_printable` BOOLEAN NOT NULL DEFAULT FALSE,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY `uk_chapter_material` (`chapter_id`,`file_id`),
+  CONSTRAINT `fk_chapter_materials_chapter` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_chapter_materials_file` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;");
+
 echo "=== BAT DAU NAP DU LIEU PHONG PHU CHO TOAN BO 27 BANG DBMS ===\n";
 
 // Disable foreign key checks for clean reload
@@ -49,7 +68,7 @@ foreach ($cols as $colName => $colDef) {
 $truncateTables = [
     'notifications', 'user_mfa', 'user_sessions', 'security_alerts',
     'audit_logs', 'download_logs', 'learning_progress', 'watch_history',
-    'file_permissions', 'lecture_files', 'lecture_permissions', 'file_versions',
+    'file_permissions', 'chapter_materials', 'chapters', 'lecture_files', 'lecture_permissions', 'file_versions',
     'files', 'quiz_questions', 'lectures', 'user_clearance_levels', 'student_classes',
     'teacher_subjects', 'users', 'subjects', 'classes', 'organizational_units',
     'role_permissions', 'permissions', 'roles', 'classification_levels',
@@ -161,9 +180,21 @@ $mysqli->query("INSERT INTO `subjects` (`id`, `code`, `name`, `description`, `or
 (5, 'KTHS_302', 'Giám định Kỹ thuật hình sự & Chứng cứ số', 'Quy chuẩn thu giữ, phân tích dữ liệu bộ nhớ RAM, ổ cứng và thiết bị di động', 2, 3.0, 'ACTIVE'),
 (6, 'ANKT_401', 'Nghiệp vụ Điều tra Tội phạm Kinh tế & Tham nhũng', 'Phương pháp phát hiện dòng tiền phi pháp, kiểm toán dữ liệu kế toán số', 2, 3.5, 'ACTIVE'),
 (7, 'ANTT_202', 'Quản lý Nhà nước về An ninh Trật tự', 'Biện pháp quản lý cư trú, ngành nghề kinh doanh có điều kiện và vũ khí', 4, 2.5, 'ACTIVE'),
-(8, 'TCDT_403', 'Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử', 'Kỹ thuật chặn thu tín hiệu, phân tích phổ sóng và phòng thủ hạ tầng trọng yếu', 3, 4.0, 'ACTIVE')
+(8, 'TCDT_403', 'Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử', 'Kỹ thuật chặn thu tín hiệu, phân tích phổ sóng và phòng thủ hạ tầng trọng yếu', 3, 4.0, 'ACTIVE'),
+(9, 'NVCB2', 'Nghiệp vụ cơ bản 2', 'Tìm bài giảng, giáo án, bài tập và tư liệu của môn học theo từng chương.', 2, 3.0, 'ACTIVE')
 ON DUPLICATE KEY UPDATE `name`=VALUES(`name`), `credits`=VALUES(`credits`);");
-echo "[x] subjects: OK (8 mon hoc)\n";
+echo "[x] subjects: OK (9 mon hoc)\n";
+
+$mysqli->query("INSERT INTO `chapters` (`id`,`subject_id`,`chapter_number`,`title`,`description`,`display_order`,`status`) VALUES
+(1,9,1,'Hồ sơ môn học','Thông tin tổng quan, hồ sơ pháp lý và yêu cầu của môn học.',1,'PUBLISHED'),
+(2,9,2,'Chương trình và đề cương','Chương trình đào tạo, đề cương chi tiết và chuẩn đầu ra.',2,'PUBLISHED'),
+(3,9,3,'Kế hoạch giảng dạy','Lịch trình, tiến độ và kế hoạch tổ chức giảng dạy.',3,'PUBLISHED'),
+(4,9,4,'Giáo án và bài giảng','Giáo án, bài giảng, slide và tài liệu trình chiếu.',4,'PUBLISHED'),
+(5,9,5,'Hoạt động học thuật','Seminar, thảo luận và hoạt động nghiên cứu của môn học.',5,'PUBLISHED'),
+(6,9,6,'Hệ thống bài tập','Bài tập lý thuyết, thực hành và tình huống nghiệp vụ.',6,'PUBLISHED'),
+(7,9,7,'Câu hỏi và đáp án','Ngân hàng câu hỏi, hướng dẫn và đáp án tham khảo.',7,'PUBLISHED'),
+(8,9,8,'Học liệu và tư liệu','Tài liệu tham khảo, hình ảnh, video và tư liệu bổ trợ.',8,'PUBLISHED')
+ON DUPLICATE KEY UPDATE `title`=VALUES(`title`),`description`=VALUES(`description`),`display_order`=VALUES(`display_order`),`status`='PUBLISHED';");
 
 // 8. USERS (Mật khẩu: T04@Security2026!)
 $pwHash = 'PBKDF2$10000$QkJCQkJCQkJCQkJCQkJCQg==$MIf+22JcC29OXsA/PSZzWj5QoYCLM+T8t0AEkf2BwuQ=';
@@ -575,6 +606,18 @@ $mysqli->query("INSERT INTO `lecture_files` (`lecture_id`, `file_id`, `display_o
 (12, 4, 2, TRUE, TRUE, TRUE)
 ON DUPLICATE KEY UPDATE `is_visible`=VALUES(`is_visible`), `is_downloadable`=VALUES(`is_downloadable`);");
 echo "[x] lecture_files: OK (30+ dinh kem hoc lieu)\n";
+
+$mysqli->query("INSERT INTO `chapter_materials` (`chapter_id`,`file_id`,`material_group`,`display_order`,`is_visible`,`is_downloadable`,`is_printable`) VALUES
+(1,1,'REFERENCE',1,TRUE,TRUE,TRUE),(1,17,'OTHER',2,TRUE,TRUE,FALSE),
+(2,4,'REFERENCE',1,TRUE,TRUE,TRUE),(2,10,'LECTURE',2,TRUE,TRUE,FALSE),
+(3,4,'LESSON_PLAN',1,TRUE,TRUE,TRUE),(3,18,'OTHER',2,TRUE,TRUE,FALSE),
+(4,3,'LECTURE',1,TRUE,TRUE,FALSE),(4,5,'LECTURE',2,TRUE,FALSE,FALSE),(4,16,'LECTURE',3,TRUE,TRUE,FALSE),
+(5,7,'REFERENCE',1,TRUE,FALSE,FALSE),(5,9,'LECTURE',2,TRUE,FALSE,FALSE),
+(6,11,'EXERCISE',1,TRUE,TRUE,TRUE),(6,17,'EXERCISE',2,TRUE,TRUE,FALSE),
+(7,4,'QA',1,TRUE,TRUE,TRUE),(7,15,'QA',2,TRUE,TRUE,TRUE),
+(8,6,'REFERENCE',1,TRUE,TRUE,FALSE),(8,8,'REFERENCE',2,TRUE,FALSE,FALSE),(8,12,'REFERENCE',3,TRUE,FALSE,FALSE)
+ON DUPLICATE KEY UPDATE `material_group`=VALUES(`material_group`),`display_order`=VALUES(`display_order`),`is_visible`=VALUES(`is_visible`),`is_downloadable`=VALUES(`is_downloadable`),`is_printable`=VALUES(`is_printable`);");
+echo "[x] chapter_materials: OK (18 tai lieu NVCB2)\n";
 
 // 16. LECTURE_PERMISSIONS (Phân quyền bài giảng theo lớp)
 $mysqli->query("INSERT INTO `lecture_permissions` (`lecture_id`, `class_id`, `can_view`, `publish_at`) VALUES

@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>TRƯỜNG ĐẠI HỌC AN NINH NHÂN DÂN - BỘ CÔNG AN</h4>
           <p className="footer-desc">
-            Cổng Quản lý và Học tập Bài giảng Điện tử phục vụ công tác giảng dạy, số hóa học liệu,
+            Cổng Môn học và Học liệu Số phục vụ công tác giảng dạy, số hóa tài liệu,
             nghiên cứu khoa học và huấn luyện nghiệp vụ an ninh trong mạng nội bộ Intranet.
           </p>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '8px' }}>
@@ -38,7 +38,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        © {new Date().getFullYear()} Trường Đại học An ninh nhân dân - Bộ Công an. Bản quyền tài liệu và bài giảng lưu hành nội bộ.
+        © {new Date().getFullYear()} Trường Đại học An ninh nhân dân - Bộ Công an. Bản quyền môn học và tài liệu lưu hành nội bộ.
       </div>
     </footer>
   );

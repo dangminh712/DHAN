@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, RefreshCw, UploadCloud, Server, Lock } from 'lucide-react';
+import { Shield, RefreshCw, UploadCloud, Server, Lock, Crown, GraduationCap, Presentation } from 'lucide-react';
 
 export default function Header({
   currentUser,
@@ -106,7 +106,7 @@ export default function Header({
             </div>
             <div className="brand-text">
               <h1>TRƯỜNG ĐẠI HỌC AN NINH NHÂN DÂN</h1>
-              <h2>CỔNG THÔNG TIN QUẢN LÝ VÀ HỌC TẬP BÀI GIẢNG ĐIỆN TỬ</h2>
+              <h2>CỔNG THÔNG TIN MÔN HỌC VÀ HỌC LIỆU SỐ</h2>
               <div className="sub-unit">Hệ thống Số hóa Học liệu Nghiệp vụ & Đào tạo Sĩ quan An ninh (Lưu hành nội bộ)</div>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function Header({
             <button
               className="btn-icon-secondary"
               onClick={onRefresh}
-              title="Làm mới danh sách bài giảng"
+              title="Làm mới danh sách học liệu"
             >
               <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
               Làm mới
@@ -137,7 +137,7 @@ export default function Header({
       <div className="quick-persona-scroll-bar">
         <div className="persona-scroll-container">
           <div className="persona-scroll-label">
-            <span className="persona-label-tag">⚡ Đổi nhanh vai trò:</span>
+            <span className="persona-label-tag">Đổi nhanh vai trò:</span>
           </div>
           <div className="persona-scroll-list">
             {availableUsers.map((u) => {
@@ -151,7 +151,7 @@ export default function Header({
                   className={`persona-scroll-chip ${isActive ? 'active' : ''}`}
                   title={`Bấm để chuyển quyền sang: ${u.fullName} (${u.role})`}
                 >
-                  <span className="chip-icon">{isSuper ? '👑' : isTeacher ? '👨‍🏫' : '👨‍🎓'}</span>
+                  <span className="chip-icon" aria-hidden="true">{isSuper ? <Crown size={15} /> : isTeacher ? <Presentation size={15} /> : <GraduationCap size={15} />}</span>
                   <span className="chip-name">{u.fullName}</span>
                   <span className="chip-role">[{isSuper ? 'Admin T04' : isTeacher ? 'Giảng viên' : 'Học viên'}]</span>
                   <span className={`chip-clearance order-${u.clearanceLevelOrder || 2}`}>

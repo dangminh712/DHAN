@@ -79,9 +79,11 @@ public class FilesController : ControllerBase
     }
 
     [HttpGet("{id}/stream")]
-    public async Task<IActionResult> StreamFile(ulong id, [FromQuery] ulong? userId, [FromQuery] ulong? lectureId)
+    public async Task<IActionResult> StreamFile(ulong id, [FromQuery] ulong? userId, [FromQuery] ulong? lectureId, [FromQuery] ulong? chapterId)
     {
         ulong uid = await ResolveUserIdAsync(userId);
+        if (chapterId.HasValue && !await _db.ChapterMaterials.AnyAsync(m => m.ChapterId == chapterId.Value && m.FileId == id && m.IsVisible && m.Chapter!.Status == "PUBLISHED"))
+            return StatusCode(403, new { message = "Tài liệu bị ẩn hoặc không thuộc chương này." });
         var decision = await _access.CanViewFileAsync(uid, id, lectureId);
         if (!decision.Allowed)
         {
@@ -103,12 +105,18 @@ public class FilesController : ControllerBase
     }
 
     [HttpGet("{id}/download")]
-    public async Task<IActionResult> DownloadFile(ulong id, [FromQuery] ulong? userId, [FromQuery] ulong? lectureId)
+    public async Task<IActionResult> DownloadFile(ulong id, [FromQuery] ulong? userId, [FromQuery] ulong? lectureId, [FromQuery] ulong? chapterId)
     {
         ulong uid = await ResolveUserIdAsync(userId);
         string? ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
         string? userAgent = Request.Headers.UserAgent.ToString();
 
+        if (chapterId.HasValue)
+        {
+            var chapterMaterial = await _db.ChapterMaterials.AsNoTracking().FirstOrDefaultAsync(m => m.ChapterId == chapterId.Value && m.FileId == id && m.IsVisible);
+            if (chapterMaterial == null || !chapterMaterial.IsDownloadable)
+                return StatusCode(403, new { message = "Tài liệu này chỉ được phép xem trực tuyến." });
+        }
         var decision = await _access.CanDownloadFileAsync(uid, id, lectureId);
         if (!decision.Allowed)
         {

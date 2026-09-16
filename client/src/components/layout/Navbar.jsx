@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Award, GraduationCap, FolderKanban, ShieldAlert, Database, UserPlus } from 'lucide-react';
+import { BookOpen, FolderKanban, ShieldAlert, Database, UserPlus } from 'lucide-react';
 
 export default function Navbar({ currentRoute }) {
   return (
@@ -13,29 +13,11 @@ export default function Navbar({ currentRoute }) {
           Trang chủ
         </a>
         <a
-          href="#/hoc-vien"
-          className={`nav-item ${currentRoute === '/hoc-vien' ? 'active' : ''}`}
-        >
-          <GraduationCap size={15} />
-          Cổng Học viên
-        </a>
-        <a
-          href="#/giang-vien"
-          className={`nav-item ${currentRoute === '/giang-vien' ? 'active' : ''}`}
-        >
-          <Award size={15} />
-          Phòng Giảng viên
-        </a>
-        <a
-          href="#/tao-bai-giang"
-          className={`nav-item ${currentRoute === '/tao-bai-giang' || currentRoute === '/lecture-creator' ? 'active' : ''}`}
-          style={{ position: 'relative' }}
+          href="#/mon-hoc"
+          className={`nav-item ${currentRoute.startsWith('/mon-hoc') ? 'active' : ''}`}
         >
           <BookOpen size={15} />
-          Biên Soạn Bài Giảng
-          <span style={{ fontSize: '9.5px', background: '#10B981', color: '#fff', padding: '1px 5px', borderRadius: '4px', fontWeight: 800, marginLeft: '4px' }}>
-            STUDIO
-          </span>
+          Môn học
         </a>
         <a
           href="#/admin"
@@ -67,7 +49,7 @@ export default function Navbar({ currentRoute }) {
           className={`nav-item ${currentRoute === '/dbms' ? 'active' : ''}`}
         >
           <Database size={15} />
-          Quản trị CSDL (27 Bảng)
+          Quản trị CSDL (29 Bảng)
         </a>
       </div>
     </nav>

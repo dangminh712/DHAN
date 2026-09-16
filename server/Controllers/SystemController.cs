@@ -30,6 +30,8 @@ public class SystemController : ControllerBase
         var classesCount = await _db.Classes.CountAsync();
         var subjectsCount = await _db.Subjects.CountAsync();
         var lecturesCount = await _db.Lectures.CountAsync();
+        var chaptersCount = await _db.Chapters.CountAsync();
+        var chapterMaterialsCount = await _db.ChapterMaterials.CountAsync();
         var filesCount = await _db.Files.CountAsync();
         var auditCount = await _db.AuditLogs.CountAsync();
         var downloadCount = await _db.DownloadLogs.CountAsync();
@@ -58,9 +60,11 @@ public class SystemController : ControllerBase
             new() { TableName = "student_classes", Module = "Academic", RowCount = await _db.StudentClasses.CountAsync(), Description = "Danh sách học viên theo lớp" },
             new() { TableName = "subjects", Module = "Academic", RowCount = subjectsCount, Description = "Môn học đào tạo nghiệp vụ" },
             new() { TableName = "teacher_subjects", Module = "Academic", RowCount = await _db.TeacherSubjects.CountAsync(), Description = "Phân công giảng dạy" },
+            new() { TableName = "chapters", Module = "Course", RowCount = chaptersCount, Description = "Chương linh hoạt theo từng môn học" },
+            new() { TableName = "chapter_materials", Module = "Course", RowCount = chapterMaterialsCount, Description = "Tài liệu và quyền tải theo chương" },
             new() { TableName = "classification_levels", Module = "Security", RowCount = await _db.ClassificationLevels.CountAsync(), Description = "4 Cấp độ mật (Normal->Secret)" },
             new() { TableName = "user_clearance_levels", Module = "Security", RowCount = await _db.UserClearanceLevels.CountAsync(), Description = "Clearance phân loại của người dùng" },
-            new() { TableName = "lectures", Module = "Lecture", RowCount = lecturesCount, Description = "Bài giảng điện tử nghiệp vụ" },
+            new() { TableName = "lectures", Module = "Legacy", RowCount = lecturesCount, Description = "Dữ liệu bài giảng cũ, chỉ giữ để chuyển đổi" },
             new() { TableName = "lecture_parts", Module = "Lecture", RowCount = await _db.LectureParts.CountAsync(), Description = "Cấu trúc 5 phần chuẩn đào tạo CAND" },
             new() { TableName = "quiz_questions", Module = "Lecture", RowCount = await _db.QuizQuestions.CountAsync(), Description = "Ngân hàng câu hỏi trắc nghiệm nghiệp vụ" },
             new() { TableName = "lecture_permissions", Module = "Lecture", RowCount = await _db.LecturePermissions.CountAsync(), Description = "Phân quyền bài giảng theo lớp" },

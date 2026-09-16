@@ -163,6 +163,7 @@ public class Subject
 
     public ICollection<TeacherSubject> TeacherSubjects { get; set; } = new List<TeacherSubject>();
     public ICollection<Lecture> Lectures { get; set; } = new List<Lecture>();
+    public ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
 }
 
 // 9. TeacherSubject
@@ -290,6 +291,7 @@ public class FileRecord
 
     public ICollection<FileVersion> Versions { get; set; } = new List<FileVersion>();
     public ICollection<LectureFile> LectureFiles { get; set; } = new List<LectureFile>();
+    public ICollection<ChapterMaterial> ChapterMaterials { get; set; } = new List<ChapterMaterial>();
     public ICollection<FilePermission> Permissions { get; set; } = new List<FilePermission>();
 }
 

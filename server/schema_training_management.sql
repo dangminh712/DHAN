@@ -348,6 +348,43 @@ CREATE TABLE IF NOT EXISTS `lecture_files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------------------
+-- Course content: subjects -> chapters -> chapter_materials
+-- --------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `chapters` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `subject_id` BIGINT UNSIGNED NOT NULL,
+    `chapter_number` INT NOT NULL,
+    `title` VARCHAR(500) NOT NULL,
+    `description` TEXT NULL,
+    `display_order` INT NOT NULL DEFAULT 0,
+    `status` VARCHAR(32) NOT NULL DEFAULT 'PUBLISHED',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `deleted_at` DATETIME NULL,
+    UNIQUE KEY `uk_chapter_number` (`subject_id`, `chapter_number`),
+    INDEX `idx_chapter_order` (`subject_id`, `display_order`),
+    CONSTRAINT `fk_chapters_subject` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `chapter_materials` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `chapter_id` BIGINT UNSIGNED NOT NULL,
+    `file_id` BIGINT UNSIGNED NOT NULL,
+    `material_group` VARCHAR(32) NOT NULL DEFAULT 'OTHER',
+    `display_order` INT NOT NULL DEFAULT 0,
+    `is_visible` BOOLEAN NOT NULL DEFAULT TRUE,
+    `is_downloadable` BOOLEAN NOT NULL DEFAULT FALSE,
+    `is_printable` BOOLEAN NOT NULL DEFAULT FALSE,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `uk_chapter_material` (`chapter_id`, `file_id`),
+    INDEX `idx_chapter_material_order` (`chapter_id`, `display_order`),
+    INDEX `idx_chapter_material_file` (`file_id`),
+    CONSTRAINT `fk_chapter_materials_chapter` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_chapter_materials_file` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------------------
 -- 16. MODULE: File - file_permissions
 -- --------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `file_permissions` (

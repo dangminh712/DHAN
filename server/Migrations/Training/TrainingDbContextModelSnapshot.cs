@@ -80,6 +80,121 @@ namespace Server.Migrations.Training
                     b.ToTable("audit_logs");
                 });
 
+            modelBuilder.Entity("Server.Models.Training.Chapter", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
+
+                    b.Property<int>("ChapterNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("chapter_number");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("description");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int")
+                        .HasColumnName("display_order");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("status");
+
+                    b.Property<ulong>("SubjectId")
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("subject_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId", "ChapterNumber")
+                        .IsUnique();
+
+                    b.HasIndex("SubjectId", "DisplayOrder");
+
+                    b.ToTable("chapters");
+                });
+
+            modelBuilder.Entity("Server.Models.Training.ChapterMaterial", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
+
+                    b.Property<ulong>("ChapterId")
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("chapter_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int")
+                        .HasColumnName("display_order");
+
+                    b.Property<ulong>("FileId")
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("file_id");
+
+                    b.Property<bool>("IsDownloadable")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_downloadable");
+
+                    b.Property<bool>("IsPrintable")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_printable");
+
+                    b.Property<bool>("IsVisible")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_visible");
+
+                    b.Property<string>("MaterialGroup")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("material_group");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileId");
+
+                    b.HasIndex("ChapterId", "DisplayOrder");
+
+                    b.HasIndex("ChapterId", "FileId")
+                        .IsUnique();
+
+                    b.ToTable("chapter_materials");
+                });
+
             modelBuilder.Entity("Server.Models.Training.ClassRecord", b =>
                 {
                     b.Property<ulong>("Id")
@@ -652,6 +767,76 @@ namespace Server.Migrations.Training
                         .IsUnique();
 
                     b.ToTable("lecture_files");
+                });
+
+            modelBuilder.Entity("Server.Models.Training.LecturePart", b =>
+                {
+                    b.Property<ulong>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<ulong>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("DefaultTab")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("default_tab");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("description");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("int")
+                        .HasColumnName("duration_minutes");
+
+                    b.Property<string>("DurationText")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("duration_text");
+
+                    b.Property<string>("IconName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("icon_name");
+
+                    b.Property<ulong>("LectureId")
+                        .HasColumnType("bigint unsigned")
+                        .HasColumnName("lecture_id");
+
+                    b.Property<int>("PartNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("part_number");
+
+                    b.Property<string>("Subtitle")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("subtitle");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectureId", "PartNumber")
+                        .IsUnique();
+
+                    b.ToTable("lecture_parts");
                 });
 
             modelBuilder.Entity("Server.Models.Training.LecturePermission", b =>
@@ -1623,6 +1808,36 @@ namespace Server.Migrations.Training
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Server.Models.Training.Chapter", b =>
+                {
+                    b.HasOne("Server.Models.Training.Subject", "Subject")
+                        .WithMany("Chapters")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("Server.Models.Training.ChapterMaterial", b =>
+                {
+                    b.HasOne("Server.Models.Training.Chapter", "Chapter")
+                        .WithMany("Materials")
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Models.Training.FileRecord", "File")
+                        .WithMany("ChapterMaterials")
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Chapter");
+
+                    b.Navigation("File");
+                });
+
             modelBuilder.Entity("Server.Models.Training.ClassRecord", b =>
                 {
                     b.HasOne("Server.Models.Training.OrganizationalUnit", "OrganizationalUnit")
@@ -1786,6 +2001,17 @@ namespace Server.Migrations.Training
                         .IsRequired();
 
                     b.Navigation("File");
+
+                    b.Navigation("Lecture");
+                });
+
+            modelBuilder.Entity("Server.Models.Training.LecturePart", b =>
+                {
+                    b.HasOne("Server.Models.Training.Lecture", "Lecture")
+                        .WithMany()
+                        .HasForeignKey("LectureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Lecture");
                 });
@@ -2055,6 +2281,11 @@ namespace Server.Migrations.Training
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Server.Models.Training.Chapter", b =>
+                {
+                    b.Navigation("Materials");
+                });
+
             modelBuilder.Entity("Server.Models.Training.ClassRecord", b =>
                 {
                     b.Navigation("LecturePermissions");
@@ -2064,6 +2295,8 @@ namespace Server.Migrations.Training
 
             modelBuilder.Entity("Server.Models.Training.FileRecord", b =>
                 {
+                    b.Navigation("ChapterMaterials");
+
                     b.Navigation("LectureFiles");
 
                     b.Navigation("Permissions");
@@ -2105,6 +2338,8 @@ namespace Server.Migrations.Training
 
             modelBuilder.Entity("Server.Models.Training.Subject", b =>
                 {
+                    b.Navigation("Chapters");
+
                     b.Navigation("Lectures");
 
                     b.Navigation("TeacherSubjects");

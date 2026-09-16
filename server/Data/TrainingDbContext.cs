@@ -38,11 +38,17 @@ public class TrainingDbContext : DbContext
     public DbSet<RetentionPolicy> RetentionPolicies => Set<RetentionPolicy>();
     public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
     public DbSet<LecturePart> LectureParts => Set<LecturePart>();
+    public DbSet<Chapter> Chapters => Set<Chapter>();
+    public DbSet<ChapterMaterial> ChapterMaterials => Set<ChapterMaterial>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<LecturePart>().HasIndex(p => new { p.LectureId, p.PartNumber }).IsUnique();
+        modelBuilder.Entity<Chapter>().HasIndex(c => new { c.SubjectId, c.ChapterNumber }).IsUnique();
+        modelBuilder.Entity<Chapter>().HasIndex(c => new { c.SubjectId, c.DisplayOrder });
+        modelBuilder.Entity<ChapterMaterial>().HasIndex(m => new { m.ChapterId, m.FileId }).IsUnique();
+        modelBuilder.Entity<ChapterMaterial>().HasIndex(m => new { m.ChapterId, m.DisplayOrder });
         modelBuilder.Entity<PdfNote>().HasIndex(n => new { n.UserId, n.FileId, n.PdfPage });
         modelBuilder.Entity<LearningPartProgress>().HasIndex(p => new { p.UserId, p.LectureId, p.PartId }).IsUnique();
         modelBuilder.Entity<QuizAttempt>().HasIndex(a => new { a.UserId, a.LectureId, a.SubmittedAt });
@@ -64,6 +70,7 @@ public class TrainingDbContext : DbContext
         modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
         modelBuilder.Entity<Lecture>().HasQueryFilter(l => l.DeletedAt == null);
         modelBuilder.Entity<FileRecord>().HasQueryFilter(f => f.DeletedAt == null);
+        modelBuilder.Entity<Chapter>().HasQueryFilter(c => c.DeletedAt == null);
 
         // 3. Unique constraints & Composite unique keys
         modelBuilder.Entity<StudentClass>()
@@ -144,6 +151,18 @@ public class TrainingDbContext : DbContext
             .HasOne(f => f.Uploader)
             .WithMany()
             .HasForeignKey(f => f.UploadedBy);
+
+        modelBuilder.Entity<Chapter>()
+            .HasOne(c => c.Subject)
+            .WithMany(s => s.Chapters)
+            .HasForeignKey(c => c.SubjectId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ChapterMaterial>()
+            .HasOne(m => m.File)
+            .WithMany(f => f.ChapterMaterials)
+            .HasForeignKey(m => m.FileId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<FileVersion>()
             .HasOne(fv => fv.Uploader)

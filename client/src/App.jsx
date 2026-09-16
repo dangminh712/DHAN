@@ -23,6 +23,10 @@ import DbmsAdminPage from './pages/DbmsAdminPage';
 import LectureStudyPage from './LectureStudyPage';
 import LectureCreatorPage from './pages/LectureCreatorPage';
 import DirectMediaViewerModal from './components/common/DirectMediaViewerModal';
+import CoursesPage from './pages/CoursesPage';
+import CourseDetailPage from './pages/CourseDetailPage';
+import ChapterDetailPage from './pages/ChapterDetailPage';
+import { parseCourseRoute } from './courseSearch';
 
 export default function App() {
   // 1. Hash-based Router (Hỗ trợ định tuyến URL riêng biệt trong mạng Intranet)
@@ -32,6 +36,7 @@ export default function App() {
   };
 
   const [route, setRoute] = useState(getHashRoute());
+  const courseRoute = parseCourseRoute(route);
 
   useEffect(() => {
     const handleHashChange = () => setRoute(getHashRoute());
@@ -232,6 +237,17 @@ export default function App() {
     setTimeout(() => setCopiedHash(null), 2500);
   };
 
+  const openCourseMaterial = (material) => {
+    setSelectedFile({
+      ...material,
+      id: material.fileId,
+      originalFileName: material.originalName,
+      fileSize: material.fileSize,
+      fileType: material.fileType,
+      contentType: material.mimeType,
+    });
+  };
+
   // ═════════════════════════════════════════════════════════
   // 11. ĐIỀU HƯỚNG URL RIÊNG: PHÒNG HỌC BÀI GIẢNG ĐA HỌC LIỆU
   // URL: #/study/:id (VD: #/study/1, #/study/2)
@@ -330,40 +346,22 @@ export default function App() {
       )}
 
       {/* NỘI DUNG TỪNG TRANG THEO URL RIÊNG */}
+      {courseRoute?.name === 'courses' && <CoursesPage currentUser={currentUser} />}
+      {courseRoute?.name === 'course' && (
+        <CourseDetailPage courseId={courseRoute.courseId} currentUser={currentUser} onOpenMaterial={openCourseMaterial} />
+      )}
+      {courseRoute?.name === 'chapter' && (
+        <ChapterDetailPage courseId={courseRoute.courseId} chapterId={courseRoute.chapterId} currentUser={currentUser} onOpenMaterial={openCourseMaterial} />
+      )}
+
       {/* 1. CỔNG HỌC VIÊN (DÀNH RIÊNG CHO HỌC VIÊN SĨ QUAN) */}
       {(route === '/hoc-vien' || route === '/student' || route === '/students') && (
-        <StudentPortalPage
-          files={files}
-          loading={loading}
-          search={search}
-          setSearch={setSearch}
-          category={category}
-          setCategory={setCategory}
-          selectedDept={selectedDept}
-          setSelectedDept={setSelectedDept}
-          academicUnits={academicUnits}
-          currentUser={currentUser}
-          onSearch={fetchFiles}
-          onCopyHash={copyToClipboard}
-          copiedHash={copiedHash}
-          onSelectFile={(f) => setSelectedFile(f)}
-          lectures={lectures}
-        />
+        <CoursesPage currentUser={currentUser} />
       )}
 
       {/* 2. PHÒNG LÀM VIỆC GIẢNG VIÊN (DÀNH RIÊNG CHO GIẢNG VIÊN BIÊN SOẠN) */}
       {(route === '/giang-vien' || route === '/teacher' || route === '/teachers') && (
-        <TeacherPortalPage
-          files={files}
-          teachersList={teachersList}
-          currentUser={currentUser}
-          onOpenUpload={() => setIsUploadModalOpen(true)}
-          onDeleteFile={handleDeleteFile}
-          onSelectFile={(f) => setSelectedFile(f)}
-          onCopyHash={copyToClipboard}
-          copiedHash={copiedHash}
-          onSwitchUser={handleSwitchUser}
-        />
+        <CoursesPage currentUser={currentUser} />
       )}
 
       {/* 2b. STUDIO BIÊN SOẠN & TẠO BÀI GIẢNG ĐIỆN TỬ */}
@@ -412,28 +410,7 @@ export default function App() {
 
       {/* 6. TRANG CHỦ TỔNG QUAN */}
       {(route === '/' || route === '') && (
-        <HomePage
-          files={files}
-          loading={loading}
-          search={search}
-          setSearch={setSearch}
-          category={category}
-          setCategory={setCategory}
-          selectedDept={selectedDept}
-          setSelectedDept={setSelectedDept}
-          activeRoleTab={activeRoleTab}
-          setActiveRoleTab={setActiveRoleTab}
-          academicUnits={academicUnits}
-          currentUser={currentUser}
-          onSearch={fetchFiles}
-          onOpenUpload={() => setIsUploadModalOpen(true)}
-          onOpenCreateLecture={() => { window.location.hash = '#/tao-bai-giang'; }}
-          onCopyHash={copyToClipboard}
-          copiedHash={copiedHash}
-          onDeleteFile={handleDeleteFile}
-          onSelectFile={(f) => setSelectedFile(f)}
-          lectures={lectures}
-        />
+        <CoursesPage currentUser={currentUser} />
       )}
 
       {/* MODAL XEM TRỰC TIẾP TẬP TIN / TÀI LIỆU (KHÔNG CẦN VÀO PHÒNG HỌC BÀI GIẢNG) */}
