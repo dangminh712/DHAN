@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B19-c</title>
+	<link rel="stylesheet" href="/bieumau/style/style_landspace.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<style type="text/css">
+		.content{width: 26cm;margin-left: 2cm;clear: both;}
+		@media print {
+				.content{width: 27.1cm;}
+			}
+	</style>
+	<script type='text/javascript'>
+			function load_page()
+				{
+					var span_gt=document.getElementById('lap_ho_so').innerHTML;
+					document.getElementById('lap_ho_so').style.display='none';
+					var DDL_GT=document.getElementById('selected1');
+						switch (span_gt)
+						{
+							case 'SƯU TRA':
+								DDL_GT.value=1;
+								break;
+							case 'HIỀM NGHI':
+								DDL_GT.value=2;
+								break;
+							case 'CHUYÊN ÁN':
+								DDL_GT.value=3;
+								break;
+							case 'TRUY NÃ':
+								DDL_GT.value=4;
+								break;
+							case 'TIỀN ÁN, TIỀN SỰ':
+								DDL_GT.value=5;
+								break;
+							case 'ĐIỀU TRA CƠ BẢN HỆ LOẠI':
+								DDL_GT.value=6;
+								break;
+							default:
+								document.getElementById('lap_ho_so1').style.display='block';
+								
+						}
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function lap_ketthuc()
+				{
+					var get_sel=document.getElementById('select_lap_ketthuc');
+					switch (get_sel.value)
+					{
+						case '1':
+							document.getElementById('lap_ho_so').innerHTML=document.getElementById("lap_hs").innerHTML;
+							document.getElementById('_duoc').innerHTML=document.getElementById("lap_hs").innerHTML;
+							break;
+						case '2':
+						document.getElementById('lap_ho_so').innerHTML=document.getElementById("kt_hs").innerHTML;
+						document.getElementById('_duoc').innerHTML=document.getElementById("kt_hs").innerHTML;
+						break;
+					}
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		function on_change_select_1()
+		{
+			var get_sel=document.getElementById('selected1');
+			document.getElementById('lap_ho_so').style.display='none';
+			document.getElementById('lap_ho_so1').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op3").innerHTML;
+				break;
+				case '4':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op4").innerHTML;
+				break;
+				case '5':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op5").innerHTML;
+				break;
+				case '6':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op6").innerHTML;
+				break;
+				case '7':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op7").innerHTML;
+				break;
+				case '8':
+				document.getElementById('lap_ho_so').style.display='none';
+				document.getElementById('lap_ho_so1').style.display='inline-block';
+				document.getElementById('lap_ho_so1').classList.add("o_nhap_1cm");
+				document.getElementById('lap_ho_so1').classList.add("border");
+				document.getElementById('lap_ho_so1').classList.add("ta_left");
+				document.getElementById('lap_ho_so1').contentEditable='true';
+				document.getElementById('selected1').style.display='none';
+				break;
+			}
+			
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					var val_sel= document.getElementById('selected1').value;
+					if(val_sel==8)
+					{
+						document.getElementById('lap_ho_so1').style.display='inline-block';
+						document.getElementById('selected1').style.display='none';
+						document.getElementById('lap_ho_so').style.display='none';
+					}else
+					{
+						document.getElementById('lap_ho_so1').style.display='none';
+						document.getElementById('selected1').style.display='none';
+						document.getElementById('lap_ho_so').style.display='inline-block';
+					}
+					window.print();
+					if(val_sel==8){
+						document.getElementById('lap_ho_so1').style.display='inline-block';
+						document.getElementById('selected1').style.display='none';
+						document.getElementById('lap_ho_so').style.display='none';
+					}
+					else
+					{
+						document.getElementById('lap_ho_so1').style.display='none';
+						document.getElementById('selected1').style.display='inline-block';
+						document.getElementById('lap_ho_so').style.display='none';
+					}
+					
+				}
+    
+	</script>
+</head>
+<body class="font14 ta_jus" onload='load_page()'>
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12">
+				<span contenteditable class="border font12 co_quan" onkeypress='hide_note("lbl1")'>
+					<label id='lbl1' class='ghichu'>Cấp trên trực tiếp</span>
+				</span><br>
+				<span contenteditable class="border fontBold font12 co_quan" onkeypress='hide_note("lbl2")'>
+					<label id='lbl2' class='ghichu'>Đơn vị lập danh sách</span>
+				</span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<div class="font16	 fontBold ta_center clear">DANH SÁCH ĐỐI TƯỢNG
+				<select id ="selected1" onchange="on_change_select_1()">
+					<option selected="selected" value="0" id="sel_op0">..............</option>
+					<option value="1" id="sel_op1">SƯU TRA</option>
+					<option value="2" id="sel_op2">HIỀM NGHI</option>
+					<option value="3" id="sel_op3">CHUYÊN ÁN</option>
+					<option value="4" id="sel_op4">TRUY NÃ</option>
+					<option value="5" id="sel_op5">TIỀN ÁN, TIỀN SỰ</option>
+					<option value="6" id="sel_op6">ĐIỀU TRA CƠ BẢN HỆ LOẠI</option>
+					<option value="8" id="sel_op8">LOẠI KHÁC</option>
+					
+				</select>
+				<span class="o_nhap_1cm" id="lap_ho_so" ></span>
+				<span class="o_nhap_1cm" id="lap_ho_so1" ></span>
+				<br>
+				<span class="o_nhap_1cm border ta_left" contenteditable onkeypress='hide_note("lbl3")' style='line-height:0.7'>
+					<label id='lbl3' class='ghichu ' >
+						Đối với với ĐTCB, ST: ghi tên địa bàn, lĩnh vực, mục tiêu, hệ loại đối tượng<br>
+						Đối với XMHN: ghi tên việc, hiện tượng<br>
+						Đối với chuyên án: ghi bí số
+					</label>
+				</span>				
+			</div>
+				 
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">MẪU B19-c</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+		</div>
+		<div class="content">
+			<br>
+			<span class="TAB"></span>
+			Để phục vụ công tác quản lý hồ sơ theo chế độ, đề nghị đồng chí báo diễn biến hồ sơ do đơn vị quản lý:
+			<table  style="width: 100%;table-layout:fixed; border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table3" >
+				<tr class='font10'>
+					<td class="Table_TH" style="width: 40px;text-align:center">TT</td>
+					<td class="Table_TH" style="width: 3.5cm;text-align:center">HỌ TÊN(TÊN KHÁC)</td>
+					<td class="Table_TH" style="width: 1.2cm;text-align:center">GIỚI TÍNH</td>
+					<td class="Table_TH" style="width: 1.5cm;text-align:center">NĂM SINH</td>
+					<td class="Table_TH" style="width: 3.8cm;text-align:center">CMND/HỘ CHIẾU SỐ</td>
+					<td class="Table_TH" style="width: 3cm;text-align:center">NƠI THƯỜNG TRÚ HOẶC TẠM TRÚ</td>
+					<td class="Table_TH" style="width: 3cm;text-align:center">HỌ TÊN CHA, MẸ</td>
+					<td class="Table_TH"style="width: 5cm;text-align:center" >
+						TIỀN ÁN, TIỀN SỰ VÀ HÀNH VI CÓ ẢNH HƯỞNG ĐẾN AN NINH TRẬT TỰ
+						<span id="Label4" class='ghichu' style="font-size:9pt; color:red;font-weight:normal;text-transform:none;text-align:left" >
+							<em> Tiền án: ghi tội danh, bản bán số, ngày và tòa xử án, ngày tha.<br/>
+						 Tiền sự: hành vi mức độ xử lý quyết định số, ngày và cơ quan ra quyết định xử lý; ngày chấp hành xong biện pháp XLHC.<br/>
+						 Đối với đối tượng sưu tra: ghi rõ DM, hệ, loại đối tượng sưu tra.<br/>
+						 Đối với đối tượng truy nã: ghi ngày trốn, quyết định số, ngày và đơn vị ra quyết định truy nã.
+						</em>
+						</span>
+					</td>
+					<td class="Table_TH" style="width: 2cm;text-align:center">THỜI GIAN VÀ KẾT QUẢ PHÂN LOẠI XỬ LÝ</td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >1</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable onblur="document.getElementById('Label4').style.display='none'" onfocus="document.getElementById('Label4').style.display='block'" onkeypress="document.getElementById('Label4').style.display='none'"></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+				</tr><!--Dòng mẫu-->
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >2</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable onblur="document.getElementById('Label4').style.display='none'" onfocus="document.getElementById('Label4').style.display='block'" onkeypress="document.getElementById('Label4').style.display='none'"></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >3</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable onblur="document.getElementById('Label4').style.display='none'" onfocus="document.getElementById('Label4').style.display='block'" onkeypress="document.getElementById('Label4').style.display='none'"></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >4</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable onblur="document.getElementById('Label4').style.display='none'" onfocus="document.getElementById('Label4').style.display='block'" onkeypress="document.getElementById('Label4').style.display='none'"></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >5</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable onblur="document.getElementById('Label4').style.display='none'" onfocus="document.getElementById('Label4').style.display='block'" onkeypress="document.getElementById('Label4').style.display='none'"></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+				</tr>
+			</table>
+		<div>
+            <input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3')" />
+            <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3')" />
+        </div>
+                    <script type="text/javascript">
+                        function addRow3(tableID) {
+
+                            var table = document.getElementById(tableID);
+
+                            var rowCount = table.rows.length;
+                            var row = table.insertRow(rowCount);
+
+                            var table1_cell1 = row.insertCell(0);
+							var table1_element0 = document.createElement("div");
+							table1_cell1.innerHTML = rowCount;
+							table1_cell1.setAttribute('class', 'ta_center');
+
+                            var table1_cell2 = row.insertCell(1);
+                            var table1_element1 = document.createElement("div");
+                            table1_cell2.setAttribute('contentEditable', 'true');
+                            table1_cell2.setAttribute('class', 'ta_center');
+
+
+                            var table1_cell3 = row.insertCell(2);
+                            var table1_element2 = document.createElement("div");
+                            table1_cell3.setAttribute('contentEditable', 'true');
+                            table1_cell3.setAttribute('class', 'ta_center');
+
+                            var table1_cell4 = row.insertCell(3);
+                            var table1_element3 = document.createElement("div");
+                            table1_cell4.setAttribute('contentEditable', 'true');
+                            table1_cell4.setAttribute('class', 'ta_center');
+							
+							var table1_cell5 = row.insertCell(4);
+                            var table1_element4 = document.createElement("div");
+                            table1_cell5.setAttribute('contentEditable', 'true');
+                            table1_cell5.setAttribute('class', 'ta_center');
+							
+							var table1_cell6 = row.insertCell(5);
+                            var table1_element5 = document.createElement("div");
+                            table1_cell6.setAttribute('contentEditable', 'true');
+                            table1_cell6.setAttribute('class', 'div2');
+							
+							var table1_cell7 = row.insertCell(6);
+                            var table1_element6 = document.createElement("div");
+                            table1_cell7.setAttribute('contentEditable', 'true');
+                            table1_cell7.setAttribute('class', 'ta_center');
+							
+							var table1_cell8 = row.insertCell(7);
+                            var table1_element7 = document.createElement("div");
+                            table1_cell8.setAttribute('contentEditable', 'true');
+                            table1_cell8.setAttribute('onblur', 'document.getElementById("Label4").style.display="none"');
+                            table1_cell8.setAttribute('onfocus', 'document.getElementById("Label4").style.display="block"');
+                            table1_cell8.setAttribute('onkeypress', 'document.getElementById("Label4").style.display="none"');
+                            table1_cell8.setAttribute('class', 'div2');
+							
+							var table1_cell9 = row.insertCell(8);
+                            var table1_element8 = document.createElement("div");
+                            table1_cell9.setAttribute('contentEditable', 'true');
+                            table1_cell9.setAttribute('class', 'ta_center');
+                        }
+
+                        function deleteRow3(tableID) {
+                            var table = document.getElementById(tableID);
+                            var rowCount = table.rows.length;
+                            for (i = rowCount - 1; i > 1; i--) {
+                                document.getElementById("Table3").deleteRow(i);
+                                break;
+                            }
+                        }
+					</script>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+						
+					</td>
+					<td class='ta_center'>
+						<div class='fontNorm font_I '>
+							<span class='o_nhap_2cm border' style='text-align:right' contenteditable></span>, ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span>
+						</div>
+						<div class='lh_1' style='margin-top:5px'>
+							<span class='fontNorm'>CÁN BỘ THỐNG KÊ</span><br>
+							<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span>
+						</div>
+					</td>
+				</tr>
+			</table>	
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau()"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+	
+</body>
+</html>

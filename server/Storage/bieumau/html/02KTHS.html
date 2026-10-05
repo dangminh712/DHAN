@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu 02KTHS</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu 02KTHS</span><br>
+				<span class="font8">BH theo TT số 30/2014/TT-BCA</span><br>
+				<span class="font8">Ngày 23/7/2014</span><br>
+			</div>
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>BIÊN BẢN GIÁM ĐỊNH<br>
+			<span class='fontLow'>Vụ </span><span class='o_nhap_1cm border fontLow ta_lef' contenteditable onkeypress='hide_note("lbl")'>
+				<label class='ghichu' id='lbl'>Ghi tên vụ việc, thời gian, địa điểm xảy ra theo Quyết định trưng cầu</span>
+			</span>
+			</div><br>
+			<span class="TAB"></span>
+			Ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>, 
+			cơ quan giám định <span class="o_nhap_1cm border" contenteditable></span> đã nhận được Quyết định trưng cầu giám định/ bổ sung/ lại lần 1 số <span class="o_nhap_0_5cm border" contenteditable></span>
+			ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span> 
+			của <span class="o_nhap_1cm border" contenteditable id = 'cua' onkeypress='kounset(id)'></span>/ Yêu cầu giám định <span class="o_nhap_0_5cm border" contenteditable></span>
+			ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			của <span class="o_nhap_1cm border" contenteditable id = 'cua2' onkeypress='kounset(id)'></span>.<br>
+			<span class="TAB"></span>Từ <span class="o_nhap_ngay border" contenteditable></span> giờ <span class="o_nhap_ngay border" contenteditable></span> ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			đến <span class="o_nhap_ngay border" contenteditable></span> giờ <span class="o_nhap_ngay border" contenteditable></span> ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>,
+			tại <span class="o_nhap_1cm border" contenteditable id = 'TAI' onkeypress='kounset(id)' style='min-width:240px'></span><br>
+			<span class="TAB"></span>Chúng tôi gồm:<em class='font12'>[Ghi rõ cấp bậc, họ tên, lĩnh vực giám định được bổ nhiệm, số thẻ đối với giám định viên; cấp bậc, họ tên đối với trợ lý giám định]</em><br>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class="TAB"></span>Đã tiến hành giám định theo yêu cầu trong Quyết định trưng cầu trên/ Yêu cầu giám định trên, kết quả như sau:<br>
+			<br><div class='ta_center fontBold'>I- TÌNH TRẠNG ĐỐI TƯỢNG GIÁM ĐỊNH</div>
+			<span class="TAB"></span>1. Tình trạng đối tượng giám định:<br>
+			<div class='font12 font_I'><span class="TAB"></span>[Ghi rõ tình trạng niêm phong, cách đóng gói bảo quản, tên, số lượng, chất lượng của từng đối tượng giám định]</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class="TAB"></span>2. Tình trạng mẫu so sánh:
+			<div class='font12 font_I'><span class="TAB"></span>[Ghi rõ tình trạng niêm phong, cách đóng gói bảo quản, tên, số lượng, chất lượng của từng mẫu so sánh]</div>
+			<span class='o_nhap_n_dong border' contenteditable	></span>
+			<div class='ta_center fontBold'><br>II- YÊU CẦU GIÁM ĐỊNH<br>
+				<em class='font12 fontNorm'>[Ghi rõ các câu hỏi, yêu cầu giám định]</em>
+			</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<div class='ta_center fontBold'><br>III- PHƯƠNG PHÁP GIÁM ĐỊNH, KẾT QUẢ, NHẬN XÉT VÀ ĐÁNH GIÁ<br>
+				<em class='font12 fontNorm'>[Trình bày lần lượt các phương pháp được áp dụng trong quá trình giám định, kết quả, nhận xét và đánh giá]</em>
+			</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<div class='ta_center fontBold'><br>IV- KẾT LUẬN GIÁM ĐỊNH<br>
+				<em class='font12 fontNorm'>[Ghi những kết luận theo nội dung trưng cầu/ yêu cầu giám định]</em>
+			</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<div class='ta_center fontBold'><br>V- XỬ LÝ ĐỐI TƯỢNG GIÁM ĐỊNH CÒN LẠI SAU GIÁM ĐỊNH<br></div>
+			<span class="TAB"></span>1. Lưu đối tượng giám định:<br>
+			<div class='font12 font_I'><span class="TAB"></span>[Ghi rõ tên, số lượng, chất lượng, cách đóng gói, niêm phong của từng đối tượng còn lại sau giám định; địa diểm lưu giữ].</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class="TAB"></span>2. Hoàn trả đối tượng giám định:<br>
+			<div class='font12 font_I'><span class="TAB"></span>[Ghi rõ tên, số lượng, chất lượng, cách đóng gói, niêm phong và bảo quản cảu từng đối tượng còn lại sau giám định; địa điểm hoàn trả].</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class="TAB"></span>Biên bản lập xong hồi <span class="o_nhap_ngay border" contenteditable></span> giờ <span class="o_nhap_ngay border" contenteditable></span> ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>,  giám định viên và trợ lý giám định có tên trên đã đọc lại và ký tên xác nhận dưới đây.
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+						<span class=''>TRỢ LÝ GIÁM ĐỊNH</span><br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+					<td class='ta_center'>
+						<span class=''>GIÁM ĐỊNH VIÊN</span><br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

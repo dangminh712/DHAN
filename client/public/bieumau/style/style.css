@@ -1,0 +1,69 @@
+body{background: #ccc;}
+.wrapper{background: #fff;width: 21cm;min-height: 26cm;margin:0 auto;-webkit-box-shadow: 0 0 6px 4px #68696b;-moz-box-shadow: 0 0 6px 4px #68696b;box-shadow: 0 0 6px 4px #68696b;}
+.header{width: 100%;}
+.content{width: 17cm;min-height: 10cm;margin-left: 2.5cm;clear: both;}
+.content_page_2{width: 17cm;min-height: 10cm;margin-left: 2.5cm;}
+.cq_banhanh{width:6.3cm;}
+.quochieu{width: 9.6cm;margin: 0 auto}
+.td_bieumau{width:5cm;}
+.fontUpper{text-transform: uppercase;}
+.fontLow{text-transform: none;}
+.fontBold{font-weight: bold;}
+.fontNorm{font-weight: normal;}
+.ta_center{text-align: center;}
+.ta_left{text-align: left;}
+.ta_right{text-align: right;}
+.ta_jus{text-align: justify;}
+.border{border: 0.5px solid #ccc;}
+.font8{font-size: 8pt;}
+.font9{font-size: 9pt;}
+.font10{font-size: 10pt;}
+.font11{font-size: 11pt;}
+.font12{font-size: 12pt;}
+.font13{font-size: 13pt;}
+.font14{font-size: 14pt;}
+.font16{font-size: 16pt;}
+.font18{font-size: 18pt;}
+.font_I{font-style: italic;}
+.co_quan{min-width: 3cm;display: inline-block;}
+.dia_danh{min-width: 50px;text-align: right;display: inline-block;}
+.o_nhap_ngay{width:20px;display: inline-block;}
+.o_nhap_thang{min-width: 10px;display: inline-block;}
+.o_nhap_nam{min-width: 40px;display: inline-block;}
+.o_nhap_n_dong{width:100%;text-align:justify;display: inline-block;word-wrap:break-word}
+.o_nhap_0_5cm{min-width: 0.5cm;display: inline-block;}
+.o_nhap_1cm{min-width: 1cm;display: inline-block;}
+.o_nhap_2cm{min-width: 2cm;display: inline-block;}
+.o_nhap_3cm{min-width: 3cm;display: inline-block;}
+.f_left{float: left;}
+.time_header{float: right;margin-right: 3cm }
+.f_right{float:right;}
+.lh_06{line-height: 0.6em}
+.lh_08{line-height: 0.8em}
+.lh_1{line-height: 1em}
+.lh_15{line-height: 1.5em}
+.lh_18{line-height: 1.8em}
+.lh_20{line-height: 2em}
+.clear{clear: both;}
+.TAB{width: 1cm;display: inline-block;}
+.ghichu{font-size: 10pt;font-style: italic;color: red;display:unset;font-weight:normal;text-transform:unset}
+select{font-family:Times New Roman;font-size: 14pt;}
+.select_tieude{font-family:Times New Roman;font-size: 16pt; font-weight:bold;text-transform:uppercase}
+.button_print{position: fixed;top:50px;right:10px;cursor: pointer;width:45px;height: 45px;text-align: center;background:transparent}
+.button_save{position: fixed;top:120px;right:13px;cursor: pointer;width:40px;height: 40px; background:transparent}
+.button_reload{position: fixed;top:180px;right:7px;cursor: pointer;width:50px;height: 50px ;background:transparent}
+table.khung_chu_ky{width:100%}
+table.khung_chu_ky_1ben{width:100%}
+table.khung_chu_ky  tr td  {font-weight:bold;width:33%;vertical-align:top}
+table.khung_chu_ky_1ben  tr td  {font-weight:bold;vertical-align:top;float:right;}
+table tr td {padding-left:5px;padding-right:5px}
+ .dotted{font-size:9pt}
+ .v_align_top{vertical-align:top}
+
+*{
+	-webkit-print-color-adjust: exact !important;
+ }
+@page
+        {
+    	    margin:18mm 8mm 15mm 18mm
+        }

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B13_CS</title>
+	<link rel="stylesheet" href="/bieumau/style/style_landspace.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<style type="text/css">
+		.content{width: 26cm;margin-left: 2cm;clear: both;}
+		@media print {
+				.content{width: 27.1cm;}
+			}
+	</style>
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'Nam':
+							DDL_GT.value=1;
+							break;
+						case 'Nữ':
+							DDL_GT.value=2;
+							break;
+					}
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function lap_ketthuc()
+				{
+					var get_sel=document.getElementById('select_lap_ketthuc');
+					switch (get_sel.value)
+					{
+						case '1':
+							document.getElementById('lap_ho_so').innerHTML=document.getElementById("lap_hs").innerHTML;
+							document.getElementById('_duoc').innerHTML=document.getElementById("lap_hs").innerHTML;
+							break;
+						case '2':
+						document.getElementById('lap_ho_so').innerHTML=document.getElementById("kt_hs").innerHTML;
+						document.getElementById('_duoc').innerHTML=document.getElementById("kt_hs").innerHTML;
+						break;
+					}
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+				}
+    
+	</script>
+</head>
+<body class="font14 ta_jus" >
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12" style='margin-top:3px'>
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">Mẫu B13-c</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		<br><br>
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>YÊU CẦU BÁO CÁO DIỄN BIẾN HỒ SƠ</div><br>
+			<div class="ta_center clear">
+				<span class="font_I"style='vertical-align:top'>Kính gửi: </span> 
+				<span class="o_nhap_1cm border ta_left" contenteditable></span>
+			</div><br>
+			<span class="TAB"></span>
+			Để phục vụ công tác quản lý hồ sơ, đề nghị đồng chí báo diễn biến hồ sơ do đơn vị quản lý:<br><br>
+			<table  style="width: 100%;table-layout:fixed; border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table3" >
+				
+				<tr class='font10'>
+					<td class="Table_TH" style="width: 40px;text-align:center">TT</td>
+					<td class="Table_TH" style="width: 200px;text-align:center">SỐ HỒ SƠ</td>
+					<td class="Table_TH"style="width: 350px;text-align:center" >TRÍCH YẾU HỒ SƠ<br/>(HOẶC HỌ TÊN ĐỐI TƯỢNG, BÍ DANH CTVBM)</td>
+					<td class="Table_TH" style="width: 270px;text-align:center">HỌ TÊN CÁN BỘ, ĐƠN VỊ QUẢN LÝ HỒ SƠ</td>
+					<td class="Table_TH" style="text-align:center">GHI CHÚ</td>
+				</tr>
+				<tr class='font10'>
+					<td class="Table_TH" style="width: 30px;text-align:center">1</td>
+					<td class="Table_TH" style="width: 300px;text-align:center">2</td>
+					<td class="Table_TH"style="width: 100px;text-align:center" >3</td>
+					<td class="Table_TH" style="width: 100px;text-align:center">4</td>
+					<td class="Table_TH" style="text-align:center">5</td>
+				</tr>
+				<tr>
+					<td style="vertical-align:middle;" class="ta_center"><div class="ta_center font10" >2</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+				</tr><!--Dòng mẫu-->
+				<tr>
+					<td style="vertical-align:middle;" class="ta_center"><div class="ta_center font10" >3</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+				</tr>
+				<tr>
+					<td style="vertical-align:middle;" class="ta_center"><div class="ta_center font10" >4</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+				</tr>
+				<tr>
+					<td style="vertical-align:middle;" class="ta_center"><div class="ta_center font10" >5</div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+					<td style="vertical-align:top" class="ta_center"><div class="ta_center" contentEditable ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="ta_left" contentEditable ></div></td>
+				</tr>
+			</table>
+		<div>
+            <input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3')" />
+            <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3')" />
+        </div>
+                    <script type="text/javascript">
+                        function addRow3(tableID) {
+
+                            var table = document.getElementById(tableID);
+
+                            var rowCount = table.rows.length;
+                            var row = table.insertRow(rowCount);
+
+                            var table1_cell1 = row.insertCell(0);
+                            table1_cell1.innerHTML = rowCount;
+                            table1_cell1.setAttribute('class', 'demo ta_center font10');
+							
+
+                            var table1_cell2 = row.insertCell(1);
+                            var table1_element1 = document.createElement("div");
+                            table1_cell2.setAttribute('contentEditable', 'true');
+                            table1_cell2.setAttribute('class', 'ta_center');
+							
+
+
+                            var table1_cell3 = row.insertCell(2);
+                            var table1_element2 = document.createElement("div");
+                            table1_cell3.setAttribute('contentEditable', 'true');
+                            table1_cell3.setAttribute('class', 'ta_left');
+
+                            var table1_cell4 = row.insertCell(3);
+                            var table1_element3 = document.createElement("div");
+                            table1_cell4.setAttribute('contentEditable', 'true');
+                            table1_cell4.setAttribute('class', 'ta_center');
+							var table1_cell4 = row.insertCell(4);
+                            var table1_element3 = document.createElement("div");
+                            table1_cell4.setAttribute('contentEditable', 'true');
+                            table1_cell4.setAttribute('class', 'ta_left');
+                        }
+
+                        function deleteRow3(tableID) {
+                            var table = document.getElementById(tableID);
+                            var rowCount = table.rows.length;
+                            for (i = rowCount - 1; i > 1; i--) {
+                                document.getElementById("Table3").deleteRow(i);
+                                break;
+                            }
+                        }
+					</script>
+					<table class='khung_chu_ky '>
+						<tr>
+							<td class=' ta_center lh_1'>
+								<span style="font-weight:normal">CÁN BỘ THỐNG KÊ</span><br>
+								<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br><br>
+							</td>
+							<td class='ta_center lh_1'>
+								<span style="font-weight:normal">LÃNH ĐẠO ĐƠN VỊ</span><br>
+								<span class='fontNorm font12 font_I'>(Ký tên, đóng dấu)</span><br><br><br><br><br>
+							</td>
+						</tr>
+					</table>
+					
+		</div>
+		<div class="ghichu">
+			<b>    
+				<strong><font size="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</font></strong><em><font size="3"> Mẫu này cơ quan Hồ sơ yêu cầu đơn vị nghiệp vụ báo diễn biến hồ sơ.</font></em>
+			</b>
+		</div> 
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau()"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+	
+</body>
+</html>

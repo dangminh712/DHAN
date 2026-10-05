@@ -8,13 +8,19 @@ export const fileService = {
   },
 
   getStreamUrl(fileId, userId, lectureId) {
-    let url = `http://localhost:5000/api/training/files/${fileId}/stream?userId=${userId || 1}`;
+    const base = typeof window !== 'undefined' && window.location.port === '5173'
+      ? `http://${window.location.hostname}:5000`
+      : '';
+    let url = `${base}/api/training/files/${fileId}/stream?userId=${userId || 1}`;
     if (lectureId) url += `&lectureId=${lectureId}`;
     return url;
   },
 
   getDownloadUrl(fileId, userId, lectureId) {
-    let url = `http://localhost:5000/api/training/files/${fileId}/download?userId=${userId || 1}`;
+    const base = typeof window !== 'undefined' && window.location.port === '5173'
+      ? `http://${window.location.hostname}:5000`
+      : '';
+    let url = `${base}/api/training/files/${fileId}/download?userId=${userId || 1}`;
     if (lectureId) url += `&lectureId=${lectureId}`;
     return url;
   },

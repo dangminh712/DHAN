@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>Hồ sơ Điều nhà an toàn</title>
+	<!--Java Script-->
+    <script language="javascript" src="../js/timkiem.js"></script>
+	<style type="text/css">
+		body, div{background:#e8f1fa;padding:0;margin:0;}
+		html,body{height:100%}
+		.flex-init-setup {display:-webkit-box;display:-moz-box;display:-webkit-flex;display:-ms-flexbox;display:flex;}
+		.flex-ppal-setup{-webkit-flex-flow:column wrap;-moz-flex-flow : colum wrap;flex-flow: column wrap;-webkit-justify-content:center;-moz-justify-content:center;justify-content:center;}
+		.tieude_hoso{text-align:center;font-size:20pt;font-weight:bold;color:red }
+		.bieumau{padding-left:50px}
+		.bieumau a{color:BLack;text-decoration:none;}
+		.bieumau a:hover{color:BLue;text-decoration:underline;}
+		.menuop{background:#7095bb;line-height:30px}
+		.menuop ul li {list-style:none;display:inline-BLock;margin-right:30px;padding-right:30px;border-right: 1px dotted white}
+		.menuop ul li:last-child{border:none}
+		.menuop ul li a {color:white;font-family:"Times New Roman", Times, serif;font-weight:bold;}
+		.menuop ul ul{display:none;position:absolute;background:#55ADDA;border:1px solid #fff;border-radius:10px; }
+		.menuop ul ul li{border-bottom:1px dotted #ccc;padding:5px 0px;margin-left:-40px;display:list-item;line-height:20px;border-right:none;padding-right:0px;margin-right:0px;}
+		.menuop ul ul li a{color:#fff;}
+		.menuop ul li:hover> ul{display:inline-BLock;margin-left:10px}
+		ul ul li{text-align:left}
+		ul li a{text-decoration:none;color:BLack;font-weight:bold;font-size:10pt}
+		ul{	margin-left:-25px}
+		ul ul li a{padding :0px 20px;}
+		Ul li a:hover{color:red;text-decoration:underline;}
+		ul ul li a:hover{color:navy;font-size:15pt}
+		ul li a:active{color:red}
+		.button_link{float:right;background-image:url('../Image/bg_button_1.png');background-repeat:repeat-x;border-radius:3px;border:none;font-family:"Courier New", Courier, monospace, Times, serif, Courier, monospace;font-size:9pt; ;cursor:pointer;border:1px solid gray}
+		.button_link:hover{background-image:url('../Image/bg_button_hover.png');background-repeat:repeat-x;border-radius:3px;border:none;color:white;border:1px solid gray}
+		.bieumau{padding-left:50px;height:30px;width:70%;color:#008}
+		.List_bieumau{background:#C0C0C0;line-height:30px}
+		.List_bieumau ul {padding-left:60px;}
+		.List_bieumau ul li {list-style:none;display:inline-BLock;float:left;clear:both;cursor:pointer;color:#008}
+		.List_bieumau ul li:last-child{border:none}
+		.List_bieumau ul li a {color:white;font-family:"Times New Roman", Times, serif;font-weight:bold;}
+		/*.List_bieumau ul li a:active {display: BLock}*/
+		/*.List_bieumau ul li a {display: none}*/
+		.List_bieumau ul ul{display:none;}
+		.List_bieumau ul ul li{padding:5px 0px;margin-left:-40px;display:list-item;line-height:20px;border-right:none;padding-right:0px;margin-right:0px}
+		.List_bieumau ul ul li a{color:gray;}
+		.List_bieumau ul li:hover > ul{display:inline;float:right;margin-left: -80px}
+		.List_bieumau ul li:hover  {text-decoration:underline; color:red}
+
+	</style>
+</head>
+
+<body>
+	<div style=" margin:0 auto;" id="container flex-init-setup flex-ppal-setup" >
+		<form method="post">
+		  <!--<div class="menuop" id="menuop">-->
+			 <!--<ul style="display:inline">-->
+			 	<!--<li><a href="../TTHD/Huongdan_BieuMau.pdf"  >Hướng dẫn sử dụng biểu mẫu</a></li>-->
+                <!--<li><a href="../DSHS/danhsach_bieumau.html"   >Danh sách biểu mẫu</a></li>-->
+			 	<!--<li><a href="">Các loại hồ sơ</a>-->
+			 		<!--<ul>-->
+			 			<!--<li><a href="../DSHS/DB.html">Hồ sơ điều tra cơ bản ĐB</a></li>-->
+			 			<!--<li><a href="../DSHS/CN.html">Hồ sơ cá nhân CN</a></li>-->
+			 			<!--<li><a href="../DSHS/VA.html">Hồ sơ chuyên án VA</a></li>-->
+			 			<!--<li><a href="../DSHS/KH.html">Hồ sơ kế hoạch nghiệp vụ KH</a></li>-->
+			 			<!--<li><a href="../DSHS/TX.html">Hồ sơ truy xét TX</a></li>-->
+			 			<!--<li><a href="../DSHS/TT.html">Hồ sơ truy tìm TT</a></li>-->
+						<!--<li><a href="../DSHS/AK.html">Hồ sơ vụ án hình sự AK</a></li>-->
+			 			<!--<li><a href="../DSHS/LL.html">Hồ sơ lực lượng LL</a></li>-->
+			 			<!--<li><a href="../DSHS/HT.html">Hồ sơ hộp thư HT</a></li>-->
+			 			<!--<li><a href="../DSHS/AT.html">Hồ sơ nhà an toàn AT</a></li>-->
+						<!--<li><a href="../DSHS/NV.html">Hồ sơ vấn đề nghiệp vụ NV</a></li>-->
+						<!--<li><a href="../DSHS/Khac.html">Các Biểu mẫu sử dụng khi có yêu cầu nghiệp vụ</a></li>-->
+					<!--</ul>-->
+				<!--</li>-->
+				<!--<li><a href="#">Hướng dẫn phần mềm</a>-->
+					<!--<ul>-->
+						<!--<li><a href="../TTHD/HD_CaiDat.pdf"  >Hướng dẫn cài đặt</a></li>-->
+						<!--<li><a href="../TTHD/HDSD_HSAN_2015.pdf"  >Hướng dẫn sử dụng</a></li>-->
+					<!--</ul>-->
+				<!--</li>-->
+				<!--<li><a href="#">Bảo mật thông tin</a>-->
+					<!--<ul>-->
+						<!--<li><a href="file:///C:/BieuMau_HSAN/BaoMat/baomat.exe">Chạy phần mềm bảo mật</a></li>-->
+						 <!---->
+					<!--</ul>-->
+				<!--</li>	-->
+			 <!--</ul>-->
+             <!--<div style="float:right;background:#55ADDA none repeat scroll 0% 0%;line-height:31px">-->
+                <!---->
+                    <!--<div id="search" style="width:35px;float:left;margin-top:5px;"> <input id ="chuoiim_kiem"type="text" maxlength="4"/></div>-->
+                    <!--<div style="float:left;background:#55ADDA none repeat scroll 0% 0%;font-size:10pt">-->
+                    <!--<input type="radio" id="danh_may" name="bieumau"/>Đánh máy-->
+                    <!--<input type="radio" id="vietay" name="bieumau"/>Viết tay-->
+                    <!--<input id ="timkiem" type="button" value="Tìm kiếm" onclick="search();"/>-->
+                    <!--</div>-->
+            <!--</div>-->
+		<!--</div>-->
+		<div class="tieude_hoso" style="height: 68px;padding-top:30PX;">CÁC BIỂU 
+			MẪU<br />
+			&nbsp;DÙNG CHO HỒ SƠ NHÀ AN TOÀN (AT) </div>
+		<div style="height:2px;background:#008;width:300px;margin:0 auto;"></div>
+        <div class="List_bieumau" style="width:100%">
+			<ul>
+		 		<li>
+		 	 		  <strong>1. Biểu mẫu B1</strong> (Quyết định lập hoặc kết thúc hồ sơ, tập hồ sơ).
+					<ul>
+						<li>
+							<a href="../Bieumau/B1.html"><input  class="button_link" type="button" value="Bản đánh máy" /></a>
+							<a href="../HS_VIETTAY/B1.pdf"><input  class="button_link" type="button" value="Bản viết tay" /></a>
+						</li>
+					</ul>
+		 	 	</li>
+		 	 	<li>
+		 	 		 <strong>2. Biểu mẫu B3</strong> (Thống kê tài liệu có trong hồ sơ).
+					<ul>
+						<li>
+							<a href="../Bieumau/B3.html"><input  class="button_link" type="button" value="Bản đánh máy" /></a>
+							<a href="../HS_VIETTAY/B3.pdf"><input  class="button_link" type="button" value="Bản viết tay" /></a>						</li>
+					</ul>
+		 	 	</li>
+		 	 	<li>
+		 	 		 <strong>3. Biểu mẫu B4</strong> (Danh sách người nghiên cứu hồ sơ).
+					<ul>
+						<li>
+							<a href="../Bieumau/B4.html"><input  class="button_link" type="button" value="Bản đánh máy" /></a>
+							<a href="../HS_VIETTAY/B4.pdf"><input  class="button_link" type="button" value="Bản viết tay" /></a>
+						</li>
+					</ul>
+		 	 	</li>
+		 	 	<li>
+		 	 		 <strong>4. Biểu mẫu B27-a</strong> (Danh sách lực lượng bí mật).
+					<ul>
+						<li>
+							<a href="../Bieumau/B27a.html"><input  class="button_link" type="button" value="Bản đánh máy" /></a>
+							<a href="../HS_VIETTAY/B27a.pdf"><input  class="button_link" type="button" value="Bản viết tay" /></a>
+						</li>
+					</ul>
+		 	 	</li>
+		 	 	<li>
+		 	 		 <strong>5. Biểu mẫu B9</strong> (Biên bản bàn giao hồ sơ, tài liệu).
+					<ul>
+						<li>
+							<a href="../Bieumau/B9.html"><input  class="button_link" type="button" value="Bản đánh máy" /></a>
+							<a href="../HS_VIETTAY/B9.pdf"><input  class="button_link" type="button" value="Bản viết tay" /></a>						</li>
+					</ul>
+		 	 	</li>
+		 	 	<li>
+		 	 		 <strong>6. Biểu mẫu B15</strong> (Bản định thời hạn bảo quản hồ sơ).
+					<ul>
+						<li>
+							<a href="../Bieumau/B15.html"><input  class="button_link" type="button" value="Bản đánh máy" /></a>
+							<a href="../HS_VIETTAY/B15.pdf"><input  class="button_link" type="button" value="Bản viết tay" /></a>
+						</li>
+					</ul>
+		 	 	</li>
+				
+		 	 </ul>
+		 </div>
+		 </form>
+	</div>
+</body>
+
+</html>

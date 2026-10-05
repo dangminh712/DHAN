@@ -29,3 +29,12 @@ test('đường dẫn PDF chứa trang cần mở còn video giữ nguyên đư�
   );
   assert.equal(viewer.createMediaViewerUrl(24, 'video', 6), '/api/media/stream/24');
 });
+
+test('mở tab mới với tài liệu PDF chứa đúng số trang #page=N', () => {
+  assert.equal(typeof viewer.createMediaNewTabUrl, 'function');
+  assert.equal(viewer.createMediaNewTabUrl(24, 'document', 6), '/api/media/stream/24#page=6');
+  assert.equal(viewer.createMediaNewTabUrl(24, 'pdf', 10), '/api/media/stream/24#page=10');
+  assert.equal(viewer.createMediaNewTabUrl(24, 'slide', 3), '/api/media/stream/24#page=3');
+  assert.equal(viewer.createMediaNewTabUrl(24, 'video', 6), '/api/media/stream/24');
+});
+

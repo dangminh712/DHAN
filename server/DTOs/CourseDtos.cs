@@ -6,6 +6,8 @@ public class CourseSummaryDto
     public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public string? ResponsibleTeacherName { get; set; }
+    public string? ResponsibilitySource { get; set; }
     public string IconName { get; set; } = "BookOpen";
     public int ChapterCount { get; set; }
     public int MaterialCount { get; set; }

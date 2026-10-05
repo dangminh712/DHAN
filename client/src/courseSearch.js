@@ -22,8 +22,9 @@ export function getMaterialFormat(material = {}) {
   if (extension === 'pdf' || fileType === 'PDF' || mime === 'application/pdf') return 'PDF'
   if (['ppt', 'pptx'].includes(extension)) return 'POWERPOINT'
   if (['doc', 'docx'].includes(extension)) return 'WORD'
+  if (['xls', 'xlsx', 'csv'].includes(extension) || mime.includes('spreadsheet') || mime.includes('ms-excel') || fileType === 'EXCEL') return 'EXCEL'
   if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(extension) || mime.startsWith('image/') || fileType === 'IMAGE') return 'IMAGE'
-  if (['mp4', 'webm', 'mov', 'mkv'].includes(extension) || mime.startsWith('video/') || fileType === 'VIDEO') return 'VIDEO'
+  if (['mp4', 'webm', 'mov', 'mkv', 'flv', 'avi'].includes(extension) || mime.startsWith('video/') || fileType === 'VIDEO') return 'VIDEO'
   return fileType || 'OTHER'
 }
 
@@ -36,6 +37,7 @@ export function formatFileSize(bytes) {
 }
 
 export function parseCourseRoute(route) {
+  route = String(route || '').split('?')[0]
   if (route === '/mon-hoc') return { name: 'courses' }
   const courseMatch = route.match(/^\/mon-hoc\/(\d+)$/)
   if (courseMatch) return { name: 'course', courseId: courseMatch[1] }
