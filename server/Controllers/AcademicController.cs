@@ -115,6 +115,8 @@ public class AcademicController : ControllerBase
                 Credits = s.Credits,
                 Status = s.Status,
                 FacultyName = s.OrganizationalUnit != null ? s.OrganizationalUnit.Name : "T04",
+                ResponsibleTeacherName = s.ResponsibleTeacherName,
+                ResponsibilitySource = s.ResponsibilitySource,
                 AssignedTeachers = s.TeacherSubjects.Select(ts => ts.Teacher.FullName).ToList()
             });
 

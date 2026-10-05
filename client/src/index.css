@@ -1,37 +1,37 @@
 /* ========================================================================
    HỆ THỐNG QUẢN LÝ HỌC LIỆU - ĐẠI HỌC AN NINH NHÂN DÂN
-   Theme: Nền trắng chủ đạo + Sắc đỏ An ninh (#A31A1A / #8B1515)
+   Theme: Đỏ đô nhận diện + vàng kim điểm nhấn + xanh lá nghiệp vụ
    ======================================================================== */
 
 :root {
-  --primary-red: #A31A1A;
-  --primary-red-dark: #8B1515;
-  --primary-red-light: #D42B2B;
-  --primary-red-bg: #FEF2F2;
-  --primary-red-border: #FECACA;
+  --primary-red: #9B1C24;
+  --primary-red-dark: #71151A;
+  --primary-red-light: #B92A32;
+  --primary-red-bg: #FFF1F0;
+  --primary-red-border: #E9BBB8;
 
-  --navy: #0B1E36;
-  --navy-light: #1E3A5F;
+  --navy: #183629;
+  --navy-light: #24523D;
 
-  --gold: #D4A843;
-  --gold-light: #FEF9C3;
-  --gold-dark: #92702A;
+  --gold: #D8A928;
+  --gold-light: #FFF7D6;
+  --gold-dark: #765805;
 
-  --bg-body: #F5F5F5;
+  --bg-body: #F5F6F2;
   --bg-white: #FFFFFF;
-  --bg-subtle: #FAFAFA;
+  --bg-subtle: #FAFAF7;
   --bg-card: #FFFFFF;
 
-  --border-light: #E5E7EB;
-  --border-medium: #D1D5DB;
+  --border-light: #DFE3DC;
+  --border-medium: #C9D0C7;
 
-  --text-heading: #111827;
-  --text-body: #374151;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
+  --text-heading: #17231D;
+  --text-body: #34453B;
+  --text-secondary: #5F6F66;
+  --text-muted: #8A9890;
 
-  --success: #059669;
-  --success-bg: #D1FAE5;
+  --success: #0A6B3D;
+  --success-bg: #EAF7F0;
   --error: #DC2626;
   --error-bg: #FEE2E2;
 
@@ -48,6 +48,11 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-family);
   background: var(--bg-body);
@@ -55,6 +60,7 @@ body {
   min-height: 100vh;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ─── ANIMATIONS ─── */
@@ -204,9 +210,12 @@ body {
   display: flex;
   align-items: center;
   gap: 7px;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
-.btn-upload-primary:hover { background: var(--primary-red-dark); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-upload-primary:hover { background: var(--primary-red-dark); box-shadow: var(--shadow-md); }
+.btn-upload-primary:active { transform: scale(0.98); }
 .btn-upload-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 .btn-icon-secondary {
@@ -387,9 +396,12 @@ body {
   align-items: center;
   gap: 14px;
   box-shadow: var(--shadow-md);
-  transition: transform 0.2s;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  backface-visibility: hidden;
 }
-.stat-card:hover { transform: translateY(-2px); }
+.stat-card:hover {
+  box-shadow: var(--shadow-lg);
+}
 .stat-icon {
   width: 48px;
   height: 48px;
@@ -483,14 +495,17 @@ body {
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 12.5px;
-  font-weight: 500;
+  font-weight: 600;
   border: 1px solid var(--border-light);
   background: var(--bg-subtle);
   color: var(--text-body);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .dept-pill:hover { border-color: var(--primary-red); color: var(--primary-red); }
+.dept-pill:active { transform: scale(0.97); }
 .dept-pill.active {
   background: var(--primary-red);
   color: #FFFFFF;
@@ -519,14 +534,17 @@ body {
   background: var(--bg-white);
   color: var(--text-secondary);
   font-size: 12.5px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .format-btn:hover { border-color: var(--primary-red); color: var(--primary-red); }
+.format-btn:active { transform: scale(0.97); }
 .format-btn.active {
   background: var(--primary-red-bg);
   color: var(--primary-red);
@@ -556,13 +574,13 @@ body {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: all 0.25s;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
   box-shadow: var(--shadow-sm);
+  backface-visibility: hidden;
 }
 .lecture-card:hover {
   box-shadow: var(--shadow-md);
   border-color: var(--primary-red-border);
-  transform: translateY(-2px);
 }
 
 .card-top-badge {
@@ -636,9 +654,11 @@ body {
   padding: 12px 16px;
   border-top: 1px solid var(--border-light);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 8px;
 }
+.card-actions > :is(a, button) { width: 100%; }
 .btn-view-lecture {
   flex: 1;
   background: linear-gradient(135deg, #A31A1A 0%, #B91C1C 100%);
@@ -653,17 +673,17 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   box-shadow: 0 2px 5px rgba(163, 26, 26, 0.25);
   user-select: none;
+  touch-action: manipulation;
 }
 .btn-view-lecture:hover {
   background: linear-gradient(135deg, #B91C1C 0%, #DC2626 100%);
   box-shadow: 0 4px 10px rgba(163, 26, 26, 0.35);
-  transform: translateY(-1px);
 }
 .btn-view-lecture:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 .btn-card-icon {
   width: 34px;
@@ -677,7 +697,12 @@ body {
   justify-content: center;
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
+}
+.btn-card-icon:active {
+  transform: scale(0.95);
 }
 .btn-card-icon:hover { border-color: var(--border-medium); color: var(--text-heading); background: #F9FAFB; }
 .btn-card-icon.delete:hover { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
@@ -712,19 +737,60 @@ body {
 }
 
 /* ═══════════════════════════════════════
-   9. MODALS
+   9. MODALS & SMOOTH TRANSITIONS
    ═══════════════════════════════════════ */
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalDialogEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pageEnterSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-page-view {
+  min-height: calc(100vh - 200px);
+  width: 100%;
+}
+
+.animate-page-enter {
+  animation: pageEnterSmooth 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(11, 30, 54, 0.72);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  animation: backdropFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity;
 }
+
 .modal-dialog {
   background: var(--bg-white);
   border-radius: var(--radius-lg);
@@ -734,8 +800,12 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  animation: fadeIn 0.2s ease-out;
+  box-shadow: 0 25px 50px -12px rgba(11, 30, 54, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  animation: modalDialogEnter 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 .modal-header {
   padding: 14px 20px;
@@ -1183,22 +1253,27 @@ body {
 .part-nav-card {
   background: var(--bg-white);
   border: 1px solid var(--border-light);
+  border-left: 4px solid transparent;
   border-radius: var(--radius-md);
   padding: 12px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .part-nav-card:hover {
   border-color: var(--primary-red-border);
+  border-left-color: var(--primary-red-border);
   background: #FEF2F2;
 }
 .part-nav-card.active {
   border-color: var(--primary-red);
+  border-left-color: var(--primary-red);
   background: #FEF2F2;
   box-shadow: 0 2px 8px rgba(163, 26, 26, 0.12);
 }
 .part-nav-card.completed {
-  border-left: 4px solid var(--success);
+  border-left-color: var(--success);
 }
 .part-card-header {
   display: flex;
@@ -1461,9 +1536,10 @@ body {
   justify-content: center;
   gap: 5px;
   min-height: 32px;
-  transition: all 0.15s ease-in-out;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
   text-decoration: none;
   user-select: none;
+  touch-action: manipulation;
   line-height: 1;
 }
 
@@ -1471,11 +1547,10 @@ body {
   background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.32);
   color: #FFFFFF;
-  transform: translateY(-1px);
 }
 
 .pdf-btn:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.97);
   background: rgba(255, 255, 255, 0.25);
 }
 
@@ -1771,11 +1846,13 @@ body {
 
 .doc-office-actions {
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
   gap: 12px;
   margin-top: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: min(100%, 320px);
 }
+.doc-office-actions > :is(a, button) { width: 100%; justify-content: center; }
 
 .document-empty-card {
   text-align: center;
@@ -2154,19 +2231,25 @@ body {
   border: 1px solid rgba(255,255,255,0.15);
   color: #E2E8F0;
   font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
   white-space: nowrap;
 }
 .persona-scroll-chip:hover {
   background: rgba(255,255,255,0.16);
   border-color: rgba(255,255,255,0.3);
 }
+.persona-scroll-chip:active {
+  transform: scale(0.97);
+}
 .persona-scroll-chip.active {
   background: #A31A1A;
   border-color: #FDE047;
   color: #FFFFFF;
-  font-weight: 700;
+  font-weight: 600;
   box-shadow: 0 0 10px rgba(220,38,38,0.4);
 }
 .persona-scroll-chip .chip-name {
@@ -2211,7 +2294,8 @@ body {
    ═══════════════════════════════════════ */
 .home-segment-selector {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 24px;
   background: #F1F5F9;
   padding: 6px;
@@ -2219,32 +2303,38 @@ body {
   border: 1px solid #E2E8F0;
 }
 .home-segment-btn {
-  flex: 1;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   padding: 14px 20px;
   border-radius: 8px;
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   font-size: 14px;
   font-weight: 700;
   color: #475569;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .home-segment-btn:hover {
   background: rgba(255,255,255,0.6);
   color: #0B1E36;
 }
+.home-segment-btn:active {
+  transform: scale(0.99);
+}
 .home-segment-btn.active {
   background: #FFFFFF;
   color: #A31A1A;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid #CBD5E1;
+  border-color: #CBD5E1;
 }
 .home-segment-btn .segment-badge {
+  margin-left: auto;
   font-size: 11px;
   font-weight: 800;
   padding: 2px 8px;
@@ -2256,6 +2346,17 @@ body {
   background: #FEE2E2;
   color: #991B1B;
 }
+
+.bieu-mau-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #F1F5F9;
+}
+.bieu-mau-card-actions > :is(a, button) { width: 100%; flex: 0 0 auto !important; }
 
 /* ═══════════════════════════════════════
    15. UNIFIED ACTION BUTTONS & TESTING SUITE
@@ -2274,16 +2375,16 @@ body {
   border: 1px solid #7F1D1D;
   box-shadow: 0 2px 5px rgba(163, 26, 26, 0.25);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   user-select: none;
+  touch-action: manipulation;
 }
 .btn-action-primary:hover {
   background: linear-gradient(135deg, #B91C1C 0%, #DC2626 100%);
   box-shadow: 0 4px 10px rgba(163, 26, 26, 0.35);
-  transform: translateY(-1px);
 }
 .btn-action-primary:active {
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 
 .btn-action-secondary {
@@ -2299,13 +2400,17 @@ body {
   background: #F1F5F9;
   border: 1px solid #CBD5E1;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
   user-select: none;
+  touch-action: manipulation;
 }
 .btn-action-secondary:hover {
   background: #E2E8F0;
   border-color: #94A3B8;
   color: #0F172A;
+}
+.btn-action-secondary:active {
+  transform: scale(0.97);
 }
 
 .btn-action-view {
@@ -2320,13 +2425,18 @@ body {
   background: #ECFDF5;
   border: 1px solid #A7F3D0;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .btn-action-view:hover {
   background: #D1FAE5;
   border-color: #34D399;
   color: #064E3B;
   box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+}
+.btn-action-view:active {
+  transform: scale(0.96);
 }
 
 .btn-action-edit {
@@ -2341,13 +2451,18 @@ body {
   background: #FEF3C7;
   border: 1px solid #FCD34D;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .btn-action-edit:hover {
   background: #FDE68A;
   border-color: #F59E0B;
   color: #78350F;
   box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+}
+.btn-action-edit:active {
+  transform: scale(0.96);
 }
 
 .btn-action-delete {
@@ -2362,13 +2477,18 @@ body {
   background: #FEE2E2;
   border: 1px solid #FCA5A5;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .btn-action-delete:hover {
   background: #FDCFCF;
   border-color: #EF4444;
   color: #7F1D1D;
   box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+}
+.btn-action-delete:active {
+  transform: scale(0.96);
 }
 
 .btn-action-test {
@@ -2383,14 +2503,18 @@ body {
   background: #EEF2FF;
   border: 1px solid #C7D2FE;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  user-select: none;
+  touch-action: manipulation;
 }
 .btn-action-test:hover {
   background: #E0E7FF;
   border-color: #818CF8;
   color: #312E81;
   box-shadow: 0 2px 6px rgba(99, 102, 241, 0.25);
-  transform: translateY(-1px);
+}
+.btn-action-test:active {
+  transform: scale(0.96);
 }
 
 /* Card action icons */
@@ -2628,23 +2752,23 @@ textarea:focus {
   background: #FFFFFF;
   border: 1.5px solid #CBD5E1;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   user-select: none;
   text-decoration: none;
   line-height: 1.2;
+  touch-action: manipulation;
 }
 
 .btn-filter-pill:hover:not(:disabled) {
   background: #F8FAFC;
   color: #0F172A;
   border-color: #94A3B8;
-  transform: translateY(-1px);
   box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
 }
 
 .btn-filter-pill:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.97);
   background: #F1F5F9;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
@@ -2663,6 +2787,9 @@ textarea:focus {
 .btn-filter-pill.active:hover {
   background: linear-gradient(135deg, #A31A1A 0%, #7F1D1D 100%) !important;
   box-shadow: 0 6px 14px rgba(185, 28, 28, 0.35) !important;
-  transform: translateY(-1px);
+}
+
+.btn-filter-pill.active:active {
+  transform: scale(0.97);
 }
 

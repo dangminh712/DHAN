@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B32-c</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'Nam':
+							DDL_GT.value=1;
+							break;
+						case 'Nữ':
+							DDL_GT.value=2;
+							break;
+					}
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function lap_ketthuc()
+				{
+					var get_sel=document.getElementById('select_lap_ketthuc');
+					switch (get_sel.value)
+					{
+						case '1':
+							document.getElementById('lap_ho_so').innerHTML=document.getElementById("lap_hs").innerHTML;
+							document.getElementById('_duoc').innerHTML=document.getElementById("lap_hs").innerHTML;
+							break;
+						case '2':
+						document.getElementById('lap_ho_so').innerHTML=document.getElementById("kt_hs").innerHTML;
+						document.getElementById('_duoc').innerHTML=document.getElementById("kt_hs").innerHTML;
+						break;
+					}
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12" style='margin-top:3px'>
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">MẪU B32-c</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			
+			
+		<br><br>
+		</div>
+		<div class="content">
+			
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>PHIẾU ĐỀ NGHỊ TRAO ĐỔI, CUNG CẤP THÔNG TIN, TÀI LIỆU
+			<br> 
+			<span class='fontLow'>Về: <span class='o_nhap_1cm border' contenteditable onkeypress='hide_note("lbl1")'></span>
+				<label class='ghichu' id='lbl1' contenteditable>Công dân, vụ việc, đối tượng</label>
+			</div><br>
+			<div class="ta_center clear">
+				<span class=""style='vertical-align:top'>Kính gửi: </span> 
+				<span class="o_nhap_1cm border ta_left" id= '1' contenteditable="" ></span>
+			</div><br>
+			<span class="TAB"></span>
+			Để đáp ứng yêu cầu công tác <span class='o_nhap_0_5cm border' contenteditable></span> 
+			theo quy định, hướng dẫn của Bộ Công an và chỉ đạo của lãnh đạo Công an <span class='o_nhap_0_5cm border' contenteditable></span>; đề nghị 
+			<span class='o_nhap_0_5cm border' contenteditable></span> phối hợp trao đổi, cung cấp thông tin, tài liệu như sau:<br>
+			<span class="TAB"></span>
+			<span class='fontBold'>1. Nội dung trao đổi, cung cấp:</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>
+			<span class='fontBold'>2. Một số đề nghị liên quan</span> <span class='font12'>(lưu ý, đề nghị đối với đơn vị phối hợp trong quá trình trao đổi, cung cấp thông tin)</span><b>:</b><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='ta_center' style='width:35%'>
+						<div class='lh_1' style='margin-top:10px'>
+							<span class='fontBold'><br>LÃNH ĐẠO ĐƠN VỊ</span><br>
+							<span class='fontNorm font12 font_I'>(Ký, đóng dấu)</span>
+						</div>
+					</td>
+					<td class='ta_center' style='width:65%;margin-right:-1cm'>
+						<div style='margin-right:-2cm'>
+							<div class="font_I fontNorm" >
+								<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+							</div>
+							<div class='lh_1' style='margin-top:5px'>
+								<span class='fontBold'>CÁN BỘ ĐỀ NGHỊ</span><br>
+								<span class='fontNorm font12 font_I'>(Ký tên, ghi rõ họ tên)</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

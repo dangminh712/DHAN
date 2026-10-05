@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu 01KTHS</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu 01KTHS</span><br>
+				<span class="font8">BH theo TT số 30/2014/TT-BCA</span><br>
+				<span class="font8">Ngày 23/7/2014</span><br>
+			</div>
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>BIÊN BẢN MỞ NIÊM PHONG<br>VÀ GIAO, NHẬN ĐỐI TƯỢNG GIÁM ĐỊNH</div><br>
+			<span class="TAB"></span>
+			Hồi <span class="o_nhap_ngay border" contenteditable></span> giờ <span class="o_nhap_ngay border" contenteditable></span> ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			tại <span class="o_nhap_1cm border" contenteditable id = 'TAI' onkeypress='kounset(id)' style='min-width:240px'></span><br>
+			<span class="TAB"></span>
+			Căn cứ Quyết định trưng cầu giám định/ bổ sung/ lại lần 1 số <span class="o_nhap_0_5cm border" contenteditable></span>
+			ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span> 
+			của <span class="o_nhap_1cm border" contenteditable id = 'cua' onkeypress='kounset(id)'></span>/ Căn cứ yêu cầu giám định <span class="o_nhap_0_5cm border" contenteditable></span>
+			ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			của <span class="o_nhap_1cm border" contenteditable id = 'cua2' onkeypress='kounset(id)'></span><br>
+			<span class="TAB"></span>Chúng tôi gồm:<br>
+			<span class="TAB"></span><b class='font_I'>Đại diện bên giao:</b> <span class="o_nhap_1cm border" contenteditable style='min-width:455px'></span><br>
+			Ông/bà: <span class="o_nhap_3cm border" contenteditable></span> <span class="TAB"></span><span class="TAB"></span>
+			Chức vụ: <span class="o_nhap_3cm border" contenteditable></span><br>
+			<span class="TAB"></span><b class='font_I'>Đại diện bên nhận:</b> <span class="o_nhap_1cm border" contenteditable style='min-width:448px'></span><br>
+			Ông/bà: <span class="o_nhap_3cm border" contenteditable></span> <span class="TAB"></span><span class="TAB"></span>
+			Chức vụ: <span class="o_nhap_3cm border" contenteditable></span><br>
+			<span class="TAB"></span>Đã tiến hành mở niêm phong và giao nhận đối tượng giám định theo Quyết định trưng cầu giám định trên/ Yêu cầu giám định trên.<br>
+			<span class="TAB"></span><b>Tình trạng giám định:</b><br>
+			<span class="TAB"></span><em class='font12'>[Ghi rõ tình trạng niêm phong, cách đóng gói và bảo quản, tên, số lượng, chất lượng của từng đối tượng giám định và tài liệu, đồ vật liên quan]<span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span><span class="TAB"></span></em>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class="TAB"></span>Biên bản lập xong hồi <span class="o_nhap_ngay border" contenteditable></span> giờ <span class="o_nhap_ngay border" contenteditable></span> ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>, những người có tên trên đã đọc lại và ký tên xác nhận dưới đây.
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+						<span class=''>ĐẠI DIỆN BÊN NHẬN</span><br>
+						<span class='fontNorm font12 font_I'>(Ký,ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+					<td class='ta_center'>
+						<span class=''>ĐẠI DIỆN BÊN GIAO</span><br>
+						<span class='fontNorm font12 font_I'>(Ký,ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

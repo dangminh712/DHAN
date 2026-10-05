@@ -1,0 +1,142 @@
+{
+  "checkedAt": "2026-10-04T10:08:15.995Z",
+  "scope": "Local demo administrator; published courses and catalog assets only",
+  "courses": [
+    {
+      "code": "ANDT_301",
+      "name": "Kỹ thuật Khám nghiệm hiện trường & Điều tra hình sự",
+      "chapters": 2,
+      "materials": 7,
+      "summaryConsistent": true
+    },
+    {
+      "code": "ANKT_401",
+      "name": "Nghiệp vụ Điều tra Tội phạm Kinh tế & Tham nhũng",
+      "chapters": 1,
+      "materials": 1,
+      "summaryConsistent": true
+    },
+    {
+      "code": "ANM_402",
+      "name": "An toàn Thông tin & Phòng chống Tấn công mạng",
+      "chapters": 3,
+      "materials": 8,
+      "summaryConsistent": true
+    },
+    {
+      "code": "ANTT_202",
+      "name": "Quản lý Nhà nước về An ninh Trật tự",
+      "chapters": 1,
+      "materials": 1,
+      "summaryConsistent": true
+    },
+    {
+      "code": "KTHS_302",
+      "name": "Giám định Kỹ thuật hình sự & Chứng cứ số",
+      "chapters": 1,
+      "materials": 3,
+      "summaryConsistent": true
+    },
+    {
+      "code": "LUAT_201",
+      "name": "Luật Tố tụng Hình sự thực hành",
+      "chapters": 1,
+      "materials": 3,
+      "summaryConsistent": true
+    },
+    {
+      "code": "NVAN_305",
+      "name": "Chiến thuật Trinh sát Thực địa & Bảo vệ Mục tiêu",
+      "chapters": 1,
+      "materials": 3,
+      "summaryConsistent": true
+    },
+    {
+      "code": "NVCB2",
+      "name": "Nghiệp vụ cơ bản 2",
+      "chapters": 8,
+      "materials": 197,
+      "summaryConsistent": true
+    },
+    {
+      "code": "TCDT_403",
+      "name": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+      "chapters": 3,
+      "materials": 3,
+      "summaryConsistent": true
+    }
+  ],
+  "failures": [],
+  "smallFiles": [
+    {
+      "fileId": 1,
+      "name": "Minh họa định dạng PDF - Giáo trình mẫu.pdf",
+      "bytes": 1106,
+      "course": "ANDT_301"
+    },
+    {
+      "fileId": 4,
+      "name": "Minh họa định dạng PDF - Đề cương mẫu.pdf",
+      "bytes": 1104,
+      "course": "ANDT_301"
+    },
+    {
+      "fileId": 10,
+      "name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+      "bytes": 1504,
+      "course": "ANDT_301"
+    },
+    {
+      "fileId": 3,
+      "name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+      "bytes": 1504,
+      "course": "ANM_402"
+    },
+    {
+      "fileId": 5,
+      "name": "Minh họa định dạng PDF - Bài giảng mẫu.pdf",
+      "bytes": 1106,
+      "course": "ANM_402"
+    },
+    {
+      "fileId": 15,
+      "name": "Minh họa - Khám nghiệm dấu vết kỹ thuật số.pdf",
+      "bytes": 1291,
+      "course": "KTHS_302"
+    },
+    {
+      "fileId": 16,
+      "name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+      "bytes": 1504,
+      "course": "KTHS_302"
+    },
+    {
+      "fileId": 11,
+      "name": "Minh họa - Chiến thuật trinh sát thực địa và bảo vệ mục tiêu.pdf",
+      "bytes": 1264,
+      "course": "NVAN_305"
+    }
+  ],
+  "missingTeachers": [],
+  "assets": {
+    "catalogEntries": 216,
+    "guidanceEntries": 11,
+    "uniquePaths": 221,
+    "valid": 221
+  },
+  "missingTeacherAccounts": [
+    {
+      "code": "NVCB2",
+      "name": "Nghiệp vụ cơ bản 2"
+    }
+  ],
+  "confirmedResponsibleTeachers": [
+    {
+      "code": "NVCB2",
+      "name": "Thượng tá, TS. Đặng Bình Dương",
+      "source": "Kế hoạch giảng dạy HP NVCB2 — TAP3/1. KẾ HOẠCH GIẢNG DẠY HP NVCB2.pdf, trang 6 (phụ trách); trang 1 (2 tín chỉ)."
+    }
+  ],
+  "uniqueCourseFiles": 218,
+  "emptyCourses": []
+}

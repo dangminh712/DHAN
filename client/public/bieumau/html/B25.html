@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B25</title>
+	<link rel="stylesheet" href="/bieumau/style/style_for_an.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<style type='text/css'>
+		.trang{text-align:center}
+		.to{text-align:center}
+	</style>
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'lập hồ sơ nghiệp vụ':
+							DDL_GT.value=1;
+							break;
+						case 'kết thúc hồ sơ nghiệp vụ':
+							DDL_GT.value=2;
+							break;
+					}
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ten_dong_chi_sau').innerHTML=document.getElementById('ten_dong_chi_truoc').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function sum_trang(){
+					var abc = document.getElementsByClassName("trang");
+					var tong=0;
+					for (var i=0;i<abc.length;i++)
+					{
+					var x=parseInt(abc[i].innerHTML);
+						if (abc[i].innerHTML==" "){
+							x=0;
+							abc[i].innerHTML==" "
+							
+						}
+						tong=tong+x;
+						
+					}
+					document.getElementById('tong_trang').innerHTML=tong;
+				}
+				
+		function sum_to(){
+					var xyz = document.getElementsByClassName("to");
+					var tong_to=0;
+					for (var j=0;j<xyz.length;j++)
+					{
+					var y=parseInt(xyz[j].innerHTML);
+						if (xyz[j].innerHTML==" "){
+							y=0;
+							xyz[j].innerHTML==" "
+							
+						}
+						tong_to=tong_to+y;
+						
+					}
+					document.getElementById('tong_to').innerHTML=tong_to;
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		function on_change_select_1()
+		{
+			var get_sel=document.getElementById('selected1');
+			document.getElementById('lap_ho_so').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op3").innerHTML;
+				break;
+			}
+			
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" >
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12">
+				<span class='font10'>ĐƠN VỊ</span><br>
+				<span contenteditable class="border fontBold  co_quan"></span><br>
+				<hr style='width:50px;margin-top:0px;height: 1px;color: black;background-color: black;border: none;'>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper" >mẫu b25/2015</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			<br><br><br>
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>GIẤY ĐỀ NGHỊ CUNG CẤP BẢN SAO TÀI LIỆU<br></div>
+			<hr style='width:100px;margin-top:0px;height: 1px;color: black;background-color: black;border: none;'>
+			<div class="ta_center clear">
+				<span class=""style='vertical-align:top'>Kính gửi: </span> 
+				<span class="o_nhap_1cm border ta_left" id= '1' contenteditable="" onkeypress='hide_note("lb1")'>
+					<label id='lb1' class="ghichu">Cục hồ sơ nghiệp vụ, Phòng hồ sơ nghiệp vụ (Pv06)</label>
+				</span>
+			</div><br>
+			Tôi là: <span class='o_nhap_2cm border' contenteditable></span>
+			<span class='TAB'></span>Cấp bậc: <span class='o_nhap_2cm border' contenteditable></span>
+			<span class='TAB'></span>Chức vụ: <span class='o_nhap_2cm border' contenteditable></span><br>
+			Đơn vị: <span class='o_nhap_3cm border' contenteditable style='min-width:105px'></span>
+			<span class='TAB'></span>Số điện thoại: <span class='o_nhap_3cm border' contenteditable></span><br>
+			Sau khi nghiên cứu hồ sơ số: <span class='o_nhap_3cm border' contenteditable style='min-width:105px'></span><br>
+			Trích yếu hồ sơ, đối tượng: <span class='o_nhap_3cm border' contenteditable style='min-width:118px' id='TY' onkeypress='kounset(id)'></span><br>
+			Để có tài liệu phục vụ công tác: <span class='o_nhap_3cm border' contenteditable style='min-width:395px' id='CT' onkeypress='kounset(id)'></span><br>
+			<label class='ghichu' id='lbl1'>
+			- Viết cụ thể mục đích xác minh nhân thân đối tượng để phục vụ công tác: QLNV, KTNV, đấu tranh chuyên án, điều tra vụ án hình sự, xây dựng LLBM, xác minh KDKD; giải quyết xuất cảnh, nhập cảnh; BVNB, giải quyết khiếu nại tố cáo; thực hiện chế dộ chính sách, phát triển Đảng, tuyển sinh, tuyển dụng, nghiên cứu lịch sử, nghiên cứu khoa học (nêu tên cá nhân liên quan và mối quan hệ với đối tượng cần kiểm tra theo từng mục đích phục vụ công tác nêu trên)... 
+			- Giấy này được lưu vào hồ sơ có tài liệu đã được cung cấp bản sao.<br>
+			</label> 
+			Đề nghị: <span class='o_nhap_0_5cm border' contenteditable></span> cung cấp bản sao những tài liệu sau:<br>
+			<table style="width:100%;margin-top:10px;margin-bottom:10px;table_layout:fixed" cellpadding="0" cellspacing="0" border="1" id="Table3">
+						<tr>
+							<td class="ta_center" style="height:36px;width:40px" rowspan="2" ><strong>STT</strong></td>
+							<td class="ta_center" rowspan="2" style="width:110px"><strong>Từ tờ <br /> đến tờ</strong></td>
+                            <td class="ta_center" rowspan="2" ><strong>Trích yếu tài liệu</strong></td>
+							<td class="ta_center" colspan="2" style="width:120px"><strong>Tổng số</strong></td>
+							
+						</tr>
+                        <tr>
+							<td class="ta_center" style="width: 113px;" ><strong>Tờ</strong></td>
+							<td class="ta_center" style="width: 113px" ><strong>Trang</strong></td>
+						</tr>
+                        <tr>
+							<td class="ta_center" style="width:40px">1</td>
+							<td><div style="text-align:center;height:21px;min-width:110px" class="td_inTable" contentEditable > </div></td>
+							<td><div style="text-align:left;min-height:21px;width:340px" class="td_inTable" contentEditable > </div></td>
+                            <td ><div style=" text-align:center;min-height:21px;" class="to" contentEditable  onkeyup='sum_to()'> </div></td>
+                            <td><div  style=" text-align:center;min-height:21px;" class="trang" contentEditable  onkeyup='sum_trang()'> </div></td>
+                        </tr>
+                        <tr>
+							<td class="ta_center" style="width:40px">2</td>
+							<td><div style="text-align:center;height:21px;min-width:110px" class="td_inTable" contentEditable > </div></td>
+							<td><div style="text-align:left;min-height:21px;width:340px" class="td_inTable" contentEditable > </div></td>
+                            <td ><div style=" text-align:center;min-height:21px;" class="to" contentEditable  onkeyup='sum_to()'> </div></td>
+                            <td><div  style=" text-align:center;min-height:21px;" class="trang" contentEditable  onkeyup='sum_trang()'> </div></td>
+                        </tr>
+                        <tr>
+							<td class="ta_center" style="width:40px">3</td>
+							<td><div style="text-align:center;height:21px;min-width:110px" class="td_inTable" contentEditable > </div></td>
+							<td><div style="text-align:left;min-height:21px;width:340px" class="td_inTable" contentEditable > </div></td>
+                            <td ><div style=" text-align:center;min-height:21px;" class="to" contentEditable  onkeyup='sum_to()'> </div></td>
+                            <td><div  style=" text-align:center;min-height:21px;" class="trang" contentEditable  onkeyup='sum_trang()'> </div></td>
+                        </tr>
+                      
+                         
+                        
+					</table> 
+
+
+                        <div>
+                            <input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3');" />
+                            <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3');sum_trang();sum_to();" />
+                        </div>
+                         <script type="text/javascript">
+                             function addRow3(tableID) {
+
+                                 var table = document.getElementById(tableID);
+
+                                 var rowCount = table.rows.length;
+                                 var row = table.insertRow(rowCount);
+
+                                 var cell1 = row.insertCell(0);
+                                 cell1.innerHTML = rowCount - 1;
+                                 cell1.setAttribute('class', 'ta_center');
+
+                                 var cell2 = row.insertCell(1);
+                                 var element1 = document.createElement("div");
+                                 cell2.setAttribute('contentEditable', 'true');
+                                 cell2.setAttribute('class', 'ta_center');
+
+                                 var cell3 = row.insertCell(2);
+                                 var element2 = document.createElement("div");
+                                 cell3.setAttribute('contentEditable', 'true');
+                                 cell3.setAttribute('class', 'divleft');
+
+                                 var cell4 = row.insertCell(3);
+                                 var element3 = document.createElement("div");
+                                 cell4.setAttribute('contentEditable', 'true');
+                                 cell4.setAttribute('class', 'to');
+								 cell4.setAttribute('onkeyup', 'sum_to()');
+
+                                 var cell5 = row.insertCell(4);
+                                 var element4 = document.createElement("div");
+                                 cell5.setAttribute('contentEditable', 'true');
+                                 cell5.setAttribute('class', 'trang');
+								 cell5.setAttribute('onkeyup', 'sum_trang()');
+
+
+
+
+                             }
+
+                             function deleteRow3(tableID) {
+                                 var table = document.getElementById(tableID);
+                                 var rowCount = table.rows.length;
+                                 for (i = rowCount - 1; i > 1; i--) {
+                                     document.getElementById("Table3").deleteRow(i);
+                                     break;
+                                 }
+
+                             }
+ 
+                        </script>
+						<p class="ta_right">Tổng cộng: <span style="min-width:20px" class="o_nhap_0_5cm border ta_center" contenteditable="true" id='tong_to'></span>&nbsp;tờ; <span style="min-width:20px" class="o_nhap_0_5cm border ta_center" id="tong_trang" contenteditable="true" ></span> &nbsp;trang
+                    <br />
+                    </p>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+						<span class=''>Ý KIẾN PHÊ DUYỆT<br>CỦA LÃNH ĐẠO ĐƠN VỊ HỒ SƠ</span><br>
+						<span class='fontNorm font12 '>(Ký duyệt)</span>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class='fontBold'>
+							Họ và tên: <span class='o_nhap_2cm border ta_left' contenteditable></span><br>
+						<div>
+					</td>
+					<td class='ta_center'>
+						<span class=''>NGƯỜI ĐỀ NGHỊ</span>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class='fontBold'>
+							Họ và tên: <span class='o_nhap_2cm border ta_left' contenteditable></span><br>
+						<div>
+					</td>
+				</tr>
+			</table>
+			
+			</div>
+			<div class="content_page_2">
+				<p class='fontBold ta_center'><br>Ý KIẾN CỦA BỘ PHẬN LƯU TRỮ HỒ SƠ</p>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br><span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br><span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br><span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<div class='ta_center'>NGƯỜI NHẬN BẢN SAO TÀI LIỆU<br>
+				<span class='font_I'>Tôi nhận đủ bản sao tài liệu theo sự phê duyệt của Thủ trưởng đơn vị Hồ sơ </span>
+				<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'></td>
+					<td class='ta_center'>
+						<span class='fontNorm'>(Ký tên)</span>
+						<br>
+						<br>
+						<br>
+						<br>
+						<div class='fontNorm'>
+							Họ, tên: <span class='o_nhap_2cm border ta_left' contenteditable></span><br>
+						<div>
+					</td>
+				</tr>
+			</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

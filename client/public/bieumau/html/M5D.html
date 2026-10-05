@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu M5d</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script type="text/javascript">
+
+         function addRow3(tableID) {
+             var table = document.getElementById(tableID);
+             var rowCount = table.rows.length - 1;
+             var row = table.insertRow(rowCount);
+            
+             var table1_cell1 = row.insertCell(0);
+             var table1_element0 = document.createElement("div");
+             table1_cell1.setAttribute('contentEditable', 'true');
+             table1_cell1.setAttribute('class', 'divtext_tt');
+            
+             var table1_cell2 = row.insertCell(1);
+             var table1_element1 = document.createElement("div");
+             table1_cell2.setAttribute('contentEditable', 'true');
+             table1_cell2.setAttribute('class', 'phong_doi');
+
+             var table1_cell3 = row.insertCell(2);
+             var table1_element2 = document.createElement("div");
+             table1_cell3.setAttribute('contentEditable', 'true');
+             table1_cell3.setAttribute('class', 'text_ts');
+
+             var x = document.getElementsByClassName('text').length;
+             for (var d = 0; d <= x; ) {
+                 table1_cell3.id = 'tong_hang_' + d;
+                 d = d + 15;
+            }
+
+             var table1_cell4 = row.insertCell(3);
+             var table1_element3 = document.createElement("div");
+             table1_cell4.setAttribute('contentEditable', 'true');
+             table1_cell4.setAttribute('class', '.phong_doi');
+            
+
+             var table1_cell5 = row.insertCell(4);
+             var table1_element4 = document.createElement("div");
+             table1_cell5.setAttribute('contentEditable', 'true');
+             table1_cell5.setAttribute('class', 'text');
+
+             
+
+             
+             
+         }
+
+         function deleteRow3(tableID) {
+             var table = document.getElementById(tableID);
+             var rowCount = table.rows.length;
+             for (i = rowCount - 2; i > 1; i--) {
+                 document.getElementById("Table3").deleteRow(i);
+                 break;
+             }
+            
+         }
+         </script>
+	<script tyype='text/javascript'>
+		
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				Đơn vị: <span class="o_nhap_2cm border_2cm ta_left border" contenteditable ></span><br>
+				Số: <span class="o_nhap_2cm border_2cm ta_left border" contenteditable ></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13"></span>	<br>
+				<span class="fontBold"></span>
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font14 "><b><style="margin-top:5px">Mẫu M5d</style></b></span><br>
+				<span class="font8"><i></i></span><br>
+			</div>
+			<div class="time_header font_I fontNorm">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_0_5cm border_ngay border" contenteditable></span> tháng <span class="o_nhap_0_5cm border_thang border" contenteditable></span> năm <span class="o_nhap_0_5cm border_nam border" contenteditable></span>
+			</div>
+			
+		</div>
+		<div class="content">
+			<br>
+			<div class="ta_center clear">
+				<span class="fontNorm"style='vertical-align:top'>Kính gửi: Đ/c </span> 
+				<span class="o_nhap_0_5cm border_1cm border fontNorm ta_left" id= '1' contenteditable></span>
+			</div>
+			<div class="font16	 fontBold ta_center clear"><br>
+				PHIẾU CHI TIỀN MẬT PHÍ<br>
+			</div>
+			<div class='ta_center font12 font_I fontNorm fontLow '>(Ban hành kèm theo Thông tư số: 15/2019/TT-BCA-V01,<br> Ngày 25/6/2019 của Bộ trưởng Bộ Công an)</div>
+			<!--------------------------------------------------------------------->
+			<br>
+			<table  style='width:100%'>
+				<tr>
+            <td class="style16" >
+                - Họ và tên người chi: <span class="o_nhap_2cm border_1cm border fontNorm ta_left" contenteditable></span> </td>
+        </tr>
+        <tr>
+            <td  >
+                - Đơn vị: <span class="o_nhap_2cm border_1cm border fontNorm ta_left" contenteditable></span> </td>
+        </tr>
+        <tr>
+            <td style="text-align:justify">
+                <div style="">
+                    <span>- Nội dung chi (ghi rõ nội dung phục vụ yêu cầu gì): </span><br />
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td >
+                <span class='o_nhap_n_dong border' contenteditable></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="style16"  style="padding:20px 0px">
+                Số tiền: <span class="o_nhap_0_5cm border_1cm border fontNorm ta_left" contenteditable></span> &nbsp;Bằng
+                chữ: <span class="o_nhap_0_5cm border_1cm border fontNorm ta_left" contenteditable></span> </td>
+        </tr>
+			</table>
+			</table>
+						
+					<table class="style8" cellpadding="0" cellspacing="0" style='width:100%'><!----------Bảng ký duyệt 2 khung---------------------------->
+						<tbody>
+						   <tr>
+							<td class="font13 ta_center" style='width:50%'>
+								<font class='fontBold'>Lãnh đạo cấp phòng</font><br />
+								<font size="3" style='font-style:italic'>(Ký và ghi rõ họ tên)</font><br />
+								<br />
+								<br />
+								</em></td>
+							<td class="font13 ta_center" style='width:50%'>
+								<font class='fontBold'>Người thực hiện</font><br />
+								<font size="3" style='font-style:italic'>(Ký và ghi rõ họ tên)</font><br />
+								<br />
+								<br />
+								</em>
+							</td>
+                </tr>
+                
+            </tbody></table><!----------END ký duyệt 2 khung---------------------------->
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+           <div class="ghichu" style="line-height:1.1">
+                    <b><i>Ghi chú:</i></b> Mẫu dùng cho Trưởng Công an phường, Công an xã, thị trấn chính quy, Đồn Công an phê duyệt. <br />
+            </div>
+		</div>
+
+            </div><!----------------------------------Kết thúc Trang 1------------------------------------------------->
+        
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

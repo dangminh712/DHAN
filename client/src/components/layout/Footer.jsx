@@ -1,45 +1,45 @@
-import React from 'react';
+import React from 'react'
+import { ChevronRight, LockKeyhole, MapPin, Server } from 'lucide-react'
 
 export default function Footer() {
   return (
     <footer className="agency-footer">
       <div className="footer-container">
-        <div className="footer-col">
-          <h4>TRƯỜNG ĐẠI HỌC AN NINH NHÂN DÂN - BỘ CÔNG AN</h4>
-          <p className="footer-desc">
-            Cổng Môn học và Học liệu Số phục vụ công tác giảng dạy, số hóa tài liệu,
-            nghiên cứu khoa học và huấn luyện nghiệp vụ an ninh trong mạng nội bộ Intranet.
-          </p>
-          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '8px' }}>
-            Địa chỉ: Km9 Xa lộ Hà Nội, Phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh
-          </p>
-        </div>
+        <section className="footer-brand" aria-labelledby="footer-school-name">
+          <div className="footer-identity">
+            <img className="footer-logo" src="/assets/logo-dhan.jpg" alt="" />
+            <div>
+              <span className="footer-kicker">Bộ Công an · Mã hiệu T04</span>
+              <h2 id="footer-school-name">Trường Đại học An ninh nhân dân</h2>
+            </div>
+          </div>
+          <p>Cổng học liệu số phục vụ giảng dạy, nghiên cứu và huấn luyện nghiệp vụ trong mạng nội bộ.</p>
+          <address className="footer-address"><MapPin size={17} aria-hidden="true" /><span>Km9 Xa lộ Hà Nội, TP. Thủ Đức, TP. Hồ Chí Minh</span></address>
+        </section>
 
-        <div className="footer-col">
-          <h4>KHOA / ĐƠN VỊ ĐÀO TẠO</h4>
-          <ul className="footer-links">
-            <li><a href="#/academic">Khoa An ninh điều tra</a></li>
-            <li><a href="#/academic">Khoa Nghiệp vụ An ninh</a></li>
-            <li><a href="#/academic">Khoa An ninh mạng & PCTP CNC</a></li>
-            <li><a href="#/academic">Khoa Luật & QLNN về ANTT</a></li>
-          </ul>
-        </div>
+        <nav className="footer-nav" aria-label="Liên kết nhanh">
+          <h2>Liên kết nhanh</h2>
+          <div className="footer-link-list">
+            <a href="#/mon-hoc"><span>Môn học</span><ChevronRight size={15} aria-hidden="true" /></a>
+            <a href="#/bieu-mau"><span>Biểu mẫu CAND</span><ChevronRight size={15} aria-hidden="true" /></a>
+            <a href="#/academic"><span>Khoa &amp; Bộ môn</span><ChevronRight size={15} aria-hidden="true" /></a>
+          </div>
+        </nav>
 
-        <div className="footer-col">
-          <h4>HỖ TRỢ KỸ THUẬT LAN & BẢO MẬT</h4>
-          <ul className="footer-links">
-            <li>Cổng Backend API: <strong>5000</strong></li>
-            <li>Cổng Frontend Web: <strong>5173</strong></li>
-            <li>Cổng CSDL MySQL: <strong>3307</strong></li>
-            <li>Giao thức Stream: <strong>HTTP 206 Partial Content</strong></li>
-            <li>Bảo mật học liệu: <strong>Mã băm SHA-256 & Watermark</strong></li>
-          </ul>
-        </div>
+        <section className="footer-security" aria-labelledby="footer-system-title">
+          <h2 id="footer-system-title">Thông tin hệ thống</h2>
+          <div className="footer-status-card">
+            <div><Server size={17} aria-hidden="true" /><span><small>Kết nối</small><strong>Intranet T04</strong></span></div>
+            <div><LockKeyhole size={17} aria-hidden="true" /><span><small>Bảo mật</small><strong>Xác thực nội bộ</strong></span></div>
+          </div>
+        </section>
       </div>
-
       <div className="footer-bottom">
-        © {new Date().getFullYear()} Trường Đại học An ninh nhân dân - Bộ Công an. Bản quyền môn học và tài liệu lưu hành nội bộ.
+        <div className="footer-bottom-inner">
+          <span>© {new Date().getFullYear()} Trường Đại học An ninh nhân dân</span>
+          <span className="footer-classification"><LockKeyhole size={13} aria-hidden="true" /> Tài liệu lưu hành nội bộ</span>
+        </div>
       </div>
     </footer>
-  );
+  )
 }

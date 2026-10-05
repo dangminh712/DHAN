@@ -22,6 +22,7 @@ import {
 import { authService } from '../services/authService';
 import { systemService } from '../services/systemService';
 import UserModal from '../components/common/UserModal';
+import ConfirmModal from '../components/common/ConfirmModal';
 import Pagination from '../components/common/Pagination';
 import { useRemoteTable } from '../utils/useRemoteTable';
 import { SortableTh } from '../utils/tableSort';
@@ -74,37 +75,72 @@ export default function AdminPortalPage({
     setUserModalOpen(true);
   };
 
-  const handleDeleteUser = async (user) => {
+  const [confirmConfig, setConfirmConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    subMessage: '',
+    confirmText: 'Xác nhận',
+    variant: 'danger',
+    isAlertOnly: false,
+    onConfirm: () => {},
+  });
+
+  const handleDeleteUser = (user) => {
     if (user.username === 'admin' || user.id === 1) {
-      alert('Không thể khóa tài khoản Quản trị viên tối cao (SUPER_ADMIN).');
-      return;
-    }
-    if (!window.confirm(`Đồng chí có chắc chắn muốn khóa/vô hiệu hóa tài khoản:\n"${user.fullName} (${user.username})"?`)) {
+      setConfirmConfig({
+        isOpen: true,
+        title: 'Thông báo an ninh hệ thống',
+        message: 'Không thể khóa tài khoản Quản trị viên tối cao (SUPER_ADMIN).',
+        subMessage: 'Tài khoản này là định danh gốc của hệ thống mạng nội bộ T04.',
+        confirmText: 'Đã hiểu',
+        variant: 'warning',
+        isAlertOnly: true,
+        onConfirm: () => {},
+      });
       return;
     }
 
-    try {
-      await authService.deleteUser(user.id, currentUser?.id || 1);
-      showToast('success', `Đã khóa/vô hiệu hóa tài khoản ${user.username} thành công.`);
-      loadAdminData();
-    } catch (err) {
-      showToast('error', err.response?.data?.message || 'Lỗi khi xóa tài khoản.');
-    }
+    setConfirmConfig({
+      isOpen: true,
+      title: 'Xác nhận vô hiệu hóa tài khoản',
+      message: `Đồng chí có chắc chắn muốn khóa/vô hiệu hóa tài khoản:\n"${user.fullName} (${user.username})"?`,
+      subMessage: 'Tài khoản sẽ bị tạm ngưng mọi quyền truy cập vào cổng học liệu.',
+      confirmText: 'Khóa tài khoản',
+      variant: 'danger',
+      isAlertOnly: false,
+      onConfirm: async () => {
+        try {
+          await authService.deleteUser(user.id, currentUser?.id || 1);
+          showToast('success', `Đã khóa/vô hiệu hóa tài khoản ${user.username} thành công.`);
+          loadAdminData();
+        } catch (err) {
+          showToast('error', err.response?.data?.message || 'Lỗi khi xóa tài khoản.');
+        }
+      },
+    });
   };
 
-  const handleRevokeSession = async (sessionId, deviceId) => {
-    if (!window.confirm(`Đồng chí có muốn ngắt kết nối và thu hồi phiên của thiết bị:\n"${deviceId}"?`)) {
-      return;
-    }
-
-    try {
-      await systemService.revokeSession(sessionId, currentUser?.id || 1);
-      sessionTable.reload();
-      showToast('success', 'Đã thu hồi phiên thiết bị ngay lập tức!');
-    } catch (err) {
-      console.error('Lỗi thu hồi phiên:', err);
-      showToast('error', 'Lỗi thu hồi phiên thiết bị.');
-    }
+  const handleRevokeSession = (sessionId, deviceId) => {
+    setConfirmConfig({
+      isOpen: true,
+      title: 'Xác nhận thu hồi phiên thiết bị',
+      message: `Đồng chí có muốn ngắt kết nối và thu hồi phiên của thiết bị:\n"${deviceId}"?`,
+      subMessage: 'Thiết bị này sẽ bị đăng xuất ngay lập tức khỏi cổng môn học.',
+      confirmText: 'Ngắt kết nối',
+      variant: 'warning',
+      isAlertOnly: false,
+      onConfirm: async () => {
+        try {
+          await systemService.revokeSession(sessionId, currentUser?.id || 1);
+          sessionTable.reload();
+          showToast('success', 'Đã thu hồi phiên thiết bị ngay lập tức!');
+        } catch (err) {
+          console.error('Lỗi thu hồi phiên:', err);
+          showToast('error', 'Lỗi thu hồi phiên thiết bị.');
+        }
+      },
+    });
   };
 
   const formatDate = (dateString) => {
@@ -841,6 +877,19 @@ export default function AdminPortalPage({
         userToEdit={userToEdit}
         onSaved={loadAdminData}
         currentUser={currentUser}
+      />
+
+      {/* CONFIRM MODAL */}
+      <ConfirmModal
+        isOpen={confirmConfig.isOpen}
+        onClose={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmConfig.onConfirm}
+        title={confirmConfig.title}
+        message={confirmConfig.message}
+        subMessage={confirmConfig.subMessage}
+        confirmText={confirmConfig.confirmText}
+        variant={confirmConfig.variant}
+        isAlertOnly={confirmConfig.isAlertOnly}
       />
     </main>
   );

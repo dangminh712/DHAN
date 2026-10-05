@@ -1,0 +1,72 @@
+.dbms-page { width: min(1200px, calc(100% - 48px)); margin-inline: auto; padding-top: 28px; padding-bottom: 40px; color: var(--portal-ink); }
+.dbms-header, .dbms-heading, .dbms-actions, .dbms-status { display: flex; align-items: center; gap: 16px; }
+.dbms-header { justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px; }
+.dbms-heading { min-width: 0; }
+.dbms-emblem { display: grid; place-items: center; flex: 0 0 60px; height: 60px; border-radius: 16px; background: var(--portal-green-dark); color: var(--portal-gold); }
+.dbms-page h1 { margin: 0 0 6px; font-size: clamp(24px, 3vw, 32px); line-height: 1.2; color: var(--portal-green-dark); }
+.dbms-page h2 { margin: 0 0 10px; font-size: 20px; line-height: 1.4; }
+.dbms-page p { line-height: 1.6; }
+.dbms-heading p, .dbms-panel-heading p { margin: 0; color: var(--portal-muted); }
+.dbms-page .dbms-eyebrow { margin: 0 0 6px; font-size: 12px; font-weight: 800; letter-spacing: .08em; color: var(--portal-green); }
+.dbms-actions { flex-wrap: wrap; gap: 10px; }
+.dbms-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 1px solid var(--portal-green); border-radius: 10px; background: var(--portal-green); color: white; font-weight: 700; font-size: 14px; text-decoration: none; cursor: pointer; transition: background .15s; }
+.dbms-button:hover { background: var(--portal-green-dark); color: white; }
+.dbms-button:active { opacity: .8; }
+.dbms-button:disabled { opacity: .65; cursor: wait; }
+.dbms-button-secondary { background: white; color: var(--portal-green-dark); border-color: var(--portal-border); }
+.dbms-status { gap: 8px; padding: 12px 16px; border: 1px solid var(--portal-border); background: white; border-radius: 10px; font-size: 14px; color: var(--portal-green-dark); margin-bottom: 20px; flex-wrap: wrap; }
+.dbms-updated { margin-left: auto; color: var(--portal-muted); font-size: 13px; }
+.dbms-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+.dbms-metric, .dbms-panel { border: 1px solid var(--portal-border); border-radius: 16px; background: white; }
+.dbms-metric { padding: 20px; border-top: 3px solid var(--portal-green); min-width: 0; }
+.dbms-metric-label { display: flex; gap: 8px; align-items: center; color: var(--portal-muted); font-size: 14px; }
+.dbms-metric strong { display: block; margin: 14px 0 8px; color: var(--portal-green-dark); font-size: 24px; line-height: 1.35; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.dbms-metric p { margin: 0; font-size: 13px; color: var(--portal-muted); }
+.dbms-panel { padding: 24px; margin-bottom: 24px; min-width: 0; }
+.dbms-capacity { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; border-top: 3px solid var(--portal-gold); }
+.dbms-capacity > div > p:not(.dbms-eyebrow) { color: var(--portal-muted); font-size: 14px; }
+.dbms-capacity dl { margin: 0 0 18px; }
+.dbms-capacity dl > div { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--portal-border); padding: 10px 0; font-size: 14px; }
+.dbms-capacity dt { color: var(--portal-muted); }
+.dbms-capacity dd { margin: 0; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.dbms-capacity-caption { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; margin-bottom: 6px; }
+.dbms-meter { width: 100%; height: 18px; accent-color: var(--portal-green); }
+.dbms-note { font-size: 13px; color: var(--portal-muted); margin: 12px 0 18px; }
+.dbms-panel-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px; }
+.dbms-filter { display: grid; gap: 6px; width: min(100%, 300px); }
+.dbms-filter label { font-size: 13px; font-weight: 700; }
+.dbms-filter input { min-width: 0; width: 100%; box-sizing: border-box; border: 1px solid var(--portal-border); border-radius: 8px; min-height: 44px; padding: 10px 12px; background: white; color: var(--portal-ink); }
+.dbms-table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+.dbms-table th, .dbms-table td { padding: 14px 12px; border-bottom: 1px solid var(--portal-border); vertical-align: top; overflow-wrap: anywhere; }
+.dbms-table thead th { background: var(--portal-green-soft); color: var(--portal-green-dark); font-size: 13px; }
+.dbms-table tbody th { max-width: 300px; font-weight: 500; }
+.dbms-table code { color: var(--portal-green-dark); font-weight: 700; }
+.dbms-table-description { display: block; margin-top: 6px; font-size: 13px; color: var(--portal-muted); }
+.dbms-table td:nth-child(n+3) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dbms-table abbr { text-decoration: none; }
+.dbms-table-count, .dbms-footer-note { color: var(--portal-muted); font-size: 13px; }
+.dbms-empty, .dbms-loading { padding: 32px 20px; text-align: center; color: var(--portal-muted); }
+.dbms-loading { min-height: 220px; background: white; border: 1px solid var(--portal-border); border-radius: 16px; display: grid; align-content: center; justify-items: center; }
+.dbms-error { display: flex; gap: 16px; padding: 24px; background: var(--portal-red-soft); color: var(--portal-red-dark); border: 1px solid var(--portal-red); border-radius: 16px; }
+.dbms-error svg { flex-shrink: 0; }
+.dbms-error p { margin: 0 0 16px; }
+@media (max-width: 1000px) { .dbms-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dbms-capacity { grid-template-columns: 1fr; gap: 16px; } }
+@media (max-width: 700px) {
+  .dbms-page { width: calc(100% - 32px); padding-top: 20px; }
+  .dbms-panel { padding: 16px; }
+  .dbms-heading { align-items: flex-start; gap: 12px; }
+  .dbms-emblem { flex-basis: 44px; height: 44px; border-radius: 12px; }
+  .dbms-updated { margin-left: 0; width: 100%; }
+  .dbms-metrics { grid-template-columns: 1fr; gap: 12px; }
+  .dbms-metric { padding: 16px; }
+  .dbms-table, .dbms-table tbody, .dbms-table tr, .dbms-table th, .dbms-table td { display: block; }
+  .dbms-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .dbms-table tr { border: 1px solid var(--portal-border); border-radius: 10px; margin-bottom: 12px; padding: 8px 12px; }
+  .dbms-table tbody th { max-width: none; }
+  .dbms-table td { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; }
+  .dbms-table td::before { content: attr(data-label); font-weight: 600; color: var(--portal-muted); white-space: normal; }
+  .dbms-table th { padding: 10px 0; }
+  .dbms-table td:last-child { border-bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .dbms-button { transition: none; } }
+.dbms-metric:first-child strong { font-size: 20px; }

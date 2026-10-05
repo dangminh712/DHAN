@@ -15,6 +15,7 @@ import {
 import { academicService } from '../services/academicService';
 import AcademicModal from '../components/common/AcademicModal';
 import ClassRosterModal from '../components/common/ClassRosterModal';
+import ConfirmModal from '../components/common/ConfirmModal';
 import Pagination from '../components/common/Pagination';
 import { useRemoteTable } from '../utils/useRemoteTable';
 import { SortableTh, useTableSort } from '../utils/tableSort';
@@ -42,6 +43,16 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
   const loadData = () => { subjectTable.reload(); classTable.reload(); };
   useEffect(() => { academicService.getUnits().then(setUnits).catch(console.error); }, []);
 
+  const [confirmConfig, setConfirmConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    subMessage: '',
+    confirmText: 'Xác nhận xóa',
+    variant: 'danger',
+    onConfirm: () => {},
+  });
+
   const showToast = (type, text) => {
     setMessage({ type, text });
     setTimeout(() => setMessage(null), 3500);
@@ -59,15 +70,24 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
     setModalOpen(true);
   };
 
-  const handleDeleteSubject = async (sub) => {
-    if (!window.confirm(`Đồng chí có chắc chắn muốn xóa môn học:\n"${sub.name} (${sub.code})"?`)) return;
-    try {
-      await academicService.deleteSubject(sub.id);
-      showToast('success', `Đã xóa môn học ${sub.code} thành công.`);
-      loadData();
-    } catch (err) {
-      showToast('error', err.response?.data?.message || 'Lỗi khi xóa môn học.');
-    }
+  const handleDeleteSubject = (sub) => {
+    setConfirmConfig({
+      isOpen: true,
+      title: 'Xác nhận xóa môn học',
+      message: `Đồng chí có chắc chắn muốn xóa môn học:\n"${sub.name} (${sub.code})"?`,
+      subMessage: 'Lưu ý: Hành động này có thể ảnh hưởng đến các chương và bài giảng liên quan.',
+      confirmText: 'Xóa môn học',
+      variant: 'danger',
+      onConfirm: async () => {
+        try {
+          await academicService.deleteSubject(sub.id);
+          showToast('success', `Đã xóa môn học ${sub.code} thành công.`);
+          loadData();
+        } catch (err) {
+          showToast('error', err.response?.data?.message || 'Lỗi khi xóa môn học.');
+        }
+      },
+    });
   };
 
   const handleOpenCreateClass = () => {
@@ -82,15 +102,24 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
     setModalOpen(true);
   };
 
-  const handleDeleteClass = async (cls) => {
-    if (!window.confirm(`Đồng chí có chắc chắn muốn xóa lớp học vụ:\n"${cls.name} (${cls.code})"?`)) return;
-    try {
-      await academicService.deleteClass(cls.id);
-      showToast('success', `Đã xóa lớp học vụ ${cls.code} thành công.`);
-      loadData();
-    } catch (err) {
-      showToast('error', err.response?.data?.message || 'Lỗi khi xóa lớp học vụ.');
-    }
+  const handleDeleteClass = (cls) => {
+    setConfirmConfig({
+      isOpen: true,
+      title: 'Xác nhận xóa lớp học vụ',
+      message: `Đồng chí có chắc chắn muốn xóa lớp học vụ:\n"${cls.name} (${cls.code})"?`,
+      subMessage: 'Toàn bộ danh sách biên chế học viên của lớp này sẽ cần được phân bổ lại.',
+      confirmText: 'Xóa lớp học vụ',
+      variant: 'danger',
+      onConfirm: async () => {
+        try {
+          await academicService.deleteClass(cls.id);
+          showToast('success', `Đã xóa lớp học vụ ${cls.code} thành công.`);
+          loadData();
+        } catch (err) {
+          showToast('error', err.response?.data?.message || 'Lỗi khi xóa lớp học vụ.');
+        }
+      },
+    });
   };
 
   const thStyle = {
@@ -514,6 +543,18 @@ export default function AcademicPage({ academicUnits: propUnits = [], academicSu
         type={modalType}
         itemToEdit={itemToEdit}
         onSaved={loadData}
+      />
+
+      {/* CONFIRM MODAL */}
+      <ConfirmModal
+        isOpen={confirmConfig.isOpen}
+        onClose={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmConfig.onConfirm}
+        title={confirmConfig.title}
+        message={confirmConfig.message}
+        subMessage={confirmConfig.subMessage}
+        confirmText={confirmConfig.confirmText}
+        variant={confirmConfig.variant}
       />
     </main>
   );

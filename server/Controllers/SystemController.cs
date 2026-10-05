@@ -13,93 +13,17 @@ public class SystemController : ControllerBase
 {
     private readonly TrainingDbContext _db;
     private readonly IAuditService _audit;
+    private readonly DatabaseOverviewService _overview;
 
-    public SystemController(TrainingDbContext db, IAuditService audit)
+    public SystemController(TrainingDbContext db, IAuditService audit, DatabaseOverviewService overview)
     {
         _db = db;
         _audit = audit;
+        _overview = overview;
     }
 
     [HttpGet("overview")]
-    public async Task<IActionResult> GetOverview()
-    {
-        var usersCount = await _db.Users.CountAsync();
-        var rolesCount = await _db.Roles.CountAsync();
-        var permsCount = await _db.Permissions.CountAsync();
-        var unitsCount = await _db.OrganizationalUnits.CountAsync();
-        var classesCount = await _db.Classes.CountAsync();
-        var subjectsCount = await _db.Subjects.CountAsync();
-        var lecturesCount = await _db.Lectures.CountAsync();
-        var chaptersCount = await _db.Chapters.CountAsync();
-        var chapterMaterialsCount = await _db.ChapterMaterials.CountAsync();
-        var filesCount = await _db.Files.CountAsync();
-        var auditCount = await _db.AuditLogs.CountAsync();
-        var downloadCount = await _db.DownloadLogs.CountAsync();
-        var alertsCount = await _db.SecurityAlerts.CountAsync();
-
-        var settings = await _db.SystemSettings
-            .Select(s => new SystemSettingItemDto
-            {
-                Key = s.SettingKey,
-                Value = s.SettingValue,
-                Type = s.SettingType,
-                Description = s.Description
-            })
-            .ToListAsync();
-
-        var tableStats = new List<TableStatDto>
-        {
-            new() { TableName = "roles", Module = "Identity", RowCount = rolesCount, Description = "4 vai trò RBAC chuẩn" },
-            new() { TableName = "permissions", Module = "Identity", RowCount = permsCount, Description = "31 quyền hạn hệ thống" },
-            new() { TableName = "role_permissions", Module = "Identity", RowCount = await _db.RolePermissions.CountAsync(), Description = "Ma trận phân quyền vai trò" },
-            new() { TableName = "users", Module = "Identity", RowCount = usersCount, Description = "Tài khoản cán bộ, giảng viên, học viên" },
-            new() { TableName = "user_sessions", Module = "Identity", RowCount = await _db.UserSessions.CountAsync(), Description = "Phiên đăng nhập & thiết bị" },
-            new() { TableName = "user_mfa", Module = "Identity", RowCount = await _db.UserMfas.CountAsync(), Description = "Xác thực 2 yếu tố TOTP/Email" },
-            new() { TableName = "organizational_units", Module = "Organization", RowCount = unitsCount, Description = "Cây tổ chức T04 & Khoa/Bộ môn" },
-            new() { TableName = "classes", Module = "Academic", RowCount = classesCount, Description = "Lớp học vụ theo niên khóa" },
-            new() { TableName = "student_classes", Module = "Academic", RowCount = await _db.StudentClasses.CountAsync(), Description = "Danh sách học viên theo lớp" },
-            new() { TableName = "subjects", Module = "Academic", RowCount = subjectsCount, Description = "Môn học đào tạo nghiệp vụ" },
-            new() { TableName = "teacher_subjects", Module = "Academic", RowCount = await _db.TeacherSubjects.CountAsync(), Description = "Phân công giảng dạy" },
-            new() { TableName = "chapters", Module = "Course", RowCount = chaptersCount, Description = "Chương linh hoạt theo từng môn học" },
-            new() { TableName = "chapter_materials", Module = "Course", RowCount = chapterMaterialsCount, Description = "Tài liệu và quyền tải theo chương" },
-            new() { TableName = "classification_levels", Module = "Security", RowCount = await _db.ClassificationLevels.CountAsync(), Description = "4 Cấp độ mật (Normal->Secret)" },
-            new() { TableName = "user_clearance_levels", Module = "Security", RowCount = await _db.UserClearanceLevels.CountAsync(), Description = "Clearance phân loại của người dùng" },
-            new() { TableName = "lectures", Module = "Legacy", RowCount = lecturesCount, Description = "Dữ liệu bài giảng cũ, chỉ giữ để chuyển đổi" },
-            new() { TableName = "lecture_parts", Module = "Lecture", RowCount = await _db.LectureParts.CountAsync(), Description = "Cấu trúc 5 phần chuẩn đào tạo CAND" },
-            new() { TableName = "quiz_questions", Module = "Lecture", RowCount = await _db.QuizQuestions.CountAsync(), Description = "Ngân hàng câu hỏi trắc nghiệm nghiệp vụ" },
-            new() { TableName = "lecture_permissions", Module = "Lecture", RowCount = await _db.LecturePermissions.CountAsync(), Description = "Phân quyền bài giảng theo lớp" },
-            new() { TableName = "lecture_files", Module = "Lecture", RowCount = await _db.LectureFiles.CountAsync(), Description = "Đính kèm học liệu vào bài giảng" },
-            new() { TableName = "files", Module = "File", RowCount = filesCount, Description = "Metadata kho lưu trữ số hóa" },
-            new() { TableName = "file_versions", Module = "File", RowCount = await _db.FileVersions.CountAsync(), Description = "Lịch sử phiên bản tập tin v1, v2" },
-            new() { TableName = "file_permissions", Module = "File", RowCount = await _db.FilePermissions.CountAsync(), Description = "Ngoại lệ phân quyền theo user/lớp" },
-            new() { TableName = "watch_history", Module = "Learning", RowCount = await _db.WatchHistories.CountAsync(), Description = "Lịch sử xem & vị trí phát video" },
-            new() { TableName = "learning_progress", Module = "Learning", RowCount = await _db.LearningProgresses.CountAsync(), Description = "Tiến độ học tập % hoàn thành" },
-            new() { TableName = "download_logs", Module = "Audit", RowCount = downloadCount, Description = "Nhật ký tải học liệu & kiểm soát" },
-            new() { TableName = "audit_logs", Module = "Audit", RowCount = auditCount, Description = "Audit trail bất biến hệ thống" },
-            new() { TableName = "security_alerts", Module = "Audit", RowCount = alertsCount, Description = "Cảnh báo an ninh & tải bất thường" },
-            new() { TableName = "notifications", Module = "Notification", RowCount = await _db.Notifications.CountAsync(), Description = "Thông báo gửi đến người dùng" },
-            new() { TableName = "retention_policies", Module = "System", RowCount = await _db.RetentionPolicies.CountAsync(), Description = "Chính sách lưu trữ & tiêu hủy" },
-            new() { TableName = "system_settings", Module = "System", RowCount = settings.Count, Description = "Tham số cấu hình động toàn hệ thống" }
-        };
-
-        return Ok(new SystemOverviewDto
-        {
-            TotalUsers = usersCount,
-            TotalRoles = rolesCount,
-            TotalPermissions = permsCount,
-            TotalOrganizationalUnits = unitsCount,
-            TotalClasses = classesCount,
-            TotalSubjects = subjectsCount,
-            TotalLectures = lecturesCount,
-            TotalFiles = filesCount,
-            TotalAuditLogs = auditCount,
-            TotalDownloadLogs = downloadCount,
-            TotalSecurityAlerts = alertsCount,
-            Settings = settings,
-            TableStats = tableStats
-        });
-    }
-
+    public async Task<IActionResult> GetOverview(CancellationToken ct) => Ok(await _overview.ReadAsync(ct));
     [HttpGet("audit-logs")]
     public async Task<IActionResult> GetAuditLogs(
         [FromQuery] string? search,

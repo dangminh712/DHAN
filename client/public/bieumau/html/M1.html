@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu M1</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				Đơn vị: <span class="o_nhap_2cm border_2cm ta_left border" contenteditable ></span><br>
+				Số: <span class="o_nhap_2cm border_2cm ta_left border" contenteditable ></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13"></span>	<br>
+				<span class="fontBold"></span>
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font14 "><b><style="margin-top:5px">Mẫu M1</style></b></span><br>
+				<span class="font8"><i></i></span><br>
+			</div>
+			<div class="time_header font_I fontNorm">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_0_5cm border_ngay border" contenteditable></span> tháng <span class="o_nhap_0_5cm border_thang border" contenteditable></span> năm <span class="o_nhap_0_5cm border_nam border" contenteditable></span>
+			</div>
+			
+		</div>
+		<div class="content">
+			<br>
+			<div class="ta_center clear">
+				<span class="fontNorm"style='vertical-align:top'>Kính gửi: Đ/c </span> 
+				<span class="o_nhap_0_5cm border_1cm border fontNorm ta_left" id= '1' contenteditable></span>
+			</div>
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>
+				BÁO CÁO<br>DỰ TOÁN MẬT PHÍ NĂM 20<span class="o_nhap_0_5cm border_0_5cm border ta_left" contenteditable></span><br>
+			</div>
+			<div class='ta_center font12 font_I fontNorm fontLow '>(Ban hành kèm theo Thông tư số: 15/2019/TT-BCA-V01,<br> Ngày 25/6/2019 của Bộ trưởng Bộ Công an)</div>
+			<!--------------------------------------------------------------------->
+			<br>
+			<table class="style1" cellpadding="0" cellspacing="0" width="100%"><!--------Bảng Nội dung biểu mẫu-------------> 
+                <tbody>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong>1-</strong> Tính đến ngày <span class="o_nhap_0_5cm border" id="Span2" style=" min-width:20px; min-height: 18px;text-align:left;vertical-align:top" contenteditable="true" onkeyup="gioihankytu(document.getElementById('Span2'),2)"></span>
+                            tháng <span class="o_nhap_0_5cm border" id="Span9" style=" min-width:20px; min-height: 18px;text-align:left;vertical-align:top" contenteditable="true" onkeyup="gioihankytu(document.getElementById('Span9'),2)"></span>
+                            năm <span class="o_nhap_0_5cm border" id="Span18" style=" min-width:40px; min-height: 18px;text-align:left;vertical-align:top" contenteditable="true" onkeyup="gioihankytu(document.getElementById('Span18'),4)"></span>, đơn vị chúng tôi đã:
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Điều tra cơ bản:
+                            <span class="o_nhap_0_5cm border" id="Span103" 
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span> 
+                            &nbsp;địa 
+                            bàn&nbsp;<span class="o_nhap_0_5cm border" id="Span3" style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" contenteditable="true"></span> 
+                            mục tiêu <span class="o_nhap_0_5cm border" id="Span100" 
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>&nbsp;tuyến <span class="o_nhap_0_5cm border" id="Span101" 
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>&nbsp;lĩnh vực, <span class="o_nhap_0_5cm border" id="Span102" 
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>&nbsp;chuyên đề đối tượng.</td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Quản lý nghiệp vụ:&nbsp;<span class="o_nhap_0_5cm border" id="Span4" style=" min-width:20px; min-height: 18px;text-align:left;vertical-align:top" contenteditable="true"></span>&nbsp;đối 
+                            tượng&nbsp;(Loại A: <span class="o_nhap_0_5cm border" id="Span22" 
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>; Loại B: <span class="o_nhap_0_5cm border" id="Span23" 
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>).</td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Kiểm tra nghiệp vụ: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;đối tượng
+                            (Thời hạn kiểm tra: <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>&nbsp;dưới 12 tháng; <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>&nbsp;trên 12 tháng).
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Đấu tranh: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;chuyên 
+                            án <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>&nbsp;đối tượng.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Truy xét: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;vụ.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Truy tìm: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;vụ.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Xử lý, xác minh tin ban đầu: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Sử dụng:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + Đặc tình: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;(Khá <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>;&nbsp;Trung bình:<span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>;&nbsp;Kém: <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>).
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + Cộng tác viên: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;(Khá <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>;&nbsp;Trung bình:<span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>;&nbsp;Kém: <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>).
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + Cơ sở bí mật: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;(Khá <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>;&nbsp;Trung bình:<span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>;&nbsp;Kém: <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>).
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + Hộp thư bí mật: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;(tăng <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>;&nbsp;giảm:<span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;so 
+                            với quý(năm) trước).
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + Trinh sát xã hội hóa: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;(tăng <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>;&nbsp;giảm:<span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;so 
+                            với quý(năm) trước).
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + 
+                            Đầu mối nghiệp vụ: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;(tăng <span class="o_nhap_0_5cm border"  
+                                style="  min-width:20px; min-height: 18px;text-align:left;vertical-align:top" 
+                                contenteditable="true"></span>;&nbsp;giảm:<span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;so 
+                            với quý(năm) trước).
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>2-</strong>&nbsp;Dự kiến trong thời gian tới sẽ triển 
+                            khai <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;kế 
+                            hoạch, phương án phản gián (kèm theo báo cáo riêng).
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>3-</strong> Mật phí năm trước:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - 
+                            Tồn cũ chuyển sang: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;</td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - Được cấp trong năm: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;</td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - Đã chi: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - 
+                            Tồn chuyển sang năm sau: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>4-</strong> Dự toán năm 20<span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>:&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Tổng số: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;đ</td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Phục vụ cho các yêu cầu sau:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Công tác nghiệp vụ thường xuyên <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;đ</td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Đấu tranh chuyên án, kế hoạch trinh sát: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;đ
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Yêu cầu nghiệp vụ khác: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;đ
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Báo cáo đề nghị đồng chí phê duyệt./.</td>
+                    </tr>
+                </tbody>
+            </table><!----------END Bảng Nội dung biểu mẫu----------------------------> 
+            <table class="style8" cellpadding="0" cellspacing="0" ><!----------Bảng ký duyệt 2 khung---------------------------->
+                <tbody>
+                   <tr>
+                    <td class="style7" style="width:45%; text-align: center;">
+                        &nbsp;</td>
+                    <td class="style11">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>THỦ TRƯỞNG ĐƠN VỊ<br />
+                        </strong>
+                        <em style="font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Ký tên, đóng dấu)</em><strong> 
+                    </strong>
+                    </td>
+                </tr>
+                
+            </tbody></table><!----------END ký duyệt 2 khung---------------------------->
+
+           <div class="ghichu">
+                    Ghi chú: Mẫu này dùng trong các trường hợp sau:<br />
+                    - Đơn bị cấp phòng dự toán báo cáo Cục, An ninh cấp tỉnh;<br />
+                    - Đơn vị Cục, An ninh cấp tỉnh dự toán báo cáo Bộ.
+              </div>
+		</div>
+
+            </div><!----------------------------------Kết thúc Trang 1------------------------------------------------->
+        
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

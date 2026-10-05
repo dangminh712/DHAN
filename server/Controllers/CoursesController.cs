@@ -42,9 +42,11 @@ public class CoursesController : ControllerBase
             Code = s.Code,
             Name = s.Name,
             Description = s.Description,
+            ResponsibleTeacherName = s.ResponsibleTeacherName,
+            ResponsibilitySource = s.ResponsibilitySource,
             ChapterCount = s.Chapters.Count(c => c.Status == "PUBLISHED"),
-            MaterialCount = s.Chapters.SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)),
-            Formats = s.Chapters.SelectMany(c => c.Materials)
+            MaterialCount = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)),
+            Formats = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials)
                 .Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance))
                 .Select(m => m.File!.FileType).Distinct().ToList()
         }).ToListAsync();
@@ -62,9 +64,11 @@ public class CoursesController : ControllerBase
                 Code = s.Code,
                 Name = s.Name,
                 Description = s.Description,
+                ResponsibleTeacherName = s.ResponsibleTeacherName,
+                ResponsibilitySource = s.ResponsibilitySource,
                 ChapterCount = s.Chapters.Count(c => c.Status == "PUBLISHED"),
-                MaterialCount = s.Chapters.SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)),
-                Formats = s.Chapters.SelectMany(c => c.Materials).Where(m => m.IsVisible && m.File != null && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)).Select(m => m.File!.FileType).Distinct().ToList(),
+                MaterialCount = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)),
+                Formats = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)).Select(m => m.File!.FileType).Distinct().ToList(),
                 Chapters = s.Chapters.Where(c => c.Status == "PUBLISHED").OrderBy(c => c.DisplayOrder).ThenBy(c => c.ChapterNumber)
                     .Select(c => new ChapterSummaryDto
                     {

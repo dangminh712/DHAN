@@ -1,260 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import {
-  Database,
-  ExternalLink,
-  Table,
-  CheckCircle2,
-  Server,
-  Layers,
-  ShieldCheck,
-  RefreshCw,
-  HardDrive
-} from 'lucide-react';
+import { Database, ExternalLink, Table2, RefreshCw, HardDrive, Gauge, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { diskUsage, fetchOverview, formatBytes, formatNumber } from '../dbmsOverview.js';
+import '../styles/dbms.css';
+
+function Metric({ icon: Icon, label, value, detail }) {
+  return <article className="dbms-metric"><div className="dbms-metric-label"><Icon size={18} aria-hidden="true" />{label}</div><strong>{value}</strong><p>{detail}</p></article>;
+}
 
 export default function DbmsAdminPage() {
-  const [dbOverview, setDbOverview] = useState(null);
+  const [overview, setOverview] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [error, setError] = useState('');
+  const [updatedAt, setUpdatedAt] = useState(null);
+  const [filter, setFilter] = useState('');
+  const request = useRef(null);
   const loadOverview = async () => {
+    request.current?.abort();
+    const controller = new AbortController();
+    request.current = controller;
     setLoading(true);
+    setError('');
+    setOverview(null);
     try {
-      const res = await axios.get('/api/system/overview').catch(() => null);
-      if (res && res.data) {
-        setDbOverview(res.data);
-      } else {
-        // Fallback default statistics
-        setDbOverview({
-          databaseEngine: 'MySQL 8.x (InnoDB)',
-          charset: 'utf8mb4_0900_ai_ci',
-          databaseName: 'training_management',
-          totalTables: 29,
-          totalRows: 182,
-          modules: [
-            {
-              name: 'Identity & Access',
-              count: 6,
-              tables: ['users', 'roles', 'permissions', 'role_permissions', 'user_sessions', 'user_mfa']
-            },
-            {
-              name: 'Organization',
-              count: 1,
-              tables: ['organizational_units']
-            },
-            {
-              name: 'Academic',
-              count: 3,
-              tables: ['classes', 'students', 'subjects']
-            },
-            {
-              name: 'Môn học & Học liệu',
-              count: 14,
-              tables: [
-                'subjects', 'chapters', 'chapter_materials', 'lectures', 'lecture_media_items', 'media_files', 'media_file_chunks',
-                'media_access_policies', 'media_view_progress', 'media_notes',
-                'media_transcriptions', 'media_bookmarks', 'media_shares',
-                'media_favorites', 'media_ratings'
-              ]
-            },
-            {
-              name: 'Security & Audit',
-              count: 5,
-              tables: ['audit_logs', 'security_alerts', 'download_tokens', 'system_configs', 'system_backups']
-            }
-          ]
-        });
-      }
+      const data = await fetchOverview(axios, controller.signal);
+      if (controller.signal.aborted) return;
+      setOverview(data);
+      setUpdatedAt(new Date());
     } catch (err) {
-      console.error('Lỗi nạp tổng quan CSDL:', err);
+      if (controller.signal.aborted) return;
+      const status = err.response?.status;
+      setError(status === 401 || status === 403
+        ? 'Phiên đăng nhập hoặc quyền quản trị không hợp lệ. Vui lòng đăng nhập bằng tài khoản được cấp quyền.'
+        : 'Không thể tải số liệu CSDL. Kiểm tra dịch vụ máy chủ và kết nối, sau đó thử lại.');
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) setLoading(false);
     }
   };
-
-  useEffect(() => {
-    loadOverview();
-  }, []);
-
-  const adminerUrl = 'http://localhost:8080/?server=127.0.0.1%3A3307&username=root&db=training_management';
-
-  return (
-    <div className="portal-container" style={{ paddingTop: '20px', paddingBottom: '40px' }}>
-      <div className="dvc-tabs-container">
-        {/* BANNER HEADER */}
-        <div style={{
-          padding: '24px',
-          borderBottom: '1px solid #E2E8F0',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px'
-        }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-              <Database size={26} color="#A31A1A" />
-              <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#0B1E36', margin: 0 }}>
-                HỆ THỐNG QUẢN TRỊ CƠ SỞ DỮ LIỆU MYSQL (29 BẢNG 3NF)
-              </h2>
-            </div>
-            <p style={{ fontSize: '13.5px', color: '#475569', margin: 0 }}>
-              Cơ sở dữ liệu <code>training_management</code> chuẩn hóa 3NF, RBAC đa tầng, mã băm mật khẩu Argon2/BCrypt và lưu vết Audit Trail.
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button
-              onClick={loadOverview}
-              className="btn-filter-pill"
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
-            >
-              <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-              <span>Kiểm tra kết nối</span>
-            </button>
-
-            <a
-              href={adminerUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-view-lecture"
-              style={{
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                background: '#A31A1A',
-                color: '#fff',
-                borderRadius: '6px',
-                fontWeight: 700,
-                fontSize: '13.5px'
-              }}
-            >
-              <ExternalLink size={16} />
-              <span>Mở Adminer Web GUI (Port 8080)</span>
-            </a>
-          </div>
-        </div>
-
-        {/* METRICS STRIP */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: '16px',
-          padding: '20px 24px',
-          background: '#F8FAFC',
-          borderBottom: '1px solid #E2E8F0'
-        }}>
-          <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '4px' }}>Cơ sở dữ liệu</div>
-            <div style={{ fontSize: '16px', fontWeight: 800, color: '#A31A1A' }}>training_management</div>
-            <div style={{ fontSize: '11px', color: '#059669', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <CheckCircle2 size={12} /> Đang kết nối MySQL 8.x
-            </div>
-          </div>
-
-          <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '4px' }}>Cổng dịch vụ CSDL</div>
-            <div style={{ fontSize: '16px', fontWeight: 800, color: '#0B1E36' }}>127.0.0.1:3307</div>
-            <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>Character Set: utf8mb4</div>
-          </div>
-
-          <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '4px' }}>Tổng số bảng quan hệ</div>
-            <div style={{ fontSize: '16px', fontWeight: 800, color: '#2563EB' }}>29 Bảng (5 Phân hệ)</div>
-            <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>InnoDB Engine (FK, Index, Soft Delete)</div>
-          </div>
-
-          <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '4px' }}>Giao diện trực quan</div>
-            <div style={{ fontSize: '16px', fontWeight: 800, color: '#D97706' }}>Adminer 4.8.4</div>
-            <div style={{ fontSize: '11px', color: '#059669', marginTop: '2px' }}>http://localhost:8080</div>
-          </div>
-        </div>
-
-        {/* 27 TABLES BREAKDOWN */}
-        <div style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0B1E36', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Layers size={18} color="#A31A1A" />
-            Cấu Trúc 5 Nhóm Phân Hệ Bảng Quan Hệ (27 Tables)
-          </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-            {/* 1. Identity & Access */}
-            <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontWeight: 800, fontSize: '14px', color: '#1E40AF' }}>1. Identity & Access (6 Bảng)</span>
-                <span style={{ fontSize: '11px', background: '#DBEAFE', color: '#1E40AF', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>RBAC</span>
-              </div>
-              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#334155', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <li><code>users</code> - Tài khoản sĩ quan, giảng viên, học viên</li>
-                <li><code>roles</code> - Vai trò: SUPER_ADMIN, TEACHER, STUDENT...</li>
-                <li><code>permissions</code> - Quyền chi tiết (CREATE, VIEW, AUDIT...)</li>
-                <li><code>role_permissions</code> - Bảng liên kết Phân quyền & Vai trò</li>
-                <li><code>user_sessions</code> - Phiên đăng nhập & Quản lý thiết bị</li>
-                <li><code>user_mfa</code> - Xác thực 2 lớp bảo vệ cấp cao</li>
-              </ul>
-            </div>
-
-            {/* 2. Organization */}
-            <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontWeight: 800, fontSize: '14px', color: '#065F46' }}>2. Organization (1 Bảng)</span>
-                <span style={{ fontSize: '11px', background: '#D1FAE5', color: '#065F46', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>Cơ Cấu</span>
-              </div>
-              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#334155', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <li><code>organizational_units</code> - 9 Khoa, Bộ môn và Ban giám hiệu</li>
-              </ul>
-            </div>
-
-            {/* 3. Academic */}
-            <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontWeight: 800, fontSize: '14px', color: '#92400E' }}>3. Academic Đào Tạo (3 Bảng)</span>
-                <span style={{ fontSize: '11px', background: '#FEF3C7', color: '#92400E', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>Đào Tạo</span>
-              </div>
-              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#334155', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <li><code>classes</code> - Danh sách lớp học viên (D32A, D32B...)</li>
-                <li><code>students</code> - Hồ sơ hồ sơ học viên, quân hàm, khóa</li>
-                <li><code>subjects</code> - Học phần nghiệp vụ, tín chỉ, đề cương</li>
-              </ul>
-            </div>
-
-            {/* 4. Lecture & Media */}
-            <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontWeight: 800, fontSize: '14px', color: '#A31A1A' }}>4. Lecture & Media (12 Bảng)</span>
-                <span style={{ fontSize: '11px', background: '#FEE2E2', color: '#A31A1A', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>Học Liệu Số</span>
-              </div>
-              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#334155', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <li><code>chapters</code> - Chương linh hoạt thuộc từng môn học</li>
-                <li><code>chapter_materials</code> - Tài liệu và quyền tải theo chương</li>
-                <li><code>lecture_media_items</code> - Đính kèm nhiều PDF, Video, Ảnh vào 1 bài giảng</li>
-                <li><code>media_files</code> - Quản lý tệp tin vật lý, SHA-256</li>
-                <li><code>media_access_policies</code> - Phân quyền theo cấp độ Mật (Level 1-4)</li>
-                <li><code>media_view_progress</code> - Theo dõi tiến độ xem & học</li>
-                <li><code>media_notes</code> - Sổ tay ghi chép nghiệp vụ học viên</li>
-                <li><code>media_file_chunks, media_transcriptions, media_bookmarks...</code></li>
-              </ul>
-            </div>
-
-            {/* 5. Security & Audit */}
-            <div style={{ background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontWeight: 800, fontSize: '14px', color: '#4C1D95' }}>5. Security & Audit (5 Bảng)</span>
-                <span style={{ fontSize: '11px', background: '#EDE9FE', color: '#4C1D95', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>An Ninh</span>
-              </div>
-              <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: '#334155', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <li><code>audit_logs</code> - Nhật ký bất biến ghi lại mọi thao tác</li>
-                <li><code>security_alerts</code> - Cảnh báo truy cập & tải bất thường</li>
-                <li><code>download_tokens</code> - Token ký số giới hạn thời gian tải</li>
-                <li><code>system_configs</code> - Cấu hình hệ thống & Dung lượng giới hạn</li>
-                <li><code>system_backups</code> - Lịch sử sao lưu phục hồi dữ liệu</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+  useEffect(() => { loadOverview(); return () => request.current?.abort(); }, []);
+  const capacity = overview ? diskUsage(overview.diskTotalBytes, overview.diskFreeBytes) : null;
+  const tables = overview?.tableStats || [];
+  const search = filter.trim().toLocaleLowerCase('vi');
+  const filteredTables = tables.filter(table => [table.tableName, table.module, table.description].some(value => String(value || '').toLocaleLowerCase('vi').includes(search)));
+  const adminerUrl = 'http://localhost:8080/?server=127.0.0.1%3A3307';
+  return <div className="portal-container dbms-page">
+    <header className="dbms-header">
+      <div className="dbms-heading"><span className="dbms-emblem"><Database size={28} aria-hidden="true" /></span><div><p className="dbms-eyebrow">QUẢN TRỊ HỆ THỐNG</p><h1>Cơ sở dữ liệu</h1><p>Theo dõi cấu trúc, thời gian truy vấn và dung lượng hiện tại.</p></div></div>
+      <div className="dbms-actions"><button type="button" onClick={loadOverview} disabled={loading} className="dbms-button"><RefreshCw size={17} aria-hidden="true" />{loading ? 'Đang kiểm tra…' : 'Làm mới số liệu'}</button><a href={adminerUrl} target="_blank" rel="noopener noreferrer" className="dbms-button dbms-button-secondary"><ExternalLink size={17} aria-hidden="true" />Adminer <span className="sr-only">(mở trong thẻ mới)</span></a></div>
+    </header>
+    <div className="dbms-status" role="status" aria-live="polite">{loading ? <><RefreshCw size={16} aria-hidden="true" />Đang tải số liệu từ máy chủ…</> : error ? <><AlertCircle size={16} aria-hidden="true" />Chưa xác nhận kết nối</> : <><CheckCircle2 size={16} aria-hidden="true" />Đã nhận số liệu từ máy chủ<span className="dbms-updated">Cập nhật {updatedAt?.toLocaleTimeString('vi-VN')}</span></>}</div>
+    <div aria-busy={loading}>
+      {loading && <div className="dbms-loading"><Database size={32} aria-hidden="true" /><p>Đang đọc thông tin bảng và dung lượng lưu trữ.</p></div>}
+      {!loading && error && <div className="dbms-error" role="alert"><AlertCircle size={24} aria-hidden="true" /><div><h2>Không có số liệu để hiển thị</h2><p>{error}</p><button type="button" className="dbms-button" onClick={loadOverview}>Thử lại</button></div></div>}
+      {!loading && overview && <>
+        <section className="dbms-metrics" aria-label="Số liệu cơ sở dữ liệu">
+          <Metric icon={Database} label="Cơ sở dữ liệu" value={overview.databaseName || 'Chưa có dữ liệu'} detail={overview.databaseEngine || 'Chưa có thông tin hệ quản trị'} />
+          <Metric icon={Table2} label="Bảng quan hệ" value={formatNumber(overview.totalTables)} detail={`${formatNumber(overview.totalRows)} bản ghi${overview.totalRowsIsEstimate ? ' (ước tính)' : ''}`} />
+          <Metric icon={HardDrive} label="Dữ liệu bảng" value={formatBytes(overview.databaseDataBytes)} detail={`Chỉ mục: ${formatBytes(overview.databaseIndexBytes)}`} />
+          <Metric icon={Gauge} label="Truy vấn tổng quan" value={overview.queryDurationMs == null ? 'Chưa có dữ liệu' : `${formatNumber(overview.queryDurationMs)} ms`} detail="Thời gian truy vấn CSDL của lần lấy số liệu này." />
+        </section>
+        <section className="dbms-capacity dbms-panel" aria-labelledby="dbms-capacity-title"><div><p className="dbms-eyebrow">DUNG LƯỢNG HIỆN TẠI</p><h2 id="dbms-capacity-title">Lưu trữ & khả năng vận hành</h2><p>Dữ liệu bảng và chỉ mục là metadata trong CSDL. Tệp học liệu được lưu riêng; số byte học liệu dưới đây tính theo các tệp đang hoạt động trong danh mục.</p></div><div className="dbms-capacity-details"><dl><div><dt>Học liệu đang hoạt động</dt><dd>{formatBytes(overview.storageBytes)}</dd></div><div><dt>Ổ lưu trữ của máy chủ</dt><dd>{formatBytes(overview.diskTotalBytes)}</dd></div><div><dt>Dung lượng ổ còn trống</dt><dd>{formatBytes(overview.diskFreeBytes)}</dd></div></dl>{capacity && <><div className="dbms-capacity-caption"><span>Toàn bộ ổ đã sử dụng</span><strong>{formatNumber(capacity.percent)}%</strong></div><meter className="dbms-meter" min="0" max="100" value={capacity.percent} aria-label="Tỷ lệ dung lượng toàn bộ ổ đã sử dụng">{formatNumber(capacity.percent)}%</meter></>}<p className="dbms-note">Dung lượng ổ bao gồm các dữ liệu khác trên máy chủ. Thời gian truy vấn tổng quan không phải phép đo tải đồng thời; chưa có kết quả kiểm thử để xác định số người dùng tối đa.</p></div></section>
+        <section className="dbms-panel" aria-labelledby="dbms-schema-title"><div className="dbms-panel-heading"><div><p className="dbms-eyebrow">CẤU TRÚC THỰC TẾ</p><h2 id="dbms-schema-title">Danh mục bảng</h2><p>{formatNumber(overview.foreignKeyCount)} khóa ngoại · {formatNumber(overview.indexCount)} chỉ mục</p></div><div className="dbms-filter"><label htmlFor="dbms-table-filter">Tìm bảng hoặc phân hệ</label><input id="dbms-table-filter" type="search" value={filter} onChange={event => setFilter(event.target.value)} placeholder="Tên bảng, phân hệ…" /></div></div>
+          <p className="dbms-note">Số bản ghi có dấu ≈ là ước tính của hệ quản trị, có thể khác số đếm chính xác. Kích thước dữ liệu và chỉ mục được thống kê riêng.</p>
+          <div className="dbms-table-wrap"><table className="dbms-table"><caption className="sr-only">Danh mục bảng và dung lượng từ cơ sở dữ liệu hiện tại</caption><thead><tr><th scope="col">Bảng / mô tả</th><th scope="col">Phân hệ</th><th scope="col">Bản ghi</th><th scope="col">Dữ liệu</th><th scope="col">Chỉ mục</th></tr></thead><tbody>{filteredTables.map(table => <tr key={table.tableName}><th scope="row" data-label="Bảng / mô tả"><code>{table.tableName}</code>{table.description && <span className="dbms-table-description">{table.description}</span>}</th><td data-label="Phân hệ">{table.module || 'Chưa phân nhóm'}</td><td data-label="Bản ghi">{table.rowCountIsEstimate && table.rowCount != null ? <abbr title="Số bản ghi ước tính">≈ </abbr> : null}{formatNumber(table.rowCount)}</td><td data-label="Dữ liệu">{formatBytes(table.dataBytes)}</td><td data-label="Chỉ mục">{formatBytes(table.indexBytes)}</td></tr>)}</tbody></table></div>
+          {filteredTables.length === 0 && <p className="dbms-empty">{tables.length ? 'Không có bảng phù hợp với từ khóa.' : 'Máy chủ chưa trả về danh mục bảng.'}</p>}
+          <p className="dbms-table-count" role="status">Hiển thị {filteredTables.length} / {tables.length} bảng</p>
+        </section>
+        <p className="dbms-footer-note">Adminer là công cụ quản trị tùy chọn tại máy cục bộ (cổng 8080), yêu cầu dịch vụ riêng và tài khoản CSDL được cấp quyền.</p>
+      </>}
     </div>
-  );
+  </div>;
 }

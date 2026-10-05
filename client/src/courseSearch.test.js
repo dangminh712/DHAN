@@ -19,6 +19,8 @@ test('material format maps office and media extensions', () => {
   assert.equal(getMaterialFormat({ extension: 'docx' }), 'WORD')
   assert.equal(getMaterialFormat({ mimeType: 'image/png' }), 'IMAGE')
   assert.equal(getMaterialFormat({ fileType: 'VIDEO' }), 'VIDEO')
+  assert.equal(getMaterialFormat({ extension: '.flv' }), 'VIDEO')
+  assert.equal(getMaterialFormat({ originalName: 'Chuyen_an_F384.FLV' }), 'VIDEO')
 })
 
 test('file size uses readable binary units', () => {

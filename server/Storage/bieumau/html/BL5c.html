@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu BL5-c</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					var span_gt=document.getElementById('lap_ho_so').innerHTML;
+					document.getElementById('lap_ho_so').style.display='none';
+					var DDL_GT=document.getElementById('selected1');
+						switch (span_gt)
+						{
+							case 'ĐIỀU TRA CƠ BẢN':
+								DDL_GT.value=1;
+								break;
+							case 'SƯU TRA':
+								DDL_GT.value=2;
+								break;
+							case 'XMHN':
+								DDL_GT.value=3;
+								break;
+							case 'CHUYÊN ÁN':
+								DDL_GT.value=4;
+								break;
+							default:
+								document.getElementById('lap_ho_so1').style.display='block';
+								
+						}
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function lap_ketthuc()
+				{
+					var get_sel=document.getElementById('select_lap_ketthuc');
+					switch (get_sel.value)
+					{
+						case '1':
+							document.getElementById('lap_ho_so').innerHTML=document.getElementById("lap_hs").innerHTML;
+							document.getElementById('_duoc').innerHTML=document.getElementById("lap_hs").innerHTML;
+							break;
+						case '2':
+						document.getElementById('lap_ho_so').innerHTML=document.getElementById("kt_hs").innerHTML;
+						document.getElementById('_duoc').innerHTML=document.getElementById("kt_hs").innerHTML;
+						break;
+					}
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		function on_change_select_1()
+		{
+			var get_sel=document.getElementById('selected1');
+			document.getElementById('lap_ho_so').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op3").innerHTML;
+				break;
+				case '4':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op4").innerHTML;
+				break;
+			}
+			
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			  function In_bieu_mau(){
+					//document.getElementById('selected1').style.display='none';
+					//document.getElementById('lap_ho_so').style.display='inline-block';
+					window.print();
+					//document.getElementById('lap_ho_so').style.display='none';
+					//document.getElementById('selected1').style.display='inline-block';
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12" style='margin-top:3px'>
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">Mẫu BL5-c</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			
+		<br><br>
+		</div>
+		<div class="content">
+			<div class="font16	 ta_center clear"><br><b>QUY HOẠCH</b><br>
+			Xây dựng, sử dụng,CTVBM và HTBM 
+			<span class='o_nhap_1cm border ta_left' contenteditable onkeypress='hide_note("lbl1")'>
+				<label class='ghichu' id='lbl1'>Trên tuyến, địa bàn, lĩnh vực</label>
+			</span>
+				<!--<select id ="selected1" onchange="on_change_select_1()">
+					<option selected="selected" value="0" id="sel_op0">..............</option>
+					<option value="1" id="sel_op1">TRÊN TUYẾN</option>
+					<option value="2" id="sel_op2">ĐỊA BÀN</option>
+					<option value="3" id="sel_op3">LĨNH VỰC</option>
+				</select>
+				<span class="o_nhap_1cm" id="lap_ho_so" ></span>--><br>
+				<span class='font_I fontNorm fontLow font14'>(Từ năm <span class='o_nhap_nam border' contenteditable></span> đến năm <span class='o_nhap_nam border' contenteditable></span>)
+			</div>
+			<br>
+			<span class="TAB"></span>I. Đánh giá tình hình tội phạm, TTATXH và yêu cầu điều tra, trinh sát<br>
+			<span class="TAB"></span><em>1- Đánh giá tình hình:</em><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span><em>2- Đánh giá yêu cầu điều tra trinh sát và nhiệm vụ xây dựng, sử dụng CTVBM, HTBM</em><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<div style='text-align:center;width:100%'> II. Nội dung quy hoạch (kèm theo sơ đồ bố trí CTVBM)<br><em>1- Về số lượng và cơ cấu CTVBM</em></div>
+			
+			<span class="TAB"></span>a) Đặc tình <span class='font10'>(số lượng đang dử dụng, số xây dựng mới để bổ sung, thay thế theo thời gian; số lượng từng loại ĐT, các yêu cầu điều tra, trinh sát cần tập trung lãnh đạo, chỉ đạo ĐT thực hiện)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>b) CSBM <span class='font10'>(số lượng đang dử dụng, số xây dựng mới để bổ sung, thay thế theo thời gian; các yêu cầu điều tra, trinh sát cần tập trung lãnh đạo, chỉ đạo CSBM thực hiện)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>c) CTVDD <span class='font10'>(số lượng đang dử dụng, số xây dựng mới để bổ sung, thay thế theo thời gian; các yêu cầu điều tra, trinh sát cần tập trung hướng dẫn CTVDD thực hiện)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>d) HTBM <span class='font10'>(số lượng đang dử dụng, số xây dựng mới để bổ sung, thay thế; các yêu cầu sử dụng HTBM trong giai đoạn quy hoạch)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>đ) Những chỉ tiêu về cơ cấu các loại CTVBM, HTBM cơ cấu các loại ĐT, chất lượng CTVBM và HTBM<br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span><em>2- Bố trí CTVBM </em><br>
+			<span class="TAB"></span>a) Bố trí theo địa bàn <span class='font10'>(bố trí ở đâu, làm nhiệm vụ gì)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>b) Bố trí theo tuyến <span class='font10'>(bố trí ở đâu, làm nhiệm vụ gì)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>c) Bố trí theo lĩnh vực <span class='font10'>(bố trí ở đâu, làm nhiệm vụ gì)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>d) Bố trí theo đối tượng <span class='font10'>(bố trí thực hiện công tác quản lý, thu thập tin, tài liệu theo đối tượng, nhóm đối tượng nào)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>đ) Bố trí theo nhiệm vụ <span class='font10'>(bố trí theo nhóm nhiệm vụ nào: ĐTCB, ST, XMHN, ĐTCA, điều tra vụ án...)</span><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span><em>(Kèm theo sơ đồ bố trí CTVBM, HTBM theo quy hoạch) </em><br>
+			<span class="TAB"></span><em>3- Về thời gian </em><span class='font10'>(Lộ trình xây dựng, bố trí, sử dụng các loại CTVBM ở các tuyến, địa bàn, lĩnh vực, các nhóm nhiệm vụ)</span>:<br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span>III. Tổ chức thực hiện<br>
+			<span class="TAB"></span><em>1- Phân công:</em><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span><em>2- Điều kiện đảm bảo thực hiện:</em><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<span class="TAB"></span><em>3- Công tác theo dõi, chỉ đạo, kiểm tra, đôn đốc:</em><br>
+			<span class='o_nhap_n_dong border' contenteditable></span><br>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='ta_center' >
+						<div style='margin-left:-1cm'>						
+							<div class='fontNorm font_I'>
+								<span class='o_nhap_1cm border ta_right' contenteditable></span>, ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span>
+							</div>
+							<div class='lh_1' style='margin-top:5px'>
+								<span>LÃNH ĐẠO PHÊ DUYỆT</span><br>
+								<span class='fontNorm font12 font_I'>(Ký tên, đóng dấu)</span><br><br><br><br>
+							</div>
+						</div>
+					</td>
+					<td class='ta_center'>
+						<div style='margin-right:-1cm'>	
+							<div class='fontNorm font_I'>
+								<span class='o_nhap_1cm border ta_right' contenteditable></span>, ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span>
+							</div>
+							<div class='lh_1' style='margin-top:5px'>
+								<span>LÃNH ĐẠO ĐƠN VỊ</span><br>
+								<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>	
+		</div>
+		
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

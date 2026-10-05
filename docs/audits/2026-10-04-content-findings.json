@@ -1,0 +1,88 @@
+{
+  "scope": "Read-only local content inspection; no DB mutations",
+  "teacherEvidence": {
+    "responsibleTeacher": "Thượng tá, TS. Đặng Bình Dương",
+    "role": "Phó Trưởng Khoa K3, Trường Đại học ANND",
+    "path": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Storage\\courses\\NVCB2\\TAP3\\1. KẾ HOẠCH GIẢNG DẠY HP NVCB2.pdf",
+    "page": 6,
+    "quote": "Giảng viên phụ trách môn học: Thượng tá, TS. Đặng Bình Dương",
+    "assistantTeacher": "Đại úy, ThS Vũ Đình Huy",
+    "lessonAssignmentEvidence": {
+      "path": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Storage\\courses\\NVCB2\\TAP1\\3.3. QUYẾT ĐỊNH GIAO BÀI.pdf",
+      "page": 1,
+      "note": "Vũ Đình Huy assigned one NVCB2 lesson; does not establish course-wide responsibility"
+    },
+    "sourceCourseMetadata": {
+      "code": "06.01.03.NVCB2",
+      "credits": 2,
+      "taughtPeriods": 39,
+      "planPage": 1
+    },
+    "limitation": "No verified existing local account for Đặng Bình Dương; do not substitute seed teachers or auto-create account"
+  },
+  "tinyFiles": [
+    {
+      "id": 1,
+      "kind": "seed_placeholder_pdf",
+      "evidence": "SAMPLE GIAOTRINH; Tap tin: sample_giaotrinh.pdf",
+      "suggestedOriginalName": "Giao_trinh_An_ninh_dieu_tra_Chuong_1.pdf",
+      "note": "Restore seed metadata; do not map to NVCB2 based on incorrect name"
+    },
+    {
+      "id": 3,
+      "kind": "seed_placeholder_svg",
+      "evidence": "SLIDE MINH HỌA BÀI GIẢNG; generic Nghiệp vụ cơ bản"
+    },
+    {
+      "id": 4,
+      "kind": "seed_placeholder_pdf",
+      "evidence": "SAMPLE DE CUONG; Tap tin: sample_de_cuong.pdf",
+      "unrelatedLinkIds": [
+        20,
+        22
+      ],
+      "note": "ANKT_401 and ANTT_202 links conflict with subject title; remove or hide with reversible record"
+    },
+    {
+      "id": 5,
+      "kind": "seed_placeholder_pdf",
+      "evidence": "SAMPLE BAI GIANG; Tap tin: sample_bai_giang.pdf"
+    },
+    {
+      "id": 10,
+      "kind": "seed_placeholder_svg",
+      "evidence": "Same checksum/content as IDs3 and16; generic Nghiệp vụ cơ bản"
+    },
+    {
+      "id": 11,
+      "kind": "seed_brief_pdf",
+      "evidence": "Title CHIEN THUAT TRINH SAT THUC DIA VA BAO VE MUC TIEU; one page/five bullets",
+      "suggestedOriginalName": "Giao_trinh_Chien_thuat_Trinh_sat_Thuc_dia.pdf",
+      "note": "Restore metadata; keep NVAN_305 link14. Not NVCB2 teaching plan"
+    },
+    {
+      "id": 15,
+      "kind": "seed_brief_pdf",
+      "evidence": "One page/five bullets of digital-evidence overview",
+      "note": "KTHS_302 mapping aligns; small valid demo, not corrupt"
+    },
+    {
+      "id": 16,
+      "kind": "seed_placeholder_svg",
+      "evidence": "Same checksum/content as IDs3 and10; generic Nghiệp vụ cơ bản"
+    }
+  ],
+  "tcdt": {
+    "existingChapterId": 12,
+    "status": "DRAFT",
+    "existingMaterialIds": [
+      24,
+      25
+    ],
+    "file6Evidence": "Actual JPG is Windows 11 blue wallpaper, no learning diagram",
+    "file8Evidence": "SHA256 f95e913bcbeeef364a246a108d5d14d622638742005437e9de1ef75d6de7e05e exactly equals server/Storage/sample_video.mp4",
+    "teacherInSeed": "Trung tá Lê Hoài Nam (Phó Trưởng Khoa ANM)",
+    "recommendation": "Do not publish draft as genuine content. Preserve/flag seed materials; require genuine supplied course sources or explicitly create reviewed replacement educational content.",
+    "sourceSearch": "Only NVCB2 actual source tree was found; no genuine TCDT named sources found in repo or relevant Desktop file-name searches"
+  }
+}

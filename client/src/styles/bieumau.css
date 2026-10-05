@@ -1,0 +1,687 @@
+/* client/src/styles/bieumau.css */
+/* Hệ thống giao diện và biên tập Biểu mẫu Nghiệp vụ CAND */
+
+:root {
+  --bm-primary: var(--portal-red);
+  --bm-primary-dark: var(--portal-red-dark);
+  --bm-accent: var(--portal-gold);
+  --bm-accent-soft: var(--portal-gold-soft);
+  --bm-support: var(--portal-green);
+  --bm-support-dark: var(--portal-green-dark);
+  --bm-support-soft: var(--portal-green-soft);
+}
+
+/* ==========================================================================
+   1. TOÀN CỤC & MODAL CONTAINER
+   ========================================================================== */
+.bm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.82);
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(4px);
+}
+
+.bm-top-toolbar {
+  flex-shrink: 0;
+  min-height: 64px;
+  background: linear-gradient(100deg, var(--bm-support-dark), #0a5934);
+  border-bottom: 3px solid var(--bm-accent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  z-index: 20;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bm-toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 240px;
+}
+
+.bm-badge-code {
+  background: var(--bm-primary);
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.bm-title-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #F8FAFC;
+  max-width: 420px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bm-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bm-save-status {
+  font-size: 12.5px;
+  color: #86EFAC;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 6px;
+  user-select: none;
+  font-weight: 500;
+}
+
+/* Nút bấm giao diện */
+.bm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease-in-out;
+  user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+
+.bm-btn:active {
+  transform: scale(0.97);
+}
+
+.bm-btn-print {
+  background: linear-gradient(135deg, var(--bm-primary) 0%, var(--bm-primary-dark) 100%);
+  color: #FFFFFF;
+  border-color: #991B1B;
+  box-shadow: 0 2px 6px rgba(185, 28, 28, 0.4);
+}
+.bm-btn-print:hover {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  box-shadow: 0 4px 10px rgba(185, 28, 28, 0.5);
+}
+
+.bm-btn-word {
+  background: var(--bm-support);
+  color: #FFFFFF;
+  border-color: var(--bm-support-dark);
+  box-shadow: 0 2px 6px rgba(6, 73, 42, 0.3);
+}
+.bm-btn-word:hover {
+  background: var(--bm-support-dark);
+}
+
+.bm-btn-toggle-active {
+  background: var(--bm-support);
+  color: #FFFFFF;
+  border-color: var(--bm-support-dark);
+}
+.bm-btn-toggle-active:hover {
+  background: var(--bm-support-dark);
+}
+
+.bm-btn-secondary {
+  background: #1E293B;
+  color: #E2E8F0;
+  border-color: #334155;
+}
+.bm-btn-secondary:hover {
+  background: #334155;
+  color: #FFFFFF;
+}
+
+.bm-btn-purple {
+  background: linear-gradient(135deg, #b8870c 0%, var(--bm-accent) 100%);
+  color: #2d2100;
+  border-color: #9d7408;
+  box-shadow: 0 2px 6px rgba(118, 88, 5, 0.25);
+}
+.bm-btn-purple:hover {
+  background: linear-gradient(135deg, var(--bm-accent) 0%, #b8870c 100%);
+  box-shadow: 0 4px 10px rgba(118, 88, 5, 0.32);
+}
+
+/* Khung thông báo khi biểu mẫu chỉ có bản viết tay */
+.bm-handwriting-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 480px;
+  width: 100%;
+}
+
+.bm-handwriting-card {
+  background: #FFFFFF;
+  border: 1.5px solid #d7c57d;
+  border-radius: 12px;
+  padding: 36px 40px;
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(118, 88, 5, 0.12);
+}
+
+.bm-handwriting-icon {
+  width: 68px;
+  height: 68px;
+  background: var(--bm-accent-soft);
+  border: 1px solid #d7c57d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.bm-handwriting-card h3 {
+  font-family: 'Times New Roman', Times, serif !important;
+  font-size: 20px;
+  font-weight: 700;
+  color: #3f2d00;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.bm-handwriting-badge {
+  display: inline-block;
+  background: var(--bm-accent-soft);
+  color: #765805;
+  font-weight: 800;
+  font-size: 11.5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border: 1px solid #d7c57d;
+}
+
+.bm-handwriting-card p {
+  font-family: 'Times New Roman', Times, serif !important;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #4B5563;
+  margin: 0 0 24px;
+}
+
+.bm-handwriting-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (min-width: 520px) {
+  .bm-handwriting-actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.bm-btn-close {
+  background: transparent;
+  color: #94A3B8;
+  padding: 0 10px;
+}
+.bm-btn-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+/* Nút điều chỉnh Zoom */
+.bm-zoom-controls {
+  display: flex;
+  align-items: center;
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 44px;
+}
+.bm-zoom-btn {
+  background: transparent;
+  border: none;
+  color: #CBD5E1;
+  padding: 0 10px;
+  min-width: 44px;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+.bm-zoom-btn:hover {
+  background: #334155;
+  color: #FFFFFF;
+}
+.bm-zoom-label {
+  padding: 0 8px;
+  font-size: 12px;
+  color: #94A3B8;
+  font-weight: 600;
+  min-width: 44px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   2. KHÔNG GIAN CUỘN VÀ TỜ GIẤY A4 MÔ PHỎNG CHUẨN CAND
+   ========================================================================== */
+.bm-editor-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 30px 20px 80px;
+  background: #475569;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bm-a4-wrapper-container {
+  display: flex;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  width: 100%;
+}
+
+/* Tờ giấy A4 chuẩn thể thức CAND */
+.bm-a4-paper {
+  width: 210mm;
+  min-height: 297mm;
+  background: #FFFFFF !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+  padding: 20mm 15mm 20mm 25mm !important; /* Chuẩn văn bản CAND: Trên 20mm, Phải 15mm, Dưới 20mm, Trái 25mm */
+  box-sizing: border-box !important;
+  font-family: 'Times New Roman', Times, serif !important;
+  font-size: 14pt;
+  line-height: 1.4;
+  color: #000000;
+  position: relative;
+  margin: 0 auto;
+  overflow-wrap: break-word;
+}
+
+/* ==========================================================================
+   3. SỬA TRIỆT ĐỂ LỖI PHÔNG (TIMES NEW ROMAN 100% CHO VĂN BẢN CAND)
+   ========================================================================== */
+#bieumau-print-area,
+#bieumau-print-area *,
+.bm-a4-paper,
+.bm-a4-paper * {
+  font-family: 'Times New Roman', Times, serif !important;
+  box-sizing: border-box;
+}
+
+/* Chuẩn hóa các cỡ chữ quy định trong Thông tư / Nghị định */
+.bm-a4-paper .font8  { font-size: 8pt !important; }
+.bm-a4-paper .font9  { font-size: 9pt !important; }
+.bm-a4-paper .font10 { font-size: 10pt !important; }
+.bm-a4-paper .font11 { font-size: 11pt !important; }
+.bm-a4-paper .font12 { font-size: 12pt !important; }
+.bm-a4-paper .font13 { font-size: 13pt !important; }
+.bm-a4-paper .font14 { font-size: 14pt !important; }
+.bm-a4-paper .font16 { font-size: 16pt !important; }
+.bm-a4-paper .font18 { font-size: 18pt !important; }
+
+.bm-a4-paper .fontUpper { text-transform: uppercase !important; }
+.bm-a4-paper .fontLow   { text-transform: none !important; }
+.bm-a4-paper .fontBold  { font-weight: bold !important; }
+.bm-a4-paper .fontNorm  { font-weight: normal !important; }
+.bm-a4-paper .font_I    { font-style: italic !important; }
+
+.bm-a4-paper .ta_center { text-align: center !important; }
+.bm-a4-paper .ta_left   { text-align: left !important; }
+.bm-a4-paper .ta_right  { text-align: right !important; }
+.bm-a4-paper .ta_jus    { text-align: justify !important; }
+
+.bm-a4-paper .f_left  { float: left !important; }
+.bm-a4-paper .f_right { float: right !important; }
+.bm-a4-paper .clear   { clear: both !important; }
+.bm-a4-paper .TAB     { width: 1cm !important; display: inline-block !important; }
+
+/* Tránh cắt xén dấu tiếng Việt (ể, ồ, ẵ, ặ, ứ, ữ) */
+.bm-a4-paper .lh_06 { line-height: 1.15em !important; }
+.bm-a4-paper .lh_08 { line-height: 1.25em !important; }
+.bm-a4-paper .lh_1  { line-height: 1.35em !important; }
+.bm-a4-paper .lh_15 { line-height: 1.5em !important; }
+.bm-a4-paper .lh_18 { line-height: 1.8em !important; }
+.bm-a4-paper .lh_20 { line-height: 2.0em !important; }
+
+/* ==========================================================================
+   4. SỬA TRIỆT ĐỂ LỖI GIAO DIỆN (LỖI 2 TRANG ĐÈ NHAU & CĂN LỀ)
+   ========================================================================== */
+/* Khử bỏ hoàn toàn khung và bóng của .wrapper bên trong file gốc */
+.bm-a4-paper .wrapper {
+  background: transparent !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: auto !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Khử margin-left 2.5cm của .content cũ vì .bm-a4-paper đã có padding chuẩn */
+.bm-a4-paper .content,
+.bm-a4-paper .content_page_2 {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 0 !important;
+  clear: both !important;
+}
+
+/* Bảng biểu trong văn bản nghiệp vụ */
+.bm-a4-paper table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 10px 0 !important;
+}
+
+.bm-a4-paper table[border="1"],
+.bm-a4-paper table#Table1,
+.bm-a4-paper table#Table2,
+.bm-a4-paper table#Table3 {
+  border: 1px solid #000000 !important;
+}
+
+.bm-a4-paper table[border="1"] td,
+.bm-a4-paper table[border="1"] th,
+.bm-a4-paper table#Table1 td,
+.bm-a4-paper table#Table1 th,
+.bm-a4-paper table#Table2 td,
+.bm-a4-paper table#Table2 th,
+.bm-a4-paper table#Table3 td,
+.bm-a4-paper table#Table3 th {
+  border: 1px solid #000000 !important;
+  padding: 4px 6px !important;
+  vertical-align: middle !important;
+}
+
+/* Bảng khung chữ ký không được có viền kẻ */
+.bm-a4-paper table.khung_chu_ky,
+.bm-a4-paper table.khung_chu_ky td,
+.bm-a4-paper table.khung_chu_ky_1ben,
+.bm-a4-paper table.khung_chu_ky_1ben td {
+  border: none !important;
+  padding: 6px 4px !important;
+}
+
+/* ==========================================================================
+   5. HIỂN THỊ CÁC Ô CÓ THỂ ĐIỀN (Ô ĐIỀN) RÕ RÀNG, DỄ DÙNG NHẤT
+   ========================================================================== */
+.bm-fill-blank,
+.bm-a4-paper [contenteditable],
+.bm-a4-paper [contenteditable="true"],
+.bm-a4-paper [contenteditable=""],
+.bm-a4-paper span[class*="o_nhap_"],
+.bm-a4-paper div[contenteditable] {
+  min-width: 46px;
+  min-height: 22px;
+  display: inline-block;
+  vertical-align: baseline;
+  padding: 1px 6px;
+  margin: 1px 2px;
+  background-color: #edf8f2 !important;
+  border: 1.5px dashed var(--bm-support) !important;
+  border-radius: 4px;
+  color: #0F172A !important;
+  outline: none !important;
+  font-family: 'Times New Roman', Times, serif !important;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: text;
+}
+
+/* Khi di chuột qua ô điền */
+.bm-fill-blank:hover,
+.bm-a4-paper [contenteditable]:hover {
+  background-color: #daf0e3 !important;
+  border-color: var(--bm-support-dark) !important;
+  box-shadow: 0 0 0 2px rgba(10, 107, 61, 0.2);
+}
+
+/* Khi nhấp chuột vào soạn thảo */
+.bm-fill-blank:focus,
+.bm-a4-paper [contenteditable]:focus {
+  background-color: #FFFFFF !important;
+  border: 2px solid var(--bm-support) !important;
+  box-shadow: 0 0 0 3px rgba(10, 107, 61, 0.22) !important;
+}
+
+/* Khi ô đã có nội dung điền */
+.bm-fill-blank:not(:empty),
+.bm-a4-paper [contenteditable]:not(:empty) {
+  background-color: #F8FAFC !important;
+  border: 1px solid #94A3B8 !important;
+  border-bottom: 2px solid var(--bm-support) !important;
+}
+
+/* Placeholder khi ô trống */
+.bm-fill-blank:empty::before,
+.bm-a4-paper [contenteditable]:empty::before {
+  content: attr(data-placeholder);
+  color: #64748B !important;
+  font-style: italic;
+  font-size: 0.88em;
+  pointer-events: none;
+}
+
+/* Khi ô trống hoàn toàn không có thuộc tính placeholder */
+.bm-fill-blank:empty:not([data-placeholder])::before,
+.bm-a4-paper [contenteditable]:empty:not([data-placeholder])::before {
+  content: "Nhấp để điền...";
+  color: #94A3B8 !important;
+  font-style: italic;
+  font-size: 0.88em;
+  pointer-events: none;
+}
+
+/* Kích thước cụ thể cho từng loại ô thông dụng */
+.bm-a4-paper .o_nhap_ngay  { min-width: 34px !important; text-align: center; }
+.bm-a4-paper .o_nhap_thang { min-width: 34px !important; text-align: center; }
+.bm-a4-paper .o_nhap_nam   { min-width: 54px !important; text-align: center; }
+
+.bm-a4-paper .o_nhap_0_5cm { min-width: 55px !important; }
+.bm-a4-paper .o_nhap_1cm   { min-width: 80px !important; }
+.bm-a4-paper .o_nhap_2cm   { min-width: 130px !important; }
+.bm-a4-paper .o_nhap_3cm   { min-width: 180px !important; }
+
+.bm-a4-paper .dia_danh { min-width: 90px !important; text-align: right; }
+.bm-a4-paper .co_quan  { min-width: 170px !important; text-align: center; }
+
+.bm-a4-paper .o_nhap_n_dong {
+  width: 100% !important;
+  min-height: 60px !important;
+  display: block !important;
+}
+
+/* Ô nhập liệu bên trong ô bảng (table cell) */
+.bm-a4-paper td [contenteditable] {
+  width: 100% !important;
+  min-height: 26px !important;
+  display: block !important;
+}
+
+/* Thẻ select lựa chọn */
+.bm-a4-paper select {
+  font-family: 'Times New Roman', Times, serif !important;
+  font-size: 14pt;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1.5px solid var(--bm-support);
+  background-color: #edf8f2;
+  color: #0F172A;
+  outline: none;
+  cursor: pointer;
+}
+
+/* CHẾ ĐỘ XEM TRƯỚC (ẨN LÀM NỔI BẬT Ô ĐIỀN) */
+.bm-a4-paper.bm-hide-highlights .bm-fill-blank,
+.bm-a4-paper.bm-hide-highlights [contenteditable] {
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px dotted #475569 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 2px !important;
+}
+
+/* Ẩn viền cũ */
+.border {
+  border-color: #CBD5E1;
+}
+
+/* Ghi chú hướng dẫn cũ trong file mẫu */
+.ghichu {
+  display: none !important;
+}
+
+/* ==========================================================================
+   6. IN ẤN CHUẨN A4 BỘ CÔNG AN (@MEDIA PRINT)
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 20mm 15mm 20mm 25mm; /* Chuẩn văn bản CAND */
+  }
+
+  body {
+    background: #FFFFFF !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #000000 !important;
+  }
+
+  .bm-top-toolbar,
+  .no-print,
+  .button_print,
+  .button_save,
+  .button_reload,
+  .ghichu,
+  header,
+  nav,
+  footer {
+    display: none !important;
+  }
+
+  .bm-modal-overlay {
+    position: static !important;
+    background: transparent !important;
+    display: block !important;
+  }
+
+  .bm-editor-scroll-area {
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .bm-a4-wrapper-container {
+    transform: none !important;
+    display: block !important;
+  }
+
+  .bm-a4-paper {
+    width: 100% !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Khi in: Khử toàn bộ viền nét đứt, màu nền và hiệu ứng ô nhập liệu */
+  .bm-fill-blank,
+  .bm-a4-paper [contenteditable],
+  .bm-a4-paper span[class*="o_nhap_"],
+  .bm-a4-paper div[contenteditable] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #000000 !important;
+  }
+
+  /* Khi in: Nếu ô trống, không in chữ placeholder */
+  .bm-fill-blank:empty::before,
+  .bm-a4-paper [contenteditable]:empty::before {
+    display: none !important;
+  }
+
+  /* Select khi in biến thành văn bản bình thường */
+  .bm-a4-paper select {
+    border: none !important;
+    background: transparent !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  .content_page_2 {
+    page-break-before: always !important;
+  }
+}
+
+/* PDF editor uses its own document so A4 form rules cannot alter source pages. */
+.pdf-editor-modal { z-index: 10000; }
+.pdf-editor-modal .bm-top-toolbar { flex-wrap: wrap; height: auto; flex-shrink: 0; }
+.pdf-editor-options { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 16px; background: var(--bm-support-soft); color: #17231d; font-size: 13px; }
+.pdf-editor-options label { display: flex; align-items: center; gap: 6px; }
+.pdf-editor-options input { width: 64px; }
+.pdf-editor-options input, .pdf-editor-options select, .pdf-editor-clear { min-height: 36px; border: 1px solid #94a3b8; border-radius: 4px; background: white; padding: 4px 8px; }
+.pdf-editor-clear { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.pdf-editor-options [role="status"] { flex: 1; min-width: 220px; }
+.pdf-editor-frame { flex: 1; width: 100%; min-height: 0; border: 0; background: #64748b; }
+.pdf-editor-modal button:focus-visible, .pdf-editor-options input:focus-visible, .pdf-editor-options select:focus-visible { outline: 3px solid var(--bm-support); outline-offset: 2px; }
+
+/* Editable table cells must retain native table layout. */
+.bm-a4-paper td[contenteditable], .bm-a4-paper th[contenteditable] {
+  display: table-cell !important;
+  min-width: 0;
+  margin: 0;
+  white-space: pre-wrap;
+}
+.bm-a4-paper [contenteditable] { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+.bm-a4-paper [data-bm-action] { padding: 8px 12px; margin: 6px 6px 6px 0; cursor: pointer; }
+.bm-a4-paper tr { break-inside: avoid; }
+.bm-a4-paper thead { display: table-header-group; }
+@media print {
+  #root[inert] { display: none !important; }
+  .bm-a4-paper [contenteditable][contenteditable] {
+    border: none !important;
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .bm-a4-paper [data-bm-action], .bm-a4-paper input[type="button"], .bm-a4-paper button { display: none !important; }
+  .bm-a4-paper td[contenteditable][contenteditable], .bm-a4-paper th[contenteditable][contenteditable] { border: 1px solid black !important; }
+  .bm-a4-paper { max-width: 100%; }
+}
