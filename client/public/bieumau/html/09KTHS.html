@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu 09KTHS</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu 09KTHS</span><br>
+				<span class="font8">BH theo TT số 30/2014/TT-BCA</span><br>
+				<span class="font8">Ngày 23/7/2014</span><br>
+			</div>
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>BIÊN BẢN SỬ DỤNG PHƯƠNG TIỆN<br>KỸ THUẬT PHÒNG, CHỐNG TỘI PHẠM<br>
+			</div><br>
+			<span class="TAB"></span>
+				<span style='float:left'>
+				<span class='TAB'></span>Hồi <span class="o_nhap_0_5cm border"  contenteditable="true" ></span> giờ <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" ></span> ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span>, tại <span style="min-width:265px" class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span><br />	
+                <span class='TAB'></span>Chúng tôi gồm: <br/>
+				
+				<span class='TAB'></span><em>Đại diện bên sử dụng phương tiện kỹ thuật phòng, chống tội phạm:</em><br/> <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" style='width:100%'></span><br/>
+				Ông/bà: <span class="o_nhap_0_5cm border"  contenteditable="true" ></span><span class='TAB'></span>
+				Chức vụ: <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" onkeypress="document.getElementById('Span36')..style.border = ''"></span>
+				làm đại diện<br/>
+				
+				<span class='TAB'></span><em>Đại diện bên yêu cầu áp dụng biện pháp kỹ thuật phòng, chống tội phạm:</em><br/> <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" style='width:100%'></span><br/>
+				Ông/bà: <span class="o_nhap_0_5cm border"  contenteditable="true" ></span><span class='TAB'></span>
+				Chức vụ: <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" onkeypress="document.getElementById('Span36')..style.border = ''"></span>
+				làm đại diện<br/>
+				
+				<span class='TAB'></span>Đã tiến hành phương tiện kỹ thuật phòng, chống tội phạm cụ thể như sau:<br/>
+				
+				<span class='TAB'></span>1. Mô tả địa điểm bố trí phương tiện, trong trường hợp dùng hóa chất để đánh dấu thì mô tả kỹ vật được đánh dấu<em style='font-size:12pt'> (có cơ đồ hiện trường kèm theo):</em></br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" <span class='TAB'></span></span><br/>
+				
+				<span class='TAB'></span>2. Các phương tiện KTPCTP được sử dụng<em style='font-size:12pt'> (loại phương tiện, thời gian, địa điểm, cách bố trí, người thực hiện, kèm theo sơ đồ bố trí và quy trình sử dụng)</em>:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+				
+				<span class='TAB'></span>3. Người được cơ quan Công an trưng dụng đã thực hiện cam đoan giữ bí mật<em style='font-size:12pt'> (ghi rõ họ tên, nơi ở, nơi công tác)</em>:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+								
+				<span class='TAB'></span>4. Địa điểm để truyền tín hiệu báo động đến 
+				<font style='font-size:12pt; font-style:italic'>(có phương án bao vây bắt thủ phạm kèm theo)</font>:<br/>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+				
+				<span class='TAB'></span>5. Ngày bố trí xong phương tiện KTPCTP:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+				
+				<span class='TAB'></span>6. Kết quả:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+								
+				<span class='TAB'></span>Biên bản lập xong hồi <span class="o_nhap_0_5cm border"  contenteditable="true" ></span> giờ <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" ></span> ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span>, những người có tên kể trên đã đọc lại và cùng ký tên xác nhận dưới đây.<br />	
+				</span>
+			
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+						<span class=''>BÊN YÊU CẦU</span><br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+					<td class='ta_center'>
+						<span class=''>BÊN TIẾN HÀNH</span><br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+    <meta charset="UTF-8">
+    <title>Biểu mẫu M1</title>
+    <style type="text/css">
+        /*---------------------------------------CSS nội dung----------------------------------------*/
+        body{font-size:16pt;font-family:Times New Roman;font-style:normal;background: #ccc}
+        .PageA4{width: 180mm;min-height: 260mm;background: #FFF;margin: 0 auto;-webkit-box-shadow: 0 0 6px 4px #68696b;-moz-box-shadow: 0 0 6px 4px #68696b;box-shadow: 0 0 6px 4px #68696b;padding: 15mm 15mm 15mm 25mm;}
+        .Wrap{width:100%; margin:0 auto;text-align:justify;}
+        .Nhap_don_vi{width:5.5cm;font-size:10pt;text-align:center;float:left}
+        .Nhap_don_vi .o_span_nhap{display:inline-block;min-height:20px;vertical-align:top;width:100%;font-weight:bold;text-transform:uppercase;border:1px solid #CCC;font-size:12pt;}
+
+        .Quoc_hiêu{width:8.4cm;
+float:left;font-weight:bold;text-align:center
+        }
+        .Ten_Bieumau{width:inherit;float:right;font-size:12pt}
+        ._date{width:73%;float:right;text-align:right;font-style:italic}
+        ._date .o_span_nhap{display:inline-block;min-height:20px;min-width:20px;border:1px solid #CCC}
+        .o_span_nhap_date{display:inline-block;min-height:20px;min-width:20px;border:1px solid #CCC}
+        .Content{clear:both}
+        .Text_center{text-align:center}
+        .Text_justify{text-align:justify}
+        .Text_left{text-align:left}
+        .Text_right {text-align:right}
+        .Text_bold{font-weight:bold}
+        .Content .o_span_nhap{display:inline-block;min-height:20px;vertical-align:top;min-width:20px;text-align:left;border:1px solid #CCC}
+        #ghichuB1_1{color:Red;float:right;display:none;font-size:12pt;font-style:italic}
+        #ghichuB1_2{color:Red;float:right;display:none;font-size:12pt;font-style:italic}
+        #btn_ghichu{position:fixed;top:0px; right:0px;}
+        .o_span_nhap_nhieu_dong{width:100%;border:1px solid #CCC;display:inline-block;width:100%;border:1px solid #CCC;display:inline-block;min-height:20px;}
+        .Page2{clear:both;width:100%;}
+        .Foter{width:100%;display: inline-flex}
+        .Foter .o_span_nhap{display:inline-block;min-height:20px;vertical-align:top;min-width:100px;text-align:left;border:1px solid #CCC}
+        .edit_font{position:fixed;top:0px; left:0px;}
+         .ghichu{color: red;font-size:10pt;clear:both}       
+        /*---------------------------------------END CSS nội dung----------------------------------------*/   
+        /*---------------------------------------CSS Print-----------------------------------------------*/
+           @media print 
+            {   #btn_ghichu,.edit_font{display:none}
+                .page1{page-break-after:always}
+                .ghichu{display:none}   
+            }
+        /*---------------------------------------CSS Print-----------------------------------------------*/
+        @media print
+        {   #btn_ghichu,.edit_font,.button_print,.button_save,.button_reload{display:none}
+            .o_span_nhap_nhieu_dong,.Nhap_don_vi .o_span_nhap,._date .o_span_nhap,.Content .o_span_nhap,.Foter .o_span_nhap{border:none}
+            .page1{page-break-after:always}
+            .PageA4{padding: 0;border: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none}
+            .Page2{margin-top: -55px}
+        }
+        /*--------------------------------------END CSS Print--------------------------------------------*/
+        /*---------------------------------------CSS PAGE------------------------------------------------*/
+        @page
+        {
+            margin:10mm 05mm 05mm 15mm
+        }
+        /*---------------------------------------END CSS PAGE--------------------------------------------*/
+        .button_print{position: fixed;top:50px;right:10px;cursor: pointer;width:45px;height: 45px;text-align: center;background:transparent}
+                .button_save{position: fixed;top:120px;right:13px;cursor: pointer;width:40px;height: 40px; background:transparent}
+                .button_reload{position: fixed;top:180px;right:7px;cursor: pointer;width:50px;height: 50px ;background:transparent}
+        /*--------------------------------------END CSS Print--------------------------------------------*/
+        /*---------------------------------------CSS PAGE------------------------------------------------*/
+            @page
+            {
+            margin:8mm 8mm 5mm 15mm
+            }
+        /*---------------------------------------END CSS PAGE--------------------------------------------*/
+        .style1
+        {
+            width: inherit;
+            float: right;
+            font-size: 12pt;
+            text-align: center;
+        }
+    
+        .style2
+        {
+            font-style: normal;
+        }
+    
+    </style>
+    <!---------------------------------------CÁC HÀM XỬ LÝ-------------------------------------------------------->
+    <script type="text/javascript">
+    //-----------------------------------------Hàm căn chỉnh phông chữ----------------------------------------//
+        function chinh_co_chu() {
+            var range = window.getSelection().getRangeAt(0),
+            content = range.extractContents(),
+            div = document.createElement('div');
+            div.appendChild(content);
+            range.insertNode(div);
+            var size = document.getElementById('fontSize').value;
+            div.style.fontSize = size;
+            
+       }
+      
+       function changeLineHeight(sel) {
+           var t = document.getElementById('textcontent');
+           t.style.lineHeight = sel.value;
+       }
+       function can_le() {
+           var range = window.getSelection().getRangeAt(0),
+            content = range.extractContents(),
+           div = document.createElement('div');
+           div.appendChild(content);
+           range.insertNode(div);
+           var Align = document.getElementById('Align').value;
+           div.style.textAlign = Align;
+           clearSelection();
+
+       }
+       function clearSelection() {
+           if (window.getSelection) {
+               window.getSelection().removeAllRanges();
+           } else if (document.selection) {
+               document.selection.empty();
+           }
+       }
+       //-------------------------------------------------------------------------------------------------------//
+       //-----------------------------------------Hàm căn chỉnh phông chữ----------------------------------------//
+        function doc_ghichu() {
+           window.open('file:///C:/BieuMau_HSAN/TTHD/chinh_sua_van_ban.pdf', '_blank', 'height=500px,width=800px,top=150px,left=100px,', '')
+	    }
+	   
+        //-------------------------------------------------------------------------------------------------------//
+    </script>
+    <!---------------------------------------KẾT THÚC CÁC HÀM XỬ LÝ------------------------------------------------>
+    <!--**********************************************************BUTTON SAVE***********************************************************************-->
+    <script type="text/javascript">
+        function save() {
+
+            var d= new Date();
+            var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="../C://BieuMauHSNV/Image/print.png" class="button_print"  width="50px" height="50px" onclick="window.print();"><br/>'+'<img src="C://BieuMauHSNV/C://BieuMauHSNV/Image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="C://BieuMauHSNV/C://BieuMauHSNV/Image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+            var bl = new Blob(htmlContent, {type: "text/html"});
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(bl);
+            // a.download = "bieu_mau"+"_"+getDate()+".html";
+            a.download = "*"+".html";
+            a.hidden = true;
+            document.body.appendChild(a);
+            a.innerHTML = document.getElementById('bieumau').innerHTML ;
+            a.click();
+            document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+        }
+    </script>
+    <!--**********************************************************END BUTTON SAVE*******************************************************************-->
+</head>
+<body >
+<div class="PageA4">
+    <!--------------------------------------------------------------Chỉnh font chữ------------------------------------------------------------------->
+    <!--<div class="edit_font">
+        <select onchange="chinh_co_chu(this)" id="fontSize">
+            <option value="---" selected="selected">Cỡ chữ</option>
+            <option value="5pt">5pt</option>
+            <option value="6pt">6pt</option>
+            <option value="7pt">7pt</option>
+            <option value="8pt">8pt</option>
+            <option value="9pt">9pt</option>
+            <option value="10pt">10pt</option>
+            <option value="11pt">11pt</option>
+            <option value="12pt">12pt</option>
+            <option value="13pt">13pt</option>
+            <option value="14pt">14pt</option>
+            <option value="15pt">15pt</option>
+            <option value="16pt">15pt</option>
+        </select>
+
+        <select id="lineHeight" onchange="changeLineHeight(this)">
+            <option value="---" selected="selected">Khoảng cách dòng</option>
+            <option value="1">1</option>
+            <option value="1.25">1.25</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+        </select>
+        <select onchange="can_le()" id="Align">
+            <option value="---" selected="selected">Căn lề</option>
+            <option value="justify">căn đều 2 bên</option>
+            <option value="left">căn trái</option>
+            <option value="right">căn phải</option>
+            <option value="center">căn giữa</option>
+        </select>
+    </div>-->
+    <!--------------------------------------------------------------END chỉnh font chữ------------------------------------------------------------------->
+    <!--------------------------------------------------------------đọc ghi chú------------------------------------------------------------------->
+    <div id="btn_ghichu">
+        <input type="button" value="Hướng dẫn chỉnh sửa văn bản" style="font-size:10pt;display:none" onclick="doc_ghichu()" />
+    </div>
+    <!--------------------------------------------------------------END đọc ghi chú--------------------------------------------------------------->
+    <div class="Wrap" id="textcontent">
+        <!--------------------------------------------------------------HEADER------------------------------------------------------------------->
+        <div class="Header">
+            <div class="Nhap_don_vi">
+                <span>ĐƠN VỊ: <span class="o_span_nhap" id="Span2" contenteditable="true" onkeypress="document.getElementById('Span2').style.border = 'none'" style="min-width:150px"></span>
+                <br />
+                Số: <span class="o_span_nhap" id="Span34" contenteditable="true" onkeypress="document.getElementById('Span2').style.border = 'none'" style="min-width:188px"></span></span>
+            </div>
+            <div class="style1"><strong>MẪU M1</strong><br />
+                <font size="3"><em>Độ mật:</em><strong> </strong>TỐI MẬT</font></div>
+            <div class="_date">
+                <span class="o_span_nhap" id="Span1" contenteditable="true" onkeypress="document.getElementById('Span1').style.border = 'none'"></span>, ngày
+                <span class="o_span_nhap" id="Span3" contenteditable="true" onkeypress="document.getElementById('Span3').style.border = 'none'"></span> tháng
+                <span class="o_span_nhap" id="Span4" contenteditable="true" onkeypress="document.getElementById('Span4').style.border = 'none'"></span> năm
+                <span class="o_span_nhap" id="Span5" contenteditable="true" onkeypress="document.getElementById('Span5').style.border = 'none'"></span>
+            </div>
+        </div>
+        <!--------------------------------------------------------------END HEADER----------------------------------------------------------------> 
+        <!--------------------------------------------------------------CONTENT------------------------------------------------------------------->
+        <div class="Content">
+            <!--------------------------PAGE1-------------------------------->
+            <div class="style2">
+                <p class="Text_center"><span class="so_ghichu">
+                    <em>
+                    Kính gửi:</em> Đ/c</span> <span class="o_span_nhap" id="Span6" contenteditable="true" style="width:200px" onkeypress="document.getElementById('Span6').style.display = 'unset';document.getElementById('Span6').style.border = 'none'" onfocus="document.getElementById('ghichuB1_1').style.display = 'block';" onblur="document.getElementById('ghichuB1_1').style.display = 'none';"></span>
+                <div class="Text_center">
+                    BÁO CÁO<br />
+                    <strong>DỰ TOÁN MẬT PHÍ NĂM 20</strong><span id="_NAM" class="o_nhap" 
+                        contenteditable="true" onkeyup="gioihankytu(document.getElementById('_NAM'),2)" 
+                        style="min-width:20px;font-size:16pt;height:0.5cm;text-align:left;"></span>
+                        <span class="o_span_nhap" id="Span35" contenteditable="true" onkeypress="document.getElementById('Span5').style.border = 'none'"></span>
+                        <br />
+                    <span class="style13" style="font-size: 12pt"><em>(Ban hành kèm theo Thông tư số: 
+                    41/2015/TT-BCA-A61,<br />
+&nbsp;Ngày 24/8/2015 của Bộ trưởng Bộ Công an)</em></span></div>
+                <p class="Text_left">
+                    <strong>1-</strong> Tính đến ngày: <span class="o_span_nhap" id="Span10" contenteditable="true" onkeypress="document.getElementById('Span10').style.border = 'none'"></span>&nbsp;tháng <span class="o_span_nhap" id="Span11" contenteditable="true" onkeypress="document.getElementById('Span11').style.border = 'none'"></span>&nbsp;năm <span class="o_span_nhap" id="Span12" contenteditable="true" onkeypress="document.getElementById('Span12').style.border = 'none'"></span>
+                    <br />
+                    - Điều tra cơ bản: <span Điều tra cơ bản:></span> <span class="o_span_nhap" id="Span36" contenteditable="true"
+                        onkeypress="document.getElementById('Span36').style.border = 'none'"></span>&nbsp;địa bàn <span class="o_span_nhap" id="Span37" contenteditable="true"
+                        onkeypress="document.getElementById('Span36').style.border = 'none'"></span>&nbsp;mục
+                    tiêu <span class="o_span_nhap" id="Span38" contenteditable="true" 
+                        onkeypress="document.getElementById('Span38').style.border = 'none'"></span>&nbsp;tuyến <span class="o_span_nhap" id="Span39" contenteditable="true"
+                        onkeypress="document.getElementById('Span38').style.border = 'none'"></span>&nbsp;lĩnh
+                    vực, <span class="o_span_nhap" id="Span40" contenteditable="true" 
+                        onkeypress="document.getElementById('Span40').style.border = 'none'"></span>&nbsp;chuyên đề đối tượng.<br />
+                    - QLNV: <span class="o_span_nhap" id="Span41" contenteditable="true" 
+                        onkeypress="document.getElementById('Span41').style.border = 'none'"></span>&nbsp;đối tượng&nbsp;(Loại A: <span class="o_span_nhap" id="Span42" contenteditable="true"
+                        onkeypress="document.getElementById('Span41').style.border = 'none'"></span>&nbsp;Loại
+                    B: <span class="o_span_nhap" id="Span43" contenteditable="true" 
+                        onkeypress="document.getElementById('Span43').style.border = 'none'"></span>
+                    ).<br />
+                    - KTNV: <span class="o_span_nhap" id="Span44" contenteditable="true" 
+                        onkeypress="document.getElementById('Span44').style.border = 'none'"></span>&nbsp;đối tượng (Thời hạn kiểm tra: <span class="o_span_nhap" id="Span45" contenteditable="true"
+                        onkeypress="document.getElementById('Span44').style.border = 'none'"></span>&nbsp;dưới
+                    12 tháng; <span class="o_span_nhap" id="Span46" contenteditable="true" 
+                        onkeypress="document.getElementById('Span46').style.border = 'none'"></span>&nbsp;trên 12 tháng).<br />
+                    - Đấu tranh: <span class="o_span_nhap" id="Span47" contenteditable="true" 
+                        onkeypress="document.getElementById('Span47').style.border = 'none'"></span>&nbsp;chuyên án <span class="o_span_nhap" id="Span48" contenteditable="true"
+                        onkeypress="document.getElementById('Span47').style.border = 'none'"></span>&nbsp;đối
+                    tượng).<br />
+                    - Truy xét: <span class="o_span_nhap" id="Span50" contenteditable="true" 
+                        onkeypress="document.getElementById('Span50').style.border = 'none'"></span>
+                    &nbsp;vụ.).<br />
+   &nbsp;vụ).<br />
+                    - Truy tìm: <span class="o_span_nhap" id="Span53" contenteditable="true" 
+                        onkeypress="document.getElementById('Span53').style.border = 'none'"></span>&nbsp;vụ).<br />
+                    - Xử lý, xác minh tin ban đầu: <span class="o_span_nhap" id="Span56" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span56').style.border = 'none'"></span>&nbsp;vụ).<br />
+                    -Sử dụng:<br />
+                    + Đặc tình: <span class="o_span_nhap" id="Span59" contenteditable="true" 
+                        onkeypress="document.getElementById('Span59').style.border = 'none'"></span>&nbsp;(Khá <span class="o_span_nhap" id="Span60" contenteditable="true"
+                        onkeypress="document.getElementById('Span59').style.border = 'none'"></span>
+                    ;Trung bình:<span class="o_span_nhap" id="Span61" contenteditable="true" 
+                        onkeypress="document.getElementById('Span61').style.border = 'none'"></span>;&nbsp;Kém).<br />
+                    + Cộng tác viên: <span class="o_span_nhap" id="Span107" contenteditable="true" 
+                        onkeypress="document.getElementById('Span107').style.border = 'none'"></span>
+                    &nbsp;(Khá <span class="o_span_nhap" id="Span108" contenteditable="true" 
+                        onkeypress="document.getElementById('Span108').style.border = 'none'"></span>
+                    ;Trung bình:<span class="o_span_nhap" id="Span109" contenteditable="true" 
+                        onkeypress="document.getElementById('Span109').style.border = 'none'"></span>;&nbsp;Kém).<br />
+                    + Cơ sở bí mật: <span class="o_span_nhap" id="Span110" contenteditable="true" 
+                        onkeypress="document.getElementById('Span110').style.border = 'none'"></span>
+                    &nbsp;(Khá <span class="o_span_nhap" id="Span111" contenteditable="true" 
+                        onkeypress="document.getElementById('Span111').style.border = 'none'"></span>
+                    ;Trung bình:<span class="o_span_nhap" id="Span112" contenteditable="true" 
+                        onkeypress="document.getElementById('Span112').style.border = 'none'"></span>;&nbsp;Kém).<br />
+                    + Hộp thư bí mật: <span class="o_span_nhap" id="Span62" contenteditable="true" 
+                        onkeypress="document.getElementById('Span62').style.border = 'none'"></span>&nbsp;(tăng <span class="o_span_nhap" id="Span63" contenteditable="true"
+                        onkeypress="document.getElementById('Span62').style.border = 'none'"></span>
+                    ; giảm: <span class="o_span_nhap" id="Span64" contenteditable="true" 
+                        onkeypress="document.getElementById('Span64').style.border = 'none'"></span>
+                    so với quý(năm) trước).
+                    <br />
+                    + TSXHH <span class="o_span_nhap" id="Span113" contenteditable="true" 
+                        onkeypress="document.getElementById('Span113').style.border = 'none'"></span>
+                    &nbsp;(tăng <span class="o_span_nhap" id="Span114" contenteditable="true" 
+                        onkeypress="document.getElementById('Span114').style.border = 'none'"></span>
+                    ; giảm: <span class="o_span_nhap" id="Span115" contenteditable="true" 
+                        onkeypress="document.getElementById('Span115').style.border = 'none'"></span>
+                    so với quý(năm) trước).
+                    <br />
+                    + Đầu mối nghiệp vụ: <span class="o_span_nhap" id="Span116" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span116').style.border = 'none'"></span>
+                    &nbsp;(tăng <span class="o_span_nhap" id="Span117" contenteditable="true" 
+                        onkeypress="document.getElementById('Span117').style.border = 'none'"></span>
+                    ; giảm: <span class="o_span_nhap" id="Span118" contenteditable="true" 
+                        onkeypress="document.getElementById('Span118').style.border = 'none'"></span>
+                    so với quý(năm) trước).
+                    <br />
+                    <strong>2-</strong>&nbsp;Dự kiến trong thời gian tới sẽ triển khai 
+                    <span class="o_span_nhap" id="Span119" contenteditable="true" 
+                        onkeypress="document.getElementById('Span119').style.border = 'none'"></span>&nbsp;kế hoạch, phương án phản gián (kèm theo báo cáo riêng).
+                    <br />
+                    <strong>3-</strong> Mật phí năm trước:<br />
+                    - Tồn cũ chuyển sang: <span class="o_span_nhap" id="Span120" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span120').style.border = 'none'"></span>
+                    <br />
+                    - Được cấp trong năm: <span class="o_span_nhap" id="Span121" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span121').style.border = 'none'"></span>
+                    <br />
+                    - Đã chi: <span class="o_span_nhap" id="Span122" contenteditable="true" 
+                        onkeypress="document.getElementById('Span122').style.border = 'none'"></span>
+                    <br />
+                    - Tồn chuyển sang năm sau: <span class="o_span_nhap" id="Span123" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span123').style.border = 'none'"></span>
+                    <br />
+                    <strong>4-</strong> Dự toán năm 20 <span class="o_span_nhap" id="Span134"
+                        contenteditable="true" 
+                        on Dự toán năm 20 <span class="o_span_nhap" id="Span124" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span124').style.border = 'none'"></span>
+                    :<br />
+                    - Tổng số: <span class="o_span_nhap" id="Span125" contenteditable="true" 
+                        onkeypress="document.getElementById('Span125').style.border = 'none'"></span>&nbsp;đ<br />
+                    - Phục vụ cho các yêu cầu sau:<br />
+                    + Công tác nghiệp vụ thường xuyên: <span class="o_span_nhap" id="Span127" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span10').style.border = 'none'"></span>&nbsp;đ<br />
+                    + Đấu tranh chuyên án, kế hoạch trinh sát: <span class="o_span_nhap" 
+                        id="Span128" contenteditable="true" 
+                        onkeypress="document.getElementById('Span127').style.border = 'none'"></span>&nbsp;đ<br />
+                    + Yêu cầu nghiệp vụ khác: <span class="o_span_nhap" id="Span129" 
+                        contenteditable="true" 
+                        onkeypress="document.getElementById('Span129').style.border = 'none'"></span>
+                    &nbsp;đ<br />
+                    - Truy tìm: <span class="o_span_nhap" id="Span126" contenteditable="true" 
+                        onkeypress="document.getElementById('Span126').style.border = 'none'"></span>
+                    <br />
+                    Báo cáo đề nghị đồng chí phê duyệt./.<br />
+                </p>
+                <p class="Text_center" style="width:300px;margin-left:auto">
+                    <strong>THỦ TRƯỞNG ĐƠN VỊ<br />
+                    </strong><em style="font-size:12pt">(Ký tên, đóng dấu)</em><strong> </strong>&nbsp;<br />
+                </p>
+                
+            </div>
+            <font size="3"></font><em></em>
+                
+            <!--------------------------END PAGE1---------------------------->
+            <!--------------------------PAGE2-------------------------------->
+            <div class="Page2">
+               
+            </div>
+            <!--------------------------END PAGE2---------------------------->
+        </div>
+        <!--------------------------------------------------------------END CONTENT--------------------------------------------------------------->
+        <!--------------------------------------------------------------FOOTER-------------------------------------------------------------------->
+        <div class="Foter">
+           
+         </div>
+         <div class="clear">
+            <font size="3">
+    
+    <div class="ghichu">
+        Ghi chú: Mẫu này dùng trong các trường hợp sau:<em><span 
+            class="style2"><br />
+               </span></em>- Đơn bị cấp phòng dự toán báo cáo Cục, An ninh cấp tỉnh;<br />
+            - Đơn vị cấp Cục, An ninh cấp tỉnh dự toán báo cáo Tổng cục An ninh	
+    </div>
+        
+             </font></div>
+        <!--------------------------------------------------------------END FOOTER---------------------------------------------------------------->
+    
+        </em>
+    
+    </div>
+
+</div>
+</div>
+<img src="../C://BieuMauHSNV/Image/print.png" class="button_print"  width="50px" height="50px" onclick="window.print();"><br/>
+<img src="../C://BieuMauHSNV/Image/save.png" class="button_save" width="45px" height="45px" onclick="save()">
+<img src="../C://BieuMauHSNV/Image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

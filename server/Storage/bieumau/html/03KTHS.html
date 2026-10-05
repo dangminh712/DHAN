@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu 03KTHS</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				<span contenteditable class=" fontBold font12 co_quan"></span><br>
+				
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu 03KTHS</span><br>
+				<span class="font8">BH theo TT số 30/2014/TT-BCA</span><br>
+				<span class="font8">Ngày 23/7/2014</span><br>
+			</div>
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>BIÊN BẢN GIÁM ĐỊNH DẤU VẾT SÚNG, ĐẠN<br>
+			<span class='fontLow'>Vụ </span><span class='o_nhap_1cm border fontLow ta_left' contenteditable onkeypress='hide_note("lbl")'>
+				<label class='ghichu' id='lbl'>Ghi tên vụ việc, thời gian, địa điểm xảy ra theo Quyết định trưng cầu</span>
+			</span>
+			</div><br>
+			<span class='TAB'></span>Ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span>, cơ quan giám định <span class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span>
+				đã nhận được Quyết định trưng cầu giám định/ bổ sung/ lại lần số 1, số <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" ></span> ngày <span class="o_nhap_0_5cm border" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> của <span style="min-width:20px" class="o_nhap_0_5cm border" id="Span8119" contenteditable="true" onkeypress='kounset(id)'></span>/ Yêu cầu giám định ngày <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" ></span> ngày <span class="o_nhap_0_5cm border" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> của <span style="min-width:20px" class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span>.<br />
+				<span class='TAB'></span>Từ <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span> ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span>
+				đến <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span> ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span>,tại <span class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span>
+				<br/>
+				<span class='TAB'></span>Chúng tôi gồm:<font style='font-size:12pt; font-style:italic'>[Ghi rõ cấp bậc, họ tên, lĩnh vực giám định được bổ nhiệm, số thể đối với giám định viên; cấp bậc, họ tên đối với trọ lý giám định]</font> </br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+				<span class='TAB'></span>Đã tiến hành giám định theo yêu cầu trong Quyết định trưng cầu trên/ Yêu cầu giám định trên, kết quả như sau:<br/>
+				
+				<div style='text-align:center;font-weight:bold'><br>I- TÌNH TRẠNG ĐỐI TƯỢNG CẦN GIÁM ĐỊNH</div>
+				<span class='TAB'></span><b>1. Tình trạng đối tượng cần giám định:</b></br>
+				<div class='font12 font_I'><span class='TAB'></span>[Ghi rõ tình trạng niêm phong, cách đóng gói bảo quản, tên, số lượng, chất lượng của từng đối tượng giám định]</div>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				</span><br/>
+				<span class='TAB'></span><b>2. Tình trạng mẫu so sánh:</b></br>
+				<div class='font12 font_I'><span class='TAB'></span>[Ghi rõ tình trạng niêm phong, cách đóng gói bảo quản, tên, số lượng, chất lượng của từng mẫu so sánh]</div>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				</span><br/>
+				
+				<div style='text-align:center;font-weight:bold'><br>II- YÊU CẦU GIÁM ĐỊNH<br/>
+				<font style='font-size:12pt;font-style:italic;font-weight:normal'>[Ghi rõ các câu hỏi, yêu cầu giám định]</font>
+				</div>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				</span><br/>
+				
+				<div style='text-align:center;font-weight:bold'><br>III- PHƯƠNG PHÁP GIÁM ĐỊNH, KẾT QUẢ, NHẬN XÉT VÀ ĐÁNH GIÁ<br/>
+				</div>
+				<span class='TAB'></span><b>1. Đặc điểm đối tượng giám định:</b></br>
+				<span class='TAB'></span><b>a. Đầu đạn:</b></br>
+				<span class='TAB'></span>- Số lượng: <span class="o_nhap_0_5cm border" id="Span350" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				<span class='TAB'></span>- Hình dạng: <span class="o_nhap_0_5cm border" id="Span351" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				<span class='TAB'></span>- Biến dạng: <span class="o_nhap_0_5cm border" id="Span352" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				<span class='TAB'></span>- Màu sắc: <span class="o_nhap_0_5cm border" id="Span353" contenteditable="true" onkeypress='kounset(id')> </span><br/>
+				<span class='TAB'></span>- Chiều dài: <span class="o_nhap_0_5cm border" id="Span354" contenteditable="true"> </span>
+				<span class='TAB'></span>- Đường kính: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Loại đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Thường dùng cho loại súng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Số lượng, hướng đấu vết đường xước: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Góc, hướng đấu vết đường xước: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Yếu tố giám định: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				
+				<span class='TAB'></span><b>b. Vỏ đạn:</b></br>
+				<span class='TAB'></span>- Số lượng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Hình dạng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Biến dạng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Ký hiệu: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Màu sắc, vật liệu, chiều dài: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Đường kính miệng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span>
+				<span class='TAB'></span>- Đường kính lớn nhất: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Loại đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Nước sản xuất: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Thường dùng cho loại súng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Dấu vết móc vỏ đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Dấu vết hất vỏ đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Dấu vết kim hỏa: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Dấu vết mặt khóa nòng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Dấu vết cửa thoát vỏ đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Dấu vết gờ dẫn đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Dấu vết ổ chứa đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Tình trạng dấu vết: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Yếu tố giám định: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				
+				<span class='TAB'></span><b>c. Đạn:</b></br>
+				<table style="width: 100%;font-size:16pt;table-layout:fixed" border="1pt" cellpadding="0" cellspacing="0" id="Table3">
+					<tr style='text-align:center'>
+						<td class="ta_center font12"rowspan="2" style='width:40px'>STT</td>
+						<td class="ta_center font12" rowspan="2">LOẠI ĐẠN</td>
+						<td class="ta_center font12" rowspan="2">SỐ LƯỢNG</td>
+						<td class="ta_center font12" colspan="2">VỎ ĐẠN</td>
+						<td class="ta_center font12" colspan="2">ĐẦU ĐẠN</td>
+						<td class="ta_center font12" rowspan="2">DÙNG CHO LOẠI SÚNG</td>
+						<td class="ta_center font12" rowspan="2">KÝ HIỆU</td>
+					</tr>
+					<tr>
+						<td style="text-align:center" class="ta_center font12">Hình dáng</td>
+						<td style="text-align:center" class="ta_center font12">Chiều dài</td>
+						<td style="text-align:center" class="ta_center font12">Hình dáng</td>
+						<td style="text-align:center" class="ta_center font12">Chiều dài</td>
+					</tr>
+					<tr>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td"  >1</div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					</tr><!--Dòng mẫu-->
+					<tr>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td"  >2</div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+						<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					</tr>
+				</table>
+		<div>
+            <input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3')" />
+            <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3')" />
+        </div>
+                    <script type="text/javascript">
+                        function addRow3(tableID) {
+
+                            var table = document.getElementById(tableID);
+
+                            var rowCount = table.rows.length;
+                            var row = table.insertRow(rowCount);
+
+                           var table1_cell1 = row.insertCell(0);
+                            table1_cell1.innerHTML = rowCount-1;
+                            table1_cell1.setAttribute('class', 'demo ta_center');
+
+                            var table1_cell2 = row.insertCell(1);
+                            var table1_element1 = document.createElement("div");
+                            table1_cell2.setAttribute('contentEditable', 'true');
+                            table1_cell2.setAttribute('class', 'ta_center');
+
+
+                            var table1_cell3 = row.insertCell(2);
+                            var table1_element2 = document.createElement("div");
+                            table1_cell3.setAttribute('contentEditable', 'true');
+                            table1_cell3.setAttribute('class', 'ta_center');
+
+                            var table1_cell4 = row.insertCell(3);
+                            var table1_element3 = document.createElement("div");
+                            table1_cell4.setAttribute('contentEditable', 'true');
+                            table1_cell4.setAttribute('class', 'ta_center');
+							
+							var table1_cell5 = row.insertCell(4);
+                            var table1_element4 = document.createElement("div");
+                            table1_cell5.setAttribute('contentEditable', 'true');
+                            table1_cell5.setAttribute('class', 'ta_center');
+							
+							var table1_cell6 = row.insertCell(5);
+                            var table1_element5 = document.createElement("div");
+                            table1_cell6.setAttribute('contentEditable', 'true');
+                            table1_cell6.setAttribute('class', 'ta_center');
+							
+							var table1_cell7 = row.insertCell(6);
+                            var table1_element6 = document.createElement("div");
+                            table1_cell7.setAttribute('contentEditable', 'true');
+                            table1_cell7.setAttribute('class', 'ta_center');
+							
+							var table1_cell8 = row.insertCell(7);
+                            var table1_element7 = document.createElement("div");
+                            table1_cell8.setAttribute('contentEditable', 'true');
+                            table1_cell8.setAttribute('class', 'ta_center');
+							
+							var table1_cell9 = row.insertCell(8);
+                            var table1_element8 = document.createElement("div");
+                            table1_cell9.setAttribute('contentEditable', 'true');
+                            table1_cell9.setAttribute('class', 'ta_center');
+						}
+
+                        function deleteRow3(tableID) {
+                            var table = document.getElementById(tableID);
+                            var rowCount = table.rows.length;
+                            for (i = rowCount - 1; i > 1; i--) {
+                                document.getElementById("Table3").deleteRow(i);
+                                break;
+                            }
+                        }
+					</script>
+				
+				<span class='TAB'></span><b>d. Súng:</b></br>
+				<span class='TAB'></span>- Số lượng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Loại súng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span>
+				<span class='TAB'></span>- Cỡ: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Số thân: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Số nòng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Số khóa nòng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Nước sản xuất, thời gian sản xuất: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Đặc điểm bên ngoài(kim loại, gỗ, nhựa): <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Tình trạng búa, cò: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Tình trạng khóa nòng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Tình trạng buồng đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Tình trạng nòng súng: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Số lượng, hướng đường xoắn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Tình trạng kỹ thuật: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Các đặc điểm khác: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				
+				<span class='TAB'></span><b>2. Bắn thực nghiệm:</b></br>
+				<span class='TAB'></span>- Số lượng, ký hiệu đạn: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Điều kiện bắn thực nghiệm: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Kết quả thực nghiệm: <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true"> </span><br/>
+				<span class='TAB'></span>- Đánh giá đặc điểm dấu vết do súng để lại trên đầu đạn, vỏ đạn: <span class="o_nhap_0_5cm border" id="D" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				
+				<span class='TAB'></span><b>3. Nghiên cứu so sánh:</b></br>
+				<span class='TAB'></span>- Dấu vết dùng để nghiên cứu so sánh: <span class="o_nhap_0_5cm border" id="D" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				<span class='TAB'></span>- Đặc điểm chung và riêng biệt của dấu vết: <span class="o_nhap_0_5cm border" id="D" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				<span class='TAB'></span>- Kết quả nghiên cứu sơ sánh: <span class="o_nhap_0_5cm border" id="D" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				<span class='TAB'></span>- Những đặc điểm không phù hợp<em>(giải thích)</em>: <span class="o_nhap_0_5cm border" id="D1" contenteditable="true" onkeypress='kounset(id)'> </span><br/>
+				
+				
+				
+				<div style='text-align:center;font-weight:bold;width:100%'><br>IV- KẾT LUẬN<br/>
+				<font style='font-size:12pt;font-style:italic;font-weight:normal'>[Ghi những kết luận theo nội dung trưng cầu/ Yêu cầu giám định]</font>
+				</div>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true">
+				</span><br/>
+				
+				<div style='text-align:center;font-weight:bold'><br>V- XỬ LÝ ĐỐI TƯỢNG GIÁM ĐỊNH CÒN LẠI SAU GIÁM ĐỊNH</div>
+				<span class='TAB'></span><b>1. Lưu đối tượng giám định:</b><span class='TAB'></span><span class='TAB'></span><span class='TAB'></span><span class='TAB'></span><span class='TAB'></span><span class='TAB'></span><span class='TAB'></span><span class='TAB'></span>
+				<span class='TAB'></span>
+				<font style='font-size:12pt; font-style:italic'> <span style='float:left'>
+				<span class='TAB'></span>[Ghi rõ tên, số lượng, chất lượng, cách đóng gói, niêm phong và bảo quản của từng đối tượng còn lại sau giám định; địa diểm lưu giữ].</span></font> 
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				</span><br/>
+				<span class='TAB'></span><b>2. Hoàn trả đối tượng giám định:</b></br>
+				<div class='font12 font_I'><span class='TAB'></span>[Ghi rõ tên, số lượng, chất lượng, cách đóng gói, niêm phong và bảo quản của từng đối tượng còn lại sau giám định; địa điểm hoàn trả].</div>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				</span><br/>
+				
+				<span class='TAB'></span>Biên bản lập xong hồi <span class="o_nhap_0_5cm border"  contenteditable="true" ></span> giờ <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" ></span> ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span>, giám định viên và trợ lý giám định có tên trên đã đọc lại và ký tên xác nhân dưới đây.<br />	
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+						<span class=''>TRỢ LÝ GIÁM ĐỊNH</span><br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+					<td class='ta_center'>
+						<span class=''>GIÁM ĐỊNH VIÊN</span><br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

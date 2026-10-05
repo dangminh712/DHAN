@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B23-a</title>
+	<link rel="stylesheet" href="/bieumau/style/style_for_an.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+		{
+			var span_gt=document.getElementById('nhap_gt').innerHTML;
+			var DDL_GT=document.getElementById('gioi_tinh');
+			switch (span_gt)
+			{
+				case 'Nam':
+					DDL_GT.value=1;
+					break;
+				case 'Nữ':
+					DDL_GT.value=2;
+					break;
+			}
+			document.getElementById('nhap_gt').style.display='none';
+		}
+		
+		
+	function on_change_select_1()
+		{
+			var get_sel=document.getElementById('select_pv');
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op1").innerHTML;
+									break;
+				case '2':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op2").innerHTML;
+					break;
+				case '3':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op3").innerHTML;
+					break;
+				case '4':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op4").innerHTML;
+					break;
+				case '5':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op5").innerHTML;
+					break;
+				case '6':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op6").innerHTML;
+					break;
+				case '7':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op7").innerHTML;
+					break;
+				case '8':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op8").innerHTML;
+					break;
+				case '9':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op9").innerHTML;
+					break;
+				case '10':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op10").innerHTML;
+					break;
+				case '11':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op11").innerHTML;
+					break;
+				case '12':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op12").innerHTML;
+					break;
+				case '13':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op13").innerHTML;
+					break;
+				case '14':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op14").innerHTML;
+					break;
+				case '15':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op15").innerHTML;
+					break;
+				case '16':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op16").innerHTML;
+					break;
+				case '17':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op17").innerHTML;
+					break;
+				case '18':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op18").innerHTML;
+					break;
+				case '19':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op19").innerHTML;
+					break;
+				case '20':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op20").innerHTML;
+					break;
+				case '21':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op21").innerHTML;
+					break;
+				case '22':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op22").innerHTML;
+					break;
+				case '23':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op23").innerHTML;
+					break;
+				case '24':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op24").innerHTML;
+					break;
+				case '25':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op25").innerHTML;
+					break;
+				case '26':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op26").innerHTML;
+					break;
+				case '27':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op27").innerHTML;
+					break;
+				case '28':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op28").innerHTML;
+					break;
+				case '29':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op29").innerHTML;
+					break;
+				case '30':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op30").innerHTML;
+					break;
+				case '31':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op31").innerHTML;
+					break;
+				case '32':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op32").innerHTML;
+					break;
+				case '33':
+					alert();
+									document.getElementById("select_pv").style.display = 'none';
+									document.getElementById("lap_ho_so").style.display = 'none';
+					 	            document.getElementById("Mucdich1").style.display = 'inline-block';
+			}
+		}
+
+	function on_change_gt()
+	{
+		var get_gt=document.getElementById('gioi_tinh');
+			switch (get_gt.value)
+			{
+				case '1':
+					document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+					break;
+				case '2':
+					document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+					break;
+			}
+	}
+	
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ten_dong_chi_sau').innerHTML=document.getElementById('ten_dong_chi_truoc').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function lap_ketthuc()
+				{
+					var get_sel=document.getElementById('select_lap_ketthuc');
+					switch (get_sel.value)
+					{
+						case '1':
+							document.getElementById('lap_ho_so').innerHTML=document.getElementById("lap_hs").innerHTML;
+							document.getElementById('_duoc').innerHTML=document.getElementById("lap_hs").innerHTML;
+							break;
+						case '2':
+						document.getElementById('lap_ho_so').innerHTML=document.getElementById("kt_hs").innerHTML;
+						document.getElementById('_duoc').innerHTML=document.getElementById("kt_hs").innerHTML;
+						break;
+					}
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					document.getElementById('gioi_tinh').style.display='none';
+					document.getElementById('nhap_gt').style.display='inline-block';
+					window.print();
+					document.getElementById('nhap_gt').style.display='none';
+					document.getElementById('gioi_tinh').style.display='inline-block';
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12" style='margin-top:3px'>
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">Mẫu B23-a</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		<br><br>
+		</div>
+		<div class="content">
+			<div class="font14	 fontBold ta_center clear"><br>BÁO CÁO TÓM TẮT LÝ LỊCH<br>VÀ QUÁ TRÌNH HOẠT ĐỘNG CỦA ĐỐI TƯỢNG<br>Của <span class='o_nhap_0_5cm border ta_left' contenteditable style='display:inline-block;vertical-align:top'></span></div>
+			<hr style='width:100px;margin-top:0px;height: 1px;color: black;background-color: black;border: none;'>
+			<div class="ta_center clear">
+				<span class=""style='vertical-align:top'>Kính gửi: </span> 
+				<span class="o_nhap_1cm border ta_left" id= '1' contenteditable="" >
+				</span>
+			</div><br>
+			<div class='fontBold ta_center fontUpper'>I. SƠ LƯỢC LÝ LỊCH</div>
+			1. Họ, tên: <span class='o_nhap_3cm border fontUpper' contenteditable onkeypress='hide_note("lbl3")' style='min-width: 161px;'><label class='ghichu' style='text-transform:none' id='lbl3'>Viết đầy đủ in hoa có dấu</label></span>
+			<span class="TAB"></span>
+			<span class="TAB"></span>
+			<span class="TAB"></span><span class="TAB"></span>
+			<span>(Nam/Nữ):
+				<select name="" id="gioi_tinh" onchange="on_change_gt()">
+						<option value="0" id="gioi_tinh_ko">-----</option>
+						<option value="1" id="gioi_tinh_nam">Nam</option>
+						<option value="2" id="gioi_tinh_nu">Nữ</option>
+				</select>
+				<span id="nhap_gt" class=""></span>
+			</span><br>
+			2. Tên khác: <span class='o_nhap_3cm border' contenteditable style='min-width: 147px;'></span>
+			<span class="TAB"></span>Bí danh, bí số: <span class='o_nhap_3cm border' contenteditable style='min-width: 161px;'></span><br>
+			3. Sinh ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span><br>
+			4. Số CCCD/Hộ chiếu <span class='o_nhap_1cm border' contenteditable></span> ngày cấp <span class='o_nhap_1cm border' contenteditable></span> nơi cấp <span class='o_nhap_1cm border' contenteditable id='NC_HC' onkeypress='kounset(id)'></span><br>
+			5. Quê quán: <span class='o_nhap_3cm border' contenteditable style='min-width: 535px;' id='QUE' onkeypress='kounset(id)'></span><br>
+			6. Nơi thường trú: <span class='o_nhap_3cm border' contenteditable style='min-width: 495px;' id='NTT' onkeypress='kounset(id)'></span><br>
+			7. Nơi cư trú: <span class='o_nhap_3cm border' contenteditable style='min-width: 529px;' id='NTT' onkeypress='kounset(id);hide_note("lbl1")'>
+				<label class='ghichu' id='lbl1'>Nơi cư trú là: nơi tạm trú hoặc nơi người đó đang sinh sống.</span>
+			</span><br>
+			8. Quốc tịch: <span class='o_nhap_3cm border'  id='Quoc_tich'   contenteditable></span>
+			9. Dân tộc: <span class='o_nhap_3cm border' id='dan_toc'   contenteditable></span>
+			10. Tôn giáo: <span class='o_nhap_2cm border' id='ton_giao'  id='NTT' onkeypress='kounset(id)'contenteditable></span><br>
+			11. Nghề nghiệp: <span class='o_nhap_3cm border' id= 'nn_nlv' onkeypress='kounset(id)' contenteditable style='min-width: 362px;'></span><br>
+			12. Cấp bậc, chức vụ: <span class='o_nhap_3cm border' contenteditable style='min-width: 329px;'></span><br>
+			13. Trình độ học vấn: <span class='o_nhap_3cm border' contenteditable style='min-width: 331px;'></span><br>
+			14. Học hàm, học vị: <span class='o_nhap_3cm border' contenteditable style='min-width: 335px;'></span><br>
+			15. Ngoại ngữ: <span class='o_nhap_3cm border' contenteditable style='min-width: 379px;'></span><br>
+			16. Tổ chức chính trị xã hội: <span class='o_nhap_3cm border' contenteditable style='min-width: 278px;'></span><br>
+			17. Họ tên cha: <span class='o_nhap_2cm border' contenteditable style='min-width: 244px;'></span><br>
+			18. Họ tên mẹ: <span class='o_nhap_2cm border' contenteditable style='min-width: 247px;'></span><br>
+			19. Họ tên vợ (chồng): <span class='o_nhap_2cm border' contenteditable style='min-width: 188px;'></span><br>
+			20. Tính chất đối tượng: <span class='o_nhap_2cm border' contenteditable style='min-width: 310px;' id= 'TC_DT' onkeypress='kounset(id)'></span><br>
+			<div class='fontBold ta_center fontUpper'>II. QUAN HỆ GIA ĐÌNH, XÃ HỘI CẦN CHÚ Ý</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<div class='fontBold ta_center fontUpper'>III. QUÁ TRÌNH HOẠT ĐỘNG</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<div class='fontBold ta_center fontUpper'>IV. NHẬN XÉT VÀ ĐỀ XUẤT</div>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			Kết quả kiểm danh, kiểm diện: <span class='o_nhap_2cm border' contenteditable style='min-width: 193px;' id= 'kq_kdkd' onkeypress='kounset(id)'></span><br>
+			Kết quả xác minh: <span class='o_nhap_2cm border' contenteditable style='min-width: 286px;' id= 'kq_xm' onkeypress='kounset(id)'></span><br>
+			Kết quả xử lý: <span class='o_nhap_2cm border' contenteditable style='min-width: 316px;' id= 'kq_xuly' onkeypress='kounset(id)'></span><br>
+			Có bút tích, vân tay, ảnh của đương sự tại hồ sơ số: <span class='o_nhap_2cm border' contenteditable style='min-width: 193px;' id= 'but_tich' onkeypress='kounset(id)'></span><br>
+			Biên tập từ hồ sơ: <span class='o_nhap_2cm border' contenteditable style='min-width: 442px;'id= 'bien_tap' onkeypress='kounset(id)'></span><br>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center lh_1'>
+						<span class='font13'>PHÊ DUYỆT CỦA LÃNH ĐẠO ĐƠN VỊ</span>
+						<br><br><br><br>
+						
+					</td>
+					<td class='ta_center lh_1' style='padding-left:2cm'>
+						<span class='font13'>CÁN BỘ BIÊN TẬP</span>
+						<br>
+												
+							<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span>
+					</td>
+				</tr>
+			</table>
+			</div>
+		</div>
+	
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

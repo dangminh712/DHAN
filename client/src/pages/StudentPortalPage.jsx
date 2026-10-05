@@ -203,6 +203,16 @@ export default function StudentPortalPage({
               <span>2. KHO GIÁO TRÌNH & TÀI LIỆU SỐ (XEM TRỰC TIẾP)</span>
               <span className="segment-badge">{filteredFiles.length} Tài liệu</span>
             </button>
+
+            <button
+              className="home-segment-btn"
+              onClick={() => { window.location.hash = '#/bieu-mau'; }}
+              title="Mở hệ thống biểu mẫu nghiệp vụ An ninh và Cảnh sát"
+            >
+              <FileText size={18} />
+              <span>3. BIỂU MẪU NGHIỆP VỤ CAND (ĐIỀN TRỰC TUYẾN)</span>
+              <span className="segment-badge" style={{ background: '#FEE2E2', color: '#991B1B' }}>109+ Mẫu</span>
+            </button>
           </div>
         </div>
 

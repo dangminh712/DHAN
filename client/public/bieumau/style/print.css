@@ -1,0 +1,9 @@
+@media print {
+	.border{border: none}
+	select {-webkit-appearance: none;-moz-appearance: none;text-indent: 1px;text-overflow: '';border: none;}
+	#btn_ghichu,.edit_font,.button_print,.button_save,.button_reload{display:none}
+	.wrapper{box-shadow:none}
+	._input,.ghichu{display:none;}
+	.content_page_2{page-break-before:always}
+	.o_nhap_n_dong{display:block;}
+}

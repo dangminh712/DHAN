@@ -38,10 +38,10 @@ import { StudyPdf, ResumeVideo } from './components/lecture/StudyMedia';
 import { getMediaKind, selectStudyMedia } from './mediaType';
 import { lectureService } from './services/lectureService';
 
-export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [], currentUser }) {
-  const [activePart, setActivePart] = useState(1); // Luôn bắt đầu từ mục tiêu và yêu cầu của bài học
-  const [mediaTab, setMediaTab] = useState('doc'); // 'video' | 'slide' | 'doc' | 'image' | 'quiz'
-  const [pdfPage, setPdfPage] = useState(1);
+export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [], currentUser, initialPart = 1, initialTab = 'doc', initialPage = 1 }) {
+  const [activePart, setActivePart] = useState(initialPart || 1); // Luôn bắt đầu từ mục tiêu và yêu cầu của bài học
+  const [mediaTab, setMediaTab] = useState(initialTab || 'doc'); // 'video' | 'slide' | 'doc' | 'image' | 'quiz'
+  const [pdfPage, setPdfPage] = useState(initialPage || 1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [completedParts, setCompletedParts] = useState([]);
   const [quizAnswers, setQuizAnswers] = useState({});
@@ -155,11 +155,11 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
 
   // Reset only when entering another lecture/user; fetched metadata must not override navigation.
   useEffect(() => {
-    setActivePart(1);
-    setMediaTab('doc');
+    setActivePart(initialPart || 1);
+    setMediaTab(initialTab || 'doc');
     setSelectedDocId(null);
-    setPdfPage(1);
-  }, [effectiveId, currentUser?.id]);
+    setPdfPage(initialPage || 1);
+  }, [effectiveId, currentUser?.id, initialPart, initialTab, initialPage]);
 
   const activePdfFile = mediaTab === 'slide' ? slideFromFiles : currentDocFile;
   const activePdfId = ['slide', 'doc'].includes(mediaTab) && getMediaKind(activePdfFile) === 'pdf' ? activePdfFile.fileId : null;
@@ -271,8 +271,8 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
   const activeBackendFile = backendLecture?.files?.find(f => String(f.fileId) === String(fileId) || String(f.fileId) === String(slideFileId) || String(f.fileId) === String(videoFileId)) || backendLecture?.files?.[0];
   const isDownloadAllowed = activeBackendFile ? activeBackendFile.isDownloadable : (lectureObj?.isDownloadable !== false);
 
-  // Link mở tab mới chuẩn xác theo URL định tuyến #/study/:id
-  const newTabUrl = `/#/study/${fileId}`;
+  // Link mở tab mới chuẩn xác theo URL định tuyến #/study/:id kèm trạng thái đang xem
+  const newTabUrl = `/#/study/${fileId}?part=${activePart}&tab=${mediaTab}${pdfPage > 1 ? `&page=${pdfPage}` : ''}`;
 
   // 1. Màn hình chặn nếu Bài giảng bị Giảng viên Khóa / Đóng
   if (isLocked) {

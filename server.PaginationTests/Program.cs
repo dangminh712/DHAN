@@ -18,10 +18,11 @@ Console.WriteLine("PASS: stable global sorting, whitelist fallback, bounds, MySQ
 if (!args.Contains("--database")) return;
 using var db = new TrainingDbContextFactory().CreateDbContext([]);
 var academic = new AcademicController(db);
-var auth = new AuthController(db, null!, null!);
-var system = new SystemController(db, null!);
+using var cache = new Microsoft.Extensions.Caching.Memory.MemoryCache(new Microsoft.Extensions.Caching.Memory.MemoryCacheOptions());
+var auth = new AuthController(db, null!, null!, cache);
+var system = new SystemController(db, null!, null!);
 var files = new FilesController(db, null!, null!, null!, null!);
-var lectures = new LecturesController(db, null!, null!);
+var lectures = new LecturesController(db, null!, null!, cache);
 var media = new MediaController(db, null!, Microsoft.Extensions.Logging.Abstractions.NullLogger<MediaController>.Instance);
 var cases = new (string, Func<Task<IActionResult>>)[] {
  ("classes", () => academic.GetClasses(null,1,2,"studentCount","desc")),

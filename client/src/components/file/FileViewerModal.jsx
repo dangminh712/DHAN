@@ -16,6 +16,7 @@ import Modal from '../common/Modal';
 import { ClearanceBadge } from '../common/Badge';
 import { fileService } from '../../services/fileService';
 import { useAuth } from '../../context/AuthContext';
+import UniversalVideoPlayer from '../common/UniversalVideoPlayer';
 
 export default function FileViewerModal({ isOpen, onClose, file, lectureId, onDownload }) {
   const { currentUser } = useAuth();
@@ -76,16 +77,16 @@ export default function FileViewerModal({ isOpen, onClose, file, lectureId, onDo
 
           {/* Player Rendering Based on Type */}
           {fileType === 'VIDEO' ? (
-            <video
-              controls
-              controlsList="nodownload"
-              autoPlay
-              className="w-full max-h-[65vh] object-contain z-10"
-              src={streamUrl}
-              onError={() => setLoadError(true)}
-            >
-              Trình duyệt của bạn không hỗ trợ phát thẻ video.
-            </video>
+            <div className="w-full max-h-[65vh] flex items-center justify-center z-10">
+              <UniversalVideoPlayer
+                src={streamUrl}
+                fileName={fileName}
+                controlsList="nodownload"
+                autoPlay
+                className="w-full max-h-[65vh] object-contain"
+                onError={() => setLoadError(true)}
+              />
+            </div>
           ) : fileType === 'IMAGE' ? (
             <img
               src={streamUrl}

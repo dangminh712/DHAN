@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu M2</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		function addRow3(tableID) {
+                    var table = document.getElementById(tableID);
+
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            var table1_cell1 = row.insertCell(0);
+            var table1_element0 = document.createElement("div");
+            table1_cell1.setAttribute('contentEditable', 'true');
+            table1_cell1.setAttribute('class', 'ta_center');
+
+            var table1_cell2 = row.insertCell(1);
+            var table1_element1 = document.createElement("div");
+            table1_cell2.setAttribute('contentEditable', 'true');
+            table1_cell2.setAttribute('class', 'ta_center');
+
+
+            var table1_cell3 = row.insertCell(2);
+            var table1_element2 = document.createElement("div");
+            table1_cell3.setAttribute('contentEditable', 'true');
+            table1_cell3.setAttribute('class', 'ta_center');
+
+            var table1_cell4 = row.insertCell(3);
+            var table1_element3 = document.createElement("div");
+            table1_cell4.setAttribute('contentEditable', 'true');
+            table1_cell4.setAttribute('class', 'ta_center');
+
+            var table1_cell5 = row.insertCell(4);
+            var table1_element3 = document.createElement("div");
+            table1_cell5.setAttribute('contentEditable', 'true');
+            table1_cell5.setAttribute('class', 'ta_center');
+
+            var table1_cell6 = row.insertCell(5);
+            var table1_element5 = document.createElement("div");
+            table1_cell6.setAttribute('contentEditable', 'true');
+            table1_cell6.setAttribute('class', 'ta_center');
+
+            var table1_cell7 = row.insertCell(6);
+            var table1_element6 = document.createElement("div");
+            table1_cell7.setAttribute('contentEditable', 'true');
+            table1_cell7.setAttribute('class', 'ta_center');
+
+            var table1_cell8 = row.insertCell(7);
+            var table1_element7 = document.createElement("div");
+            table1_cell8.setAttribute('contentEditable', 'true');
+            table1_cell8.setAttribute('class', 'ta_center');
+
+            var table1_cell9 = row.insertCell(8);
+            var table1_element8 = document.createElement("div");
+            table1_cell9.setAttribute('contentEditable', 'true');
+            table1_cell9.setAttribute('class', 'ta_center');
+
+            var table1_cell10 = row.insertCell(9);
+            var table1_element9 = document.createElement("div");
+            table1_cell10.setAttribute('contentEditable', 'true');
+            table1_cell10.setAttribute('class', 'ta_center');
+
+            var table1_cell11 = row.insertCell(10);
+            var table1_element10 = document.createElement("div");
+            table1_cell11.setAttribute('contentEditable', 'true');
+            table1_cell11.setAttribute('class', 'ta_center');
+
+            var table1_cell12 = row.insertCell(11);
+            var table1_element11 = document.createElement("div");
+            table1_cell12.setAttribute('contentEditable', 'true');
+            table1_cell12.setAttribute('class', 'ta_center');
+
+            var table1_cell13 = row.insertCell(12);
+            var table1_element12 = document.createElement("div");
+            table1_cell13.setAttribute('contentEditable', 'true');
+            table1_cell13.setAttribute('class', 'ta_center');
+
+            var table1_cell14 = row.insertCell(13);
+            var table1_element13 = document.createElement("div");
+            table1_cell14.setAttribute('contentEditable', 'true');
+            table1_cell14.setAttribute('class', 'ta_center');
+
+            var table1_cell15 = row.insertCell(14);
+            var table1_element14 = document.createElement("div");
+            table1_cell15.setAttribute('contentEditable', 'true');
+            table1_cell15.setAttribute('class', 'ta_center');
+
+            var table1_cell16 = row.insertCell(15);
+            var table1_element15 = document.createElement("div");
+            table1_cell16.setAttribute('contentEditable', 'true');
+            table1_cell16.setAttribute('class', 'ta_center');
+         }
+
+        function deleteRow3(tableID) {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+            for (i = rowCount - 1; i > 1; i--) {
+                document.getElementById("Table3").deleteRow(i);
+                break;
+            }
+        }
+         
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				Đơn vị: <span class="o_nhap_2cm  ta_left border" contenteditable ></span><br>
+				Số: <span class="o_nhap_2cm  ta_left border" contenteditable ></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13"></span>	<br>
+				<span class="fontBold"></span>
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font14 "><b>Mẫu M2</b></span><br>
+				<span class="font8"><i> </i></span><br>
+			</div>
+			<div class="time_header font_I fontNorm">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_0_5cm border_0_5cm border_ngay border" contenteditable></span> tháng <span class="o_nhap_0_5cm border_0_5cm border_thang border" contenteditable></span> năm <span class="o_nhap_0_5cm border_0_5cm border_nam border" contenteditable></span>
+			</div>
+			
+		</div>
+		<div class="content">
+			<br>
+			<div class="ta_center clear">
+				<span class="fontNorm"style='vertical-align:top'>Kính gửi: Đ/c </span> 
+				<span class="o_nhap_0_5cm border_0_5cm border_1cm border fontNorm ta_left" id= '1' contenteditable></span>
+			</div><br>
+			<div class="font16	 fontBold ta_center clear"><br>
+				BÁO CÁO<br>Quyết toán mật phí Quý <span class="o_nhap_0_5cm border_0_5cm border ta_left" contenteditable></span> năm 20<span class="o_nhap_0_5cm border_0_5cm border ta_left" contenteditable></span><br>
+			</div>
+			<div class='ta_center font12 font_I fontNorm fontLow '>(Ban hành kèm theo Thông tư số: 15/2019/TT-BCA-V01,<br> Ngày 25/6/2019 của Bộ trưởng Bộ Công an)</div>
+			<!--------------------------------------------------------------------->
+			<br>
+			<table class="style1" cellpadding="0" cellspacing="0" width="100%" ><!--------Bảng Nội dung biểu mẫu-------------> 
+                <tbody >
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong>I-</strong> <strong>Tình hình kinh phí tổng quát:</strong></td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - 
+                            Tổng số Mật phí được cấp trong quý: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;</td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Mật phí được cấp từ đầu năm đến quý này: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;</td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Mật phí quý trước chuyển sang: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>&nbsp;
+                        </td>
+                    </tr>
+                     <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - 
+                            Mật phí được sử dụng quý này: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - 
+                            Số quyết toán từ đầu năm đến quý này: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  >
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            - 
+                            Mật phí còn chuyển sang quý sau: <span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  style="padding:15px 0px">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong>II-</strong> <strong>Chi tiết sử dụng cụ thể:</strong></td>
+                    </tr>
+                    <tr>
+                        <td  >
+    <table cellpadding="0" cellspacing="0" class="style1 ta_center font12" border="1" style="width: 100%" id="Table3">
+        <tr class="style15">
+            <td style="width:23px;vertical-align:top" rowspan="3" class="ta_center font12">Số<br />
+                TT</td>
+            <td rowspan="3" class="ta_center font12" style="vertical-align:top;width:125px ">Đơn vị, 
+                địa phương<br />
+                (Phòng, Quận, Huyện)</td>
+            
+            <td style="vertical-align:top" class="ta_center font12" colspan="12"><strong>Các trường hợp sử dụng mật phí</strong></td>
+            <td class="ta_center font12" style="width:110px;vertical-align:top" rowspan="3">Tổng số<br />kinh<br />phí đã<br />chi</td>
+            <td class="ta_center font12" style="width:55px;vertical-align:top" rowspan="3">Ghi chú</td>
+        </tr>
+        <tr class="style15">
+            <td style="vertical-align:top" class="ta_center font12" colspan="4" >Công tác nghiệp vụ<br />thường xuyên</td>
+            <td class="ta_center font12" style="vertical-align:top" colspan="3">Chuyên án, kế hoạch trinh sát</td>
+            <td class="ta_center font12"style="vertical-align:top" colspan="5">Yêu cầu nghiệp vụ khác</td>
+        </tr>
+        <tr>
+            <td style="width:55px;vertical-align:top" class="ta_center font12">Đặc tình</td>
+            <td style="width:50px;vertical-align:top" class="ta_center font12">Cộng<br>tác<br>viên<br></td>
+            <td style="width:50px;vertical-align:top" class="ta_center font12">Cơ<br>sở<br>bí<br>mật</font></td>
+            <td class="style16 font12" style="width:55px;vertical-align:top">Hộp<br />Thư</td>
+            <td class="ta_center font12" style="width:55px;vertical-align:top">Chuyên<br>án</td>
+            <td class="ta_center" style="width:55px;vertical-align:top"><font size="3">Kiểm<br>tra<br>nghiệp<br>vụ<br /></td>
+            <td class="ta_center font12"style="vertical-align:top">Trinh<br>sát<br>liên<br>hoàn<br /></td>
+            <td class="ta_center font12"style="width:55px;vertical-align:top">Nhà<br />an<br />toàn</td>
+            <td class="ta_center font12"style="width:55px;vertical-align:top">Trinh<br>sát<br>xã<br>hội<br>hóa<br /></td>
+            <td class="ta_center font12" style="width:55px;vertical-align:top">Chi<br>cho<br>người<br>ngoài<br>LLBM<br /></td>
+            <td style="width:55px; font-size: 12pt;vertical-align:top" class="ta_center">Mua tin</td>
+            <td style="width:55px" class="ta_center font12">Khác</span></font></td>
+        </tr>
+       
+        <tr class="divtext_tt">
+            <td class="ta_center"><div style="text-align:center;padding-left:4px;padding-right:4px;min-height:20px;vertical-align:top;line-height:20px;"  contentEditable="true"> </div></td>
+            <td class="style25"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+            <td><div class="text" contentEditable="true" ></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td class="style29"><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true" id="tong_hang_0" ></div></td>
+                <td><div class="phong_doi" contentEditable="true"></div></td>
+        </tr>
+        <tr>
+            <td class="style14"><div style="text-align:center;padding-left:4px;padding-right:4px;min-height:20px;vertical-align:top;line-height:20px;"  contentEditable > </div></td>
+            <td class="style25"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+            <td><div class="text" contentEditable="true" ></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td class="style29"><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true" id="tong_hang_12"></div></td>
+                <td><div class="phong_doi" contentEditable="true"></div></td>
+        </tr>
+        <tr>
+            <td class="style14"><div style="text-align:center;padding-left:4px;padding-right:4px;min-height:20px;vertical-align:top;line-height:20px;"  contentEditable > </div></td>
+            <td class="style25"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+            <td><div class="text" contentEditable="true" ></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td class="style29"><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true" id="tong_hang_24"></div></td>
+                <td><div class="phong_doi" contentEditable="true"></div></td>
+        </tr>
+        <tr>
+            <td class="style14"><div style="text-align:center;padding-left:4px;padding-right:4px;min-height:20px;vertical-align:top;line-height:20px;"  contentEditable > </div></td>
+            <td class="style25"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+            <td><div class="text" contentEditable="true" ></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td class="style29"><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true" id="tong_hang_36"></div></td>
+                <td><div class="phong_doi" contentEditable="true"></div></td>
+        </tr>
+        <tr>
+            <td class="style14"><div style="text-align:center;padding-left:4px;padding-right:4px;min-height:20px;vertical-align:top;line-height:20px;"  contentEditable > </div></td>
+            <td class="style25"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+            <td><div class="text" contentEditable="true" ></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td class="style29"><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true"></div></td>
+                <td><div class="text" contentEditable="true" id="tong_hang_48"></div></td>
+                <td><div class="phong_doi" contentEditable="true"></div></td>
+        </tr>
+         
+            
+    </table>
+       <div>
+                        <input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3')" />
+                        <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3'),thong_ke('Table3')" />
+                        
+                </div>
+    <span style="margin-left:100px">
+                            <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cộng: </span><span class="o_nhap_0_5cm border"  style=" min-width:20px; min-height: 18px;text-align:justify;vertical-align:top" contenteditable="true"></span></tr>
+    <table cellpadding="0" cellspacing="0" style="float:right">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="o_nhap_0_5cm border" style="width:240px;font-size:16pt;height:0.6cm;text-align:right;font-style:italic;" contenteditable="true"></div>
+                                    </td>
+                                    <td>
+                                        <em>,&nbsp;                   </td>
+                                    <td>
+                                        <em>ngày&nbsp;</em>
+                                    </td>
+                                    <td>
+                                        <div class="o_nhap_0_5cm border" id="_date" style="width:20px;font-size:16pt;height:0.6cm;text-align:center;font-style:italic;" contenteditable="true" onkeyup="gioihankytu(document.getElementById('_date'),2)"></div>
+                                    </td>
+                                    <td>
+                                        <em>&nbsp;tháng&nbsp;</em>
+                                    </td>
+                                    <td>
+                                        <div class="o_nhap_0_5cm border" id="_month" style="width:20px;font-size:16pt;height:0.6cm;text-align:center;font-style:italic;" contenteditable="true" onkeyup="gioihankytu(document.getElementById('_month'),2)"></div>
+                                    </td>
+                                    <td>
+                                        <em>&nbsp;năm&nbsp;</em>
+                                    </td>
+                                    <td>
+                                        <div class="o_nhap_0_5cm border" id="_year" style="width:40px;font-size:16pt;height:0.6cm;text-align:center;font-style:italic;" contenteditable="true" onkeyup="gioihankytu(document.getElementById('_year'),4)"></div>
+                                    </td>
+                                </tr>
+                           </tbody>
+                        </table>                 
+            <table class="style8" cellpadding="0" cellspacing="0" style='width:100%'><!----------Bảng ký duyệt 2 khung---------------------------->
+                <tbody>
+                   <tr>
+                    <td class="font13" style=" text-align: center;vertical-align:top;width:33%">
+                        <strong>
+                        <br />
+                        Cán bộ lập bảng<br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        </strong></td>
+                        <td class="font13" style=" text-align: center;vertical-align:top;width:33%">
+                            <strong>
+                            <br />
+                            Lãnh đạo phụ trách</strong></td>
+                    <td class="font13" style="text-align: center;vertical-align:top;width:33%">
+                        <strong><span class="style30">
+                        <br />
+                        Thủ trưởng đơn vị</span><br />
+                        </strong>
+                        <em style="font-size:12pt">(Ký tên, đóng dấu)</em><strong> 
+                    </strong>
+                    </td>
+                </tr>
+                
+            </tbody></table><!----------END ký duyệt 2 khung---------------------------->
+
+           
+
+            </div><!----------------------------------Kết thúc Trang 1------------------------------------------------->
+        <!--<div class="ghichu">
+                    Ghi chú: Mẫu này dùng trong các trường hợp sau:<br />
+                    - Đơn bị cấp phòng dự toán báo cáo Cục, An ninh cấp tỉnh;<br />
+                    - Đơn vị cấp Cục, An ninh cấp tỉnh dự toán báo cáo Tổng cục An ninh;
+                    <br />
+                    - Tổng cục An ninh duyệt quyết toán hàng quý của A11.</div>
+      </div>
+		</div>
+
+            </div>--><!----------------------------------Kết thúc Trang 1------------------------------------------------->
+        
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

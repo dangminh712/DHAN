@@ -10,6 +10,7 @@ import Footer from './components/layout/Footer';
 import FileUploadModal from './components/file/FileUploadModal';
 import LectureModal from './components/lecture/LectureModal';
 import NetworkModal from './components/common/NetworkModal';
+import ConfirmModal from './components/common/ConfirmModal';
 import { lectureService } from './services/lectureService';
 
 // Dedicated URL Pages
@@ -23,10 +24,13 @@ import DbmsAdminPage from './pages/DbmsAdminPage';
 import LectureStudyPage from './LectureStudyPage';
 import LectureCreatorPage from './pages/LectureCreatorPage';
 import DirectMediaViewerModal from './components/common/DirectMediaViewerModal';
+import DocumentViewerPage from './pages/DocumentViewerPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import ChapterDetailPage from './pages/ChapterDetailPage';
+import BieuMauPage from './pages/BieuMauPage';
 import { parseCourseRoute } from './courseSearch';
+import './styles/portal.css';
 
 export default function App() {
   // 1. Hash-based Router (Hỗ trợ định tuyến URL riêng biệt trong mạng Intranet)
@@ -37,6 +41,8 @@ export default function App() {
 
   const [route, setRoute] = useState(getHashRoute());
   const courseRoute = parseCourseRoute(route);
+
+  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }, [route]);
 
   useEffect(() => {
     const handleHashChange = () => setRoute(getHashRoute());
@@ -60,6 +66,15 @@ export default function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [copiedHash, setCopiedHash] = useState(null);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
+  const [confirmModalConfig, setConfirmModalConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    subMessage: '',
+    confirmText: 'Xác nhận thực hiện',
+    variant: 'danger',
+    onConfirm: () => {},
+  });
 
   // Dữ liệu từ MySQL CSDL
   const [availableUsers, setAvailableUsers] = useState([]);
@@ -213,19 +228,25 @@ export default function App() {
   };
 
   // 9. Xóa học liệu
-  const handleDeleteFile = async (id, fileName) => {
-    if (!window.confirm(`Đồng chí có chắc chắn muốn xóa học liệu:\n"${fileName}" khỏi hệ thống?`)) {
-      return;
-    }
-
-    try {
-      await axios.delete(`/api/media/${id}`);
-      showToast('success', `Đã xóa học liệu "${fileName}" an toàn.`);
-      fetchFiles();
-    } catch (err) {
-      console.error('Lỗi xóa tập tin:', err);
-      showToast('error', 'Không thể xóa học liệu này.');
-    }
+  const handleDeleteFile = (id, fileName) => {
+    setConfirmModalConfig({
+      isOpen: true,
+      title: 'Xác nhận thu hồi học liệu số',
+      message: `Đồng chí có chắc chắn muốn xóa học liệu:\n"${fileName}" khỏi hệ thống?`,
+      subMessage: 'Học liệu sẽ bị thu hồi vĩnh viễn khỏi kho lưu trữ và các bài giảng liên quan.',
+      confirmText: 'Thu hồi học liệu',
+      variant: 'danger',
+      onConfirm: async () => {
+        try {
+          await axios.delete(`/api/media/${id}`);
+          showToast('success', `Đã xóa học liệu "${fileName}" an toàn.`);
+          fetchFiles();
+        } catch (err) {
+          console.error('Lỗi xóa tập tin:', err);
+          showToast('error', 'Không thể xóa học liệu này.');
+        }
+      },
+    });
   };
 
   // 10. Sao chép mã SHA-256
@@ -253,10 +274,19 @@ export default function App() {
   // URL: #/study/:id (VD: #/study/1, #/study/2)
   // ═════════════════════════════════════════════════════════
   if (route.startsWith('/study/')) {
-    const lectureId = route.replace('/study/', '');
+    const rawPath = route.replace('/study/', '');
+    const lectureId = rawPath.split('?')[0];
+    const queryStr = rawPath.includes('?') ? rawPath.slice(rawPath.indexOf('?') + 1) : '';
+    const params = new URLSearchParams(queryStr);
+    const initialPart = parseInt(params.get('part'), 10) || 1;
+    const initialTab = params.get('tab') || 'doc';
+    const initialPage = parseInt(params.get('page'), 10) || 1;
     return (
       <LectureStudyPage
         lectureId={lectureId}
+        initialPart={initialPart}
+        initialTab={initialTab}
+        initialPage={initialPage}
         allFiles={files}
         currentUser={currentUser}
         onBack={() => { window.location.hash = '#/'; }}
@@ -264,23 +294,26 @@ export default function App() {
     );
   }
 
-  // 11b. ĐIỀU HƯỚNG URL RIÊNG: XEM TRỰC TIẾP TÀI LIỆU
+  // 11b. ĐIỀU HƯỚNG URL RIÊNG: TRANG XEM TÀI LIỆU TOÀN MÀN HÌNH ĐỘC LẬP
   // URL: #/view/:id (VD: #/view/1)
   if (route.startsWith('/view/')) {
-    const viewId = route.replace('/view/', '');
-    const targetFile = files.find(f => String(f.id) === String(viewId)) || {
-      id: viewId,
-      originalFileName: `Tài liệu nghiệp vụ #${viewId}`,
-      category: 'document',
-      fileSize: 0
-    };
+    const rawPath = route.replace('/view/', '');
+    const viewId = rawPath.split('?')[0];
+    const queryStr = rawPath.includes('?') ? rawPath.slice(rawPath.indexOf('?') + 1) : '';
+    const params = new URLSearchParams(queryStr);
+    const initialPage = parseInt(params.get('page'), 10) || 1;
     return (
-      <DirectMediaViewerModal
-        isOpen={true}
-        onClose={() => { window.location.hash = '#/'; }}
-        file={targetFile}
-        onCopyHash={copyToClipboard}
-        copiedHash={copiedHash}
+      <DocumentViewerPage
+        fileId={viewId}
+        currentUser={currentUser}
+        initialPage={initialPage}
+        onBack={() => {
+          if (window.history.length > 1) {
+            window.history.back();
+          } else {
+            window.location.hash = '#/mon-hoc';
+          }
+        }}
       />
     );
   }
@@ -294,6 +327,7 @@ export default function App() {
   // ═════════════════════════════════════════════════════════
   return (
     <div className="app-portal">
+      <a className="portal-skip-link" href="#portal-content" onClick={(event) => { event.preventDefault(); document.getElementById('portal-content')?.focus() }}>Chuyển đến nội dung chính</a>
       {/* HEADER & THANH VĂN PHÒNG BỘ CÔNG AN */}
       <Header
         currentUser={currentUser}
@@ -345,73 +379,106 @@ export default function App() {
         </div>
       )}
 
-      {/* NỘI DUNG TỪNG TRANG THEO URL RIÊNG */}
-      {courseRoute?.name === 'courses' && <CoursesPage currentUser={currentUser} />}
-      {courseRoute?.name === 'course' && (
-        <CourseDetailPage courseId={courseRoute.courseId} currentUser={currentUser} onOpenMaterial={openCourseMaterial} />
-      )}
-      {courseRoute?.name === 'chapter' && (
-        <ChapterDetailPage courseId={courseRoute.courseId} chapterId={courseRoute.chapterId} currentUser={currentUser} onOpenMaterial={openCourseMaterial} />
-      )}
+      {/* NỘI DUNG TỪNG TRANG THEO URL RIÊNG VỚI HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ */}
+      <div key={route} id="portal-content" tabIndex={-1} className="app-page-view animate-page-enter">
+        {courseRoute?.name === 'courses' && <CoursesPage currentUser={currentUser} />}
+        {courseRoute?.name === 'course' && (
+          <CourseDetailPage courseId={courseRoute.courseId} currentUser={currentUser} onOpenMaterial={openCourseMaterial} />
+        )}
+        {courseRoute?.name === 'chapter' && (
+          <ChapterDetailPage courseId={courseRoute.courseId} chapterId={courseRoute.chapterId} currentUser={currentUser} onOpenMaterial={openCourseMaterial} />
+        )}
 
-      {/* 1. CỔNG HỌC VIÊN (DÀNH RIÊNG CHO HỌC VIÊN SĨ QUAN) */}
-      {(route === '/hoc-vien' || route === '/student' || route === '/students') && (
-        <CoursesPage currentUser={currentUser} />
-      )}
+        {/* HỆ THỐNG BIỂU MẪU NGHIỆP VỤ CAND */}
+        {(route === '/bieu-mau' || route === '/bieu-mau-cand' || route === '/forms') && (
+          <BieuMauPage />
+        )}
 
-      {/* 2. PHÒNG LÀM VIỆC GIẢNG VIÊN (DÀNH RIÊNG CHO GIẢNG VIÊN BIÊN SOẠN) */}
-      {(route === '/giang-vien' || route === '/teacher' || route === '/teachers') && (
-        <CoursesPage currentUser={currentUser} />
-      )}
+        {/* 1. CỔNG HỌC VIÊN (DÀNH RIÊNG CHO HỌC VIÊN SĨ QUAN) */}
+        {(route === '/hoc-vien' || route === '/student' || route === '/students') && (
+          <StudentPortalPage
+            files={files}
+            loading={loading}
+            search={search}
+            setSearch={setSearch}
+            category={category}
+            setCategory={setCategory}
+            selectedDept={selectedDept}
+            setSelectedDept={setSelectedDept}
+            academicUnits={academicUnits}
+            currentUser={currentUser}
+            onSearch={fetchFiles}
+            onCopyHash={copyToClipboard}
+            copiedHash={copiedHash}
+            onSelectFile={setSelectedFile}
+            lectures={lectures}
+          />
+        )}
 
-      {/* 2b. STUDIO BIÊN SOẠN & TẠO BÀI GIẢNG ĐIỆN TỬ */}
-      {(route === '/tao-bai-giang' || route === '/lecture-creator' || route.startsWith('/lecture-editor')) && (
-        <LectureCreatorPage
-          lectureId={route.match(/^\/lecture-editor\/(\d+)/)?.[1] || null}
-          currentUser={currentUser}
-          onBack={() => { window.location.hash = '#/giang-vien'; }}
-          onSaved={() => {
-            fetchLectures();
-            fetchFiles();
-          }}
-        />
-      )}
+        {/* 2. PHÒNG LÀM VIỆC GIẢNG VIÊN (DÀNH RIÊNG CHO GIẢNG VIÊN BIÊN SOẠN) */}
+        {(route === '/giang-vien' || route === '/teacher' || route === '/teachers') && (
+          <TeacherPortalPage
+            files={files}
+            teachersList={teachersList}
+            currentUser={currentUser}
+            onOpenUpload={() => setIsUploadModalOpen(true)}
+            onDeleteFile={handleDeleteFile}
+            onSelectFile={setSelectedFile}
+            onCopyHash={copyToClipboard}
+            copiedHash={copiedHash}
+            onSwitchUser={handleSwitchUser}
+          />
+        )}
 
-      {/* 3. TRUNG TÂM QUẢN TRỊ HỆ THỐNG (DÀNH CHO ADMIN & BGH) */}
-      {(route === '/admin' || route === '/audit') && (
-        <AdminPortalPage
-          availableUsers={availableUsers}
-          currentUser={currentUser}
-          onSwitchUser={handleSwitchUser}
-        />
-      )}
+        {/* 2b. STUDIO BIÊN SOẠN & TẠO BÀI GIẢNG ĐIỆN TỬ */}
+        {(route === '/tao-bai-giang' || route === '/lecture-creator' || route.startsWith('/lecture-editor')) && (
+          <LectureCreatorPage
+            lectureId={route.match(/^\/lecture-editor\/(\d+)/)?.[1] || null}
+            currentUser={currentUser}
+            onBack={() => { window.location.hash = '#/giang-vien'; }}
+            onSaved={() => {
+              fetchLectures();
+              fetchFiles();
+            }}
+          />
+        )}
 
-      {/* 3b. CẤP TÀI KHOẢN HỌC VIÊN TỰ ĐỘNG & QUẢN TRỊ ĐỒNG BỘ */}
-      {(route === '/cap-tai-khoan' || route === '/provision' || route === '/provisioning') && (
-        <ProvisioningPage
-          onSwitchUser={handleSwitchUser}
-          currentUser={currentUser}
-          academicClasses={academicClasses}
-        />
-      )}
+        {/* 3. TRUNG TÂM QUẢN TRỊ HỆ THỐNG (DÀNH CHO ADMIN & BGH) */}
+        {(route === '/admin' || route === '/audit') && (
+          <AdminPortalPage
+            availableUsers={availableUsers}
+            currentUser={currentUser}
+            onSwitchUser={handleSwitchUser}
+          />
+        )}
 
-      {/* 4. KHOA & BỘ MÔN */}
-      {route === '/academic' && (
-        <AcademicPage
-          academicUnits={academicUnits}
-          academicSubjects={academicSubjects}
-        />
-      )}
+        {/* 3b. CẤP TÀI KHOẢN HỌC VIÊN TỰ ĐỘNG & QUẢN TRỊ ĐỒNG BỘ */}
+        {(route === '/cap-tai-khoan' || route === '/provision' || route === '/provisioning') && (
+          <ProvisioningPage
+            onSwitchUser={handleSwitchUser}
+            currentUser={currentUser}
+            academicClasses={academicClasses}
+          />
+        )}
 
-      {/* 5. CSDL 27 BẢNG */}
-      {route === '/dbms' && (
-        <DbmsAdminPage />
-      )}
+        {/* 4. KHOA & BỘ MÔN */}
+        {route === '/academic' && (
+          <AcademicPage
+            academicUnits={academicUnits}
+            academicSubjects={academicSubjects}
+          />
+        )}
 
-      {/* 6. TRANG CHỦ TỔNG QUAN */}
-      {(route === '/' || route === '') && (
-        <CoursesPage currentUser={currentUser} />
-      )}
+        {/* 5. CSDL 27 BẢNG */}
+        {route === '/dbms' && (
+          <DbmsAdminPage />
+        )}
+
+        {/* 6. TRANG CHỦ TỔNG QUAN */}
+        {(route === '/' || route === '') && (
+          <HomePage currentUser={currentUser} />
+        )}
+      </div>
 
       {/* MODAL XEM TRỰC TIẾP TẬP TIN / TÀI LIỆU (KHÔNG CẦN VÀO PHÒNG HỌC BÀI GIẢNG) */}
       <DirectMediaViewerModal
@@ -461,6 +528,18 @@ export default function App() {
           <span>{statusMessage.text}</span>
         </div>
       )}
+
+      {/* HỘP THOẠI XÁC NHẬN NGHIỆP VỤ CAND */}
+      <ConfirmModal
+        isOpen={confirmModalConfig.isOpen}
+        onClose={() => setConfirmModalConfig(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmModalConfig.onConfirm}
+        title={confirmModalConfig.title}
+        message={confirmModalConfig.message}
+        subMessage={confirmModalConfig.subMessage}
+        confirmText={confirmModalConfig.confirmText}
+        variant={confirmModalConfig.variant}
+      />
 
       {/* CHÂN TRANG */}
       <Footer />

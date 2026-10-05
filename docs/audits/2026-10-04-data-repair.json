@@ -1,0 +1,318 @@
+{
+    "before": {
+        "subjects": [
+            {
+                "id": "9",
+                "code": "NVCB2",
+                "name": "Nghiệp vụ cơ bản 2",
+                "description": "Tìm bài giảng, giáo án, bài tập và tư liệu của môn học theo từng chương.",
+                "organizational_unit_id": "2",
+                "credits": "3.00",
+                "status": "ACTIVE",
+                "created_at": "2026-09-16 20:54:55",
+                "updated_at": "2026-09-17 19:11:02",
+                "responsible_teacher_name": null,
+                "responsibility_source": null
+            },
+            {
+                "id": "8",
+                "code": "TCDT_403",
+                "name": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+                "description": "Kỹ thuật chặn thu tín hiệu, phân tích phổ sóng và phòng thủ hạ tầng trọng yếu",
+                "organizational_unit_id": "3",
+                "credits": "4.00",
+                "status": "ACTIVE",
+                "created_at": "2026-09-15 12:29:58",
+                "updated_at": "2026-09-15 12:29:58",
+                "responsible_teacher_name": null,
+                "responsibility_source": null
+            }
+        ],
+        "files": [
+            {
+                "id": "1",
+                "original_name": "KẾ HOẠCH GIẢNG DẠY HP NVCB2.pdf",
+                "updated_at": "2026-09-16 21:51:42"
+            },
+            {
+                "id": "3",
+                "original_name": "Slide_minh_hoa_Nghiep_vu_An_ninh_mang.svg",
+                "updated_at": "2026-09-15 12:29:58"
+            },
+            {
+                "id": "4",
+                "original_name": "De_cuong_bai_giang_Luat_to_tung_hinh_su.pdf",
+                "updated_at": "2026-09-15 12:29:58"
+            },
+            {
+                "id": "5",
+                "original_name": "Tai_lieu_Toi_mat_Bao_ve_bi_mat_nha_nuoc.pdf",
+                "updated_at": "2026-09-15 12:29:58"
+            },
+            {
+                "id": "10",
+                "original_name": "Slide_Quy_trinh_To_tung_Hinh_su.svg",
+                "updated_at": "2026-09-15 12:29:58"
+            },
+            {
+                "id": "11",
+                "original_name": "KẾ HOẠCH GIẢNG DẠY HP NVCB2.pdf",
+                "updated_at": "2026-09-16 21:53:52"
+            },
+            {
+                "id": "15",
+                "original_name": "So_tay_Kham_nghiem_Dau_vet_Ky_thuat_so.pdf",
+                "updated_at": "2026-09-15 12:29:58"
+            },
+            {
+                "id": "16",
+                "original_name": "Slide_Phan_tich_Chung_cu_Dien_tu.svg",
+                "updated_at": "2026-09-15 12:29:58"
+            }
+        ],
+        "links": [
+            {
+                "id": "1",
+                "chapter_id": "1",
+                "file_id": "1",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "1",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "5",
+                "chapter_id": "4",
+                "file_id": "3",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "6",
+                "chapter_id": "4",
+                "file_id": "5",
+                "material_group": "LECTURE",
+                "display_order": "2",
+                "is_visible": "1",
+                "is_downloadable": "0",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "10",
+                "chapter_id": "7",
+                "file_id": "4",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "1",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "12",
+                "chapter_id": "7",
+                "file_id": "10",
+                "material_group": "LECTURE",
+                "display_order": "3",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "13",
+                "chapter_id": "5",
+                "file_id": "3",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "14",
+                "chapter_id": "8",
+                "file_id": "11",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "1",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "18",
+                "chapter_id": "9",
+                "file_id": "15",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "1",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "19",
+                "chapter_id": "9",
+                "file_id": "16",
+                "material_group": "LECTURE",
+                "display_order": "2",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "26",
+                "chapter_id": "6",
+                "file_id": "3",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "28",
+                "chapter_id": "3",
+                "file_id": "4",
+                "material_group": "LECTURE",
+                "display_order": "2",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "1",
+                "created_at": "2026-09-16 07:21:47.000000",
+                "updated_at": "2026-09-16 07:21:47.000000"
+            },
+            {
+                "id": "30",
+                "chapter_id": "3",
+                "file_id": "10",
+                "material_group": "LECTURE",
+                "display_order": "3",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "0",
+                "created_at": "2026-09-16 07:21:47.000000",
+                "updated_at": "2026-09-16 07:21:47.000000"
+            },
+            {
+                "id": "20",
+                "chapter_id": "10",
+                "file_id": "4",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "1",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "22",
+                "chapter_id": "11",
+                "file_id": "4",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "1",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "24",
+                "chapter_id": "12",
+                "file_id": "6",
+                "material_group": "LECTURE",
+                "display_order": "1",
+                "is_visible": "1",
+                "is_downloadable": "1",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            },
+            {
+                "id": "25",
+                "chapter_id": "12",
+                "file_id": "8",
+                "material_group": "LECTURE",
+                "display_order": "2",
+                "is_visible": "1",
+                "is_downloadable": "0",
+                "is_printable": "0",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000"
+            }
+        ],
+        "chapters": [
+            {
+                "id": "12",
+                "subject_id": "8",
+                "chapter_number": "1",
+                "title": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+                "description": "Kỹ thuật phân tích tín hiệu vô tuyến, phát hiện thiết bị nghe lén và bảo vệ mật mã",
+                "display_order": "1",
+                "status": "DRAFT",
+                "created_at": "2026-09-15 12:29:58.000000",
+                "updated_at": "2026-09-15 12:29:58.000000",
+                "deleted_at": null
+            }
+        ]
+    },
+    "backup": "C:/Users/DangMinh/.codex/backups/DHAN-20261004-DBMS/before-20261004-163618.sql",
+    "references": [
+        {
+            "number": 1,
+            "title": "Quản trị rủi ro và bảo vệ không gian mạng",
+            "file": "NIST.CSWP.29.pdf",
+            "name": "Tham khảo công khai - NIST Cybersecurity Framework 2.0.pdf",
+            "source": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf",
+            "note": "NIST CSF 2.0, 2024; tài liệu tham khảo tiếng Anh về quản trị rủi ro an toàn thông tin, không thay thế giáo trình nghiệp vụ được phê duyệt.",
+            "path": "Storage/courses/TCDT_403/references/NIST.CSWP.29.pdf",
+            "bytes": 1518858,
+            "checksum": "3c31f46fee98cac0c4323453e5109291a213b4de7fef8c058af9bf67f717433c"
+        },
+        {
+            "number": 2,
+            "title": "Quản lý và ứng phó sự cố an toàn thông tin",
+            "file": "NIST.SP.800-61r3.pdf",
+            "name": "Tham khảo công khai - NIST SP 800-61 Rev.3.pdf",
+            "source": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf",
+            "note": "NIST SP 800-61 Rev.3, 2025; đọc tham khảo về chuẩn bị, phát hiện, ứng phó và phục hồi sự cố.",
+            "path": "Storage/courses/TCDT_403/references/NIST.SP.800-61r3.pdf",
+            "bytes": 1040566,
+            "checksum": "e5593d6bb85daecec7e8d9549400c7b3473bcc3f06e469c82218073afa7fba2d"
+        },
+        {
+            "number": 3,
+            "title": "Cơ sở tín hiệu và hệ thống",
+            "file": "MIT6_01SCS11_chap05.pdf",
+            "name": "Tham khảo công khai - MIT Signals and Systems Chapter 5.pdf",
+            "source": "https://ocw.mit.edu/courses/6-01sc-introduction-to-electrical-engineering-and-computer-science-i-spring-2011/1268f3289b19d628e9be3bd2ecfb4f44_MIT6_01SCS11_chap05.pdf",
+            "note": "MIT OpenCourseWare 6.01SC, 2011, chương 5; kiến thức nền về tín hiệu và hệ thống. Giữ nguyên tài liệu và nguồn tác giả, giấy phép CC BY-NC-SA của MIT OCW.",
+            "path": "Storage/courses/TCDT_403/references/MIT6_01SCS11_chap05.pdf",
+            "bytes": 1801845,
+            "checksum": "7aba5ffaf33e3c65466da5f2f8428aea1eb634ae9063800231f09ddc3272442d"
+        }
+    ]
+}

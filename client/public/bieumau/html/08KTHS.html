@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu 08KTHS_CS</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'Viện trưởng Viện KHHS':
+							DDL_GT.value=1;
+							break;
+						case 'Trưởng phòng KTHS':
+							DDL_GT.value=2;
+							break;
+					}
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					 
+					window.print();
+					 
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable ></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu 08KTHS</span><br>
+				<span class="font8">BH theo TT số 30/2014/TT-BCA</span><br>
+				<span class="font8">Ngày 23/7/2014</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>YÊU CẦU ÁP DỤNG BIỆN PHÁP<br>KỸ THUẬT PHÒNG, CHỐNG TỘI PHẠM</div><br>
+			<div class="ta_center clear">
+				<span class="font_I"style='vertical-align:top'>Kính gửi: </span> 
+				<span class="o_nhap_1cm border ta_left" id= '1' contenteditable="" ></span>
+			</div>
+			<span class='TAB'></span>1. Tóm tắt nội dung sự việc:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+				
+				<span class='TAB'></span>2. Mục đích yêu cầu đạt được:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+				
+				<span class='TAB'></span>3. Thời gian, địa điểm triển khai thực hiện:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+								
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. Những địa điểm cần lưu ý 
+				<font style='font-size:12pt; font-style:italic'>(thời gian cần hoàn thành bố trí phương tiện kỹ thuật phòng, chống tội phạm; thời gian kéo dài, yêu cầu cần ngụy trang...)</font> :<br/>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				</span><br/>
+				
+				<span class='TAB'></span>5. Những thông tin cần thiết khác có liên quan:</br>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" ></span><br/>
+								
+				<span style='float:left'><span class='TAB'></span>Đề nghị Quý đơn vị giải quyết./.</span>
+				
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold'>
+						<span class='TAB'></span><b class='font12'>Nơi nhận</b><br/>
+								<span class="o_nhap_0_5cm border fontNorm" contenteditable='' style='font-size:12pt;min-width:100%'>
+									<label>
+									- Như trên (để giải quyết);<br/>
+									- Lưu cơ quan yêu cầu.
+									</label>
+								</span>
+					</td>
+					<td style='width:50%;text-align:center'>
+								<span class="o_nhap_0_5cm border" id="Span21" style='text-align:center' contenteditable="true" onblur="document.getElementById('Label1111').style.display='none'" onfocus="document.getElementById('Label1111').style.display='block'" onkeypress="document.getElementById('Label1111').style.display='none'">
+									<span id="Label1111" style="font-size:9pt; color:red;font-weight:normal;text-transform:none;text-align:center" ><em>Đại diện cơ quan yêu cầu ký, đóng dấu</em></span>
+								</span><br/>
+								<font size="3" class='fontNorm'><em>(Ký tên và đóng dấu)</em><br /></font><br /><br /><br />
+								</p>
+							</td>
+				</tr>
+			</table>
+			
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

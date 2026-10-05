@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu 06KTHS_CS</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'Viện trưởng Viện KHHS':
+							DDL_GT.value=1;
+							break;
+						case 'Trưởng phòng KTHS':
+							DDL_GT.value=2;
+							break;
+					}
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					document.getElementById('gioi_tinh').style.display='none';
+					document.getElementById('nhap_gt').style.display='inline-block';
+					window.print();
+					document.getElementById('nhap_gt').style.display='none';
+					document.getElementById('gioi_tinh').style.display='inline-block';
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable ></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<br>
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu 06KTHS</span><br>
+				<span class="font8">BH theo TT số 30/2014/TT-BCA</span><br>
+				<span class="font8">Ngày 23/7/2014</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>KẾT LUẬN GIÁM ĐỊNH</div><br>
+			
+			<span class='TAB'></span>Căn cứ Quyết định trưng cầu giám định/ bổ sung/ lại lần số 1,số <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" ></span> ngày <span class="o_nhap_0_5cm border" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> của <span style="min-width:20px" class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span> / Yêu cầu giám định ngày <span class="o_nhap_0_5cm border" id="Span34" contenteditable="true" ></span> ngày <span class="o_nhap_0_5cm border" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> của <span style="min-width:20px" class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span> yêu cầu giám định trong vụ: 
+				<span style="min-width:50px;" class="o_nhap_0_5cm border"   id="Span7" contenteditable="true" onblur="document.getElementById('Label13').style.display='none'" onfocus="document.getElementById('Label13').style.display='block'" onkeypress="document.getElementById('Label13').style.display='none';kounset(id)">
+					<span id="Label13" style="font-size:9pt; color:red;font-weight:normal;text-transform:none;text-align:left;" ><em>Ghi nội dung vụ việc, địa điểm xảy ra theo Quyết định trưng cầu/ Yêu cầu giám định</em></span>
+					</span><br />
+				
+				
+				<span class='TAB'></span>Theo sự phân công của lãnh đạo Phòng/ Trung tâm <span  contenteditable id='TT' onkeypress='kounset(id)' class='o_nhap_0_5cm border'></span><br/>
+				<span style='float:left'><span class='TAB'></span>Tôi(Chúng tôi) gồm:&nbsp;</span>
+				<span class='o_nhap_0_5cm border' contenteditable style='min-width:200px' onkeypress='kounset(id)' id="span_123"></span>
+				<br/>
+				<span class='TAB'></span><font style='font-size:12pt; font-style:italic'>[Ghi rõ cấp bậc, họ tên, lĩnh vực giám định được bổ nhiệm, số thẻ]</font> </br>
+				<span class='TAB'></span>Đã tiến hành giám định tại <span class="o_nhap_0_5cm border" contenteditable="true"></span>
+				từ  ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span>
+				đến   ngày <span class="o_nhap_0_5cm border" id="Span35" contenteditable="true" ></span> tháng <span class="o_nhap_0_5cm border" id="Span36" contenteditable="true" ></span> năm <span class="o_nhap_0_5cm border" id="Span81" contenteditable="true" onkeypress='kounset(id)'></span>
+				<br/>
+				<span class='TAB'></span><b>1. Nội dung vụ việc</b></br>
+				<font style='font-size:12pt; font-style:italic;float:left'><span class='TAB'></span>[Ghi tóm tắt nội dung vụ việc; nếu là trưng cầu giám định lại phải tóm tắt nội dung giám định và kết luận giám định lần trước].</span></font> 
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				
+				</span><br/>
+				
+				<span class='TAB'></span><b>2. Đối tượng gửi giám định:</b></br>
+				<font style='font-size:12pt; font-style:italic;float:left'><span class='TAB'></span>[Ghi rõ tên, số lượng, chất lượng, cách đóng gói, niêm phong từng đối tượng gửi giám định].</font> 
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				</span><br/><span>
+				
+				<span class='TAB'></span><b>3. Yêu cầu giám định:</b></br>
+				<font style='font-size:12pt; font-style:italic;float:left'><span class='TAB'></span>[Ghi rõ các câu hỏi, yêu cầu giám định].</font> 
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				
+				</span><br/>
+				
+				<span class='TAB'></span><b>4. Phương pháp và kết quả giám định:</b></br>
+				
+				<font style='font-size:12pt; font-style:italic;float:left'><span class='TAB'></span>[Ghi các phương pháp đã sử dụng, kết quả, nhận xét và đánh giá].</font> 
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				
+				</span><br/>
+				
+				<span class='TAB'></span><b>5. Kết luận:</b></br>
+				
+				<font style='font-size:12pt; font-style:italic;float:left'><span class='TAB'></span>[Ghi những kết luận(chỉ được kết luận khẳng định: đúng; không đúng hoặc không đủ cơ sở. Không được kết luận khả năng) theo nội dung trưng cầu/ Yêu cầu giám định].</font> 
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				
+				</span><br/>
+				
+				<span class='TAB'></span><b>6. Kèm theo kết luận giám định có:</b></br>
+				
+				<font style='font-size:12pt; font-style:italic;float:left'><span class='TAB'></span>[Ghi tên các tài liệu liên quan].</font> 
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				
+				</span><br/>
+				
+				<span class='TAB'></span><b>7. Hoàn lại đối tượng giám định gồm:</b></br>
+				<div class='font12 font_I'><span class='TAB'></span>[Ghi rõ tình trạng các đối tượng còn lại sau giám định được hoàn trả, phương thức, nơi hoàn trả; nêu đã tiêu hủy thì ghi rõ đối tượng gửi giám định đã sử dụng hết trong quá trong quá trình giám định].</div>
+				<span class="o_nhap_0_5cm border" style='width:100%;text-align:justify' contenteditable="true" >
+				
+				</span><br/><br/>
+				
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+						<span class=''>GIÁM ĐỊNH VIÊN</span><br>
+						<span class='fontNorm font12 font_I'>(Ký,ghi rõ họ tên)</span><br><br><br><br><br>
+					</td>
+					<td class='ta_center'>
+						<select name="" id="gioi_tinh" onchange="on_change_gt()">
+						<option value="0" id="gioi_tinh_ko">------------------------------</option>
+						<option value="1" id="gioi_tinh_nam">Viện trưởng Viện KHHS</option>
+						<option value="2" id="gioi_tinh_nu">Trưởng phòng KTHS</option>
+				</select>
+				<span id="nhap_gt" class="border fontUpper"></span><br>
+						<span class='fontNorm font12 font_I'>(Ký tên và đóng dấu)</span><br><br><br><br><br>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

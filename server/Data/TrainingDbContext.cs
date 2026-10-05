@@ -47,6 +47,7 @@ public class TrainingDbContext : DbContext
         modelBuilder.Entity<LecturePart>().HasIndex(p => new { p.LectureId, p.PartNumber }).IsUnique();
         modelBuilder.Entity<Chapter>().HasIndex(c => new { c.SubjectId, c.ChapterNumber }).IsUnique();
         modelBuilder.Entity<Chapter>().HasIndex(c => new { c.SubjectId, c.DisplayOrder });
+        modelBuilder.Entity<Chapter>().Property(c => c.Status).HasMaxLength(32);
         modelBuilder.Entity<ChapterMaterial>().HasIndex(m => new { m.ChapterId, m.FileId }).IsUnique();
         modelBuilder.Entity<ChapterMaterial>().HasIndex(m => new { m.ChapterId, m.DisplayOrder });
         modelBuilder.Entity<PdfNote>().HasIndex(n => new { n.UserId, n.FileId, n.PdfPage });
@@ -97,6 +98,10 @@ public class TrainingDbContext : DbContext
         // 4. Important Composite Indexes (Section 50)
         modelBuilder.Entity<DownloadLog>()
             .HasIndex(dl => new { dl.UserId, dl.DownloadedAt });
+        modelBuilder.Entity<AuditLog>().HasIndex(a => new { a.CreatedAt, a.Id });
+        modelBuilder.Entity<SecurityAlert>().HasIndex(a => new { a.CreatedAt, a.Id });
+        modelBuilder.Entity<UserSession>().HasIndex(s => new { s.LastActivityAt, s.Id });
+        modelBuilder.Entity<Chapter>().HasIndex(c => new { c.SubjectId, c.Status, c.DeletedAt, c.DisplayOrder, c.ChapterNumber }).HasDatabaseName("IX_chapters_published_order");
 
         // 5. Restrict/SetNull deletes on Audit & Download logs (Section 42)
         modelBuilder.Entity<AuditLog>()

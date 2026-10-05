@@ -1,0 +1,2331 @@
+{
+    "server": {
+        "version": "8.0.43",
+        "database_name": "training_management"
+    },
+    "tables": [
+        {
+            "table_name": "__efmigrationshistory",
+            "engine": "InnoDB",
+            "estimated_rows": "2",
+            "data_bytes": "16384",
+            "index_bytes": "0",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "audit_logs",
+            "engine": "InnoDB",
+            "estimated_rows": "25",
+            "data_bytes": "16384",
+            "index_bytes": "65536",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "chapter_materials",
+            "engine": "InnoDB",
+            "estimated_rows": "227",
+            "data_bytes": "49152",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "chapters",
+            "engine": "InnoDB",
+            "estimated_rows": "20",
+            "data_bytes": "16384",
+            "index_bytes": "32768",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "classes",
+            "engine": "InnoDB",
+            "estimated_rows": "8",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "classification_levels",
+            "engine": "InnoDB",
+            "estimated_rows": "4",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "download_logs",
+            "engine": "InnoDB",
+            "estimated_rows": "15",
+            "data_bytes": "16384",
+            "index_bytes": "98304",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "file_permissions",
+            "engine": "InnoDB",
+            "estimated_rows": "5",
+            "data_bytes": "16384",
+            "index_bytes": "65536",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "file_versions",
+            "engine": "InnoDB",
+            "estimated_rows": "19",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "files",
+            "engine": "InnoDB",
+            "estimated_rows": "215",
+            "data_bytes": "98304",
+            "index_bytes": "131072",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "learning_part_progress",
+            "engine": "InnoDB",
+            "estimated_rows": "2",
+            "data_bytes": "16384",
+            "index_bytes": "32768",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "learning_progress",
+            "engine": "InnoDB",
+            "estimated_rows": "10",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "lecture_files",
+            "engine": "InnoDB",
+            "estimated_rows": "30",
+            "data_bytes": "16384",
+            "index_bytes": "81920",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "lecture_parts",
+            "engine": "InnoDB",
+            "estimated_rows": "60",
+            "data_bytes": "65536",
+            "index_bytes": "32768",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "engine": "InnoDB",
+            "estimated_rows": "31",
+            "data_bytes": "16384",
+            "index_bytes": "81920",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "lectures",
+            "engine": "InnoDB",
+            "estimated_rows": "12",
+            "data_bytes": "16384",
+            "index_bytes": "98304",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "notifications",
+            "engine": "InnoDB",
+            "estimated_rows": "10",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "organizational_units",
+            "engine": "InnoDB",
+            "estimated_rows": "9",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "pdf_notes",
+            "engine": "InnoDB",
+            "estimated_rows": "2",
+            "data_bytes": "16384",
+            "index_bytes": "32768",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "permissions",
+            "engine": "InnoDB",
+            "estimated_rows": "31",
+            "data_bytes": "16384",
+            "index_bytes": "32768",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "quiz_attempts",
+            "engine": "InnoDB",
+            "estimated_rows": "0",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "quiz_questions",
+            "engine": "InnoDB",
+            "estimated_rows": "8",
+            "data_bytes": "16384",
+            "index_bytes": "16384",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "retention_policies",
+            "engine": "InnoDB",
+            "estimated_rows": "5",
+            "data_bytes": "16384",
+            "index_bytes": "16384",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "role_permissions",
+            "engine": "InnoDB",
+            "estimated_rows": "83",
+            "data_bytes": "16384",
+            "index_bytes": "16384",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "roles",
+            "engine": "InnoDB",
+            "estimated_rows": "4",
+            "data_bytes": "16384",
+            "index_bytes": "32768",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "security_alerts",
+            "engine": "InnoDB",
+            "estimated_rows": "10",
+            "data_bytes": "16384",
+            "index_bytes": "81920",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "student_classes",
+            "engine": "InnoDB",
+            "estimated_rows": "56",
+            "data_bytes": "16384",
+            "index_bytes": "65536",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "subjects",
+            "engine": "InnoDB",
+            "estimated_rows": "8",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "system_settings",
+            "engine": "InnoDB",
+            "estimated_rows": "9",
+            "data_bytes": "16384",
+            "index_bytes": "32768",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "teacher_subjects",
+            "engine": "InnoDB",
+            "estimated_rows": "9",
+            "data_bytes": "16384",
+            "index_bytes": "49152",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "engine": "InnoDB",
+            "estimated_rows": "50",
+            "data_bytes": "16384",
+            "index_bytes": "81920",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "user_mfa",
+            "engine": "InnoDB",
+            "estimated_rows": "5",
+            "data_bytes": "16384",
+            "index_bytes": "16384",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "user_sessions",
+            "engine": "InnoDB",
+            "estimated_rows": "218",
+            "data_bytes": "65536",
+            "index_bytes": "114688",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "users",
+            "engine": "InnoDB",
+            "estimated_rows": "60",
+            "data_bytes": "16384",
+            "index_bytes": "114688",
+            "free_bytes": "0"
+        },
+        {
+            "table_name": "watch_history",
+            "engine": "InnoDB",
+            "estimated_rows": "16",
+            "data_bytes": "16384",
+            "index_bytes": "81920",
+            "free_bytes": "0"
+        }
+    ],
+    "indexes": [
+        {
+            "table_name": "__efmigrationshistory",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "MigrationId"
+        },
+        {
+            "table_name": "audit_logs",
+            "index_name": "idx_audit_action",
+            "non_unique": "1",
+            "columns_list": "action"
+        },
+        {
+            "table_name": "audit_logs",
+            "index_name": "idx_audit_created",
+            "non_unique": "1",
+            "columns_list": "created_at"
+        },
+        {
+            "table_name": "audit_logs",
+            "index_name": "idx_audit_entity",
+            "non_unique": "1",
+            "columns_list": "entity_type,entity_id"
+        },
+        {
+            "table_name": "audit_logs",
+            "index_name": "idx_audit_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "audit_logs",
+            "index_name": "IX_audit_logs_created_at_id",
+            "non_unique": "1",
+            "columns_list": "created_at,id"
+        },
+        {
+            "table_name": "audit_logs",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "chapter_materials",
+            "index_name": "IX_chapter_materials_chapter_id_display_order",
+            "non_unique": "1",
+            "columns_list": "chapter_id,display_order"
+        },
+        {
+            "table_name": "chapter_materials",
+            "index_name": "IX_chapter_materials_chapter_id_file_id",
+            "non_unique": "0",
+            "columns_list": "chapter_id,file_id"
+        },
+        {
+            "table_name": "chapter_materials",
+            "index_name": "IX_chapter_materials_file_id",
+            "non_unique": "1",
+            "columns_list": "file_id"
+        },
+        {
+            "table_name": "chapter_materials",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "chapters",
+            "index_name": "IX_chapters_published_order",
+            "non_unique": "1",
+            "columns_list": "subject_id,status,deleted_at,display_order,chapter_number"
+        },
+        {
+            "table_name": "chapters",
+            "index_name": "IX_chapters_subject_id_chapter_number",
+            "non_unique": "0",
+            "columns_list": "subject_id,chapter_number"
+        },
+        {
+            "table_name": "chapters",
+            "index_name": "IX_chapters_subject_id_display_order",
+            "non_unique": "1",
+            "columns_list": "subject_id,display_order"
+        },
+        {
+            "table_name": "chapters",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "classes",
+            "index_name": "code",
+            "non_unique": "0",
+            "columns_list": "code"
+        },
+        {
+            "table_name": "classes",
+            "index_name": "idx_classes_org",
+            "non_unique": "1",
+            "columns_list": "organizational_unit_id"
+        },
+        {
+            "table_name": "classes",
+            "index_name": "idx_classes_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "classes",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "classification_levels",
+            "index_name": "code",
+            "non_unique": "0",
+            "columns_list": "code"
+        },
+        {
+            "table_name": "classification_levels",
+            "index_name": "idx_classification_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "classification_levels",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "classification_levels",
+            "index_name": "uk_classification_order",
+            "non_unique": "0",
+            "columns_list": "level_order"
+        },
+        {
+            "table_name": "download_logs",
+            "index_name": "idx_download_file",
+            "non_unique": "1",
+            "columns_list": "file_id"
+        },
+        {
+            "table_name": "download_logs",
+            "index_name": "idx_download_lecture",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "download_logs",
+            "index_name": "idx_download_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "download_logs",
+            "index_name": "idx_download_time",
+            "non_unique": "1",
+            "columns_list": "downloaded_at"
+        },
+        {
+            "table_name": "download_logs",
+            "index_name": "idx_download_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "download_logs",
+            "index_name": "idx_download_user_time",
+            "non_unique": "1",
+            "columns_list": "user_id,downloaded_at"
+        },
+        {
+            "table_name": "download_logs",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "file_permissions",
+            "index_name": "idx_file_permission_class",
+            "non_unique": "1",
+            "columns_list": "class_id"
+        },
+        {
+            "table_name": "file_permissions",
+            "index_name": "idx_file_permission_expiry",
+            "non_unique": "1",
+            "columns_list": "expires_at"
+        },
+        {
+            "table_name": "file_permissions",
+            "index_name": "idx_file_permission_file",
+            "non_unique": "1",
+            "columns_list": "file_id"
+        },
+        {
+            "table_name": "file_permissions",
+            "index_name": "idx_file_permission_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "file_permissions",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "file_versions",
+            "index_name": "idx_file_versions_file",
+            "non_unique": "1",
+            "columns_list": "file_id"
+        },
+        {
+            "table_name": "file_versions",
+            "index_name": "idx_file_versions_uploader",
+            "non_unique": "1",
+            "columns_list": "uploaded_by"
+        },
+        {
+            "table_name": "file_versions",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "file_versions",
+            "index_name": "uk_file_version",
+            "non_unique": "0",
+            "columns_list": "file_id,version"
+        },
+        {
+            "table_name": "files",
+            "index_name": "idx_files_checksum",
+            "non_unique": "1",
+            "columns_list": "checksum_sha256"
+        },
+        {
+            "table_name": "files",
+            "index_name": "idx_files_classification",
+            "non_unique": "1",
+            "columns_list": "classification_level_id"
+        },
+        {
+            "table_name": "files",
+            "index_name": "idx_files_deleted",
+            "non_unique": "1",
+            "columns_list": "deleted_at"
+        },
+        {
+            "table_name": "files",
+            "index_name": "idx_files_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "files",
+            "index_name": "idx_files_uploader",
+            "non_unique": "1",
+            "columns_list": "uploaded_by"
+        },
+        {
+            "table_name": "files",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "files",
+            "index_name": "uk_files_stored_name",
+            "non_unique": "0",
+            "columns_list": "stored_name"
+        },
+        {
+            "table_name": "learning_part_progress",
+            "index_name": "IX_learning_part_progress_lecture_id",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "learning_part_progress",
+            "index_name": "IX_learning_part_progress_user_id_lecture_id_part_id",
+            "non_unique": "0",
+            "columns_list": "user_id,lecture_id,part_id"
+        },
+        {
+            "table_name": "learning_part_progress",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "learning_progress",
+            "index_name": "idx_progress_lecture",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "learning_progress",
+            "index_name": "idx_progress_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "learning_progress",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "learning_progress",
+            "index_name": "uk_learning_progress",
+            "non_unique": "0",
+            "columns_list": "user_id,lecture_id"
+        },
+        {
+            "table_name": "lecture_files",
+            "index_name": "idx_lecture_files_file",
+            "non_unique": "1",
+            "columns_list": "file_id"
+        },
+        {
+            "table_name": "lecture_files",
+            "index_name": "idx_lecture_files_lecture",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "lecture_files",
+            "index_name": "idx_lecture_files_perm",
+            "non_unique": "1",
+            "columns_list": "lecture_id,is_downloadable,is_visible"
+        },
+        {
+            "table_name": "lecture_files",
+            "index_name": "idx_lecture_files_visible",
+            "non_unique": "1",
+            "columns_list": "is_visible"
+        },
+        {
+            "table_name": "lecture_files",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "lecture_files",
+            "index_name": "uk_lecture_file",
+            "non_unique": "0",
+            "columns_list": "lecture_id,file_id"
+        },
+        {
+            "table_name": "lecture_parts",
+            "index_name": "fk_lecture_parts_lecture",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "lecture_parts",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "lecture_parts",
+            "index_name": "uk_lecture_part",
+            "non_unique": "0",
+            "columns_list": "lecture_id,part_number"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "index_name": "idx_lecture_perm_view",
+            "non_unique": "1",
+            "columns_list": "class_id,can_view"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "index_name": "idx_lecture_permission_class",
+            "non_unique": "1",
+            "columns_list": "class_id"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "index_name": "idx_lecture_permission_expiry",
+            "non_unique": "1",
+            "columns_list": "expires_at"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "index_name": "idx_lecture_permission_lecture",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "index_name": "uk_lecture_class",
+            "non_unique": "0",
+            "columns_list": "lecture_id,class_id"
+        },
+        {
+            "table_name": "lectures",
+            "index_name": "idx_lectures_close",
+            "non_unique": "1",
+            "columns_list": "close_at"
+        },
+        {
+            "table_name": "lectures",
+            "index_name": "idx_lectures_deleted",
+            "non_unique": "1",
+            "columns_list": "deleted_at"
+        },
+        {
+            "table_name": "lectures",
+            "index_name": "idx_lectures_publish",
+            "non_unique": "1",
+            "columns_list": "publish_at"
+        },
+        {
+            "table_name": "lectures",
+            "index_name": "idx_lectures_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "lectures",
+            "index_name": "idx_lectures_subject",
+            "non_unique": "1",
+            "columns_list": "subject_id"
+        },
+        {
+            "table_name": "lectures",
+            "index_name": "idx_lectures_teacher",
+            "non_unique": "1",
+            "columns_list": "teacher_id"
+        },
+        {
+            "table_name": "lectures",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "notifications",
+            "index_name": "idx_notifications_created",
+            "non_unique": "1",
+            "columns_list": "created_at"
+        },
+        {
+            "table_name": "notifications",
+            "index_name": "idx_notifications_read",
+            "non_unique": "1",
+            "columns_list": "is_read"
+        },
+        {
+            "table_name": "notifications",
+            "index_name": "idx_notifications_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "notifications",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "organizational_units",
+            "index_name": "code",
+            "non_unique": "0",
+            "columns_list": "code"
+        },
+        {
+            "table_name": "organizational_units",
+            "index_name": "idx_org_parent",
+            "non_unique": "1",
+            "columns_list": "parent_id"
+        },
+        {
+            "table_name": "organizational_units",
+            "index_name": "idx_org_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "organizational_units",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "pdf_notes",
+            "index_name": "IX_pdf_notes_file_id",
+            "non_unique": "1",
+            "columns_list": "file_id"
+        },
+        {
+            "table_name": "pdf_notes",
+            "index_name": "IX_pdf_notes_user_id_file_id_pdf_page",
+            "non_unique": "1",
+            "columns_list": "user_id,file_id,pdf_page"
+        },
+        {
+            "table_name": "pdf_notes",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "permissions",
+            "index_name": "code",
+            "non_unique": "0",
+            "columns_list": "code"
+        },
+        {
+            "table_name": "permissions",
+            "index_name": "idx_permissions_module",
+            "non_unique": "1",
+            "columns_list": "module"
+        },
+        {
+            "table_name": "permissions",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "quiz_attempts",
+            "index_name": "IX_quiz_attempts_lecture_id",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "quiz_attempts",
+            "index_name": "IX_quiz_attempts_user_id_lecture_id_submitted_at",
+            "non_unique": "1",
+            "columns_list": "user_id,lecture_id,submitted_at"
+        },
+        {
+            "table_name": "quiz_attempts",
+            "index_name": "IX_quiz_attempts_user_id_submission_id",
+            "non_unique": "0",
+            "columns_list": "user_id,submission_id"
+        },
+        {
+            "table_name": "quiz_attempts",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "quiz_questions",
+            "index_name": "fk_quiz_questions_lecture",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "quiz_questions",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "retention_policies",
+            "index_name": "entity_type",
+            "non_unique": "0",
+            "columns_list": "entity_type"
+        },
+        {
+            "table_name": "retention_policies",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "role_permissions",
+            "index_name": "fk_role_permissions_permission",
+            "non_unique": "1",
+            "columns_list": "permission_id"
+        },
+        {
+            "table_name": "role_permissions",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "role_id,permission_id"
+        },
+        {
+            "table_name": "roles",
+            "index_name": "code",
+            "non_unique": "0",
+            "columns_list": "code"
+        },
+        {
+            "table_name": "roles",
+            "index_name": "idx_roles_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "roles",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "security_alerts",
+            "index_name": "fk_security_alert_resolver",
+            "non_unique": "1",
+            "columns_list": "resolved_by"
+        },
+        {
+            "table_name": "security_alerts",
+            "index_name": "idx_security_alert_created",
+            "non_unique": "1",
+            "columns_list": "created_at"
+        },
+        {
+            "table_name": "security_alerts",
+            "index_name": "idx_security_alert_severity",
+            "non_unique": "1",
+            "columns_list": "severity"
+        },
+        {
+            "table_name": "security_alerts",
+            "index_name": "idx_security_alert_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "security_alerts",
+            "index_name": "idx_security_alert_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "security_alerts",
+            "index_name": "IX_security_alerts_created_at_id",
+            "non_unique": "1",
+            "columns_list": "created_at,id"
+        },
+        {
+            "table_name": "security_alerts",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "student_classes",
+            "index_name": "idx_student_classes_active",
+            "non_unique": "1",
+            "columns_list": "class_id,status"
+        },
+        {
+            "table_name": "student_classes",
+            "index_name": "idx_student_classes_class",
+            "non_unique": "1",
+            "columns_list": "class_id"
+        },
+        {
+            "table_name": "student_classes",
+            "index_name": "idx_student_classes_student",
+            "non_unique": "1",
+            "columns_list": "student_id"
+        },
+        {
+            "table_name": "student_classes",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "student_classes",
+            "index_name": "uk_student_class",
+            "non_unique": "0",
+            "columns_list": "student_id,class_id"
+        },
+        {
+            "table_name": "subjects",
+            "index_name": "code",
+            "non_unique": "0",
+            "columns_list": "code"
+        },
+        {
+            "table_name": "subjects",
+            "index_name": "idx_subjects_org",
+            "non_unique": "1",
+            "columns_list": "organizational_unit_id"
+        },
+        {
+            "table_name": "subjects",
+            "index_name": "idx_subjects_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "subjects",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "system_settings",
+            "index_name": "fk_settings_updated_by",
+            "non_unique": "1",
+            "columns_list": "updated_by"
+        },
+        {
+            "table_name": "system_settings",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "system_settings",
+            "index_name": "setting_key",
+            "non_unique": "0",
+            "columns_list": "setting_key"
+        },
+        {
+            "table_name": "teacher_subjects",
+            "index_name": "idx_teacher_subject_subject",
+            "non_unique": "1",
+            "columns_list": "subject_id"
+        },
+        {
+            "table_name": "teacher_subjects",
+            "index_name": "idx_teacher_subject_teacher",
+            "non_unique": "1",
+            "columns_list": "teacher_id"
+        },
+        {
+            "table_name": "teacher_subjects",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "teacher_subjects",
+            "index_name": "uk_teacher_subject",
+            "non_unique": "0",
+            "columns_list": "teacher_id,subject_id"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "index_name": "fk_clearance_granted_by",
+            "non_unique": "1",
+            "columns_list": "granted_by"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "index_name": "idx_clearance_expiry",
+            "non_unique": "1",
+            "columns_list": "expires_at"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "index_name": "idx_clearance_level",
+            "non_unique": "1",
+            "columns_list": "classification_level_id"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "index_name": "idx_clearance_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "index_name": "idx_clearance_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "user_mfa",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "user_mfa",
+            "index_name": "user_id",
+            "non_unique": "0",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "user_sessions",
+            "index_name": "idx_sessions_device",
+            "non_unique": "1",
+            "columns_list": "device_id"
+        },
+        {
+            "table_name": "user_sessions",
+            "index_name": "idx_sessions_expiry",
+            "non_unique": "1",
+            "columns_list": "expires_at"
+        },
+        {
+            "table_name": "user_sessions",
+            "index_name": "idx_sessions_revoked",
+            "non_unique": "1",
+            "columns_list": "revoked_at"
+        },
+        {
+            "table_name": "user_sessions",
+            "index_name": "idx_sessions_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "user_sessions",
+            "index_name": "IX_user_sessions_last_activity_at_id",
+            "non_unique": "1",
+            "columns_list": "last_activity_at,id"
+        },
+        {
+            "table_name": "user_sessions",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "user_sessions",
+            "index_name": "session_token_hash",
+            "non_unique": "0",
+            "columns_list": "session_token_hash"
+        },
+        {
+            "table_name": "users",
+            "index_name": "idx_users_deleted",
+            "non_unique": "1",
+            "columns_list": "deleted_at"
+        },
+        {
+            "table_name": "users",
+            "index_name": "idx_users_full_name",
+            "non_unique": "1",
+            "columns_list": "full_name"
+        },
+        {
+            "table_name": "users",
+            "index_name": "idx_users_org",
+            "non_unique": "1",
+            "columns_list": "organizational_unit_id"
+        },
+        {
+            "table_name": "users",
+            "index_name": "idx_users_role",
+            "non_unique": "1",
+            "columns_list": "role_id"
+        },
+        {
+            "table_name": "users",
+            "index_name": "idx_users_status",
+            "non_unique": "1",
+            "columns_list": "status"
+        },
+        {
+            "table_name": "users",
+            "index_name": "idx_users_student_code",
+            "non_unique": "1",
+            "columns_list": "student_code"
+        },
+        {
+            "table_name": "users",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "users",
+            "index_name": "username",
+            "non_unique": "0",
+            "columns_list": "username"
+        },
+        {
+            "table_name": "watch_history",
+            "index_name": "fk_watch_lecture",
+            "non_unique": "1",
+            "columns_list": "lecture_id"
+        },
+        {
+            "table_name": "watch_history",
+            "index_name": "idx_watch_file",
+            "non_unique": "1",
+            "columns_list": "file_id"
+        },
+        {
+            "table_name": "watch_history",
+            "index_name": "idx_watch_last",
+            "non_unique": "1",
+            "columns_list": "last_watched_at"
+        },
+        {
+            "table_name": "watch_history",
+            "index_name": "idx_watch_user",
+            "non_unique": "1",
+            "columns_list": "user_id"
+        },
+        {
+            "table_name": "watch_history",
+            "index_name": "PRIMARY",
+            "non_unique": "0",
+            "columns_list": "id"
+        },
+        {
+            "table_name": "watch_history",
+            "index_name": "uk_watch_user_file",
+            "non_unique": "0",
+            "columns_list": "user_id,file_id"
+        }
+    ],
+    "foreignKeys": [
+        {
+            "table_name": "audit_logs",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_audit_user"
+        },
+        {
+            "table_name": "chapter_materials",
+            "column_name": "chapter_id",
+            "referenced_table": "chapters",
+            "referenced_column": "id",
+            "constraint_name": "FK_chapter_materials_chapters_chapter_id"
+        },
+        {
+            "table_name": "chapter_materials",
+            "column_name": "file_id",
+            "referenced_table": "files",
+            "referenced_column": "id",
+            "constraint_name": "FK_chapter_materials_files_file_id"
+        },
+        {
+            "table_name": "chapters",
+            "column_name": "subject_id",
+            "referenced_table": "subjects",
+            "referenced_column": "id",
+            "constraint_name": "FK_chapters_subjects_subject_id"
+        },
+        {
+            "table_name": "classes",
+            "column_name": "organizational_unit_id",
+            "referenced_table": "organizational_units",
+            "referenced_column": "id",
+            "constraint_name": "fk_classes_org"
+        },
+        {
+            "table_name": "download_logs",
+            "column_name": "file_id",
+            "referenced_table": "files",
+            "referenced_column": "id",
+            "constraint_name": "fk_download_file"
+        },
+        {
+            "table_name": "download_logs",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "fk_download_lecture"
+        },
+        {
+            "table_name": "download_logs",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_download_user"
+        },
+        {
+            "table_name": "file_permissions",
+            "column_name": "class_id",
+            "referenced_table": "classes",
+            "referenced_column": "id",
+            "constraint_name": "fk_file_permissions_class"
+        },
+        {
+            "table_name": "file_permissions",
+            "column_name": "file_id",
+            "referenced_table": "files",
+            "referenced_column": "id",
+            "constraint_name": "fk_file_permissions_file"
+        },
+        {
+            "table_name": "file_permissions",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_file_permissions_user"
+        },
+        {
+            "table_name": "file_versions",
+            "column_name": "file_id",
+            "referenced_table": "files",
+            "referenced_column": "id",
+            "constraint_name": "fk_file_versions_file"
+        },
+        {
+            "table_name": "file_versions",
+            "column_name": "uploaded_by",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_file_versions_uploader"
+        },
+        {
+            "table_name": "files",
+            "column_name": "classification_level_id",
+            "referenced_table": "classification_levels",
+            "referenced_column": "id",
+            "constraint_name": "fk_files_classification"
+        },
+        {
+            "table_name": "files",
+            "column_name": "uploaded_by",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_files_uploaded_by"
+        },
+        {
+            "table_name": "learning_part_progress",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "FK_learning_part_progress_lectures_lecture_id"
+        },
+        {
+            "table_name": "learning_part_progress",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "FK_learning_part_progress_users_user_id"
+        },
+        {
+            "table_name": "learning_progress",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "fk_progress_lecture"
+        },
+        {
+            "table_name": "learning_progress",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_progress_user"
+        },
+        {
+            "table_name": "lecture_files",
+            "column_name": "file_id",
+            "referenced_table": "files",
+            "referenced_column": "id",
+            "constraint_name": "fk_lecture_files_file"
+        },
+        {
+            "table_name": "lecture_files",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "fk_lecture_files_lecture"
+        },
+        {
+            "table_name": "lecture_parts",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "fk_lecture_parts_lecture"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "column_name": "class_id",
+            "referenced_table": "classes",
+            "referenced_column": "id",
+            "constraint_name": "fk_lecture_permissions_class"
+        },
+        {
+            "table_name": "lecture_permissions",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "fk_lecture_permissions_lecture"
+        },
+        {
+            "table_name": "lectures",
+            "column_name": "subject_id",
+            "referenced_table": "subjects",
+            "referenced_column": "id",
+            "constraint_name": "fk_lectures_subject"
+        },
+        {
+            "table_name": "lectures",
+            "column_name": "teacher_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_lectures_teacher"
+        },
+        {
+            "table_name": "notifications",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_notifications_user"
+        },
+        {
+            "table_name": "organizational_units",
+            "column_name": "parent_id",
+            "referenced_table": "organizational_units",
+            "referenced_column": "id",
+            "constraint_name": "fk_org_parent"
+        },
+        {
+            "table_name": "pdf_notes",
+            "column_name": "file_id",
+            "referenced_table": "files",
+            "referenced_column": "id",
+            "constraint_name": "FK_pdf_notes_files_file_id"
+        },
+        {
+            "table_name": "pdf_notes",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "FK_pdf_notes_users_user_id"
+        },
+        {
+            "table_name": "quiz_attempts",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "FK_quiz_attempts_lectures_lecture_id"
+        },
+        {
+            "table_name": "quiz_attempts",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "FK_quiz_attempts_users_user_id"
+        },
+        {
+            "table_name": "quiz_questions",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "fk_quiz_questions_lecture"
+        },
+        {
+            "table_name": "role_permissions",
+            "column_name": "permission_id",
+            "referenced_table": "permissions",
+            "referenced_column": "id",
+            "constraint_name": "fk_role_permissions_permission"
+        },
+        {
+            "table_name": "role_permissions",
+            "column_name": "role_id",
+            "referenced_table": "roles",
+            "referenced_column": "id",
+            "constraint_name": "fk_role_permissions_role"
+        },
+        {
+            "table_name": "security_alerts",
+            "column_name": "resolved_by",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_security_alert_resolver"
+        },
+        {
+            "table_name": "security_alerts",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_security_alert_user"
+        },
+        {
+            "table_name": "student_classes",
+            "column_name": "class_id",
+            "referenced_table": "classes",
+            "referenced_column": "id",
+            "constraint_name": "fk_student_classes_class"
+        },
+        {
+            "table_name": "student_classes",
+            "column_name": "student_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_student_classes_student"
+        },
+        {
+            "table_name": "subjects",
+            "column_name": "organizational_unit_id",
+            "referenced_table": "organizational_units",
+            "referenced_column": "id",
+            "constraint_name": "fk_subjects_org"
+        },
+        {
+            "table_name": "system_settings",
+            "column_name": "updated_by",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_settings_updated_by"
+        },
+        {
+            "table_name": "teacher_subjects",
+            "column_name": "subject_id",
+            "referenced_table": "subjects",
+            "referenced_column": "id",
+            "constraint_name": "fk_teacher_subjects_subject"
+        },
+        {
+            "table_name": "teacher_subjects",
+            "column_name": "teacher_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_teacher_subjects_teacher"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "column_name": "granted_by",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_clearance_granted_by"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "column_name": "classification_level_id",
+            "referenced_table": "classification_levels",
+            "referenced_column": "id",
+            "constraint_name": "fk_clearance_level"
+        },
+        {
+            "table_name": "user_clearance_levels",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_clearance_user"
+        },
+        {
+            "table_name": "user_mfa",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_mfa_user"
+        },
+        {
+            "table_name": "user_sessions",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_sessions_user"
+        },
+        {
+            "table_name": "users",
+            "column_name": "organizational_unit_id",
+            "referenced_table": "organizational_units",
+            "referenced_column": "id",
+            "constraint_name": "fk_users_org"
+        },
+        {
+            "table_name": "users",
+            "column_name": "role_id",
+            "referenced_table": "roles",
+            "referenced_column": "id",
+            "constraint_name": "fk_users_role"
+        },
+        {
+            "table_name": "watch_history",
+            "column_name": "file_id",
+            "referenced_table": "files",
+            "referenced_column": "id",
+            "constraint_name": "fk_watch_file"
+        },
+        {
+            "table_name": "watch_history",
+            "column_name": "lecture_id",
+            "referenced_table": "lectures",
+            "referenced_column": "id",
+            "constraint_name": "fk_watch_lecture"
+        },
+        {
+            "table_name": "watch_history",
+            "column_name": "user_id",
+            "referenced_table": "users",
+            "referenced_column": "id",
+            "constraint_name": "fk_watch_user"
+        }
+    ],
+    "orphans": [],
+    "courses": [
+        {
+            "id": "1",
+            "code": "ANDT_301",
+            "name": "Kỹ thuật Khám nghiệm hiện trường & Điều tra hình sự",
+            "chapter_id": "1",
+            "chapter_number": "1",
+            "title": "Kỹ thuật Khám nghiệm hiện trường vụ án hình sự",
+            "status": "PUBLISHED",
+            "material_count": "4"
+        },
+        {
+            "id": "1",
+            "code": "ANDT_301",
+            "name": "Kỹ thuật Khám nghiệm hiện trường & Điều tra hình sự",
+            "chapter_id": "2",
+            "chapter_number": "2",
+            "title": "Kỹ thuật Phục hồi Dấu vết Đạn đạo & Cơ học (Bản thảo)",
+            "status": "DRAFT",
+            "material_count": "0"
+        },
+        {
+            "id": "1",
+            "code": "ANDT_301",
+            "name": "Kỹ thuật Khám nghiệm hiện trường & Điều tra hình sự",
+            "chapter_id": "3",
+            "chapter_number": "3",
+            "title": "Thực hành Hỏi cung Bị can và Đối chất theo BLTTHS",
+            "status": "PUBLISHED",
+            "material_count": "3"
+        },
+        {
+            "id": "6",
+            "code": "ANKT_401",
+            "name": "Nghiệp vụ Điều tra Tội phạm Kinh tế & Tham nhũng",
+            "chapter_id": "10",
+            "chapter_number": "1",
+            "title": "Điều tra Tội phạm Rửa tiền & Tội phạm Kinh tế số",
+            "status": "PUBLISHED",
+            "material_count": "2"
+        },
+        {
+            "id": "2",
+            "code": "ANM_402",
+            "name": "An toàn Thông tin & Phòng chống Tấn công mạng",
+            "chapter_id": "4",
+            "chapter_number": "1",
+            "title": "Phòng chống Tấn công mạng & Bảo vệ Bí mật Nhà nước",
+            "status": "PUBLISHED",
+            "material_count": "5"
+        },
+        {
+            "id": "2",
+            "code": "ANM_402",
+            "name": "An toàn Thông tin & Phòng chống Tấn công mạng",
+            "chapter_id": "5",
+            "chapter_number": "2",
+            "title": "Hồ sơ an ninh mạng chuyên sâu (Học phần đã đóng)",
+            "status": "PUBLISHED",
+            "material_count": "1"
+        },
+        {
+            "id": "2",
+            "code": "ANM_402",
+            "name": "An toàn Thông tin & Phòng chống Tấn công mạng",
+            "chapter_id": "6",
+            "chapter_number": "3",
+            "title": "Điều tra Tội phạm Lừa đảo Chiếm đoạt Tài sản qua Mạng",
+            "status": "PUBLISHED",
+            "material_count": "2"
+        },
+        {
+            "id": "7",
+            "code": "ANTT_202",
+            "name": "Quản lý Nhà nước về An ninh Trật tự",
+            "chapter_id": "11",
+            "chapter_number": "1",
+            "title": "Quản lý Nhà nước về An ninh Trật tự cơ sở",
+            "status": "PUBLISHED",
+            "material_count": "2"
+        },
+        {
+            "id": "5",
+            "code": "KTHS_302",
+            "name": "Giám định Kỹ thuật hình sự & Chứng cứ số",
+            "chapter_id": "9",
+            "chapter_number": "1",
+            "title": "Giám định Kỹ thuật hình sự & Phân tích Chứng cứ số",
+            "status": "PUBLISHED",
+            "material_count": "3"
+        },
+        {
+            "id": "3",
+            "code": "LUAT_201",
+            "name": "Luật Tố tụng Hình sự thực hành",
+            "chapter_id": "7",
+            "chapter_number": "1",
+            "title": "Quy trình Tố tụng Hình sự trong giai đoạn khởi tố",
+            "status": "PUBLISHED",
+            "material_count": "3"
+        },
+        {
+            "id": "4",
+            "code": "NVAN_305",
+            "name": "Chiến thuật Trinh sát Thực địa & Bảo vệ Mục tiêu",
+            "chapter_id": "8",
+            "chapter_number": "1",
+            "title": "Chiến thuật Trinh sát Thực địa & Bảo vệ Mục tiêu",
+            "status": "PUBLISHED",
+            "material_count": "3"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "16",
+            "chapter_number": "1",
+            "title": "Hồ sơ môn học",
+            "status": "PUBLISHED",
+            "material_count": "10"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "17",
+            "chapter_number": "2",
+            "title": "Chương trình và đề cương",
+            "status": "PUBLISHED",
+            "material_count": "10"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "18",
+            "chapter_number": "3",
+            "title": "Kế hoạch giảng dạy",
+            "status": "PUBLISHED",
+            "material_count": "11"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "19",
+            "chapter_number": "4",
+            "title": "Giáo án và bài giảng",
+            "status": "PUBLISHED",
+            "material_count": "4"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "20",
+            "chapter_number": "5",
+            "title": "Hoạt động học thuật",
+            "status": "PUBLISHED",
+            "material_count": "5"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "21",
+            "chapter_number": "6",
+            "title": "Hệ thống bài tập",
+            "status": "PUBLISHED",
+            "material_count": "1"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "22",
+            "chapter_number": "7",
+            "title": "Câu hỏi và đáp án",
+            "status": "PUBLISHED",
+            "material_count": "1"
+        },
+        {
+            "id": "9",
+            "code": "NVCB2",
+            "name": "Nghiệp vụ cơ bản 2",
+            "chapter_id": "23",
+            "chapter_number": "8",
+            "title": "Học liệu và tư liệu",
+            "status": "PUBLISHED",
+            "material_count": "155"
+        },
+        {
+            "id": "8",
+            "code": "TCDT_403",
+            "name": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "chapter_id": "12",
+            "chapter_number": "1",
+            "title": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "status": "DRAFT",
+            "material_count": "2"
+        },
+        {
+            "id": "8",
+            "code": "TCDT_403",
+            "name": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "chapter_id": "98",
+            "chapter_number": "2",
+            "title": "Quản trị rủi ro và bảo vệ không gian mạng",
+            "status": "PUBLISHED",
+            "material_count": "1"
+        },
+        {
+            "id": "8",
+            "code": "TCDT_403",
+            "name": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "chapter_id": "99",
+            "chapter_number": "3",
+            "title": "Quản lý và ứng phó sự cố an toàn thông tin",
+            "status": "PUBLISHED",
+            "material_count": "1"
+        },
+        {
+            "id": "8",
+            "code": "TCDT_403",
+            "name": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "chapter_id": "102",
+            "chapter_number": "4",
+            "title": "Cơ sở tín hiệu và hệ thống",
+            "status": "PUBLISHED",
+            "material_count": "1"
+        }
+    ],
+    "teachers": [
+        {
+            "code": "NVCB2",
+            "teacher_id": null,
+            "full_name": null,
+            "username": null,
+            "lecture_title": null,
+            "subject_id": null
+        },
+        {
+            "code": "TCDT_403",
+            "teacher_id": "3",
+            "full_name": "Trung tá Lê Hoài Nam (Phó Trưởng Khoa ANM)",
+            "username": "gv_nam",
+            "lecture_title": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "subject_id": "8"
+        }
+    ],
+    "tinyFiles": [
+        {
+            "id": "1",
+            "original_name": "Minh họa định dạng PDF - Giáo trình mẫu.pdf",
+            "storage_path": "Storage/2026/09/01/f47ac10b-58cc-4372-a567-0e02b2c3d479.pdf",
+            "file_size": "1106",
+            "mime_type": "application/pdf",
+            "checksum_sha256": "caf8c5e7f77d2c25e6fe4a724f49efdca7d972ee9cb1ba812969f819ac8f9a24",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "3",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/2026/09/03/d8e9f0a1-b2c3-4d5e-6f7a-c3d4e5f6a1b2.svg",
+            "file_size": "1504",
+            "mime_type": "image/svg+xml",
+            "checksum_sha256": "961477b7dff49b539eb9004bca834ef2b2039f24bac6e0079a44134c55f8f749",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "4",
+            "original_name": "Minh họa định dạng PDF - Đề cương mẫu.pdf",
+            "storage_path": "Storage/2026/09/04/e1f2a3b4-c5d6-4e7f-8a9b-d4e5f6a1b2c3.pdf",
+            "file_size": "1104",
+            "mime_type": "application/pdf",
+            "checksum_sha256": "ae1d4894406b06f42ff7d6f42f334635270eda0fbd15c3660664d30ba2f2b067",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "5",
+            "original_name": "Minh họa định dạng PDF - Bài giảng mẫu.pdf",
+            "storage_path": "Storage/2026/09/05/fa5b6c7d-8e9f-4a0b-1c2d-e5f6a1b2c3d4.pdf",
+            "file_size": "1106",
+            "mime_type": "application/pdf",
+            "checksum_sha256": "f979becb28dd8f3b4670315c68e658321c6019cce60e4b3fe89f2e06393e863a",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "10",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/Slides_PPT/Slide_Quy_trinh_To_tung_Hinh_su.svg",
+            "file_size": "1504",
+            "mime_type": "image/svg+xml",
+            "checksum_sha256": "961477b7dff49b539eb9004bca834ef2b2039f24bac6e0079a44134c55f8f749",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "11",
+            "original_name": "Minh họa - Chiến thuật trinh sát thực địa và bảo vệ mục tiêu.pdf",
+            "storage_path": "Storage/PDFs/Giao_trinh_Chien_thuat_Trinh_sat_Thuc_dia.pdf",
+            "file_size": "1264",
+            "mime_type": "application/pdf",
+            "checksum_sha256": "215bd99f608ec582a8640bcc6dd4ed4c4d8e27c19fe38c280356d026957601f4",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "15",
+            "original_name": "Minh họa - Khám nghiệm dấu vết kỹ thuật số.pdf",
+            "storage_path": "Storage/PDFs/So_tay_Kham_nghiem_Dau_vet_Ky_thuat_so.pdf",
+            "file_size": "1291",
+            "mime_type": "application/pdf",
+            "checksum_sha256": "ae4c50a4f98f1393fc0cc4576e4d4b917738e5e532d4842499778c4bc613f583",
+            "status": "ACTIVE"
+        },
+        {
+            "id": "16",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/Slides_PPT/Slide_Phan_tich_Chung_cu_Dien_tu.svg",
+            "file_size": "1504",
+            "mime_type": "image/svg+xml",
+            "checksum_sha256": "961477b7dff49b539eb9004bca834ef2b2039f24bac6e0079a44134c55f8f749",
+            "status": "ACTIVE"
+        }
+    ],
+    "materialLinks": [
+        {
+            "id": "1",
+            "chapter_id": "1",
+            "file_id": "1",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "ANDT_301",
+            "title": "Kỹ thuật Khám nghiệm hiện trường vụ án hình sự",
+            "original_name": "Minh họa định dạng PDF - Giáo trình mẫu.pdf",
+            "storage_path": "Storage/2026/09/01/f47ac10b-58cc-4372-a567-0e02b2c3d479.pdf"
+        },
+        {
+            "id": "2",
+            "chapter_id": "1",
+            "file_id": "2",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANDT_301",
+            "title": "Kỹ thuật Khám nghiệm hiện trường vụ án hình sự",
+            "original_name": "Video_bai_giang_Ky_thuat_dieu_tra_co_ban.mp4",
+            "storage_path": "Storage/2026/09/02/c9a646d3-9c61-4cd7-9f59-b2c3d4e5f6a1.mp4"
+        },
+        {
+            "id": "3",
+            "chapter_id": "1",
+            "file_id": "7",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANDT_301",
+            "title": "Kỹ thuật Khám nghiệm hiện trường vụ án hình sự",
+            "original_name": "Ghi_am_Phan_tich_Loi_khai_Nghi_pham.wav",
+            "storage_path": "Storage/2026/09/07/c8d9e0f1-2a3b-4c5d-6e7f-8a9b0c1d2e3f.wav"
+        },
+        {
+            "id": "4",
+            "chapter_id": "1",
+            "file_id": "17",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANDT_301",
+            "title": "Kỹ thuật Khám nghiệm hiện trường vụ án hình sự",
+            "original_name": "Bieu_mau_Danh_gia_Hoc_vien_T04.xlsx",
+            "storage_path": "Storage/Documents/Bieu_mau_Danh_gia_Hoc_vien_T04.xlsx"
+        },
+        {
+            "id": "28",
+            "chapter_id": "3",
+            "file_id": "4",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "ANDT_301",
+            "title": "Thực hành Hỏi cung Bị can và Đối chất theo BLTTHS",
+            "original_name": "Minh họa định dạng PDF - Đề cương mẫu.pdf",
+            "storage_path": "Storage/2026/09/04/e1f2a3b4-c5d6-4e7f-8a9b-d4e5f6a1b2c3.pdf"
+        },
+        {
+            "id": "29",
+            "chapter_id": "3",
+            "file_id": "7",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANDT_301",
+            "title": "Thực hành Hỏi cung Bị can và Đối chất theo BLTTHS",
+            "original_name": "Ghi_am_Phan_tich_Loi_khai_Nghi_pham.wav",
+            "storage_path": "Storage/2026/09/07/c8d9e0f1-2a3b-4c5d-6e7f-8a9b0c1d2e3f.wav"
+        },
+        {
+            "id": "30",
+            "chapter_id": "3",
+            "file_id": "10",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "ANDT_301",
+            "title": "Thực hành Hỏi cung Bị can và Đối chất theo BLTTHS",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/Slides_PPT/Slide_Quy_trinh_To_tung_Hinh_su.svg"
+        },
+        {
+            "id": "20",
+            "chapter_id": "10",
+            "file_id": "4",
+            "material_group": "OTHER",
+            "is_visible": "0",
+            "code": "ANKT_401",
+            "title": "Điều tra Tội phạm Rửa tiền & Tội phạm Kinh tế số",
+            "original_name": "Minh họa định dạng PDF - Đề cương mẫu.pdf",
+            "storage_path": "Storage/2026/09/04/e1f2a3b4-c5d6-4e7f-8a9b-d4e5f6a1b2c3.pdf"
+        },
+        {
+            "id": "21",
+            "chapter_id": "10",
+            "file_id": "17",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANKT_401",
+            "title": "Điều tra Tội phạm Rửa tiền & Tội phạm Kinh tế số",
+            "original_name": "Bieu_mau_Danh_gia_Hoc_vien_T04.xlsx",
+            "storage_path": "Storage/Documents/Bieu_mau_Danh_gia_Hoc_vien_T04.xlsx"
+        },
+        {
+            "id": "5",
+            "chapter_id": "4",
+            "file_id": "3",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Phòng chống Tấn công mạng & Bảo vệ Bí mật Nhà nước",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/2026/09/03/d8e9f0a1-b2c3-4d5e-6f7a-c3d4e5f6a1b2.svg"
+        },
+        {
+            "id": "6",
+            "chapter_id": "4",
+            "file_id": "5",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Phòng chống Tấn công mạng & Bảo vệ Bí mật Nhà nước",
+            "original_name": "Minh họa định dạng PDF - Bài giảng mẫu.pdf",
+            "storage_path": "Storage/2026/09/05/fa5b6c7d-8e9f-4a0b-1c2d-e5f6a1b2c3d4.pdf"
+        },
+        {
+            "id": "7",
+            "chapter_id": "4",
+            "file_id": "6",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Phòng chống Tấn công mạng & Bảo vệ Bí mật Nhà nước",
+            "original_name": "So_do_Ha_tang_Giam_sat_Toan_tuyen.jpg",
+            "storage_path": "Storage/2026/09/06/b7c8d9e0-1a2b-3c4d-5e6f-7a8b9c0d1e2f.jpg"
+        },
+        {
+            "id": "8",
+            "chapter_id": "4",
+            "file_id": "8",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Phòng chống Tấn công mạng & Bảo vệ Bí mật Nhà nước",
+            "original_name": "Huong_dan_Thuc_hanh_Phong_chong_Tan_cong.mp4",
+            "storage_path": "Storage/2026/09/08/d9e0f1a2-3b4c-5d6e-7f8a-9b0c1d2e3f4a.mp4"
+        },
+        {
+            "id": "9",
+            "chapter_id": "4",
+            "file_id": "14",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Phòng chống Tấn công mạng & Bảo vệ Bí mật Nhà nước",
+            "original_name": "Video_Phan_tich_Ma_doc_va_Truy_vet_IP.mp4",
+            "storage_path": "Storage/Videos/Video_Phan_tich_Ma_doc_va_Truy_vet_IP.mp4"
+        },
+        {
+            "id": "13",
+            "chapter_id": "5",
+            "file_id": "3",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Hồ sơ an ninh mạng chuyên sâu (Học phần đã đóng)",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/2026/09/03/d8e9f0a1-b2c3-4d5e-6f7a-c3d4e5f6a1b2.svg"
+        },
+        {
+            "id": "26",
+            "chapter_id": "6",
+            "file_id": "3",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Điều tra Tội phạm Lừa đảo Chiếm đoạt Tài sản qua Mạng",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/2026/09/03/d8e9f0a1-b2c3-4d5e-6f7a-c3d4e5f6a1b2.svg"
+        },
+        {
+            "id": "27",
+            "chapter_id": "6",
+            "file_id": "14",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANM_402",
+            "title": "Điều tra Tội phạm Lừa đảo Chiếm đoạt Tài sản qua Mạng",
+            "original_name": "Video_Phan_tich_Ma_doc_va_Truy_vet_IP.mp4",
+            "storage_path": "Storage/Videos/Video_Phan_tich_Ma_doc_va_Truy_vet_IP.mp4"
+        },
+        {
+            "id": "22",
+            "chapter_id": "11",
+            "file_id": "4",
+            "material_group": "OTHER",
+            "is_visible": "0",
+            "code": "ANTT_202",
+            "title": "Quản lý Nhà nước về An ninh Trật tự cơ sở",
+            "original_name": "Minh họa định dạng PDF - Đề cương mẫu.pdf",
+            "storage_path": "Storage/2026/09/04/e1f2a3b4-c5d6-4e7f-8a9b-d4e5f6a1b2c3.pdf"
+        },
+        {
+            "id": "23",
+            "chapter_id": "11",
+            "file_id": "18",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "ANTT_202",
+            "title": "Quản lý Nhà nước về An ninh Trật tự cơ sở",
+            "original_name": "Mau_Nhap_Lieu_Hoc_Vien_T04.xlsx",
+            "storage_path": "Storage/Documents/Mau_Nhap_Lieu_Hoc_Vien_T04.xlsx"
+        },
+        {
+            "id": "17",
+            "chapter_id": "9",
+            "file_id": "14",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "KTHS_302",
+            "title": "Giám định Kỹ thuật hình sự & Phân tích Chứng cứ số",
+            "original_name": "Video_Phan_tich_Ma_doc_va_Truy_vet_IP.mp4",
+            "storage_path": "Storage/Videos/Video_Phan_tich_Ma_doc_va_Truy_vet_IP.mp4"
+        },
+        {
+            "id": "18",
+            "chapter_id": "9",
+            "file_id": "15",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "KTHS_302",
+            "title": "Giám định Kỹ thuật hình sự & Phân tích Chứng cứ số",
+            "original_name": "Minh họa - Khám nghiệm dấu vết kỹ thuật số.pdf",
+            "storage_path": "Storage/PDFs/So_tay_Kham_nghiem_Dau_vet_Ky_thuat_so.pdf"
+        },
+        {
+            "id": "19",
+            "chapter_id": "9",
+            "file_id": "16",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "KTHS_302",
+            "title": "Giám định Kỹ thuật hình sự & Phân tích Chứng cứ số",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/Slides_PPT/Slide_Phan_tich_Chung_cu_Dien_tu.svg"
+        },
+        {
+            "id": "10",
+            "chapter_id": "7",
+            "file_id": "4",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "LUAT_201",
+            "title": "Quy trình Tố tụng Hình sự trong giai đoạn khởi tố",
+            "original_name": "Minh họa định dạng PDF - Đề cương mẫu.pdf",
+            "storage_path": "Storage/2026/09/04/e1f2a3b4-c5d6-4e7f-8a9b-d4e5f6a1b2c3.pdf"
+        },
+        {
+            "id": "11",
+            "chapter_id": "7",
+            "file_id": "9",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "LUAT_201",
+            "title": "Quy trình Tố tụng Hình sự trong giai đoạn khởi tố",
+            "original_name": "Video_Dien_an_Thuc_hanh_To_tung_Hinh_su.mp4",
+            "storage_path": "Storage/Videos/Video_Dien_an_Thuc_hanh_To_tung_Hinh_su.mp4"
+        },
+        {
+            "id": "12",
+            "chapter_id": "7",
+            "file_id": "10",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "LUAT_201",
+            "title": "Quy trình Tố tụng Hình sự trong giai đoạn khởi tố",
+            "original_name": "Minh họa định dạng SVG - Bài giảng mẫu.svg",
+            "storage_path": "Storage/Slides_PPT/Slide_Quy_trinh_To_tung_Hinh_su.svg"
+        },
+        {
+            "id": "14",
+            "chapter_id": "8",
+            "file_id": "11",
+            "material_group": "OTHER",
+            "is_visible": "1",
+            "code": "NVAN_305",
+            "title": "Chiến thuật Trinh sát Thực địa & Bảo vệ Mục tiêu",
+            "original_name": "Minh họa - Chiến thuật trinh sát thực địa và bảo vệ mục tiêu.pdf",
+            "storage_path": "Storage/PDFs/Giao_trinh_Chien_thuat_Trinh_sat_Thuc_dia.pdf"
+        },
+        {
+            "id": "15",
+            "chapter_id": "8",
+            "file_id": "12",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "NVAN_305",
+            "title": "Chiến thuật Trinh sát Thực địa & Bảo vệ Mục tiêu",
+            "original_name": "Video_Tap_huan_Bao_ve_Muc_tieu_Quan_trong.mp4",
+            "storage_path": "Storage/Videos/Video_Tap_huan_Bao_ve_Muc_tieu_Quan_trong.mp4"
+        },
+        {
+            "id": "16",
+            "chapter_id": "8",
+            "file_id": "13",
+            "material_group": "LECTURE",
+            "is_visible": "1",
+            "code": "NVAN_305",
+            "title": "Chiến thuật Trinh sát Thực địa & Bảo vệ Mục tiêu",
+            "original_name": "Ban_do_Dien_tap_Thuc_dia_Phuong_an_A2.jpg",
+            "storage_path": "Storage/Images/Ban_do_Dien_tap_Thuc_dia_Phuong_an_A2.jpg"
+        },
+        {
+            "id": "24",
+            "chapter_id": "12",
+            "file_id": "6",
+            "material_group": "LECTURE",
+            "is_visible": "0",
+            "code": "TCDT_403",
+            "title": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "original_name": "So_do_Ha_tang_Giam_sat_Toan_tuyen.jpg",
+            "storage_path": "Storage/2026/09/06/b7c8d9e0-1a2b-3c4d-5e6f-7a8b9c0d1e2f.jpg"
+        },
+        {
+            "id": "25",
+            "chapter_id": "12",
+            "file_id": "8",
+            "material_group": "LECTURE",
+            "is_visible": "0",
+            "code": "TCDT_403",
+            "title": "Tác chiến Không gian mạng & Trinh sát Kỹ thuật điện tử",
+            "original_name": "Huong_dan_Thuc_hanh_Phong_chong_Tan_cong.mp4",
+            "storage_path": "Storage/2026/09/08/d9e0f1a2-3b4c-5d6e-7f8a-9b0c1d2e3f4a.mp4"
+        },
+        {
+            "id": "426",
+            "chapter_id": "98",
+            "file_id": "300",
+            "material_group": "REFERENCE",
+            "is_visible": "1",
+            "code": "TCDT_403",
+            "title": "Quản trị rủi ro và bảo vệ không gian mạng",
+            "original_name": "Tham khảo công khai - NIST Cybersecurity Framework 2.0.pdf",
+            "storage_path": "Storage/courses/TCDT_403/references/NIST.CSWP.29.pdf"
+        },
+        {
+            "id": "427",
+            "chapter_id": "99",
+            "file_id": "301",
+            "material_group": "REFERENCE",
+            "is_visible": "1",
+            "code": "TCDT_403",
+            "title": "Quản lý và ứng phó sự cố an toàn thông tin",
+            "original_name": "Tham khảo công khai - NIST SP 800-61 Rev.3.pdf",
+            "storage_path": "Storage/courses/TCDT_403/references/NIST.SP.800-61r3.pdf"
+        },
+        {
+            "id": "428",
+            "chapter_id": "102",
+            "file_id": "302",
+            "material_group": "REFERENCE",
+            "is_visible": "1",
+            "code": "TCDT_403",
+            "title": "Cơ sở tín hiệu và hệ thống",
+            "original_name": "Tham khảo công khai - MIT Signals and Systems Chapter 5.pdf",
+            "storage_path": "Storage/courses/TCDT_403/references/MIT6_01SCS11_chap05.pdf"
+        }
+    ],
+    "fileTotals": {
+        "files": "218",
+        "metadata_bytes": "338229000"
+    },
+    "queries": {
+        "chapters": [
+            {
+                "id": "1",
+                "select_type": "SIMPLE",
+                "table": "chapters",
+                "partitions": null,
+                "type": "range",
+                "possible_keys": "IX_chapters_subject_id_chapter_number,IX_chapters_subject_id_display_order,IX_chapters_published_order",
+                "key": "IX_chapters_published_order",
+                "key_len": "147",
+                "ref": null,
+                "rows": "8",
+                "filtered": "100.00",
+                "Extra": "Using index condition"
+            }
+        ],
+        "audit": [
+            {
+                "id": "1",
+                "select_type": "SIMPLE",
+                "table": "audit_logs",
+                "partitions": null,
+                "type": "ALL",
+                "possible_keys": null,
+                "key": null,
+                "key_len": null,
+                "ref": null,
+                "rows": "28",
+                "filtered": "100.00",
+                "Extra": "Using filesort"
+            }
+        ],
+        "sessions": [
+            {
+                "id": "1",
+                "select_type": "SIMPLE",
+                "table": "user_sessions",
+                "partitions": null,
+                "type": "range",
+                "possible_keys": "idx_sessions_expiry",
+                "key": "idx_sessions_expiry",
+                "key_len": "6",
+                "ref": null,
+                "rows": "12",
+                "filtered": "100.00",
+                "Extra": "Using index condition; Using filesort"
+            }
+        ]
+    }
+}

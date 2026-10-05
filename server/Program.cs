@@ -17,6 +17,7 @@ builder.Services.AddSingleton<IMediaService, MySqlMediaService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddScoped<IAccessDecisionService, AccessDecisionService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<DatabaseOverviewService>();
 builder.Services.AddScoped<ISecurityAlertService, SecurityAlertService>();
 builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
 builder.Services.AddMemoryCache();

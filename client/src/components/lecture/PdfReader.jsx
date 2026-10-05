@@ -93,14 +93,13 @@ export default function PdfReader({
         return;
       } catch (secondErr) {
         if (!active) return;
-        console.warn('ArrayBuffer PDF parse failed, switching to native embed fallback:', secondErr);
+        console.warn('ArrayBuffer PDF parse failed:', secondErr);
         const message =
           secondErr?.name === 'InvalidPDFException'
-            ? 'Tập tin PDF bị lỗi cấu trúc ISO. Đang hiển thị qua trình xem dự phòng của trình duyệt.'
-            : 'Không thể kết xuất PDF bằng Canvas. Đang chuyển sang trình xem dự phòng.';
+            ? 'Tập tin không phải định dạng PDF tiêu chuẩn hoặc có cấu trúc bị lỗi.'
+            : 'Không thể kết xuất trang PDF bằng Canvas.';
         setError(message);
         callbacks.current.onError?.(message);
-        setFallbackMode(true);
       }
     };
 
@@ -326,7 +325,7 @@ export default function PdfReader({
         <div className="pdf-toolbar-group actions-group">
           {/* Mở tab mới độc lập */}
           <a
-            href={url}
+            href={url ? `${url.split('#')[0]}#page=${page}` : '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="pdf-btn pdf-btn-link"

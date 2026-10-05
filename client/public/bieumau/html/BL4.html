@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu BL4</title>
+	<link rel="stylesheet" href="/bieumau/style/style_for_an.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+		{
+			
+		/*---------------------------------------------------------------------------------------*/	
+			var span_ll=document.getElementById('nhap_ll').innerHTML;
+			var DDL_LL=document.getElementById('luc_luong');
+			switch (span_ll)
+			{
+				case 'kết thúc':
+					DDL_LL.value=1;
+					break;
+				case 'chuyển loại':
+					DDL_LL.value=2;
+					break;
+				case 'CSBM':
+					DDL_LL.value=3;
+					break;
+				case 'HT':
+					DDL_LL.value=4;
+					break;
+				case 'AT':
+					DDL_LL.value=5;
+					break;
+				case 'Trạm':
+					DDL_LL.value=6
+			}
+			document.getElementById('nhap_ll_ct').style.display='none';
+			var span_ll_ct=document.getElementById('nhap_ll_ct').innerHTML;
+			var DDL_LL_CT=document.getElementById('luc_luong_ct');
+			switch (span_ll_ct)
+			{
+				case 'ĐT':
+					DDL_LL_CT.value=1;
+					break;
+				case 'CTV':
+					DDL_LL_CT.value=2;
+					break;
+				case 'CSBM':
+					DDL_LL_CT.value=3;
+					break;
+				
+			}
+			document.getElementById('nhap_ll').style.display='none';
+		}
+		
+		
+	/*---------------------------------------------------------------------------------------*/	
+			
+		
+		
+/*---------------------------------------------------------------------------------------*/
+	function on_change_ll()
+	{
+		var get_gt=document.getElementById('luc_luong');
+			switch (get_gt.value)
+			{
+				case '1':
+					document.getElementById('nhap_ll').innerHTML=document.getElementById("luc_luong1").innerHTML;
+					break;
+				case '2':
+					document.getElementById('nhap_ll').innerHTML=document.getElementById("luc_luong2").innerHTML;
+					break;
+				case '3':
+					document.getElementById('nhap_ll').innerHTML=document.getElementById("luc_luong3").innerHTML;
+					break;
+				case '4':
+					document.getElementById('nhap_ll').innerHTML=document.getElementById("luc_luong4").innerHTML;
+					break;
+				case '5':
+					document.getElementById('nhap_ll').innerHTML=document.getElementById("luc_luong5").innerHTML;
+					break;
+				case '6':
+					document.getElementById('nhap_ll').innerHTML=document.getElementById("luc_luong6").innerHTML;
+					break;
+			}
+	}
+/*---------------------------------------------------------------------------------------*/
+	function on_change_ll_ct()
+	{
+		var get_gt=document.getElementById('luc_luong_ct');
+			switch (get_gt.value)
+			{
+				case '1':
+					document.getElementById('nhap_ll_ct').innerHTML=document.getElementById("luc_luong_ct_1").innerHTML;
+					break;
+				case '2':
+					document.getElementById('nhap_ll_ct').innerHTML=document.getElementById("luc_luong_ct_2").innerHTML;
+					break;
+				case '3':
+					document.getElementById('nhap_ll_ct').innerHTML=document.getElementById("luc_luong_ct_3").innerHTML;
+					break;
+				
+			}
+	}
+	
+
+	
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ten_dong_chi_sau').innerHTML=document.getElementById('ten_dong_chi_truoc').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					
+					document.getElementById('luc_luong').style.display='none';
+					document.getElementById('luc_luong_ct').style.display='none';
+					document.getElementById('nhap_ll').style.display='inline-block';
+					document.getElementById('nhap_ll_ct').style.display='inline-block';
+					
+					window.print();
+					document.getElementById('nhap_ll').style.display='none';
+					document.getElementById('nhap_ll_ct').style.display='none';
+					document.getElementById('luc_luong_ct').style.display='inline-block';
+					document.getElementById('luc_luong').style.display='inline-block';
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12">
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable ></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu bl4</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center fontUpper clear"><br>BÁO CÁO<br>
+			<span class='fontLow'>
+			<b>Đề nghị</b>
+				<select name="" id="luc_luong" onchange="on_change_ll()">
+						<option value="0" id="luc_luong0">-----</option>
+						<option value="1" id="luc_luong1">kết thúc</option>
+						<option value="2" id="luc_luong2">chuyển loại</option>
+				</select>
+				<span id="nhap_ll" class=""></span> 
+			
+				<select name="" id="luc_luong_ct" onchange="on_change_ll_ct()">
+						<option value="0" id="luc_luong_ct_0">-----</option>
+						<option value="1" id="luc_luong_ct_1">Đặc tình</option>
+						<option value="2" id="luc_luong_ct_2">CTV</option>
+						<option value="3" id="luc_luong_ct_3">CSBM</option>
+				</select>
+				<span id="nhap_ll_ct" class=""></span>
+			<br>
+			</span>
+			</div>
+			
+			
+			<div class="ta_center clear">
+				<span class=""style='vertical-align:top'>Kính gửi: </span> 
+				<span class="o_nhap_1cm border ta_left" id= '1' contenteditable=""></span>
+			</div><br>
+			Họ tên: <span class='o_nhap_2cm border' contenteditable onkeypress='hide_note("lb1")'>
+				<label id='lb1' class="ghichu">Viết in hoa đủ dấu</label>
+			</span>
+			<span class='TAB'></span>
+			Bí danh: <span class='o_nhap_1cm border' contenteditable></span><br>
+			Số hồ sơ: <span class='o_nhap_1cm border' contenteditable ></span><br>
+			Xây dựng ngày <span class='o_nhap_ngay border' contenteditable></span>
+			tháng <span class='o_nhap_thang border' contenteditable></span> 
+			năm <span class='o_nhap_nam border' contenteditable></span><br>
+			<span class='TAB'></span><b>I. CĂN CỨ KẾT THÚC:</b>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class='TAB'></span><b>II. CHUYỂN LOẠI:</b> 
+			<span class='font12 font_I'>(nêu lý do kết thúc và yêu cầu khách quan của công tác nghiệp vụ cần kết thúc hoặc chuyển loại LLBM, CTVBM)</span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class='TAB'></span><b>III. NHẬN XÉT ĐỀ XUẤT CỦA CÁN BỘ SỬ DỤNG:</b>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='TAB'></span>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+					</td>
+					<td class='ta_center lh_1'>
+						<span class=''>CÁN BỘ BÁO CÁO</span>
+						<br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span>
+						<br>
+						<br>
+						<br>
+						<br>
+					</td>
+				</tr>
+			</table>
+			<span class='TAB'></span><span class='fontBold'>IV. Ý KIẾN CỦA LÃNH ĐẠO ĐƠN VỊ: 
+				<span class='TAB'></span>
+				<span class='TAB'></span>
+			</span>
+			<br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				
+				<table class='khung_chu_ky'>
+					<tr>
+						<td class='fontBold ta_center'>
+						</td>
+						<td class='ta_center'>
+							<div class='font_I fontNorm'>
+								Ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span><br>
+							</div>
+							<div class='lh_1' style='margin-top:5px'>
+								<span class=''>LÃNH ĐẠO ĐƠN VỊ</span><br>
+								<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span>
+							</div>
+							<br>
+							<br>
+							<br>
+							<br>
+						</td>
+					</tr>
+				</table>
+			<span class='TAB'></span><span class='fontBold'>V. PHÊ DUYỆT CỦA LÃNH ĐẠO CẤP TRÊN: 
+				<span class='TAB'></span>
+				<span class='TAB'></span>
+			</span>
+			<br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				
+				<table class='khung_chu_ky'>
+					<tr>
+						<td class='fontBold ta_center'>
+						</td>
+						<td class='ta_center'>
+							<div class='font_I fontNorm'>
+								Ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span><br>
+							</div>
+							<div class='lh_1' style='margin-top:5px'>
+								<span class=''>THỦ TRƯỞNG ĐƠN VỊ</span><br>
+								<span class='fontNorm font12 font_I'>(Ký tên, đóng dấu)</span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			<label class='ghichu' contenteditable style='font-size:16pt;'>Ghi chú: - Tài liệu này lưu vào phần hồ sơ cá nhân của LLBM, CTVBM</label>
+			</div>
+		</div>
+	</div>
+	
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

@@ -31,3 +31,11 @@ export function createMediaViewerUrl(fileId, category, page = 1) {
     : streamUrl;
 }
 
+export function createMediaNewTabUrl(fileId, category, page = 1) {
+  const streamUrl = getMediaStreamUrl(fileId);
+  const isDoc = ['pdf', 'document', 'slide'].includes(category);
+  return isDoc
+    ? `${streamUrl}#page=${normalizePdfPage(page)}`
+    : streamUrl;
+}
+

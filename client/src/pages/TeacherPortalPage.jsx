@@ -41,6 +41,7 @@ import { useRemoteTable } from '../utils/useRemoteTable';
 import LectureModal from '../components/lecture/LectureModal';
 import Pagination from '../components/common/Pagination';
 import { SortableTh, useTableSort } from '../utils/tableSort';
+import { getMediaStreamUrl } from '../pdfViewer';
 
 export default function TeacherPortalPage({
   files: initialFiles,
@@ -1047,7 +1048,7 @@ export default function TeacherPortalPage({
                                                         <span>Xem</span>
                                                       </button>
                                                       <a
-                                                        href={`/api/media/stream/${file.fileId}`}
+                                                        href={getMediaStreamUrl(file.fileId)}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         style={{

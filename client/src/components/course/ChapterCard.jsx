@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrowRight, FileText } from 'lucide-react'
+import { ArrowRight, FileText, GraduationCap } from 'lucide-react'
 
 export default function ChapterCard({ courseId, chapter }) {
   return (
@@ -14,9 +14,18 @@ export default function ChapterCard({ courseId, chapter }) {
           {chapter.formats?.slice(0, 4).map((format) => <span className="format-tag" key={format}>{format}</span>)}
         </div>
       </div>
-      <a className="course-secondary-button" href={`#/mon-hoc/${courseId}/chuong/${chapter.id}`}>
-        Xem tài liệu <ArrowRight size={17} aria-hidden="true" />
-      </a>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '150px' }}>
+        <a className="course-secondary-button" href={`#/mon-hoc/${courseId}/chuong/${chapter.id}`}>
+          Xem tài liệu <ArrowRight size={16} aria-hidden="true" />
+        </a>
+        <a 
+          className="portal-button portal-button--primary" 
+          href={`#/study/${courseId}`}
+          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '12px', padding: '6px 12px' }}
+        >
+          <GraduationCap size={15} /> Phòng học
+        </a>
+      </div>
     </article>
   )
 }

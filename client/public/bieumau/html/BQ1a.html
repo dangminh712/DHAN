@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu BQ1-a</title>
+	<link rel="stylesheet" href="/bieumau/style/style_for_an.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script type='text/javascript'>
+		function load_page()
+        {
+
+            var span=document.getElementById('lap_ho_so').innerHTML;
+            var span_gt=document.getElementById('nhap_gt').innerHTML;
+            var DDL=document.getElementById('select_pv');
+            var DDL_GT=document.getElementById('gioi_tinh');
+            switch (span)
+            {
+                case 'QLNV':
+                    DDL.value=1;
+                    break;
+                case 'KTNV':
+                    DDL.value=2;
+                    break;
+                case 'VA':
+                    DDL.value=3;
+                    break;
+                case 'AK':
+                    DDL.value=4;
+                    break;
+                case 'TX':
+                    DDL.value=5;
+                    break;
+                case 'TT':
+                    DDL.value=6;
+                    break;
+            }
+			document.getElementById('select_pv').style.display='inline-block';
+            document.getElementById('lap_ho_so').style.display='none';
+            switch (span_gt)
+            {
+                case 'Nam':
+                    DDL_GT.value=1;
+                    break;
+                case 'Nữ':
+                    DDL_GT.value=2;
+                    break;
+            }
+            document.getElementById('nhap_gt').style.display='none';
+			document.getElementById('gioi_tinh').style.display='inline-block';
+
+        }
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ten_dong_chi_sau').innerHTML=document.getElementById('ten_dong_chi_truoc').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		function on_change_select_1()
+		{
+			var get_sel=document.getElementById('select_pv');
+			document.getElementById('lap_ho_so').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op3").innerHTML;
+				break;
+				case '4':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op4").innerHTML;
+				break;
+				case '5':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op5").innerHTML;
+				break;
+				case '6':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op6").innerHTML;
+				break;
+				
+			}
+			
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+		
+				document.getElementById('gioi_tinh').style.display='none';
+				document.getElementById('select_pv').style.display='none';
+				document.getElementById('nhap_gt').style.display='inline-block';
+				document.getElementById('lap_ho_so').style.display='inline-block';
+				window.print();
+				document.getElementById('gioi_tinh').style.display='inline-block';
+				document.getElementById('select_pv').style.display='inline-block';
+				document.getElementById('nhap_gt').style.display='none';
+				document.getElementById('lap_ho_so').style.display='none';
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12" style='margin-top:3px'>
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">Mẫu BQ1-a</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		<br><br>
+		</div>
+		<div class="content">
+			<table class="style1" cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+					<tr>
+						<td colspan="3" style="text-align:center;font-weight:bold;padding-bottom:10px;padding-top: 15px;">
+							<br />BÁO CÁO<br />
+							<strong>Đề nghị phê duyệt đối tượng</strong><br />
+							<span class="fontNorm">(Thuộc diện:
+								<select id ="select_pv" style="font-size:15pt;text-transform:uppercase;font-family:Times New Roman;" onchange="on_change_select_1()">
+									<option value="0" id="sel_op0">..............</option>
+									<option value='1' id="sel_op1">QLNV</option>
+									<option value='2' id="sel_op2">KTNV</option>
+									<option value='3' id="sel_op3">VA</option>
+									<option value='4' id="sel_op4">AK</option>
+									<option value='5' id="sel_op5">TX</option>
+									<option value='6' id="sel_op6">TT</option>
+								</select>
+								<span class="o_span_nhap" id="lap_ho_so" style='font-weight:normal'></span>) 
+							 </span> 
+							<label id="ghichu1" class='ghichu'>
+								Chọn loại đối tượng QLNV, KTNV, Chuyên án... 
+							</label>
+							<hr style="margin-top:0;background-color:black;border-top:1px solid black" size="1" width="100px" />
+							
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" style="text-align:center;">
+							Kính gửi<span class="so_ghichu">: </span>
+							<span class="o_nhap border" id="" style=" display:inline-block;min-width:100px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span>
+							<br>
+							<br>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="style1" cellpadding="0" cellspacing="0" width="100%" style="line-height:28px">
+                <tbody>
+					<tr>
+						<td colspan="2">
+							<strong><span class='TAB'></span> I. LÝ LỊCH ĐỐI TƯỢNG:
+						</strong>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<strong><span class='TAB'></span> 1. Bản Thân:
+						</strong>
+						</td>
+					</tr>
+					<tr style="border:1px solid black">
+                    <td><!--Lý lich bản thân bên trái-->
+                        <table  style="width: 100%;table-layout:fixed; border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table3" >
+                            <tr  style='line-height:1.25em'>
+                                <td style="width:55%;padding:3px;vertical-align:top">
+                                    Họ tên:&nbsp;<span class="o_nhap border" id="Span10" style=" display:inline-block;min-width:278px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    Họ tên khác:&nbsp;<span class="o_nhap border" id="Span1" style=" display:inline-block;min-width:238px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    Giới tính: <select style="font-size:15pt" id='gioi_tinh' onchange='on_change_gt()'>
+													<option value="0" id="gioi_tinh_0">..............</option>
+													<option  value="1" id='gioi_tinh_nam'>Nam</option>
+													<option value="2"  id='gioi_tinh_nu'>Nữ</option>
+												</select>
+									<span class="o_span_nhap" id="nhap_gt" style='display:inline-block;min-width:20px'></span><br />
+                                    Bí danh:&nbsp;<span class="o_nhap border" id="Span5" style=" display:inline-block;min-width:269px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    Sinh ngày&nbsp;<span class="o_nhap border" id="Span6" style=" display:inline-block;min-width:20px;max-width:20px;overflow:hidden; min-height:23px;text-align:left;vertical-align:top" contenteditable="true" onkeyup="gioihankytu(document.getElementById('Span6'),2)"></span>
+                                    tháng&nbsp;<span class="o_nhap border" id="Span8" style=" display:inline-block;min-width:20px;max-width:20px;overflow:hidden; min-height:23px;text-align:left;vertical-align:top" contenteditable="true" onkeyup="gioihankytu(document.getElementById('Span8'),2)"></span>
+                                    năm&nbsp;<span class="o_nhap border" id="Span9" style=" display:inline-block;min-width:40px;max-width:40px;overflow:hidden; min-height:23px;text-align:left;vertical-align:top" contenteditable="true" onkeyup="gioihankytu(document.getElementById('Span9'),4)"></span><br />
+                                    Quê quán: <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="vertical-align:top;min-width:257px;display:inline-block" id="span11" onkeypress="document.getElementById('span11').style.display = 'unset';"></span><br />
+                                    <div><label style="float:left">Nơi thường trú:&nbsp;</label>
+                                        <div style="min-height:30px">
+                                            <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:217px;display:inline-block" id="span99" onkeypress="document.getElementById('span99').style.display = 'unset';"></span>
+                                        </div>
+                                    </div>
+                                     <div><label style="float:left">Nơi cư trú:&nbsp;</label>
+                                        <div style="min-height:30px">
+                                            <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:252px;display:inline-block" id="span98" onkeypress="document.getElementById('span98').style.display = 'unset';" onfocus="document.getElementById('ghichu2').style.display = 'block';" onblur="document.getElementById('ghichu2').style.display = 'none';"></span>
+                                        </div>
+                                        <label id="ghichu2" style="color:Red;float:right;font-size:12pt;font-style:italic;line-height:18px" >
+                                            Nơi cư trú là nơi tạm trú hoặc nơi người đó đang sinh sống.
+                                        </label>
+                                    </div>
+                                    Quốc tịch: <span class="o_nhap border" id="Span13" style=" display:inline-block;min-width:256px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    Dân tộc: <span class="o_nhap border" id="Span15" style=" display:inline-block;min-width:270px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    Tôn giáo: <span class="o_nhap border" id="Span16" style=" display:inline-block;min-width:262px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    <div><label style="float:left">Nghề nghiệp, chức vụ, nơi làm việc:&nbsp;</label>
+                                        <div style="min-height:30px">
+                                            <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:62px;display:inline-block" id="span97" onkeypress="document.getElementById('span97').style.display = 'unset';"></span>
+                                        </div>
+                                    </div>
+                                    Trình độ văn hóa: <span class="o_nhap border" id="Span12" style=" display:inline-block;min-width:202px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    <div ><label style="float:left">Trình độ chuyên môn kỹ thuật:&nbsp;</label>
+                                        <div style="min-height:30px">
+                                            <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:103px;display:inline-block" id="span96" onkeypress="document.getElementById('span96').style.display = 'unset';"></span>
+                                        </div>
+                                    </div>
+                                    <div><label style="float:left">Ngoại ngữ, tiếng dân tộc:&nbsp; </label>
+                                        <div style="min-height:30px">
+                                            <span class="o_nhap border" id="Span17" style=" display:inline-block;min-width:144px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                        </div>
+                                    </div>
+                                    <div ><label style="float:left">Lý luận chính trị:&nbsp;</label>
+                                        <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:204px;display:inline-block" id="span95" onkeypress="document.getElementById('span95').style.display = 'unset';"></span>
+                                    </div>
+                                    <div style=""><label style="float:left">Đảng phái, tổ chức xã hội hiện nay(ta, địch):&nbsp;</label>
+                                        <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:98%;display:inline-block;min-height:90px;float:left" id="span94" onkeypress="document.getElementById('span94').style.display = 'unset';"></span>
+                                    </div>
+                                </td>
+                                <td style="width:45%;padding:3px;vertical-align:top">
+                                <div style="width:1.8cm;height:1.4cm;float:right;border:1px solid black;text-align:center;font-size:12px;margin-right:10px;padding-top:30px">
+                                    <span>Ảnh</span>
+                                </div>
+                                <div>     
+                                    <label style="float:left">Số CMND/CCCD:&nbsp;</label>
+                                    <div style="min-height:30px">
+                                        <span class="o_nhap border" id="Span2" style=" display:inline-block;min-width:194px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    </div>
+                                </div>
+                                    Ngày cấp:&nbsp;<span class="o_nhap border" id="Span18" style=" display:inline-block;min-width:114px; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    <div style="min-height:30px;line-height:23px"><label style="float:left">Nơi cấp:&nbsp;</label>
+                                        <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:208px;display:inline-block" id="span93" onkeypress="document.getElementById('span93').style.display = 'unset';"></span>
+                                    </div>
+                                    Số hộ chiếu:&nbsp;<span class="o_nhap border" id="Span20" style=" display:inline-block;min-width:168px;overflow:hidden; min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                    Ngày cấp:&nbsp;<span class="o_nhap border" id="Span21" style=" display:inline-block;min-width:185px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span>
+                                    <div><label style="float:left">Nơi cấp:&nbsp;</label>
+                                        <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:197px;display:inline-block" id="span92" onkeypress="document.getElementById('span92').style.display = 'unset';"></span>
+                                    </div>
+                                    <span style="float:left"><strong style="float:left">Nhận dạng và đặc điểm</strong> (nếu có):</span>
+                                    <table style="clear:left">
+                                        <tr>
+                                            <td style="width:58%">
+                                                Chiều cao:&nbsp;<span class="o_nhap border" id="Span19" style=" display:inline-block;min-width:60px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Vóc dáng:&nbsp;<span class="o_nhap border" id="Span23" style=" display:inline-block;min-width:63px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Màu da:&nbsp;<span class="o_nhap border" id="Span24" style=" display:inline-block;min-width:78px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Màu mắt:&nbsp;<span class="o_nhap border" id="Span25" style=" display:inline-block;min-width:68px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Màu tóc:&nbsp;<span class="o_nhap border" id="Span26" style=" display:inline-block;min-width:73px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Khuôn mặt:&nbsp;<span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="vertical-align:top;min-width:51px;display:inline-block" id="span27" onkeypress="document.getElementById('span27').style.display = 'unset';"></span>
+                                            </td>
+                                            <td style="width:36%">
+                                                Trán:&nbsp;<span class="o_nhap border" id="Span22" style=" display:inline-block;min-width:45px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Tai:&nbsp;<span class="o_nhap border" id="Span28" style=" display:inline-block;min-width:56px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Mũi:&nbsp;<span class="o_nhap border" id="Span29" style=" display:inline-block;min-width:49px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Miệng:&nbsp;<span class="o_nhap border" id="Span30" style=" display:inline-block;min-width:31px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Răng:&nbsp;<span class="o_nhap border" id="Span31" style=" display:inline-block;min-width:41px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                                Môi:&nbsp;<span class="o_nhap border" id="Span32" style=" display:inline-block;min-width:49px;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span><br />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div><label style="clear:both"> Dấu vết riêng:&nbsp;</label>
+                                        <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:157px;display:inline-block" id="span91" onkeypress="document.getElementById('span91').style.display = 'unset';"></span>
+                                    </div>
+                                    <div>
+                                        <label style="clear:both"> Cằm:&nbsp;</label>
+                                        <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:223px;display:inline-block" id="span333" onkeypress="document.getElementById('span333').style.display = 'unset';"></span>
+                                    </div>
+                                    <div >
+                                        <label style="float:left">Sở thích:&nbsp;</label>
+                                        <div style="min-height:30px">
+                                            <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:201px;display:inline-block" id="span341" onkeypress="document.getElementById('span341').style.display = 'unset';"></span>
+                                        </div>
+                                    </div>
+                                    <div style="float:left"><label style="float:left">Khả năng đặc biệt:&nbsp;</label>
+                                        <span class="o_nhap_nhieu_dong1 border" contenteditable="true" style="min-width:128px;display:inline-block" id="span90" onkeypress="document.getElementById('span90').style.display = 'unset';"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td><!--End lý lịch bản thân bên phải-->
+                </tr>
+                </tbody>
+			</table><!--------END Bảng Nội dung Lý lịch bản thân------------->
+		</div>
+		<div class="content_page_2">
+            <p class="p_margin" ><strong><span>
+                <br />
+                <span id="span1111" class="setHeight TAB" style="display:inline-block;min-width:10px;min-height:20px;"contentEditable="true" onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;};br_line('span1111')"></span>2. Quan hệ gia đình:</span></strong><font 
+                    size="3"> (Bố mẹ, anh chị em ruột, vợ hoặc chồng, con)</font></p>
+			<table  style="width: 100%;border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table1" >
+				<tr>
+							<td class="style13 ta_center" style="height:36px;width:31px" ><strong>STT</strong></td>
+							<td class="style7 ta_center" style="width:65px; " >
+							<strong><span class="quochieu">&nbsp;Quan hệ</span></strong><span class="quochieu"></td>
+							<td class="style7 ta_center" style="width:160px; " >
+							<strong>Họ tên</strong></td>
+							<td class="style7 ta_center" style="width:52px;">
+							<strong>Năm sinh</strong></td>
+							<td class="style7 ta_center" style="width:240px;"><strong>Nghề nghiệp, chức 
+							vụ và nơi làm việc</strong></td>
+							<td class="style7 ta_center" style="width:89px;"></span><strong><span class="quochieu">Nơi cư trú</span></strong></td>
+                        </tr>
+				<tr>
+							<td style="text-align:center; ">
+								1
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td class="style3">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                                </td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+                           
+						</tr>
+				<tr>
+							<td style="text-align:center; ">
+								2
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td class="style3">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                                </td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+                           
+						</tr><tr>
+							<td style="text-align:center; ">
+								3
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td class="style3">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                                </td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+                           
+						</tr><tr>
+							<td style="text-align:center; ">
+								4
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td class="style3">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                                </td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+                           
+						</tr><tr>
+							<td style="text-align:center; ">
+								5
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td class="style3">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                                </td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+                           
+						</tr>
+			</table>
+            <div>
+                        <input type="button" value="Thêm dòng" class="_input" onclick="addRow('Table1')" />
+                        <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow('Table1')" />
+                    </div>
+            <script type="text/javascript">
+                        function addRow(tableID) {
+
+                            var table = document.getElementById(tableID);
+
+                            var rowCount = table.rows.length;
+                            var row = table.insertRow(rowCount);
+
+                            var table1_cell1 = row.insertCell(0);
+                            table1_cell1.innerHTML = rowCount;
+                            table1_cell1.setAttribute('class', 'demo ta_center');
+
+                            var table1_cell2 = row.insertCell(1);
+                            var table1_element1 = document.createElement("div");
+                            table1_cell2.setAttribute('contentEditable', 'true');
+                            table1_cell2.setAttribute('class', 'ta_center');
+
+
+                            var table1_cell3 = row.insertCell(2);
+                            var table1_element2 = document.createElement("div");
+                            table1_cell3.setAttribute('contentEditable', 'true');
+                            table1_cell3.setAttribute('class', 'ta_center');
+
+                            var table1_cell4 = row.insertCell(3);
+                            var table1_element3 = document.createElement("div");
+                            table1_cell4.setAttribute('contentEditable', 'true');
+                            table1_cell4.setAttribute('class', 'ta_center');
+
+                            var table1_cell5 = row.insertCell(4);
+                            var table1_element4 = document.createElement("div");
+                            table1_cell5.setAttribute('contentEditable', 'true');
+                            table1_cell5.setAttribute('class', 'div1');
+
+                            var table1_cell6 = row.insertCell(5);
+                            var table1_element5 = document.createElement("div");
+                            table1_cell6.setAttribute('contentEditable', 'true');
+                            table1_cell6.setAttribute('class', 'div1');
+
+
+
+                        }
+
+                        function deleteRow(tableID) {
+                            var table = document.getElementById(tableID);
+                            var rowCount = table.rows.length;
+                            for (i = rowCount - 1; i > 1; i--) {
+                                document.getElementById("Table1").deleteRow(i);
+                                break;
+                            }
+                        }
+ 
+    </script>
+            <p class="p_margin"><strong><span id="span1112" class="setHeight TAB" style="display:inline-block;min-width:10px;min-height:20px;clear:left"contentEditable="true" onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;};br_line('span1112')"></span>3. Các quan hệ 
+                        khác cần lưu ý:</strong></p>
+			<table  style="width: 100%;border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table2" >
+						<tr>
+							<td class="style13 ta_center" style="height:36px" rowspan="2" ><strong>STT</strong></td>
+							<td class="style7 ta_center" rowspan="2" >
+							<strong>Họ tên</strong></td>
+							<td class="style7 ta_center" colspan="2" >
+							<strong>Năm sinh</strong></td>
+							<td class="style7 ta_center" rowspan="2" style="width:110px" ><strong>Nghề 
+							nghiệp chức vụ</strong></td>
+							<td class="style7 ta_center" rowspan="2" style="width:90px"><strong>Nơi cư trú</strong></td>
+							<td class="style7 ta_center" rowspan="2" style="width:55px">
+							<strong>&nbsp;Quan hệ</strong></td>
+							<td class="style7 ta_center" rowspan="2" style="width:92px"><strong>Nguồn 
+							tin</strong></td>
+						</tr>
+						<tr>
+							<td class="style13 ta_center" style="width: 113px" >
+							<strong>Nam</strong></td>
+							<td class="style7 ta_center" style="width: 113px" >
+							<strong>Nữ</strong></td>
+						</tr>
+						 <tr>
+							<td style="text-align:center ">
+								1
+							</td>
+							<td style=" ">
+								<div style="width:120px; text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style="width: 113px;">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                            </td>
+							<td style="width: 113px;">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                            </td>
+							<td style=" ">
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style=" text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style="width:83px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable onfocus="document.getElementById('ghichu3').style.display = 'block';" onblur="document.getElementById('ghichu3').style.display = 'none';"> 
+                                    <label id="ghichu3" style="color:Red;float:right;display:none;font-size:12pt;font-style:italic" >
+                                        Viết rõ nguồn tin cung cấp: người, đơn vị, số công văn, số hồ sơ.
+                                    </label>
+                                </div>
+							</td>
+                             
+						</tr>
+                        <tr>
+							<td style="text-align:center ">
+								2
+							</td>
+							<td style=" ">
+								<div style="width:120px; text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style="width: 113px;">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                            </td>
+							<td style="width: 113px;">
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                            </td>
+							<td style=" ">
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style=" text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style="width:83px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > 
+                                </div>
+							</td>
+                        </tr>
+                        <tr>
+							<td style="text-align:center ">
+								3
+							</td>
+							<td style=" ">
+								<div style="width:120px; text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style="width: 113px;">
+								<div style=" text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                                </td>
+							<td style="width: 113px;">
+								<div style=" text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+                                </td>
+							<td style=" ">
+								<div style="width:100px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style="width:80px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style=" text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td style=" ">
+								<div style="width:83px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+                             
+						</tr>
+					
+												
+					</table>
+            <div>
+                        <input type="button" value="Thêm dòng" class="_input" onclick="addTable2('Table2')" />
+                        <input type="button" value="Xóa dòng" class="_input" onclick="deleteTable2('Table2')" />
+                    </div>
+            <script type="text/javascript">
+                         function addTable2(tableID) {
+
+                             var table = document.getElementById(tableID);
+
+                             var rowCount = table.rows.length;
+                             var row = table.insertRow(rowCount);
+
+                             var cell1 = row.insertCell(0);
+                             cell1.innerHTML = rowCount - 1;
+                             cell1.setAttribute('class', 'demo ta_center');
+
+                             var cell2 = row.insertCell(1);
+                             var element1 = document.createElement("div");
+                             cell2.setAttribute('contentEditable', 'true');
+                             cell2.setAttribute('class', 'ta_center');
+
+                             var cell3 = row.insertCell(2);
+                             var element2 = document.createElement("div");
+                             cell3.setAttribute('contentEditable', 'true');
+                             cell3.setAttribute('class', 'ta_center');
+
+                             var cell4 = row.insertCell(3);
+                             var element3 = document.createElement("div");
+                             cell4.setAttribute('contentEditable', 'true');
+                             cell4.setAttribute('class', 'ta_center');
+
+                             var cell5 = row.insertCell(4);
+                             var element4 = document.createElement("div");
+                             cell5.setAttribute('contentEditable', 'true');
+                             cell5.setAttribute('class', 'div1');
+
+                             var cell6 = row.insertCell(5);
+                             var element5 = document.createElement("div");
+                             cell6.setAttribute('contentEditable', 'true');
+                             cell6.setAttribute('class', 'div1');
+
+                             var cell7 = row.insertCell(6);
+                             var element6 = document.createElement("div");
+                             cell7.setAttribute('contentEditable', 'true');
+                             cell7.setAttribute('class', 'ta_center');
+
+                             var cell8 = row.insertCell(7);
+                             var element7 = document.createElement("div");
+                             cell8.setAttribute('contentEditable', 'true');
+                             cell8.setAttribute('class', 'div1');
+
+
+
+
+                         }
+
+                         function deleteTable2(tableID) {
+                             var table = document.getElementById(tableID);
+                             var rowCount = table.rows.length;
+                             for (i = rowCount - 1; i > 1; i--) {
+                                 document.getElementById("Table2").deleteRow(i);
+                                 break;
+                             }
+
+                         }
+ 
+ 
+    </script>
+            <p class="p_margin">
+				<strong>
+					<span id="span1113" class="setHeight TAB" style="display:inline-block;min-height:20px;clear:left"contentEditable="true" onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;};"></span>4. Quá trình lịch sử bản thân:
+				</strong><br />
+				<strong><span class='TAB' style="min-height:20px;clear:left"contentEditable="true" onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;}"></span>a - Tiền án tiền sự:</strong></p>
+			<table  style="width: 100%; border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table3" >
+						<tr>
+							<td class="style14 ta_center" >
+							<strong>Thời gian</strong></td>
+							<td class="style7 ta_center" >
+							<strong>Hành vi hoặc tội danh</strong></td>
+							<td class="style7 ta_center" ><strong>Cơ quan xử lý<br />
+							Mức độ xử lý</strong></td>
+							<td class="style7 ta_center" ><strong>Nguồn tin</strong></td>
+						</tr>
+						 <tr>
+							<td>
+								<div style="width:100px; text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;min-height:23px" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="width:180px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="width:155px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px" class="divtext" contentEditable onfocus="document.getElementById('ghichu4').style.display = 'block';" onblur="document.getElementById('ghichu4').style.display = 'none';">
+                                    <label id="ghichu4" style="color:Red;float:right;display:none;font-size:12pt;font-style:italic" >
+                                         Viết rõ nguồn tin cung cấp: người, đơn vị, số công văn, số hồ sơ. 
+                                    </label>
+                                </div>
+							</td>
+						</tr>
+						
+ <tr>
+							<td>
+								<div style="width:100px; text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="width:180px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="width:155px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+
+ <tr>
+							<td>
+								<div style="width:100px; text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="width:180px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="width:155px; text-align:left;padding-left:4px;padding-right:4px;min-height:23px" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+
+												
+						</table>
+            <div>
+                        <input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3')" />
+                        <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3')" />
+                    </div>
+            <script type="text/javascript">
+                        function addRow3(tableID) {
+
+                            var table = document.getElementById(tableID);
+
+                            var rowCount = table.rows.length;
+                            var row = table.insertRow(rowCount);
+
+                            var table1_cell1 = row.insertCell(0);
+                            var table1_element0 = document.createElement("div");
+                            table1_cell1.setAttribute('contentEditable', 'true');
+                            table1_cell1.setAttribute('class', 'ta_center');
+
+                            var table1_cell2 = row.insertCell(1);
+                            var table1_element1 = document.createElement("div");
+                            table1_cell2.setAttribute('contentEditable', 'true');
+                            table1_cell2.setAttribute('class', 'div1');
+
+
+                            var table1_cell3 = row.insertCell(2);
+                            var table1_element2 = document.createElement("div");
+                            table1_cell3.setAttribute('contentEditable', 'true');
+                            table1_cell3.setAttribute('class', 'div1');
+
+                            var table1_cell4 = row.insertCell(3);
+                            var table1_element3 = document.createElement("div");
+                            table1_cell4.setAttribute('contentEditable', 'true');
+                            table1_cell4.setAttribute('class', 'div1');
+
+
+
+
+                        }
+
+                        function deleteRow3(tableID) {
+                            var table = document.getElementById(tableID);
+                            var rowCount = table.rows.length;
+                            for (i = rowCount - 1; i > 1; i--) {
+                                document.getElementById("Table3").deleteRow(i);
+                                break;
+                            }
+                        }
+    </script>
+            <p class="p_margin"><strong><span class='TAB' id="span1114" style="display:inline-block;min-height:20px;clear:left"contentEditable="true" onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;};br_line('span1114')"></span>b - Quá trình hoạt động:</strong></p>
+			<table  style="width: 100%;border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table4" >
+						<tr>
+							<td class="style14 ta_center" style="width:110px">
+							<strong>Thời gian</strong></td>
+							<td class="style7 ta_center"  style="width:384px">
+							<strong>Làm gì, ở đâu, cấp bậc, chức vụ, các hoạt 
+							động cần chú ý</strong></td>
+							<td class="style7 ta_center" style="width:146px"><strong>Nguồn tin</strong></td>
+						</tr>
+						 <tr>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable onfocus="document.getElementById('ghichu5').style.display = 'block';" onblur="document.getElementById('ghichu5').style.display = 'none';">
+                                    <label id="ghichu5" style="color:Red;float:right;display:none;font-size:12pt;font-style:italic" >
+                                         Viết rõ nguồn tin cung cấp: người, đơn vị, số công văn, số hồ sơ. 
+                                    </label>
+                                </div>
+							</td>
+						</tr>
+						 
+ <tr>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+						 
+ <tr>
+							<td>
+								<div style="text-align:center;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+						 
+ 
+ 												
+					</table>
+            <div>
+                        <input type="button" value="Thêm dòng" class="_input" onclick="addRow4('Table4')" />
+                        <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow4('Table4')" />
+                    </div>   
+            <script type="text/javascript">
+                         function addRow4(tableID) {
+
+                             var table = document.getElementById(tableID);
+
+                             var rowCount = table.rows.length;
+                             var row = table.insertRow(rowCount);
+
+                             var table1_cell1 = row.insertCell(0);
+                             var table1_element0 = document.createElement("div");
+                             table1_cell1.setAttribute('contentEditable', 'true');
+                             table1_cell1.setAttribute('class', 'ta_center');
+
+                             var table1_cell2 = row.insertCell(1);
+                             var table1_element1 = document.createElement("div");
+                             table1_cell2.setAttribute('contentEditable', 'true');
+                             table1_cell2.setAttribute('class', 'div1');
+
+
+                             var table1_cell3 = row.insertCell(2);
+                             var table1_element2 = document.createElement("div");
+                             table1_cell3.setAttribute('contentEditable', 'true');
+                             table1_cell3.setAttribute('class', 'div1');
+                            }
+
+                         function deleteRow4(tableID) {
+                             var table = document.getElementById(tableID);
+                             var rowCount = table.rows.length;
+                             for (i = rowCount - 1; i > 0; i--) {
+                                 document.getElementById("Table4").deleteRow(i);
+                                 break;
+                             }
+
+                         }
+    </script>
+			<p class="p_margin" ><strong><span id="span1115" class='TAB' style="display:inline-block;min-height:20px;clear:left"contentEditable="true" onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;};br_line('span1115')"></span>5. Những dấu hiệu hoạt động hiện hành:</strong></p>
+			<table  style="width: 100%;	border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table5" >
+						<tr >
+							<td class="style14 ta_center" style="width:112px">
+							<strong>Thời gian</strong></td>
+							<td class="demo ta_center" style="width:378px">
+							<strong>&nbsp;Vấn đề nghi vấn hoạt động hiện hành</strong></td>
+							<td class="demo ta_center" style="width:150px"><strong>Nguồn tin</strong></td>
+						</tr>
+						 <tr>
+							<td>
+								<div style=" text-align:center;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="  text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable onfocus="document.getElementById('ghichu6').style.display = 'block';" onblur="document.getElementById('ghichu6').style.display = 'none';">
+                                    <label id="ghichu6" style="color:Red;float:right;display:none;font-size:12pt;font-style:italic" >
+                                         Viết rõ nguồn tin cung cấp: người, đơn vị, số công văn, số hồ sơ. 
+                                    </label>
+                                </div>
+							</td>
+						</tr>
+						 
+ <tr>
+							<td>
+								<div style="  text-align:center;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="  text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="  text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+						 
+ <tr>
+							<td>
+								<div style="  text-align:center;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="  text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style="  text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+                        <tr>
+							<td>
+								<div style="  text-align:center;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+                        <tr>
+							<td>
+								<div style="  text-align:center;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+							<td>
+								<div style=" text-align:left;padding-left:4px;padding-right:4px;min-height:23px;" class="divtext" contentEditable > </div>
+							</td>
+						</tr>
+						 
+ 				
+					</table>   
+            <div>
+                        <input type="button" value="Thêm dòng" class="_input" onclick="addRow5('Table5')" />
+                        <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow5('Table5')" />
+                    </div>   
+            <script type="text/javascript">
+                         function addRow5(tableID) {
+
+                             var table = document.getElementById(tableID);
+
+                             var rowCount = table.rows.length;
+                             var row = table.insertRow(rowCount);
+
+                             var table1_cell1 = row.insertCell(0);
+                             var table1_element0 = document.createElement("div");
+                             table1_cell1.setAttribute('contentEditable', 'true');
+                             table1_cell1.setAttribute('class', 'ta_center');
+
+                             var table1_cell2 = row.insertCell(1);
+                             var table1_element1 = document.createElement("div");
+                             table1_cell2.setAttribute('contentEditable', 'true');
+                             table1_cell2.setAttribute('class', 'div1');
+
+
+                             var table1_cell3 = row.insertCell(2);
+                             var table1_element2 = document.createElement("div");
+                             table1_cell3.setAttribute('contentEditable', 'true');
+                             table1_cell3.setAttribute('class', 'div1');
+
+                        }
+
+                         function deleteRow5(tableID) {
+                             var table = document.getElementById(tableID);
+                             var rowCount = table.rows.length;
+                             for (i = rowCount - 1; i > 0; i--) {
+                                 document.getElementById("Table5").deleteRow(i);
+                                 break;
+                             }
+
+                         }
+            </script> 
+            <strong>
+            <br />
+            <span class='TAB' contentEditable onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;};"></span><span class='fontBold'>II. NHẬN XÉT ĐỀ XUẤT CỦA TRINH SÁT: 
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+			</span>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<br>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+					</td>
+					<td class='ta_center lh_1'>
+						<span class=''>TRINH SÁT BÁO CÁO</span>
+						<br>
+						<span class='fontNorm font12 font_I'>(Ký, ghi rõ họ tên)</span>
+						<br>
+						<br>
+						<br>
+						<br>
+						
+					</td>
+				</tr>
+			</table>
+			<span class='TAB' onkeypress="if (event.keyCode != 13 && event.keyCode != 8 && event.keyCode != 9  && event.keyCode != 9) {return false;};"></span><span class='fontBold'>III. Ý KIẾN CỦA LÃNH ĐẠO ĐƠN VỊ: 
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+			</span>
+			<br>
+			<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				
+				<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+					</td>
+					<td class='ta_center'>
+						<div class='font_I fontNorm'>
+							Ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span><br>
+						</div>
+						<div class='lh_1' style='margin-top:5px'>
+							<span class=''>LÃNH ĐẠO ĐƠN VỊ</span><br>
+							<span class='font_I font12 fontNorm'>(Ký, ghi rõ họ tên)</span>
+						</div>
+						<br>
+						<br>
+						<br>
+						<br>
+						
+					</td>
+				</tr>
+			</table>
+			<span class='TAB'></span><span class='fontBold'>IV. PHÊ DUYỆT CỦA LÃNH ĐẠO CẤP TRÊN: 
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+			</span>
+			<br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				
+				<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+					</td>
+					<td class='ta_center'>
+						<div class='font_I fontNorm'>
+							Ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span><br>
+						</div>
+						<div class='lh_1' style='margin-top:5px'>
+							<span class=''>THỦ TRƯỎNG ĐƠN VỊ</span><br>
+							<span class='font_I font12 fontNorm'>(Ký tên, đóng dấu)</span>
+						</div>
+						<br>
+						<br>
+						<br>
+						<br>
+						
+					</td>
+				</tr>
+			</table>
+        </div>
+    </div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

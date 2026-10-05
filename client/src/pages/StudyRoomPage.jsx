@@ -18,6 +18,7 @@ import { fileService } from '../services/fileService';
 import { useAuth } from '../context/AuthContext';
 import { ClearanceBadge } from '../components/common/Badge';
 import { getMediaKind } from '../mediaType';
+import UniversalVideoPlayer from '../components/common/UniversalVideoPlayer';
 
 export default function StudyRoomPage({ lecture, onBack, onDownloadFile }) {
   const { currentUser, isClearanceSufficient } = useAuth();
@@ -124,23 +125,21 @@ export default function StudyRoomPage({ lecture, onBack, onDownloadFile }) {
               const activeKind = getMediaKind(activeFile);
               const ext = (activeFile?.originalName || activeFile?.originalFileName || '').toLowerCase();
               const ft = (activeFile?.fileType || '').toLowerCase();
-              const isVideo = activeKind === 'video' || ft.includes('video') || Boolean(ext.match(/\.(mp4|webm|mov|mkv|avi|m4v)$/i));
+              const isVideo = activeKind === 'video' || ft.includes('video') || Boolean(ext.match(/\.(mp4|webm|mov|mkv|avi|m4v|flv)$/i));
               const isPdf = activeKind === 'pdf' || ft.includes('pdf') || ext.endsWith('.pdf');
               const isImage = activeKind === 'image' || ft.includes('image') || Boolean(ext.match(/\.(png|jpg|jpeg|gif|webp|svg)$/i));
               const isAudio = activeKind === 'audio' || ft.includes('audio') || Boolean(ext.match(/\.(mp3|wav|ogg|m4a|aac)$/i));
 
               if (isVideo) {
                 return (
-                  <video
+                  <UniversalVideoPlayer
                     key={activeFile.fileId || activeFile.id}
-                    controls
                     controlsList="nodownload"
                     autoPlay
                     className="w-full h-full object-contain z-10"
                     src={streamUrl}
-                  >
-                    Trình duyệt không hỗ trợ video.
-                  </video>
+                    fileName={activeFile.originalName || activeFile.originalFileName}
+                  />
                 );
               }
               if (isPdf) {

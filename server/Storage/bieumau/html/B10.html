@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B10</title>
+	<link rel="stylesheet" href="/bieumau/style/style_for_an.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'Nam':
+							DDL_GT.value=1;
+							break;
+						case 'Nữ':
+							DDL_GT.value=2;
+							break;
+					}
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function lap_ketthuc()
+				{
+					var get_sel=document.getElementById('select_lap_ketthuc');
+					switch (get_sel.value)
+					{
+						case '1':
+							document.getElementById('lap_ho_so').innerHTML=document.getElementById("lap_hs").innerHTML;
+							document.getElementById('_duoc').innerHTML=document.getElementById("lap_hs").innerHTML;
+							break;
+						case '2':
+						document.getElementById('lap_ho_so').innerHTML=document.getElementById("kt_hs").innerHTML;
+						document.getElementById('_duoc').innerHTML=document.getElementById("kt_hs").innerHTML;
+						break;
+					}
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					document.getElementById('gioi_tinh').style.display='none';
+					document.getElementById('nhap_gt').style.display='inline-block';
+					window.print();
+					document.getElementById('nhap_gt').style.display='none';
+					document.getElementById('gioi_tinh').style.display='inline-block';
+				}
+    
+	</script>
+	<script type="text/javascript">
+        function addRow(tableID) {
+
+            var table = document.getElementById(tableID);
+
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            var cell1 = row.insertCell(0);
+			cell1.innerHTML ="<span class='TAB'></span>"+"Đồng chí:"+" <span class='o_nhap_3cm border' contentEditable></span>";
+			
+
+            var cell2 = row.insertCell(1);
+			cell2.innerHTML ="<span class='TAB'></span>"+"Chức vụ, đơn vị:"+" <span class='o_nhap_3cm border' contentEditable></span>";
+        }
+
+
+        function deleteRow2(tableID) {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+            for (i = rowCount - 1; i >= 1; i--) {
+                document.getElementById(tableID).deleteRow(i);
+                break;
+            }
+        }
+       
+        
+    </script>
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12">
+				<span class='font10'>ĐƠN VỊ</span><br>
+				<span contenteditable class="border fontBold  co_quan"></span>
+				<hr style='width:50px;margin-top:0px;height: 1px;color: black;background-color: black;border: none;'>
+				Số: <span class='o_nhap_1cm border ta_left' contentEditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper" >mẫu b10/2015</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			<br><br><br>
+		</div>
+		<div class="content">
+			<div class="font16	 fontBold ta_center clear"><br>QUYẾT ĐỊNH<br>Thành lập Ban chuyên án</div>
+			<hr style='width:100px;margin-top:0px;height: 1px;color: black;background-color: black;border: none;'>
+			<br>
+			<div class='ta_center'>
+				<span class='o_nhap_2cm border' contenteditable id='hide_note("lbl123")'></span>
+				<label class='ghichu' id= 'lbl123'>Cấp có thẩm quyền ra quyết định thành lập ban chuyên án</label>
+			</div>
+			<br>
+			<span class='TAB'></span>Căn cứ Thông tư của Bộ trưởng Bộ Công an quy định công tác Chuyên án của lực lượng An ninh nhân dân;<br>
+			<span class='TAB'></span>Căn cứ vào báo cáo đề nghị xác lập chuyên án, bí số: <span class='o_nhap_0_5cm border' contentEditable></span>, 
+			ngày <span class='o_nhap_ngay border' contentEditable></span> tháng <span class='o_nhap_ngay border' contentEditable></span> năm <span class='o_nhap_nam border' contentEditable></span>
+			của đơn vị: <span class='o_nhap_0_5cm border' contentEditable></span> (đã được phê duyệt)<br>
+			<div class="font14	 fontBold ta_center clear"><br>QUYẾT ĐỊNH</div>
+			<span class='TAB'></span><b>Điều 1. </b>Thành lập ban chuyên án <span class='o_nhap_0_5cm border' contentEditable onkeypress='hide_note("lblCA")'>
+				<label class='ghichu' id='lblCA'>Bí số chuyên án.</label>
+			</span>, gồm:<br>
+			<span class='TAB'></span>1. Trưởng Ban chuyên án:
+			<table id="Table2" style="width:100%">
+                <tr style="vertical-align: top;">
+					<td><span class='TAB'></span>Đồng chí: <span class="o_nhap_3cm border" id="Span38" contenteditable="true" style="display:inline-block;min-height:20px"></span></td>
+					<td><span class='TAB'></span>Chức vụ, đơn vị: <span class="o_nhap_3cm border" id="Span39" contenteditable="true" style="display:inline-block;min-height:20px"></span></td>
+                </tr>
+            </table>
+			<div style="margin-left:30px">
+				<input type="button" value="Thêm dòng" class="_input" onclick="addRow('Table2')" />
+                <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow2('Table2')" />
+            </div>
+			<span class='TAB'></span>2. Phó trưởng Ban chuyên án:<br>
+			<table id="Table3" style="width:100%">
+                <tr style="vertical-align: top;">
+					<td><span class='TAB'></span>Đồng chí: <span class="o_nhap_3cm border" id="Span38" contenteditable="true" style="display:inline-block;min-height:20px"></span></td>
+					<td><span class='TAB'></span>Chức vụ, đơn vị: <span class="o_nhap_3cm border" id="Span39" contenteditable="true" style="display:inline-block;min-height:20px"></span></td>
+                </tr>
+            </table>
+			<div style="margin-left:30px">
+				<input type="button" value="Thêm dòng" class="_input" onclick="addRow('Table3')" />
+                <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow2('Table3')" />
+            </div>
+			<span class='TAB'></span>3. Các thành viên:<br>
+			<table id="Table4" style="width:100%">
+                <tr style="vertical-align: top;">
+					<td><span class='TAB'></span>Đồng chí: <span class="o_nhap_3cm border" id="Span38" contenteditable="true" style="display:inline-block;min-height:20px"></span></td>
+					<td><span class='TAB'></span>Chức vụ, đơn vị: <span class="o_nhap_3cm border" id="Span39" contenteditable="true" style="display:inline-block;min-height:20px"></span></td>
+                </tr>
+            </table>
+			<div style="margin-left:30px">
+				<input type="button" value="Thêm dòng" class="_input" onclick="addRow('Table4')" />
+                <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow2('Table4')" />
+            </div>
+			<span class='TAB'></span><b>Điều 2. </b>Ban chuyên án thực hiện các nhiệm vụ, quyền hạn theo quy định tại Thông tư của Bộ trưởng Bộ Công an quy định công tác Chuyên án của lực lượng An ninh nhân dân.</span><br>
+			<span class='TAB'></span><b>Điều 3. </b>Quyết định này có hiệu lực kể từ ngày ký, các đồng chí có tên tại Điều 1 có trách nhiệm thi hành quyết định này./.</span><br>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_left'>
+						<span class='font12'><span class='TAB'></span><i>Nơi nhận:</i></span><br>
+						<span class='o_nhap_3cm fontNorm font12' style='min-width:100%;min-height:3cm'>
+						<span contentEditable='false'>- Các đ/c có tên tại Điều 1;<br>
+						- Lưu HS chuyên án.</span>
+						</span>
+					</td>
+					<td class='ta_center'>
+						<span>
+							<div class='ta_center'>
+								<span class='o_nhap_2cm border' contenteditable id='lblCTQ'></span><br>
+								<label id='lblCTQ' class='ghichu'>Cấp có thẩm quyền ra quyết định thành lập ban chuyên án</label>
+							</div>
+						</span>
+						<br><br><br>
+						<div class='fontBold'>
+							Họ và tên: <span class='o_nhap_2cm border ta_left' contenteditable></span><br>
+							Chức vụ: <span class='o_nhap_2cm border ta_left' contenteditable></span>
+						<div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="window.print();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

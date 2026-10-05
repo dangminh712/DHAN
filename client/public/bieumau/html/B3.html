@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B3</title>
+	<link rel="stylesheet" href="/bieumau/style/style_for_an.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'lập hồ sơ nghiệp vụ':
+							DDL_GT.value=1;
+							break;
+						case 'kết thúc hồ sơ nghiệp vụ':
+							DDL_GT.value=2;
+							break;
+					}
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ten_dong_chi_sau').innerHTML=document.getElementById('ten_dong_chi_truoc').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		function lap_ketthuc()
+				{
+					var get_sel=document.getElementById('select_lap_ketthuc');
+					switch (get_sel.value)
+					{
+						case '1':
+							document.getElementById('lap_ho_so').innerHTML=document.getElementById("lap_hs").innerHTML;
+							document.getElementById('_duoc').innerHTML=document.getElementById("lap_hs").innerHTML;
+							break;
+						case '2':
+						document.getElementById('lap_ho_so').innerHTML=document.getElementById("kt_hs").innerHTML;
+						document.getElementById('_duoc').innerHTML=document.getElementById("kt_hs").innerHTML;
+						break;
+					}
+				}
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		function on_change_select_1()
+		{
+			var get_sel=document.getElementById('selected1');
+			document.getElementById('lap_ho_so').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op3").innerHTML;
+				break;
+			}
+			
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					
+					window.print();
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" >
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12" style='margin-top:3px'>
+				<!--<span contenteditable class="border font12 co_quan " onkeypress='hide_note("lb1")'>
+					<label id='lb1' class="ghichu">Ghi "BỘ CÔNG AN" đối với các mẫu sử dụng ở Cục, "CÔNG AN CÁC TỈNH, THÀNH PHỐ" đối với mẫu sử dụng ở địa phương.</label>
+				</span><br>
+				<span contenteditable class="border fontBold font12 co_quan" onkeypress='hide_note("lb2")'>
+					<label id='lb2' class="ghichu">Ghi "CỤC HỒ SƠ NGHIỆP VỤ" đối với các mẫu sử dụng ở Cục, "PHÒNG HỒ SƠ NGHIỆP VỤ" đối với mẫu sử dụng ở địa phương.</label>
+				</span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable></span>-->
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font14">THỐNG KÊ TÀI LIỆU CÓ TRONG HỒ SƠ</span>	<br>
+				<b>Số hồ sơ: </b><span class="o_nhap_1cm border fontBold ta_left" contentEditable></span>
+				
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">Mẫu B3</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			
+			
+		<br><br>
+		</div>
+		<div class="content">
+			<table  style="width: 100%;border:1px;border-collapse: collapse; border-color:black;border-style:solid" border='1px' cellpadding="0" cellspacing="0" id="Table3" >
+				
+				<tr class='fontBold'>
+					<td class="Table_TH fontUpper font10" style="width: 30px;text-align:center"><b>TT</b></td>
+					<td class="Table_TH fontUpper font10" style="width: 340px;text-align:center ">Trích yếu tài liệu</td>
+					<td class="Table_TH fontUpper font10"style="width: 200px;text-align:center" >Từ tờ đến tờ</td>
+					<td class="Table_TH fontUpper font10" style="width: 250px;text-align:center">Đặc điểm<br> tài liệu</td>
+					<td class="Table_TH fontUpper font10" style="width: 150px;text-align:center">Ghi chú</td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >1</div></td>
+					<td style="vertical-align:top;text-align:justify" class="div2" contentEditable></td>
+					<td style="vertical-align:top;" class="ta_center" contentEditable></td>
+					<td style="vertical-align:top;" class="div2" contentEditable onkeypress="document.getElementById('ghichu2').style.display = 'none';">
+						<div class="div_in_td" id="div_ghi_chu"  style="text-align:justify" >
+							<label id="ghichu2" style="color:Red;float:right;font-size:12pt;font-style:italic" class='ghichu' >
+									Bản gốc, bản chính, sao y, phô tô
+							</label>
+						</div>
+					</td>
+					<td style="vertical-align:top" class="div2" contentEditable style="text-align:justify"  onkeypress="document.getElementById('ghichu1').style.display = 'none';">
+						<div class="div_in_td" id="div_ghi_chu" >
+							<label id="ghichu1" style="color:Red;float:right;font-size:12pt;font-style:italic" class='ghichu' >
+									Viết rõ tài liệu đã giải quyết cho phô tô rút ra khỏi hồ sơ để hủy, bàn giao, chuyển sang hồ sơ khác. Phong bì có ảnh hoặc các tài liệu khác... (mà không đục lỗ được).
+							</label>
+						</div>
+                    </td>
+				</tr><!--Dòng mẫu-->
+                <tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >2</div></td>
+					<td style="vertical-align:top;" class="div2" contentEditable style="text-align:justify"><div class="div_in_td"  ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify" onkeypress="document.getElementById('ghichu2').style.display = 'none';"></div>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify"  onkeypress="document.getElementById('ghichu1').style.display = 'none';"></div>
+                    </td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >3</div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable style="text-align:justify" ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify" onkeypress="document.getElementById('ghichu2').style.display = 'none';"></div>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify"  onkeypress="document.getElementById('ghichu1').style.display = 'none';"></div>
+                    </td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >4</div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable style="text-align:justify" ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify" onkeypress="document.getElementById('ghichu2').style.display = 'none';"></div>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify"  onkeypress="document.getElementById('ghichu1').style.display = 'none';"></div>
+                    </td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" >5</div></td>
+					<td style="vertical-align:top;" class="div2"><div class="div_in_td" contentEditable style="text-align:justify" ></div></td>
+					<td style="vertical-align:top;" class="ta_center"><div class="div_in_td" contentEditable ></div></td>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify" onkeypress="document.getElementById('ghichu2').style.display = 'none';"></div>
+					<td style="vertical-align:top" class="div2"><div class="div_in_td" id="div_ghi_chu" contentEditable style="text-align:justify"  onkeypress="document.getElementById('ghichu1').style.display = 'none';"></div>
+                    </td>
+				</tr>
+				</table>
+				<div>
+                        <input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3')" />
+                        <input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3')" />
+                    </div>
+                    <script type="text/javascript">
+                        function addRow3(tableID) {
+
+                            var table = document.getElementById(tableID);
+
+                            var rowCount = table.rows.length;
+                            var row = table.insertRow(rowCount);
+
+                            var table1_cell1 = row.insertCell(0);
+                            table1_cell1.innerHTML = rowCount;
+                            table1_cell1.setAttribute('class', 'ta_center');
+
+                            var table1_cell2 = row.insertCell(1);
+                            var table1_element1 = document.createElement("div");
+                            table1_cell2.setAttribute('contentEditable', 'true');
+                            table1_cell2.setAttribute('class', 'div2');
+
+
+                            var table1_cell3 = row.insertCell(2);
+                            var table1_element2 = document.createElement("div");
+                            table1_cell3.setAttribute('contentEditable', 'true');
+                            table1_cell3.setAttribute('class', 'ta_center');
+
+                            var table1_cell4 = row.insertCell(3);
+                            var table1_element3 = document.createElement("div");
+                            table1_cell4.setAttribute('contentEditable', 'true');
+                            table1_cell4.setAttribute('class', 'div2');
+							var table1_cell5 = row.insertCell(4);
+                            var table1_element4 = document.createElement("div");
+                            table1_cell5.setAttribute('contentEditable', 'true');
+                            table1_cell5.setAttribute('class', 'div2');
+                        }
+
+                        function deleteRow3(tableID) {
+                            var table = document.getElementById(tableID);
+                            var rowCount = table.rows.length;
+                            for (i = rowCount - 1; i > 1; i--) {
+                                document.getElementById("Table3").deleteRow(i);
+                                break;
+                            }
+                        }
+			</script>
+		</div>
+		
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

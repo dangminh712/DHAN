@@ -4,6 +4,18 @@ public class SystemOverviewDto
 {
     public string DatabaseName { get; set; } = "training_management";
     public string DatabaseEngine { get; set; } = "MySQL 8.0 (InnoDB, utf8mb4_0900_ai_ci)";
+    public int TotalTables { get; set; }
+    public long TotalRows { get; set; }
+    public bool TotalRowsIsEstimate { get; set; } = true;
+    public long DatabaseDataBytes { get; set; }
+    public long DatabaseIndexBytes { get; set; }
+    public long StorageBytes { get; set; }
+    public long? DiskTotalBytes { get; set; }
+    public long? DiskFreeBytes { get; set; }
+    public double QueryDurationMs { get; set; }
+    public int ForeignKeyCount { get; set; }
+    public int IndexCount { get; set; }
+    public DateTime MeasuredAt { get; set; }
     public int TotalUsers { get; set; }
     public int TotalRoles { get; set; }
     public int TotalPermissions { get; set; }
@@ -31,7 +43,10 @@ public class TableStatDto
 {
     public string TableName { get; set; } = string.Empty;
     public string Module { get; set; } = string.Empty;
-    public int RowCount { get; set; }
+    public long RowCount { get; set; }
+    public bool RowCountIsEstimate { get; set; }
+    public long DataBytes { get; set; }
+    public long IndexBytes { get; set; }
     public string Description { get; set; } = string.Empty;
 }
 

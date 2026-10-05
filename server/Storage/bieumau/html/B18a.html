@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu B18-a</title>
+	<link rel="stylesheet" href="/bieumau/style/style_for_an.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script type='text/javascript'>
+		function load_page()
+        {
+
+            var span=document.getElementById('lap_ho_so').innerHTML;
+            var span_gt=document.getElementById('nhap_gt').innerHTML;
+            var span_pl=document.getElementById('nhap_pl').innerHTML;
+            var span_ct=document.getElementById('nhap_ct').innerHTML;
+            var span_dt=document.getElementById('nhap_dt').innerHTML;
+            var DDL=document.getElementById('select_pv');
+            var DDL_GT=document.getElementById('gioi_tinh');
+            var DDL_PL=document.getElementById('phan_loai');
+            var DDL_CT=document.getElementById('chuyen_thanh');
+            var DDL_DT=document.getElementById('doi_tuong');
+            switch (span)
+            {
+                case 'QLNV':
+                    DDL.value=1;
+                    break;
+                case 'KTNV':
+                    DDL.value=2;
+                    break;
+                case 'VA':
+                    DDL.value=3;
+                    break;
+                case 'AK':
+                    DDL.value=4;
+                    break;
+                case 'TX':
+                    DDL.value=5;
+                    break;
+                case 'TT':
+                    DDL.value=6;
+                    break;
+            }
+			document.getElementById('select_pv').style.display='inline-block';
+            document.getElementById('lap_ho_so').style.display='none';
+			
+			switch (span_ct)
+            {
+                case 'QLNV':
+                    DDL_CT.value=1;
+                    break;
+                case 'KTNV':
+                    DDL_CT.value=2;
+                    break;
+                case 'VA':
+                    DDL_CT.value=3;
+                    break;
+                case 'AK':
+                    DDL_CT.value=4;
+                    break;
+                case 'TX':
+                    DDL_CT.value=5;
+                    break;
+                case 'TT':
+                    DDL_CT.value=6;
+                    break;
+            }
+			document.getElementById('doi_tuong').style.display='inline-block';
+            document.getElementById('nhap_dt').style.display='none';
+			
+			switch (span_dt)
+            {
+                case 'QLNV':
+                    DDL_DT.value=1;
+                    break;
+                case 'KTNV':
+                    DDL_DT.value=2;
+                    break;
+                case 'VA':
+                    DDL_DT.value=3;
+                    break;
+                case 'AK':
+                    DDL_DT.value=4;
+                    break;
+                case 'TX':
+                    DDL_DT.value=5;
+                    break;
+                case 'TT':
+                    DDL_DT.value=6;
+                    break;
+            }
+			document.getElementById('doi_tuong').style.display='inline-block';
+            document.getElementById('nhap_dt').style.display='none';
+			
+			
+            switch (span_gt)
+            {
+                case 'Nam':
+                    DDL_GT.value=1;
+                    break;
+                case 'Nữ':
+                    DDL_GT.value=2;
+                    break;
+            }
+            document.getElementById('nhap_gt').style.display='none';
+			document.getElementById('gioi_tinh').style.display='inline-block';
+		}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ten_dong_chi_sau').innerHTML=document.getElementById('ten_dong_chi_truoc').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		
+		function on_change_select_1()
+		{
+			var get_sel=document.getElementById('select_pv');
+			document.getElementById('lap_ho_so').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op3").innerHTML;
+				break;
+				case '4':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op4").innerHTML;
+				break;
+				case '5':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op5").innerHTML;
+				break;
+				case '6':
+				document.getElementById('lap_ho_so').innerHTML=document.getElementById("sel_op6").innerHTML;
+				break;
+				
+			}
+			
+		}
+		
+		function on_change_ct()
+		{
+			var get_sel=document.getElementById('chuyen_thanh');
+			document.getElementById('nhap_ct').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('nhap_ct').innerHTML=document.getElementById("sel_op_ct1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('nhap_ct').innerHTML=document.getElementById("sel_op_ct2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('nhap_ct').innerHTML=document.getElementById("sel_op_ct3").innerHTML;
+				break;
+				case '4':
+				document.getElementById('nhap_ct').innerHTML=document.getElementById("sel_op_ct4").innerHTML;
+				break;
+				case '5':
+				document.getElementById('nhap_ct').innerHTML=document.getElementById("sel_op_ct5").innerHTML;
+				break;
+				case '6':
+				document.getElementById('nhap_ct').innerHTML=document.getElementById("sel_op_ct6").innerHTML;
+				break;
+				
+			}
+			
+		}
+		
+		function on_change_dt()
+		{
+			var get_sel=document.getElementById('doi_tuong');
+			document.getElementById('nhap_dt').style.display='none';
+			switch (get_sel.value)
+			{
+				case '1':
+					document.getElementById('nhap_dt').innerHTML=document.getElementById("sel_op_dt1").innerHTML;
+				break;
+				case '2':
+				document.getElementById('nhap_dt').innerHTML=document.getElementById("sel_op_dt2").innerHTML;
+				break;
+				case '3':
+				document.getElementById('nhap_dt').innerHTML=document.getElementById("sel_op_dt3").innerHTML;
+				break;
+				case '4':
+				document.getElementById('nhap_dt').innerHTML=document.getElementById("sel_op_dt4").innerHTML;
+				break;
+				case '5':
+				document.getElementById('nhap_dt').innerHTML=document.getElementById("sel_op_dt5").innerHTML;
+				break;
+				case '6':
+				document.getElementById('nhap_dt').innerHTML=document.getElementById("sel_op_dt6").innerHTML;
+				break;
+				
+			}
+			
+		}
+		
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+		
+				document.getElementById('gioi_tinh').style.display='none';
+				document.getElementById('select_pv').style.display='none';
+				document.getElementById('doi_tuong').style.display='none';
+				document.getElementById('chuyen_thanh').style.display='none';
+				document.getElementById('nhap_gt').style.display='inline-block';
+				document.getElementById('lap_ho_so').style.display='inline-block';
+				document.getElementById('nhap_ct').style.display='inline-block';
+				document.getElementById('nhap_dt').style.display='inline-block';
+				window.print();
+				document.getElementById('gioi_tinh').style.display='inline-block';
+				document.getElementById('select_pv').style.display='inline-block';
+				document.getElementById('doi_tuong').style.display='inline-block';
+				document.getElementById('chuyen_thanh').style.display='inline-block';
+				document.getElementById('nhap_gt').style.display='none';
+				document.getElementById('lap_ho_so').style.display='none';
+				document.getElementById('nhap_ct').style.display='none';
+				document.getElementById('nhap_dt').style.display='none';
+					
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus" onload="load_page()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12" style='margin-top:3px'>
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class="o_nhap_2cm ta_left border" contenteditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 ">Mẫu B18-a</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		<br><br>
+		</div>
+		<div class="content">
+			<table class="style1" cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+					<tr>
+						<td colspan="3" style="text-align:center;font-weight:bold;padding-bottom:10px;padding-top: 15px;">
+							<br />BÁO CÁO<br />
+							<strong>Đề nghị kết thúc công tác nghiệp vụ với đối tượng</strong><br />
+							<span class="fontNorm">(Thuộc diện:
+								<select id ="select_pv" style="font-size:15pt;text-transform:uppercase;font-family:Times New Roman;" onchange="on_change_select_1()">
+									<option value="0" id="sel_op0">..............</option>
+									<option value='1' id="sel_op1">QLNV</option>
+									<option value='2' id="sel_op2">KTNV</option>
+									<option value='3' id="sel_op3">VA</option>
+									<option value='4' id="sel_op4">AK</option>
+									<option value='5' id="sel_op5">TX</option>
+									<option value='6' id="sel_op6">TT</option>
+								</select>
+								<span class="o_span_nhap" id="lap_ho_so" style='font-weight:normal'></span> 
+							Số hồ sơ: <span class='o_nhap_0_5cm border' contentEditable></span>
+							Chuyển thành: 
+								<select id ="chuyen_thanh" style="font-size:15pt;text-transform:uppercase;font-family:Times New Roman;" onchange="on_change_ct();">
+									<option value="0" id="sel_op_ct0">..............</option>
+									<option value='1' id="sel_op_ct1">QLNV</option>
+									<option value='2' id="sel_op_ct2">KTNV</option>
+									<option value='3' id="sel_op_ct3">VA</option>
+									<option value='4' id="sel_op_ct4">AK</option>
+									<option value='5' id="sel_op_ct5">TX</option>
+									<option value='6' id="sel_op_ct6">TT</option>
+								</select>
+								<span class="o_span_nhap" id="nhap_ct" style='font-weight:normal'>)</span>
+							</span> 
+							
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" style="text-align:center;">
+							<br>Kính gửi<span class="so_ghichu">: </span>
+							<span class="o_nhap_0_5cm border" id="" style=" display:inline-block;min-height:23px;text-align:left;vertical-align:top" contenteditable="true"></span>
+							<br>
+							<br>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		Họ và tên đối tượng: <span class='o_nhap_3cm border' contentEditable></span>
+		<span class='TAB'></span>
+		<span class='TAB'></span>
+		(Nam/Nữ):  
+			<select style="font-size:15pt" id='gioi_tinh' onchange='on_change_gt()'>
+				<option value="0" id="gioi_tinh_0">..............</option>
+				<option  value="1" id='gioi_tinh_nam'>Nam</option>
+				<option value="2"  id='gioi_tinh_nu'>Nữ</option>
+			</select>
+			<span class="o_span_nhap" id="nhap_gt" style='display:inline-block;min-width:20px'></span><br />
+		Tên khác: <span class='o_nhap_3cm border' contentEditable></span>
+		Bí danh: <span class='o_nhap_3cm border' contentEditable></span><br>
+		Sinh ngày: <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span><br>
+		Số CCCD/Hộ chiếu: <span class="o_nhap_2cm border" contenteditable></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ngày cấp <span class="o_nhap_2cm border" contenteditable></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nơi cấp <span class='o_nhap_3cm border' contentEditable style='min-width:130px;' id='QQ' onkeypress='kounset(id)'></span><br>
+		Quê quán: <span class='o_nhap_3cm border' contentEditable style='min-width:553px;' id='QQ' onkeypress='kounset(id)'></span><br>
+		Nơi ĐKTT: <span class='o_nhap_3cm border' contentEditable style='min-width:513px;' id='NTT' onkeypress='kounset(id)'></span><br>
+		Nơi cư trú: <span class='o_nhap_3cm border' contentEditable style='min-width:548px;' id='QQ' onkeypress='hide_note("lbl1");kounset(id)'  >
+			<label class='ghichu' id='lbl1'>Nơi cư trú là nơi tạm trú hoặc nơi người đó đang sinh sống;</label>
+		</span><br>
+		Là đối tượng: 
+			<select id ="doi_tuong" style="font-size:15pt;text-transform:uppercase;font-family:Times New Roman;" onchange="on_change_dt();">
+				<option value="0" id="sel_op_dt0">..............</option>
+				<option value='1' id="sel_op_dt1">QLNV</option>
+				<option value='2' id="sel_op_dt2">KTNV</option>
+				<option value='3' id="sel_op_dt3">VA</option>
+				<option value='4' id="sel_op_dt4">AK</option>
+				<option value='5' id="sel_op_dt5">TX</option>
+				<option value='6' id="sel_op_dt6">TT</option>
+			</select>
+			<span class="o_span_nhap" id="nhap_dt" style='font-weight:normal'></span>
+		từ ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span><br>
+		<span class='TAB'></span><span class='fontBold'>I. NHỮNG CĂN CỨ BAN ĐẦU ĐƯA ĐỐI TƯỢNG VÀO DIỆN:</span><br>
+		<span class='font12 font_I'>(Viết rõ xuất xứ, nội dung, tài liệu thu thập bằng các nguồn)</span><br>
+		<span class='o_nhap_n_dong border' contentEditable></span>
+		<span class='TAB'></span><span class='fontBold'>II. BIỆN PHÁP VÀ KẾT QUẢ XÁC MINH:</span><br>
+		<span class='o_nhap_n_dong border' contentEditable></span>
+		<span class='TAB'></span><span class='fontBold'>II. NHẬN XÉT ĐỀ XUẤT CỦA TRINH SÁT:</span><br>
+		<span class='o_nhap_n_dong border' contentEditable></span>
+		<span class="o_span_nhap" id="nhap_pl" style='display:inline-block;min-width:20px'></span><br />
+		<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+					</td>
+					<td class='ta_center lh_1'>
+						<span class=''>TRINH SÁT BÁO CÁO</span>
+						<span class='fontNorm font12 font_I'><br>(Ký, ghi rõ họ tên)</span>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+					</td>
+				</tr>
+			</table>
+			<span class='TAB'></span><span class='fontBold'>IV. Ý KIẾN CỦA LÃNH ĐẠO ĐƠN VỊ: 
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+			</span>
+			<br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+					</td>
+					<td class='ta_center'>
+						<div class='font_I fontNorm'>
+							Ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span><br>
+						</div>
+						<div class='lh_1' style='margin-top:5px'>
+							<span class=''>LÃNH ĐẠO ĐƠN VỊ</span><br>
+							<span class='fontNorm font12 font_I'>(Ký tên, đóng dấu)</span>
+						</div>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+					</td>
+				</tr>
+			</table>
+			<span class='TAB'></span><span class='fontBold'>V. PHÊ DUYỆT CỦA LÃNH ĐẠO CẤP TRÊN: 
+				<span class='TAB'></span></span>
+				<span class='TAB'></span></span>
+			</span>
+			<br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<span class='bolder o_nhap_1cm font9 fontNorm' contenteditable id='...' style='display:unset'>....................................................................................................................................................................................................................</span><br>
+				<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_center'>
+					</td>
+					<td class='ta_center'>
+						<div class='font_I fontNorm'>
+							Ngày <span class='o_nhap_ngay border' contenteditable></span> tháng <span class='o_nhap_thang border' contenteditable></span> năm <span class='o_nhap_nam border' contenteditable></span><br>
+						</div>
+						<div class='lh_1' style='margin-top:5px'>
+							<span class=''>THỦ TRƯỞNG ĐƠN VỊ</span><br>
+							<span class='fontNorm font12 font_I'>(Ký tên, đóng dấu)</span>
+						</div>
+						<br>
+						<br>
+						<br>
+						<br>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

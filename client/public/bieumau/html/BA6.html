@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu BA6</title>
+	<link rel="stylesheet" href="/bieumau/style/style.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<script tyype='text/javascript'>
+		function load_page()
+				{
+					var span_gt=document.getElementById('nhap_gt').innerHTML;
+					var DDL_GT=document.getElementById('gioi_tinh');
+					switch (span_gt)
+					{
+						case 'An ninh':
+							DDL_GT.value=1;
+							break;
+						case 'Cảnh sát':
+							DDL_GT.value=2;
+							break;
+						
+					}
+					
+					document.getElementById('nhap_gt').style.display='none';
+				}
+		function on_change_gt()
+		{
+			var get_gt=document.getElementById('gioi_tinh');
+				switch (get_gt.value)
+				{
+					case '1':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nam").innerHTML;
+						break;
+					case '2':
+						document.getElementById('nhap_gt').innerHTML=document.getElementById("gioi_tinh_nu").innerHTML;
+						break;
+				}
+		}
+		/*---------------------------------------------------------------------------------------HÀM HÀM TEXT TRÊN DÒNG LIÊN TỤC--------------------------------------------------------------------------------*/  
+			function kounset(id)
+			   {
+				   if (document.getElementById(id).innerHTML == "") {
+					   document.getElementById(id).style.display = 'inline-block';
+				   } else { document.getElementById(id).style.display = 'unset'; }
+			   }
+		/*---------------------------------------------------------------------------------------HÀM DÀNH CHO LƯU BIỂU MẪU-------------------------------------------------------------------------------*/  
+			function hide_note(id){
+				document.getElementById(id).style.display = 'none';
+					}
+					
+			function copy_ho_ten()
+					{
+						document.getElementById('ho_ten_2').innerHTML=document.getElementById('ho_ten_1').innerHTML;
+					}
+			
+		/*---------------------------------------------------------------------------------------HÀM SELECT-------------------------------------------------------------------------------*/  
+		
+		
+		/*---------------------------------------------------------------------------------------HÀM chọn giới tính-------------------------------------------------------------------------------*/  
+		function copy_text()
+		{
+			document.getElementById('Span14').innerHTML=document.getElementById('Span10').innerHTML;
+		}
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					 
+					window.print();
+					 
+				}
+    
+	</script>
+	
+</head>
+<body class="font14 ta_jus"  onload='load_page()'>
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center font12">
+				<span contenteditable class="border font12 co_quan"></span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				Số: <span class='o_nhap_2cm border' contenteditable></span>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06">
+				<span class="font8 fontUpper ">mẫu ba6</span><br>
+				<span class="font8">BH theo TT số 60/2020/TT-BCA</span><br>
+				<span class="font8">Ngày 16/6/2020</span><br>
+			</div>
+			<div class="time_header font_I">
+				<span class="dia_danh border" contenteditable></span>, ngày <span class="o_nhap_ngay border" contenteditable></span> tháng <span class="o_nhap_thang border" contenteditable></span> năm <span class="o_nhap_nam border" contenteditable></span>
+			</div>
+			
+		</div>
+		<div class="content">
+			<div class="font16 fontBold ta_center clear"><br>QUYẾT ĐỊNH<br>
+				Thành lập Ban Chỉ đạo chuyên án
+			</div><br>
+			
+			<span class="TAB"></span>- Căn cứ Thông tư của Bộ trưởng Bộ Công an quy định về công tác đấu tranh chuyên án của lực lượng 
+			<select name="" id="gioi_tinh" onchange="on_change_gt()">
+						<option value="0" id="gioi_tinh_ko">-----</option>
+						<option value="1" id="gioi_tinh_nam">An ninh</option>
+						<option value="2" id="gioi_tinh_nu">Cảnh sát</option>
+				</select>
+				<span id="nhap_gt" class="border"></span>.
+				<br>
+			<span class="TAB"></span>- Căn cứ Quyết định số: <span class='o_nhap_0_5cm border' id='so' contenteditable onkeypress='kounset(id)'></span>
+			ngày <span class='o_nhap_ngay border' contenteditable></span>/<span class='o_nhap_thang border' contenteditable></span>/<span class='o_nhap_nam border' contenteditable></span> của <span class='o_nhap_0_5cm border' id='cua' contenteditable onkeypress='kounset(id)'></span>
+			về việc xác lập chuyên án: <span class='o_nhap_0_5cm border' id ='CA' onkeypress='kounset(id)' contenteditable></span> Bí số: <span class='o_nhap_0_5cm border' contenteditable></span>.<br>
+			<br>
+			<span class="TAB"></span>- Theo báo cáo của Ban Chuyên án về tính chất phức tạp, trọng điểm của chuyên án.<br>
+			<span class="TAB"></span>- Xét căn cứ, điều kiện đảm bảo đấu tranh chuyên án,
+			<br>
+			<br>
+			<div class='ta_center fontBold'>QUYẾT ĐỊNH</div><br>
+			<span class="TAB"></span><b>Điều 1. </b>Thành lập Ban Chỉ đạo chuyên án bao gồm: <br>
+			<span class="TAB"></span>- Trưởng ban Chỉ đạo: <span class='o_nhap_3cm border' contenteditable></span><br>
+			<span class="TAB"></span>- Phó ban Chỉ đạo: <span class='o_nhap_3cm border' contenteditable style='min-width:140px'></span><br>
+			<span class="TAB"></span><span style='display:inline-block;vertical-align:top'>- Các thành viên:</span>&nbsp;<span class='o_nhap_3cm border' contenteditable style='min-width:147px'></span><br>
+			<span class="TAB"></span><b>Điều 2. </b>Quyền hạn và nhiệm vụ của Ban Chỉ đạo chuyên án: <br>
+			<span class='o_nhap_n_dong border' contenteditable></span>
+			<span class="TAB"></span><b>Điều 3. </b>Các thành viên trong Ban chỉ đạo chuyên án và các đơn vị liên quan chịu trách nhiệm thi hành Quyết định này và thực hiện đúng các quy định của pháp luật, nguyên tắc hoạt động của Bộ Công an. Ban chỉ đạo chuyên án tự giải thể khi hoàn thành nhiệm vụ.<br>
+			<span class="TAB"></span>Quyết định này có hiệu lực kể từ ngày ký./. 
+			<br><br>
+			<table class='khung_chu_ky'>
+				<tr>
+					<td class='fontBold ta_left lh_1'>
+						<span class='font12'><span class='TAB'></span><em>Nơi nhận:</em></span><br>
+						<span class='o_nhap_3cm border fontNorm font12' contenteditable style='min-width:100%;min-height:3cm'></span>
+					</td>
+					<td class='ta_center lh_1'>
+						<span>THỦ TRƯỞNG ĐƠN VỊ</span><br>
+						<span class='fontNorm font12 font_I'>(Ký tên, đóng dấu)</span><br><br><br><br><br>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau();"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+</body>
+</html>

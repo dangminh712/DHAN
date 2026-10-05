@@ -2,41 +2,54 @@ import React, { useState } from 'react';
 import {
   X,
   FileText,
+  FileSpreadsheet,
+  FileCode,
+  Presentation,
+  Archive,
+  FileQuestion,
   Video,
   Image as ImageIcon,
   Music,
   Download,
   Copy,
   Check,
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
   Shield,
-  Clock,
-  Hash
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
-import { getMediaKind } from '../../mediaType';
-import { createMediaViewerUrl, getMediaStreamUrl } from '../../pdfViewer';
+import { getMediaKind, getViewerKind } from '../../mediaType';
+import { getMediaStreamUrl } from '../../pdfViewer';
+import UniversalVideoPlayer from './UniversalVideoPlayer';
+import PdfReader from '../lecture/PdfReader';
+import ExcelViewer from '../file/ExcelViewer';
+import WordViewer from '../file/WordViewer';
+import TextViewer from '../file/TextViewer';
+import OfficeDocCard from '../file/OfficeDocCard';
 
 export default function DirectMediaViewerModal({
   isOpen,
   onClose,
   file,
   onCopyHash,
-  copiedHash
+  copiedHash,
+  initialPage = 1
 }) {
-  const [pdfPage, setPdfPage] = useState(1);
+  const [pdfPage, setPdfPage] = useState(initialPage || 1);
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  React.useEffect(() => {
+    setPdfPage(initialPage || 1);
+  }, [file?.id, file?.fileId, initialPage]);
 
   if (!isOpen || !file) return null;
 
   const fileId = file.id || file.fileId;
   const fileName = file.originalFileName || file.originalName || 'Tập tin';
-  const fileCat = getMediaKind(file);
   const fileClassification = file.classification || file.classificationName || 'Nội bộ';
-  const isDoc = ['pdf', 'document', 'slide'].includes(fileCat);
-  const isVideo = fileCat === 'video';
-  const isImage = fileCat === 'image';
-  const isAudio = fileCat === 'audio';
+  const viewerKind = getViewerKind(file);
+  const streamUrl = getMediaStreamUrl(fileId);
+  const downloadUrl = `/api/media/download/${fileId}`;
 
   const formatFileSize = (bytes) => {
     if (!bytes || bytes === 0) return '0 B';
@@ -58,69 +71,152 @@ export default function DirectMediaViewerModal({
     });
   };
 
+  // Mở tab mới: luôn mở trang xem tài liệu toàn màn hình độc lập #/view/:id
+  const newTabUrl = `#/view/${fileId}`;
+
+  const formatBadgeLabel = () => {
+    switch (viewerKind) {
+      case 'excel':
+        return 'EXCEL / BẢNG TÍNH';
+      case 'word':
+        return 'WORD / TÀI LIỆU';
+      case 'pdf':
+        return 'TÀI LIỆU PDF';
+      case 'slide':
+        return 'SLIDE POWERPOINT';
+      case 'text':
+        return 'VĂN BẢN THUẦN';
+      case 'video':
+        return 'VIDEO BÀI GIẢNG';
+      case 'image':
+        return 'HÌNH ẢNH';
+      case 'audio':
+        return 'BẢN ÂM THANH';
+      case 'archive':
+        return 'TỆP NÉN';
+      default:
+        return (file.fileType || 'TẬP TIN').toUpperCase();
+    }
+  };
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div
         className="modal-dialog"
-        style={{ maxWidth: '1050px', width: '95vw', height: '90vh', maxHeight: '90vh' }}
+        style={
+          isMaximized
+            ? { maxWidth: '100vw', width: '100vw', height: '100vh', maxHeight: '100vh', borderRadius: 0 }
+            : { maxWidth: '1100px', width: '96vw', height: '90vh', maxHeight: '90vh' }
+        }
         onClick={(e) => e.stopPropagation()}
       >
         {/* MODAL HEADER */}
         <div className="modal-header" style={{ background: '#0B1E36', borderBottom: '2px solid #A31A1A' }}>
           <div className="modal-title-wrap">
-            {isDoc && <FileText size={20} color="#F87171" />}
-            {isVideo && <Video size={20} color="#60A5FA" />}
-            {isImage && <ImageIcon size={20} color="#34D399" />}
-            {isAudio && <Music size={20} color="#FBBF24" />}
+            {viewerKind === 'excel' && <FileSpreadsheet size={20} color="#10B981" />}
+            {viewerKind === 'word' && <FileText size={20} color="#38BDF8" />}
+            {viewerKind === 'pdf' && <FileText size={20} color="#F87171" />}
+            {viewerKind === 'text' && <FileCode size={20} color="#93C5FD" />}
+            {viewerKind === 'slide' && <Presentation size={20} color="#FBBF24" />}
+            {viewerKind === 'archive' && <Archive size={20} color="#C084FC" />}
+            {viewerKind === 'video' && <Video size={20} color="#60A5FA" />}
+            {viewerKind === 'image' && <ImageIcon size={20} color="#34D399" />}
+            {viewerKind === 'audio' && <Music size={20} color="#FBBF24" />}
+            {viewerKind === 'other' && <FileQuestion size={20} color="#94A3B8" />}
+
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h3 title={fileName} style={{ fontSize: '15px', color: '#FFFFFF', margin: 0 }}>
+                <h3 title={fileName} style={{ fontSize: '15px', color: '#FFFFFF', margin: 0, fontWeight: 700 }}>
                   {fileName}
                 </h3>
-                <span style={{
-                  fontSize: '10.5px',
-                  fontWeight: 800,
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                  background: fileClassification.toLowerCase().includes('tuyệt mật') ? '#991B1B' :
-                              fileClassification.toLowerCase().includes('tối mật') ? '#C2410C' :
-                              fileClassification.toLowerCase().includes('mật') ? '#D97706' : '#1E40AF',
-                  color: '#FFFFFF'
-                }}>
+                <span
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: 800,
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    background: fileClassification.toLowerCase().includes('tuyệt mật')
+                      ? '#991B1B'
+                      : fileClassification.toLowerCase().includes('tối mật')
+                      ? '#C2410C'
+                      : fileClassification.toLowerCase().includes('mật')
+                      ? '#D97706'
+                      : '#1E40AF',
+                    color: '#FFFFFF'
+                  }}
+                >
                   {fileClassification}
                 </span>
               </div>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', display: 'flex', gap: '8px', alignItems: 'center', marginTop: '3px' }}>
-                <span>Định dạng: <strong>{fileCat?.toUpperCase() || 'TẬP TIN'}</strong></span>
+              <div
+                style={{
+                  fontSize: '11px',
+                  color: 'rgba(255,255,255,0.7)',
+                  display: 'flex',
+                  gap: '8px',
+                  alignItems: 'center',
+                  marginTop: '3px'
+                }}
+              >
+                <span>
+                  Định dạng: <strong>{formatBadgeLabel()}</strong>
+                </span>
                 <span>•</span>
-                <span>Dung lượng: <strong>{formatFileSize(file.fileSize)}</strong></span>
+                <span>
+                  Dung lượng: <strong>{formatFileSize(file.fileSize)}</strong>
+                </span>
                 <span>•</span>
-                <span>Lưu hành: <strong>Nội bộ T04</strong></span>
+                <span>
+                  Lưu hành: <strong>Nội bộ T04</strong>
+                </span>
               </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => setIsMaximized(!isMaximized)}
+              className="btn-icon-secondary"
+              style={{
+                padding: '6px 10px',
+                fontSize: '12px',
+                background: 'rgba(255,255,255,0.12)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                cursor: 'pointer'
+              }}
+              title={isMaximized ? 'Thu nhỏ lại kích thước chuẩn' : 'Mở rộng toàn màn hình'}
+            >
+              {isMaximized ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+              <span className="hidden sm:inline">{isMaximized ? 'Thu nhỏ' : 'Toàn màn hình'}</span>
+            </button>
+
             <a
-              href={`/api/media/stream/${fileId}`}
+              href={newTabUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-icon-secondary"
               style={{
                 textDecoration: 'none',
-                padding: '5px 10px',
+                padding: '6px 12px',
                 fontSize: '12px',
-                background: 'rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.12)',
                 color: '#fff',
-                border: 'none',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '6px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px'
+                gap: '5px'
               }}
-              title="Mở tập tin trong tab mới"
+              title="Mở tài liệu ra một tab trình duyệt mới độc lập"
             >
               <ExternalLink size={13} />
-              Mở tab mới
+              <span>Mở tab mới</span>
             </a>
 
             <button className="modal-close-btn" onClick={onClose} title="Đóng cửa sổ xem tài liệu">
@@ -141,125 +237,169 @@ export default function DirectMediaViewerModal({
             position: 'relative'
           }}
         >
+          {/* EXCEL VIEWER */}
+          {viewerKind === 'excel' && (
+            <ExcelViewer
+              url={streamUrl}
+              fileName={fileName}
+              file={file}
+              downloadUrl={downloadUrl}
+            />
+          )}
+
+          {/* WORD VIEWER */}
+          {viewerKind === 'word' && (
+            <WordViewer
+              url={streamUrl}
+              fileName={fileName}
+              file={file}
+              downloadUrl={downloadUrl}
+            />
+          )}
+
+          {/* PLAIN TEXT / CODE VIEWER */}
+          {viewerKind === 'text' && (
+            <TextViewer
+              url={streamUrl}
+              fileName={fileName}
+              downloadUrl={downloadUrl}
+            />
+          )}
+
           {/* PDF VIEWER */}
-          {isDoc && (
+          {viewerKind === 'pdf' && (
             <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <div style={{
-                background: '#1E293B',
-                padding: '8px 16px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid #334155'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <button
-                    onClick={() => setPdfPage(p => Math.max(1, p - 1))}
-                    disabled={pdfPage <= 1}
-                    className="btn-doc-nav"
-                    style={{
-                      background: '#334155',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      padding: '4px 8px',
-                      cursor: pdfPage <= 1 ? 'not-allowed' : 'pointer',
-                      opacity: pdfPage <= 1 ? 0.5 : 1
-                    }}
-                    title="Trang trước"
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-
-                  <span style={{ fontSize: '13px', color: '#E2E8F0' }}>
-                    Trang <strong style={{ color: '#FEF08A' }}>{pdfPage}</strong>
-                  </span>
-
-                  <button
-                    onClick={() => setPdfPage(p => p + 1)}
-                    className="btn-doc-nav"
-                    style={{
-                      background: '#334155',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      padding: '4px 8px',
-                      cursor: 'pointer'
-                    }}
-                    title="Trang sau"
-                  >
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-
-                <div style={{ fontSize: '12px', color: '#94A3B8' }}>
-                  Trình đọc Giáo trình & Tài liệu nghiệp vụ PDF chuẩn T04
-                </div>
-              </div>
-
-              <iframe
-                title={fileName}
-                src={createMediaViewerUrl(fileId, 'document', pdfPage)}
-                style={{ width: '100%', flex: 1, border: 'none', background: '#525659' }}
+              <PdfReader
+                key={`${fileId}_${initialPage}`}
+                url={streamUrl}
+                initialPage={pdfPage}
+                fileName={fileName}
+                downloadUrl={downloadUrl}
+                canDownload={true}
+                onPage={(p) => setPdfPage(p)}
               />
             </div>
           )}
 
+          {/* SLIDE POWERPOINT */}
+          {viewerKind === 'slide' && (
+            <OfficeDocCard
+              file={file}
+              fileName={fileName}
+              downloadUrl={downloadUrl}
+              formatType="powerpoint"
+            />
+          )}
+
+          {/* ARCHIVE (.ZIP / .RAR) */}
+          {viewerKind === 'archive' && (
+            <OfficeDocCard
+              file={file}
+              fileName={fileName}
+              downloadUrl={downloadUrl}
+              formatType="archive"
+            />
+          )}
+
+          {/* OTHER UNRECOGNIZED FORMAT */}
+          {viewerKind === 'other' && (
+            <OfficeDocCard
+              file={file}
+              fileName={fileName}
+              downloadUrl={downloadUrl}
+              formatType="other"
+            />
+          )}
+
           {/* VIDEO PLAYER */}
-          {isVideo && (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000' }}>
-              <video
-                controls
-                autoPlay
+          {viewerKind === 'video' && (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#000'
+              }}
+            >
+              <UniversalVideoPlayer
+                src={streamUrl}
+                fileName={fileName}
                 className="video-player-frame"
-                src={getMediaStreamUrl(fileId)}
                 style={{ maxHeight: '70vh', maxWidth: '100%', width: '100%' }}
-              >
-                Trình duyệt của bạn không hỗ trợ thẻ video HTML5.
-              </video>
+              />
             </div>
           )}
 
           {/* IMAGE VIEWER */}
-          {isImage && (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          {viewerKind === 'image' && (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px'
+              }}
+            >
               <img
-                src={getMediaStreamUrl(fileId)}
+                src={streamUrl}
                 alt={fileName}
                 className="image-viewer-frame"
-                style={{ maxHeight: '72vh', maxWidth: '100%', objectFit: 'contain', borderRadius: '4px', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
+                style={{
+                  maxHeight: '72vh',
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  borderRadius: '4px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+                }}
               />
             </div>
           )}
 
           {/* AUDIO PLAYER */}
-          {isAudio && (
+          {viewerKind === 'audio' && (
             <div className="audio-viewer-panel" style={{ margin: 'auto', textAlign: 'center' }}>
               <div className="audio-icon-pulse">
                 <Music size={40} color="#FBBF24" />
               </div>
               <h4 style={{ fontSize: '16px', color: '#FFFFFF', marginBottom: '8px' }}>{fileName}</h4>
-              <p style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '20px' }}>Bản ghi âm bài giảng lưu hành nội bộ T04</p>
-              <audio controls autoPlay src={getMediaStreamUrl(fileId)} style={{ width: '380px' }} />
+              <p style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '20px' }}>
+                Bản ghi âm bài giảng lưu hành nội bộ T04
+              </p>
+              <audio controls autoPlay src={streamUrl} style={{ width: '380px' }} />
             </div>
           )}
         </div>
 
         {/* MODAL DETAILS FOOTER */}
-        <div className="modal-details-footer" style={{ background: '#F8FAFC', padding: '12px 20px', borderTop: '1px solid #E2E8F0' }}>
+        <div
+          className="modal-details-footer"
+          style={{ background: '#F8FAFC', padding: '12px 20px', borderTop: '1px solid #E2E8F0' }}
+        >
           <div className="file-specs">
             <div className="spec-title" style={{ fontSize: '12.5px', color: '#334155' }}>
-              <span>Dung lượng: <strong>{formatFileSize(file.fileSize)}</strong></span>
+              <span>
+                Dung lượng: <strong>{formatFileSize(file.fileSize)}</strong>
+              </span>
               <span style={{ margin: '0 8px' }}>•</span>
-              <span>Ngày cập nhật: <strong>{formatDate(file.createdAt)}</strong></span>
+              <span>
+                Ngày cập nhật: <strong>{formatDate(file.createdAt)}</strong>
+              </span>
             </div>
-            <div className="spec-hash" style={{ fontSize: '11px', color: '#64748B', fontFamily: 'monospace', marginTop: '2px' }}>
+            <div
+              className="spec-hash"
+              style={{ fontSize: '11px', color: '#64748B', fontFamily: 'monospace', marginTop: '2px' }}
+            >
               SHA-256: <code>{file.checksum || file.checksumSha256 || file.sha256Hash || 'N/A'}</code>
             </div>
           </div>
 
           <div className="modal-action-btns" style={{ display: 'flex', gap: '8px' }}>
             <button
+              type="button"
               className="btn-icon-secondary"
               onClick={() => onCopyHash(file.checksum || file.checksumSha256 || file.sha256Hash, fileId)}
               style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px', fontSize: '12px' }}
@@ -269,7 +409,7 @@ export default function DirectMediaViewerModal({
             </button>
 
             <a
-              href={`/api/media/download/${fileId}`}
+              href={downloadUrl}
               download={fileName}
               className="btn-download-gold"
               style={{
@@ -290,6 +430,7 @@ export default function DirectMediaViewerModal({
             </a>
 
             <button
+              type="button"
               className="btn-icon-secondary"
               onClick={onClose}
               style={{ padding: '6px 14px', fontSize: '12px' }}

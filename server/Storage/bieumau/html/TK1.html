@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" id="bieumau">
+<head>
+	<meta charset="UTF-8">
+	<title>Mẫu TK01</title>
+	<link rel="stylesheet" href="/bieumau/style/style_landspace.css">
+	<link rel="stylesheet" href="/bieumau/style/print.css">
+	<style type="text/css">
+		.text {min-height: 20px;overflow: visible;word-wrap: break-word;height:20px;line-height:20px;text-align:center}
+		.text_ts{min-height: 20px;overflow: visible;word-wrap: break-word;height:20px;line-height:20px;vertical-align:middle;text-align:center}
+		.content{width: 26cm;margin-left: 2cm;clear: both;}
+		@media print {
+				.content{width: 27.1cm;}
+			}
+	</style>
+	
+	<script type="text/javascript">
+         function thong_ke(tableID) {
+             var i, j, n = 0;
+             var x = document.getElementsByClassName('text');
+             var len = x.length;
+             for (i = 0; i < len; ) {
+                 var tong_hang = 0;
+                 for (j = i; j < i + 15; j++) {
+                     var y = parseInt(x[j].innerHTML);
+                     if (x[j].innerHTML == "") {
+                         y = 0;
+                         x[j].innerHTML = "";
+                     }
+                     tong_hang = tong_hang + y;
+                 }
+                 document.getElementById('tong_hang_' + i).innerHTML = tong_hang;
+                 i = i + 15;
+                 if (tong == 0) {
+                     document.getElementById('tong_hang_' + i).innerHTML = "";
+                 }
+             }
+             for (var t = 0; t < len; ) {
+                 //alert("t = " + t);
+                 //alert(document.getElementById('tong_hang_' + t).innerHTML);
+                 if (document.getElementById('tong_hang_' + t).innerHTML == "0" || document.getElementById('tong_hang_' + t).innerHTML == 0) {
+                 document.getElementById('tong_hang_' + t).innerHTML = "";
+                 }
+                 t = t + 15;
+             }
+               //-------------------------------//
+             var sum = 0;
+             var mang_text_ts = document.getElementsByClassName('text_ts');
+             for (var s = 0; s < mang_text_ts.length; s++) {
+                 var tong_ts = parseInt(mang_text_ts[s].innerHTML);
+                 if (mang_text_ts[s].innerHTML == "") {
+                     tong_ts = 0;
+                     mang_text_ts[s].innerHTML = "";
+                 }
+                 sum = sum + tong_ts;
+             }
+             document.getElementById('tong_so').innerHTML = sum;
+             
+             var abc = document.getElementsByClassName("text");
+             for (var m = 0; m < abc.length; m++) {
+                 var tong = 0;
+                 for (var n = m; n < abc.length; ) {
+                     var x = parseInt(abc[n].innerHTML);
+                     if (abc[n].innerHTML == "") {
+                         x = 0;
+                         abc[n].innerHTML = "";
+                     }
+                     tong = tong + x;
+                     document.getElementById('tong_' + m).innerHTML = tong;
+                     n = n + 15;
+                     if (tong == 0) {
+                         document.getElementById('tong_' + m).innerHTML = "";
+                     }
+                 }
+             }
+             
+           }
+         
+		 
+		 
+		function addRow3(tableID) {
+             var table = document.getElementById(tableID);
+             var rowCount = table.rows.length - 1;
+             var row = table.insertRow(rowCount);
+            
+            var table1_cell1 = row.insertCell(0);
+            table1_cell1.innerHTML = rowCount-1;
+            table1_cell1.setAttribute('class', 'demo ta_center');
+			/*var table1_cell1 = row.insertCell(0);
+             var table1_element0 = document.createElement("div");
+             table1_cell1.setAttribute('contentEditable', 'true');
+             table1_cell1.setAttribute('class', 'divtext_tt');*/
+            
+             var table1_cell2 = row.insertCell(1);
+             var table1_element1 = document.createElement("div");
+             table1_cell2.setAttribute('contentEditable', 'true');
+             table1_cell2.setAttribute('class', 'phong_doi');
+
+             var table1_cell3 = row.insertCell(2);
+             var table1_element2 = document.createElement("div");
+             table1_cell3.setAttribute('contentEditable', 'true');
+             table1_cell3.setAttribute('class', 'text_ts');
+
+             var x = document.getElementsByClassName('text').length;
+             for (var d = 0; d <= x; ) {
+                 table1_cell3.id = 'tong_hang_' + d;
+                 d = d + 15;
+            }
+
+             var table1_cell4 = row.insertCell(3);
+             var table1_element3 = document.createElement("div");
+             table1_cell4.setAttribute('contentEditable', 'true');
+             table1_cell4.setAttribute('class', 'text');
+             var x = document.getElementsByClassName('text').length;
+
+             var table1_cell5 = row.insertCell(4);
+             var table1_element4 = document.createElement("div");
+             table1_cell5.setAttribute('contentEditable', 'true');
+             table1_cell5.setAttribute('class', 'text');
+
+             var table1_cell6 = row.insertCell(5);
+             var table1_element5 = document.createElement("div");
+             table1_cell6.setAttribute('contentEditable', 'true');
+             table1_cell6.setAttribute('class', 'text');
+
+             var table1_cell7 = row.insertCell(6);
+             var table1_element6 = document.createElement("div");
+             table1_cell7.setAttribute('contentEditable', 'true');
+             table1_cell7.setAttribute('class', 'text');
+
+             var table1_cell8 = row.insertCell(7);
+             var table1_element7 = document.createElement("div");
+             table1_cell8.setAttribute('contentEditable', 'true');
+             table1_cell8.setAttribute('class', 'text');
+
+             var table1_cell9 = row.insertCell(8);
+             var table1_element8 = document.createElement("div");
+             table1_cell9.setAttribute('contentEditable', 'true');
+             table1_cell9.setAttribute('class', 'text');
+
+             var table1_cell10 = row.insertCell(9);
+             var table1_element9 = document.createElement("div");
+             table1_cell10.setAttribute('contentEditable', 'true');
+             table1_cell10.setAttribute('class', 'text');
+
+             var table1_cell11 = row.insertCell(10);
+             var table1_element10 = document.createElement("div");
+             table1_cell11.setAttribute('contentEditable', 'true');
+             table1_cell11.setAttribute('class', 'text');
+
+             var table1_cell12 = row.insertCell(11);
+             var table1_element11 = document.createElement("div");
+             table1_cell12.setAttribute('contentEditable', 'true');
+             table1_cell12.setAttribute('class', 'text');
+
+             var table1_cell13 = row.insertCell(12);
+             var table1_element12 = document.createElement("div");
+             table1_cell13.setAttribute('contentEditable', 'true');
+             table1_cell13.setAttribute('class', 'text');
+
+             var table1_cell14 = row.insertCell(13);
+             var table1_element13 = document.createElement("div");
+             table1_cell14.setAttribute('contentEditable', 'true');
+             table1_cell14.setAttribute('class', 'text');
+
+             var table1_cell15 = row.insertCell(14);
+             var table1_element14 = document.createElement("div");
+             table1_cell15.setAttribute('contentEditable', 'true');
+             table1_cell15.setAttribute('class', 'text');
+
+             var table1_cell16 = row.insertCell(15);
+             var table1_element15 = document.createElement("div");
+             table1_cell16.setAttribute('contentEditable', 'true');
+             table1_cell16.setAttribute('class', 'text');
+
+             var table1_cell17 = row.insertCell(16);
+             var table1_element16 = document.createElement("div");
+             table1_cell17.setAttribute('contentEditable', 'true');
+             table1_cell17.setAttribute('class', 'text');
+
+             var table1_cell18 = row.insertCell(17);
+             var table1_element17 = document.createElement("div");
+             table1_cell18.setAttribute('contentEditable', 'true');
+             table1_cell18.setAttribute('class', 'text');
+
+             var table1_cell19 = row.insertCell(18);
+             var table1_element18 = document.createElement("div");
+             table1_cell19.setAttribute('contentEditable', 'true');
+             table1_cell19.setAttribute('class', 'divtext1');
+         } 
+		 function deleteRow3(tableID) {
+             var table = document.getElementById(tableID);
+             var rowCount = table.rows.length;
+             for (i = rowCount - 2; i > 1; i--) {
+                 document.getElementById("Table3").deleteRow(i);
+                 break;
+             }
+            
+         }
+    </script>
+	
+	
+     <script type="text/javascript">
+
+         function addRow3(tableID) {
+             var table = document.getElementById(tableID);
+             var rowCount = table.rows.length - 1;
+             var row = table.insertRow(rowCount);
+            
+             var table1_cell1 = row.insertCell(0);
+             var table1_element0 = document.createElement("div");
+             table1_cell1.setAttribute('contentEditable', 'true');
+             table1_cell1.setAttribute('class', 'divtext_tt');
+            
+             var table1_cell2 = row.insertCell(1);
+             var table1_element1 = document.createElement("div");
+             table1_cell2.setAttribute('contentEditable', 'true');
+             table1_cell2.setAttribute('class', 'phong_doi');
+
+             var table1_cell3 = row.insertCell(2);
+             var table1_element2 = document.createElement("div");
+             table1_cell3.setAttribute('contentEditable', 'true');
+             table1_cell3.setAttribute('class', 'text_ts');
+
+             var x = document.getElementsByClassName('text').length;
+             for (var d = 0; d <= x; ) {
+                 table1_cell3.id = 'tong_hang_' + d;
+                 d = d + 15;
+            }
+
+             var table1_cell4 = row.insertCell(3);
+             var table1_element3 = document.createElement("div");
+             table1_cell4.setAttribute('contentEditable', 'true');
+             table1_cell4.setAttribute('class', 'text');
+             var x = document.getElementsByClassName('text').length;
+
+             var table1_cell5 = row.insertCell(4);
+             var table1_element4 = document.createElement("div");
+             table1_cell5.setAttribute('contentEditable', 'true');
+             table1_cell5.setAttribute('class', 'text');
+
+             var table1_cell6 = row.insertCell(5);
+             var table1_element5 = document.createElement("div");
+             table1_cell6.setAttribute('contentEditable', 'true');
+             table1_cell6.setAttribute('class', 'text');
+
+             var table1_cell7 = row.insertCell(6);
+             var table1_element6 = document.createElement("div");
+             table1_cell7.setAttribute('contentEditable', 'true');
+             table1_cell7.setAttribute('class', 'text');
+
+             var table1_cell8 = row.insertCell(7);
+             var table1_element7 = document.createElement("div");
+             table1_cell8.setAttribute('contentEditable', 'true');
+             table1_cell8.setAttribute('class', 'text');
+
+             var table1_cell9 = row.insertCell(8);
+             var table1_element8 = document.createElement("div");
+             table1_cell9.setAttribute('contentEditable', 'true');
+             table1_cell9.setAttribute('class', 'text');
+
+             var table1_cell10 = row.insertCell(9);
+             var table1_element9 = document.createElement("div");
+             table1_cell10.setAttribute('contentEditable', 'true');
+             table1_cell10.setAttribute('class', 'text');
+
+             var table1_cell11 = row.insertCell(10);
+             var table1_element10 = document.createElement("div");
+             table1_cell11.setAttribute('contentEditable', 'true');
+             table1_cell11.setAttribute('class', 'text');
+
+             var table1_cell12 = row.insertCell(11);
+             var table1_element11 = document.createElement("div");
+             table1_cell12.setAttribute('contentEditable', 'true');
+             table1_cell12.setAttribute('class', 'text');
+
+             var table1_cell13 = row.insertCell(12);
+             var table1_element12 = document.createElement("div");
+             table1_cell13.setAttribute('contentEditable', 'true');
+             table1_cell13.setAttribute('class', 'text');
+
+             var table1_cell14 = row.insertCell(13);
+             var table1_element13 = document.createElement("div");
+             table1_cell14.setAttribute('contentEditable', 'true');
+             table1_cell14.setAttribute('class', 'text');
+
+             var table1_cell15 = row.insertCell(14);
+             var table1_element14 = document.createElement("div");
+             table1_cell15.setAttribute('contentEditable', 'true');
+             table1_cell15.setAttribute('class', 'text');
+
+             var table1_cell16 = row.insertCell(15);
+             var table1_element15 = document.createElement("div");
+             table1_cell16.setAttribute('contentEditable', 'true');
+             table1_cell16.setAttribute('class', 'text');
+
+             var table1_cell17 = row.insertCell(16);
+             var table1_element16 = document.createElement("div");
+             table1_cell17.setAttribute('contentEditable', 'true');
+             table1_cell17.setAttribute('class', 'text');
+
+             var table1_cell18 = row.insertCell(17);
+             var table1_element17 = document.createElement("div");
+             table1_cell18.setAttribute('contentEditable', 'true');
+             table1_cell18.setAttribute('class', 'text');
+
+             var table1_cell19 = row.insertCell(18);
+             var table1_element18 = document.createElement("div");
+             table1_cell19.setAttribute('contentEditable', 'true');
+             table1_cell19.setAttribute('class', 'divtext1');
+         }
+
+         function deleteRow3(tableID) {
+             var table = document.getElementById(tableID);
+             var rowCount = table.rows.length;
+             for (i = rowCount - 2; i > 1; i--) {
+                 document.getElementById("Table3").deleteRow(i);
+                 break;
+             }
+            
+         }
+                       
+    </script>
+    <script type='text/javascript'>
+	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			function save() {
+					var d= new Date();
+					var htmlContent =['<!DOCTYPE'+' html'+ '>'+'\n' +'<' + 'html' + ' lang='+'"'+"en"+'"'+' id'+'='+'"'+'bieumau'+'"'+'>'+'\n' +document.getElementById('bieumau').innerHTML+'\n'+'<'+'/html>'+'<img src="/bieumau/image/print.png" class="button_print"  width="50px" height="50px" onclick="In_bieu_mau();"><br/>'+'<img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()">'+'<img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">'];
+					var bl = new Blob(htmlContent, {type: "text/html"});
+					var a = document.createElement("a");
+					a.href = URL.createObjectURL(bl);
+					// a.download = "bieu_mau"+"_"+getDate()+".html";
+					a.download = "*"+".html";
+					a.hidden = true;
+					document.body.appendChild(a);
+					a.innerHTML = document.getElementById('bieumau').innerHTML ;
+					a.click();
+					document.getElementsByClassName("myNicPanel")[i-1].style.display = 'block';
+				}	
+		/*---------------------------------------------------------------------------------------HÀM LOAD PAGE-------------------------------------------------------------------------------*/  		
+			 function In_bieu_mau(){
+					window.print();
+				}
+    
+	</script>
+</head>
+<body class="font14 ta_jus" onkeyup="thong_ke()">
+	<div class="wrapper border">
+		<div class="header">
+			<div class="cq_banhanh f_left ta_center">
+				<span class='font10'>ĐƠN VỊ</span><br>
+				<span contenteditable class="border fontBold font12 co_quan"></span><br>
+				<hr style='width:50px;margin-top:0px;height: 1px;color: black;background-color: black;border: none;'>
+			</div>
+			<div class="quochieu ta_center f_left">
+				<span class="fontUpper fontBold font13">cộng hòa xã hội chủ nghĩa Việt nam</span>	<br>
+				<span class="fontBold">Độc lập - Tự do - Hạnh phúc</span>
+				<hr style="width: 5cm;margin-top:2px;height: 1px;color: black;background-color: black;border: none;">
+			</div>
+			<div class="td_bieumau ta_center f_right lh_06" style='margin-top:10px'>
+				<span class="font8 fontUpper" >mẫu TK01/2015</span>
+				<br>
+				<br>
+				<br>
+				
+			</div>
+		</div>
+		<div class="quochieu ta_center">
+				<div class="font16	 fontBold ta_center fontUpper clear"><br>THỐNG KÊ TỔNG HỢP<br>CÁC LOẠI HỒ SƠ NGHIỆP VỤ AN NINH</div>
+		</div>
+		<div class='ta_center'>
+			<i>Tính đến ngày</i> <span class='o_nhap_ngay border' contentEditable></span> 
+			<i>tháng</i> <span class='o_nhap_ngay border' contentEditable></span> 
+			<i>năm</i> <span class='o_nhap_nam border' contentEditable></span> 
+		</div><br>
+		<div class="content">
+			<table cellpadding="0" cellspacing="0" class="font10 ta_center" border="1" style="width: 100%;table_layout:fixed" id="Table3">
+				<tr class='font10'>
+				<td style="width:23px;vertical-align:middle" rowspan="2">TT</td>
+				<td rowspan="2" class="style13" style="vertical-align:middle;width:100px">Phòng<br />(Đội)</td>
+				<td style="width:50px;vertical-align:middle" rowspan="2">Tổng số</td>
+				<td style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ ĐB</td>
+				<td colspan="3" style="width:156px;vertical-align:middle">Hồ sơ cá nhân</td>
+				<td class="style11" style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ VA</td>
+				<td class="style6" style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ KH</td>
+				<td class="style7"style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ TX</td>
+				<td class="style7"style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ TT</td>
+				<td class="style8"style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ AK</td>
+				<td colspan="3">Hồ sơ Lực lượng bí mật</td>
+				<td class="style6" style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ AT</td>
+				<td class="style9" style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ HT</td>
+				<td class="style9" style="width:55px;vertical-align:middle" rowspan="2">Hồ sơ NV</td>
+				<td class="style10" rowspan="2" style="width:110px;vertical-align:middle">Ghi chú</td>
+			</tr>
+			<tr class='font10 ta_center'>
+				<td style="width:50px">QLNV</td>
+				<td style="width:50px">KTNV</td>
+				<td class="style4" style="width:55px">Truy nã</td>
+				<td class="style12" style="width:55px">ĐT</td>
+				<td style="width:55px">CTV</td>
+				<td style="width:55px">CSBM</td>
+			</tr>
+		   
+			<tr class="divtext_tt">
+				<td><div style="text-align:center;padding-left:4px;padding-right:4px;height:20px"  >1</div></td>
+				<td class="style13"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+				<td><div class="text_ts" contentEditable="true" id="tong_hang_0"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					
+					
+				<td><div style="text-align:left;padding-left:4px;padding-right:4px" class="divtext1" contentEditable > </div></td>
+			</tr>
+			<tr class="divtext_tt">
+				<td><div style="text-align:center;padding-left:4px;padding-right:4px;height:20px"  >2</div></td>
+				<td class="style13"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+				<td><div class="text_ts" contentEditable="true" id="tong_hang_15"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					
+					
+				<td><div style="text-align:left;padding-left:4px;padding-right:4px" class="divtext1" contentEditable > </div></td>
+			</tr>
+			<tr class="divtext_tt">
+				<td><div style="text-align:center;padding-left:4px;padding-right:4px;height:20px"  >3</div></td>
+				<td class="style13"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+				<td><div class="text_ts" contentEditable="true" id="tong_hang_30"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					
+					
+				<td><div style="text-align:left;padding-left:4px;padding-right:4px" class="divtext1" contentEditable > </div></td>
+			</tr>
+			<tr class="divtext_tt">
+				<td><div style="text-align:center;padding-left:4px;padding-right:4px;height:20px"  >4</div></td>
+				<td class="style13"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+				<td><div class="text_ts" contentEditable="true" id="tong_hang_45"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					
+					
+				<td><div style="text-align:left;padding-left:4px;padding-right:4px" class="divtext1" contentEditable > </div></td>
+			</tr>
+			<tr class="divtext_tt">
+				<td><div style="text-align:center;padding-left:4px;padding-right:4px;height:20px"  >5</div></td>
+				<td class="style13"><div style="text-align:center;padding-left:4px;padding-right:4px" class="phong_doi" contentEditable > </div></td>
+				<td><div class="text_ts" contentEditable="true" id="tong_hang_60"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					<td><div class="text" contentEditable="true"></div></td>
+					
+					
+				<td><div style="text-align:left;padding-left:4px;padding-right:4px" class="divtext1" contentEditable > </div></td>
+			</tr>
+			
+			 <tr>
+				<td class="divtext_tt">
+					<div style="text-align:center;padding-left:4px;padding-right:4px;class="divtext_tt""  contentEditable > </div>
+				</td>
+				<td class="divtext1" style="vertical-align:middle">
+					  <strong>Tổng cộng</strong></td>
+				<td class="style9">
+				   <div style="text-align:center;padding-left:4px;padding-right:4px;font-weight:bold" class="tong_cong" contentEditable id="tong_so"> </div></td>
+				<td>
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_0"> </div></td>
+				<td>
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_1"> </div></td>
+				<td>
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_2"> </div></td>
+				<td>
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_3"> </div></td>
+				<td class="style4">
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_4"> </div></td>
+				<td class="style11">
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_5"> </div></td>
+				<td class="style6">
+				   <div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_6"> </div></td>
+				<td class="style7">
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_7"> </div></td>
+				<td class="style7">
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_8"> </div></td>
+				<td class="style8">
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_9"> </div></td>
+				<td class="style12" style="width:55px">
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_10"> </div></td>
+				<td>
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_11"> </div></td>
+				<td>
+				   <div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_12"> </div></td>
+				<td class="style6" >
+					<div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_13"> </div></td>
+				<td class="style9">
+				   <div style="text-align:center;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_14"> </div></td>
+				
+				<td class="style10">
+					<div style="text-align:left;padding-left:4px;padding-right:4px" class="tong_cong" contentEditable id="tong_18"> </div></td>
+			</tr>
+		   
+		</table>
+	<div>
+		<input type="button" value="Thêm dòng" class="_input" onclick="addRow3('Table3')" />
+		<input type="button" value="Xóa dòng" class="_input" onclick="deleteRow3('Table3'),thong_ke('Table3')" />
+    </div>
+			
+		</div>
+	</div>
+	<img src="/bieumau/image/print.png" class="button_print" width="50px" height="50px" onclick="In_bieu_mau()"><br>
+    <img src="/bieumau/image/save.png" class="button_save" width="45px" height="45px" onclick="save()"><br>
+    <img src="/bieumau/image/reload.png" class="button_reload" onclick="window.location.reload(true);">
+	<div class="ghichu">
+        <b>    
+			<strong><font size="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></strong><em><font size="3"> Chú ý: Danh sách này lưu giữ vào hồ sơ ĐTCB, VA, AK hoặc KH.</font></em>
+        </b>
+	</div> 
+</body>
+</html>

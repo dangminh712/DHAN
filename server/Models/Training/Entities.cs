@@ -152,6 +152,10 @@ public class Subject
     public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
+    [MaxLength(255)]
+    public string? ResponsibleTeacherName { get; set; }
+    [MaxLength(1000)]
+    public string? ResponsibilitySource { get; set; }
 
     public ulong? OrganizationalUnitId { get; set; }
     public OrganizationalUnit? OrganizationalUnit { get; set; }
