@@ -1677,17 +1677,40 @@ body {
 
 /* KHUNG CANVAS CHÍNH - MÀU NỀN TƯƠI SÁNG, DỊU MẮT THEO UI-UX-PRO-MAX */
 .pdf-canvas-stage {
-  flex: 1;
-  max-height: calc(100vh - 230px);
-  min-height: 520px;
-  overflow: auto;
-  background: #EDF2F7;
+  flex: 1 1 0%;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #0B132B;
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.28) rgba(15, 23, 42, 0.4);
+}
+
+.pdf-canvas-stage::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.pdf-canvas-stage::-webkit-scrollbar-track {
+  background: #0B132B;
+}
+
+.pdf-canvas-stage::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.pdf-canvas-stage::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .pdf-loading-state {
@@ -1725,13 +1748,16 @@ body {
 }
 
 .pdf-canvas-wrapper {
-  display: inline-block;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
-  border-radius: 6px;
-  overflow: hidden;
+  display: block;
+  flex-shrink: 0;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+  overflow: visible;
   background: #FFFFFF;
-  border: 1px solid #CBD5E1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   transition: opacity 0.15s ease;
+  margin: 0 auto 32px auto;
+  box-sizing: content-box;
 }
 
 .pdf-canvas-wrapper.rendering {

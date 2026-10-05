@@ -23,7 +23,6 @@ import ProvisioningPage from './pages/ProvisioningPage';
 import DbmsAdminPage from './pages/DbmsAdminPage';
 import LectureStudyPage from './LectureStudyPage';
 import LectureCreatorPage from './pages/LectureCreatorPage';
-import DirectMediaViewerModal from './components/common/DirectMediaViewerModal';
 import DocumentViewerPage from './pages/DocumentViewerPage';
 import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
@@ -259,14 +258,17 @@ export default function App() {
   };
 
   const openCourseMaterial = (material) => {
-    setSelectedFile({
-      ...material,
-      id: material.fileId,
-      originalFileName: material.originalName,
-      fileSize: material.fileSize,
-      fileType: material.fileType,
-      contentType: material.mimeType,
-    });
+    const fileId = material?.fileId || material?.id;
+    if (fileId) {
+      window.location.hash = `#/view/${fileId}`;
+    }
+  };
+
+  const handleOpenFile = (file) => {
+    const fileId = file?.fileId || file?.id;
+    if (fileId) {
+      window.location.hash = `#/view/${fileId}`;
+    }
   };
 
   // ═════════════════════════════════════════════════════════
@@ -410,7 +412,7 @@ export default function App() {
             onSearch={fetchFiles}
             onCopyHash={copyToClipboard}
             copiedHash={copiedHash}
-            onSelectFile={setSelectedFile}
+            onSelectFile={handleOpenFile}
             lectures={lectures}
           />
         )}
@@ -423,7 +425,7 @@ export default function App() {
             currentUser={currentUser}
             onOpenUpload={() => setIsUploadModalOpen(true)}
             onDeleteFile={handleDeleteFile}
-            onSelectFile={setSelectedFile}
+            onSelectFile={handleOpenFile}
             onCopyHash={copyToClipboard}
             copiedHash={copiedHash}
             onSwitchUser={handleSwitchUser}
@@ -480,14 +482,6 @@ export default function App() {
         )}
       </div>
 
-      {/* MODAL XEM TRỰC TIẾP TẬP TIN / TÀI LIỆU (KHÔNG CẦN VÀO PHÒNG HỌC BÀI GIẢNG) */}
-      <DirectMediaViewerModal
-        isOpen={Boolean(selectedFile)}
-        onClose={() => setSelectedFile(null)}
-        file={selectedFile}
-        onCopyHash={copyToClipboard}
-        copiedHash={copiedHash}
-      />
 
       {/* MODAL NHẬP LIỆU FILE (PDF, PPT, VIDEO, ẢNH, AUDIO) LƯU NỘI BỘ MÁY TÍNH */}
       <FileUploadModal

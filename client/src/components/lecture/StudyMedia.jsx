@@ -37,7 +37,7 @@ export function StudyPdf({
       canDownload={canDownload}
       onError={onError}
       onPage={(page, total, changed) => {
-        onPage(page);
+        onPage?.(page);
         if (changed) saver.schedule({ partId, fileId, lastPdfPage: page });
       }}
     />
