@@ -25,10 +25,10 @@ export default function Navbar({ currentRoute }) {
             <a
               key={item.id}
               href={item.href}
-              className={`nav-item ${active ? 'active' : ''}`}
+              className={`nav-item ${item.id === 'home' ? 'nav-item--home' : ''} ${active ? 'active' : ''}`}
               aria-current={active ? 'page' : undefined}
             >
-              <Icon size={18} aria-hidden="true" />
+              <Icon size={item.id === 'home' ? 18 : 16} className="nav-item__icon" aria-hidden="true" />
               <span>{item.label}</span>
               {item.badge && <span className="nav-badge">{item.badge}</span>}
             </a>

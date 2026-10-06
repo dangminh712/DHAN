@@ -271,9 +271,6 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
   const activeBackendFile = backendLecture?.files?.find(f => String(f.fileId) === String(fileId) || String(f.fileId) === String(slideFileId) || String(f.fileId) === String(videoFileId)) || backendLecture?.files?.[0];
   const isDownloadAllowed = activeBackendFile ? activeBackendFile.isDownloadable : (lectureObj?.isDownloadable !== false);
 
-  // Link mở tab mới chuẩn xác theo URL định tuyến #/study/:id kèm trạng thái đang xem
-  const newTabUrl = `/#/study/${fileId}?part=${activePart}&tab=${mediaTab}${pdfPage > 1 ? `&page=${pdfPage}` : ''}`;
-
   // 1. Màn hình chặn nếu Bài giảng bị Giảng viên Khóa / Đóng
   if (isLocked) {
     return (
@@ -403,18 +400,6 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
               <Shield size={12} />
               HỌC LIỆU NGHIỆP VỤ NỘI BỘ
             </span>
-
-            {/* Nút mở tab mới: Thẻ <a> chuẩn HTML 100% không bị chặn popup */}
-            <a
-              href={newTabUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-study-action"
-              title="Mở bài giảng này trong một tab trình duyệt độc lập"
-            >
-              <ExternalLink size={15} />
-              <span>Mở tab mới</span>
-            </a>
 
             {/* Quyền tải học liệu do giảng viên thiết lập */}
             {isDownloadAllowed ? (
@@ -624,17 +609,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                       <h4>🎥 Video bài giảng: {videoLabel}</h4>
                       <p>Theo dõi bài giảng và tiếp tục từ vị trí đã lưu.</p>
                     </div>
-                    <div className="video-actions">
-                      <a
-                        href={getMediaStreamUrl(videoFileId)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-sub-action"
-                      >
-                        <ExternalLink size={13} />
-                        Mở luồng video gốc
-                      </a>
-                    </div>
+
                   </div>
                 )}
               </div>
@@ -812,17 +787,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                           <h4>🎥 {currentDocFile.originalName}</h4>
                           <p>Tệp video tài liệu thuộc bài giảng. Theo dõi và tiếp tục bài học.</p>
                         </div>
-                        <div className="video-actions">
-                          <a
-                            href={getMediaStreamUrl(currentDocFile.fileId)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-sub-action"
-                          >
-                            <ExternalLink size={13} />
-                            Mở luồng video gốc
-                          </a>
-                        </div>
+
                       </div>
                     </div>
                   ) : isCurrentDocAudio ? (
@@ -880,16 +845,7 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                           <Download size={15} />
                           <span>Tải tài liệu về máy tính</span>
                         </a>
-                        <a
-                          href={getMediaStreamUrl(currentDocFile.fileId)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-study-action"
-                          style={{ background: '#F1F5F9', color: '#0F172A', border: '1px solid #CBD5E1' }}
-                        >
-                          <ExternalLink size={15} />
-                          <span>Mở luồng tệp tin gốc</span>
-                        </a>
+
                       </div>
                     </div>
                   )

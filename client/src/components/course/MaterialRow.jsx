@@ -1,5 +1,5 @@
 import React from 'react'
-import { Download, ExternalLink, Eye, File, FileImage, FileSpreadsheet, FileText, Presentation, Video } from 'lucide-react'
+import { Download, Eye, File, FileImage, FileSpreadsheet, FileText, Presentation, Video } from 'lucide-react'
 import { formatFileSize, getMaterialFormat } from '../../courseSearch'
 import { getMediaStreamUrl } from '../../pdfViewer'
 
@@ -24,7 +24,6 @@ function FormatIcon({ format }) {
 export default function MaterialRow({ material, currentUser, onOpen, showChapter = false }) {
   const format = getMaterialFormat(material)
   const downloadUrl = `/api/training/files/${material.fileId}/download?userId=${currentUser?.id || 1}&chapterId=${material.chapterId}`
-  const newTabUrl = `#/view/${material.fileId}`
 
   const getFormatLabel = (fmt) => {
     switch (fmt) {
@@ -55,10 +54,6 @@ export default function MaterialRow({ material, currentUser, onOpen, showChapter
           <Eye size={17} />
           <span>Xem tài liệu</span>
         </button>
-        <a className="course-secondary-button" href={newTabUrl} target="_blank" rel="noopener noreferrer" title="Mở trang xem tài liệu toàn màn hình trong tab mới">
-          <ExternalLink size={16} />
-          <span>Mở tab mới</span>
-        </a>
         {material.canDownload && (
           <a className="course-download-button" href={downloadUrl} title="Tải tài liệu về máy tính">
             <Download size={17} />

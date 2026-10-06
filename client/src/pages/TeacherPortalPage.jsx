@@ -1047,25 +1047,6 @@ export default function TeacherPortalPage({
                                                         <Eye size={12} />
                                                         <span>Xem</span>
                                                       </button>
-                                                      <a
-                                                        href={getMediaStreamUrl(file.fileId)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        style={{
-                                                          display: 'inline-flex',
-                                                          alignItems: 'center',
-                                                          padding: '3px 6px',
-                                                          borderRadius: '4px',
-                                                          fontSize: '11px',
-                                                          background: '#F1F5F9',
-                                                          color: '#475569',
-                                                          border: '1px solid #CBD5E1',
-                                                          textDecoration: 'none'
-                                                        }}
-                                                        title="Mở tài liệu trong tab mới"
-                                                      >
-                                                        <ExternalLink size={12} />
-                                                      </a>
                                                     </div>
                                                   </td>
                                                   <td style={{ padding: '6px 10px', textAlign: 'center' }}>

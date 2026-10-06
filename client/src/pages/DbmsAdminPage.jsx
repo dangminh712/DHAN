@@ -42,11 +42,10 @@ export default function DbmsAdminPage() {
   const tables = overview?.tableStats || [];
   const search = filter.trim().toLocaleLowerCase('vi');
   const filteredTables = tables.filter(table => [table.tableName, table.module, table.description].some(value => String(value || '').toLocaleLowerCase('vi').includes(search)));
-  const adminerUrl = 'http://localhost:8080/?server=127.0.0.1%3A3307';
   return <div className="portal-container dbms-page">
     <header className="dbms-header">
-      <div className="dbms-heading"><span className="dbms-emblem"><Database size={28} aria-hidden="true" /></span><div><p className="dbms-eyebrow">QUẢN TRỊ HỆ THỐNG</p><h1>Cơ sở dữ liệu</h1><p>Theo dõi cấu trúc, thời gian truy vấn và dung lượng hiện tại.</p></div></div>
-      <div className="dbms-actions"><button type="button" onClick={loadOverview} disabled={loading} className="dbms-button"><RefreshCw size={17} aria-hidden="true" />{loading ? 'Đang kiểm tra…' : 'Làm mới số liệu'}</button><a href={adminerUrl} target="_blank" rel="noopener noreferrer" className="dbms-button dbms-button-secondary"><ExternalLink size={17} aria-hidden="true" />Adminer <span className="sr-only">(mở trong thẻ mới)</span></a></div>
+      <div className="dbms-heading"><span className="dbms-emblem"><Database size={28} aria-hidden="true" /></span><div><p className="dbms-eyebrow">QUẢN TRỊ HỆ THỐNG</p><h1>Cơ sở dữ liệu</h1><p>Theo dõi cấu trúc 27 bảng quan hệ, thời gian truy vấn và dung lượng lưu trữ nội bộ T04.</p></div></div>
+      <div className="dbms-actions"><button type="button" onClick={loadOverview} disabled={loading} className="dbms-button"><RefreshCw size={17} aria-hidden="true" />{loading ? 'Đang kiểm tra…' : 'Làm mới số liệu CSDL'}</button></div>
     </header>
     <div className="dbms-status" role="status" aria-live="polite">{loading ? <><RefreshCw size={16} aria-hidden="true" />Đang tải số liệu từ máy chủ…</> : error ? <><AlertCircle size={16} aria-hidden="true" />Chưa xác nhận kết nối</> : <><CheckCircle2 size={16} aria-hidden="true" />Đã nhận số liệu từ máy chủ<span className="dbms-updated">Cập nhật {updatedAt?.toLocaleTimeString('vi-VN')}</span></>}</div>
     <div aria-busy={loading}>
@@ -66,7 +65,7 @@ export default function DbmsAdminPage() {
           {filteredTables.length === 0 && <p className="dbms-empty">{tables.length ? 'Không có bảng phù hợp với từ khóa.' : 'Máy chủ chưa trả về danh mục bảng.'}</p>}
           <p className="dbms-table-count" role="status">Hiển thị {filteredTables.length} / {tables.length} bảng</p>
         </section>
-        <p className="dbms-footer-note">Adminer là công cụ quản trị tùy chọn tại máy cục bộ (cổng 8080), yêu cầu dịch vụ riêng và tài khoản CSDL được cấp quyền.</p>
+        <p className="dbms-footer-note">Cơ sở dữ liệu vận hành trên nền tảng MySQL 8.x mạng nội bộ T04 (cổng 3307), tuân thủ tiêu chuẩn an toàn thông tin lực lượng CAND.</p>
       </>}
     </div>
   </div>;

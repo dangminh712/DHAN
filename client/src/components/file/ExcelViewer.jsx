@@ -154,12 +154,12 @@ export default function ExcelViewer({ url, fileName, file, downloadUrl }) {
   }
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-900 select-text overflow-hidden">
+    <div className="flex flex-col h-full w-full bg-slate-100 select-text overflow-hidden">
       {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-slate-800/90 border-b border-slate-700 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-white border-b border-slate-200 text-xs shadow-sm">
         {/* Sheet Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto max-w-[60%] py-0.5 scrollbar-thin">
-          <span className="text-emerald-400 font-bold flex items-center gap-1 mr-1">
+          <span className="text-emerald-700 font-bold flex items-center gap-1 mr-1">
             <FileSpreadsheet className="w-4 h-4" />
             <span className="hidden sm:inline">Trang tính:</span>
           </span>
@@ -171,10 +171,10 @@ export default function ExcelViewer({ url, fileName, file, downloadUrl }) {
                 setActiveSheetName(name);
                 setCurrentPage(1);
               }}
-              className={`px-2.5 py-1 rounded-md font-medium text-xs whitespace-nowrap transition-all ${
+              className={`px-3 py-1 rounded-md font-bold text-xs whitespace-nowrap transition-all ${
                 activeSheetName === name
-                  ? 'bg-emerald-600 text-white shadow-sm font-semibold'
-                  : 'bg-slate-700/60 text-slate-300 hover:bg-slate-700 hover:text-white'
+                  ? 'bg-emerald-700 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
               }`}
             >
               {name}
@@ -194,46 +194,46 @@ export default function ExcelViewer({ url, fileName, file, downloadUrl }) {
                 setCurrentPage(1);
               }}
               placeholder="Tìm ô dữ liệu..."
-              className="pl-7 pr-2 py-1 bg-slate-900 border border-slate-700 rounded-md text-slate-200 text-xs focus:outline-none focus:border-emerald-500 w-32 sm:w-44"
+              className="pl-7 pr-2 py-1 bg-white border border-slate-300 rounded-md text-slate-800 text-xs focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 w-32 sm:w-44"
             />
           </div>
 
-          <span className="text-[11px] text-slate-400 hidden md:inline">
+          <span className="text-[11px] text-slate-500 font-semibold hidden md:inline">
             {totalRows} dòng × {maxCols} cột
           </span>
 
           <a
             href={effectiveDownloadUrl}
             download={fileName}
-            className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-md text-xs font-medium transition-colors"
+            className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-md text-xs font-semibold transition-colors"
             title="Tải tệp Excel gốc về máy"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <Download className="w-3.5 h-3.5 text-emerald-700" />
             <span className="hidden sm:inline">Tải về</span>
           </a>
         </div>
       </div>
 
       {/* Spreadsheet Grid View */}
-      <div className="flex-1 overflow-auto bg-slate-950 text-slate-100 relative max-h-[calc(75vh-100px)]">
+      <div className="flex-1 overflow-auto bg-slate-100 text-slate-900 relative max-h-[calc(75vh-100px)]">
         {paginatedRows.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 text-slate-400">
-            <FileSpreadsheet className="w-10 h-10 text-slate-600 mb-2" />
+          <div className="flex flex-col items-center justify-center p-12 text-slate-500">
+            <FileSpreadsheet className="w-10 h-10 text-slate-400 mb-2" />
             <p className="text-xs">Trang tính này không có dữ liệu để hiển thị.</p>
           </div>
         ) : (
-          <table className="w-full border-collapse text-xs font-mono">
-            <thead className="sticky top-0 z-10 bg-slate-800 text-slate-300 select-none shadow-sm">
+          <table className="w-full border-collapse text-xs font-mono bg-white">
+            <thead className="sticky top-0 z-10 bg-slate-100 text-slate-700 select-none shadow-sm">
               <tr>
                 {/* Góc hàng/cột */}
-                <th className="sticky left-0 z-20 bg-slate-800/95 border-b border-r border-slate-700 px-2 py-1.5 w-12 text-center text-slate-400 font-bold text-[10px]">
+                <th className="sticky left-0 z-20 bg-slate-200 border-b border-r border-slate-300 px-2 py-1.5 w-12 text-center text-slate-600 font-bold text-[10px]">
                   #
                 </th>
                 {/* Tên cột A, B, C... */}
                 {Array.from({ length: maxCols }).map((_, cIdx) => (
                   <th
                     key={cIdx}
-                    className="border-b border-r border-slate-700 px-3 py-1.5 text-center font-bold text-[11px] min-w-[90px] max-w-[260px] truncate"
+                    className="border-b border-r border-slate-300 bg-slate-100 px-3 py-1.5 text-center font-bold text-[11px] min-w-[90px] max-w-[260px] truncate text-slate-700"
                   >
                     {getColHeader(cIdx)}
                   </th>
@@ -248,16 +248,16 @@ export default function ExcelViewer({ url, fileName, file, downloadUrl }) {
                 return (
                   <tr
                     key={rIdx}
-                    className={`border-b border-slate-800/80 transition-colors ${
+                    className={`border-b border-slate-200 transition-colors ${
                       isHeaderRow
-                        ? 'bg-slate-900/90 font-bold text-emerald-300'
+                        ? 'bg-emerald-50/70 font-bold text-emerald-900'
                         : rIdx % 2 === 0
-                        ? 'bg-slate-950 hover:bg-slate-800/50'
-                        : 'bg-slate-900/30 hover:bg-slate-800/50'
+                        ? 'bg-white hover:bg-emerald-50/40'
+                        : 'bg-slate-50/60 hover:bg-emerald-50/40'
                     }`}
                   >
                     {/* Số dòng 1, 2, 3... */}
-                    <td className="sticky left-0 z-0 bg-slate-900 border-r border-slate-800 px-2 py-1 text-center text-[10px] text-slate-500 font-medium select-none">
+                    <td className="sticky left-0 z-0 bg-slate-100 border-r border-slate-200 px-2 py-1 text-center text-[10px] text-slate-500 font-medium select-none">
                       {actualRowNumber}
                     </td>
 
@@ -273,14 +273,14 @@ export default function ExcelViewer({ url, fileName, file, downloadUrl }) {
                         <td
                           key={cIdx}
                           title={strVal}
-                          className={`border-r border-slate-800/70 px-2.5 py-1 truncate max-w-[280px] ${
+                          className={`border-r border-slate-200 px-2.5 py-1 truncate max-w-[280px] ${
                             isMatch
-                              ? 'bg-amber-500/20 text-amber-200 font-bold'
+                              ? 'bg-amber-100 text-amber-900 font-bold'
                               : isHeaderRow
-                              ? 'text-emerald-300 font-semibold'
+                              ? 'text-emerald-900 font-bold'
                               : typeof cellValue === 'number'
-                              ? 'text-right text-sky-300'
-                              : 'text-slate-200'
+                              ? 'text-right text-blue-700 font-mono'
+                              : 'text-slate-800'
                           }`}
                         >
                           {strVal}
@@ -297,7 +297,7 @@ export default function ExcelViewer({ url, fileName, file, downloadUrl }) {
 
       {/* Bottom Status / Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900 border-t border-slate-800 text-[11px] text-slate-400">
+        <div className="flex items-center justify-between px-3 py-1.5 bg-white border-t border-slate-200 text-[11px] text-slate-600">
           <div>
             Trang {currentPage} / {totalPages} (Tổng cộng {totalRows} dòng dữ liệu)
           </div>
@@ -306,17 +306,17 @@ export default function ExcelViewer({ url, fileName, file, downloadUrl }) {
               type="button"
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-slate-200"
+              className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700"
               title="Trang trước"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
-            <span className="px-2 font-mono text-slate-300">{currentPage}</span>
+            <span className="px-2 font-mono font-bold text-slate-800">{currentPage}</span>
             <button
               type="button"
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              className="p-1 rounded bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-slate-200"
+              className="p-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700"
               title="Trang sau"
             >
               <ChevronRight className="w-3.5 h-3.5" />

@@ -13,12 +13,14 @@ import {
   Maximize2,
   Minimize2,
   Download,
-  ExternalLink,
   FileText,
   Loader2,
   AlertCircle,
   Maximize,
-  StretchHorizontal
+  StretchHorizontal,
+  Sun,
+  Moon,
+  Contrast
 } from 'lucide-react';
 import { clampPdfPage, validPdfPage } from '../../pdfViewer';
 
@@ -40,7 +42,8 @@ export default function PdfReader({
   const [loading, setLoading] = useState(true);
   const [rendering, setRendering] = useState(false);
   const [scaleMultiplier, setScaleMultiplier] = useState(1.0);
-  const [scaleMode, setScaleMode] = useState('fit-width'); // 'fit-width' | 'fit-page' | 'manual'
+  const [scaleMode, setScaleMode] = useState('fit-page'); // 'fit-page' | 'fit-width' | 'manual'
+  const [deskTheme, setDeskTheme] = useState('light'); // 'light' | 'contrast' | 'dark'
   const [rotation, setRotation] = useState(0); // 0 | 90 | 180 | 270
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [stageDimensions, setStageDimensions] = useState({ width: 800, height: 600 });
@@ -171,17 +174,20 @@ export default function PdfReader({
         const stageW = stageDimensions.width || stageRef.current?.clientWidth || 800;
         const stageH = stageDimensions.height || stageRef.current?.clientHeight || 600;
 
-        const availW = Math.max(stageW - 56, 360);
-        const availH = Math.max(stageH - 56, 360);
+        const availW = Math.max(stageW - 64, 360);
+        const availH = Math.max(stageH - 64, 360);
 
         let baseScale = 1.0;
         if (scaleMode === 'fit-width') {
-          baseScale = availW / unscaledViewport.width;
+          // Vừa chiều rộng chuẩn đọc (tối đa 1020px trên màn hình lớn để không bị kéo giãn quá cỡ)
+          const targetW = Math.min(availW, 1020);
+          baseScale = targetW / unscaledViewport.width;
         } else if (scaleMode === 'fit-page') {
           baseScale = Math.min(availW / unscaledViewport.width, availH / unscaledViewport.height);
         } else {
-          // Manual mode: lấy fit-width làm tỷ lệ gốc 100%
-          baseScale = availW / unscaledViewport.width;
+          // Manual mode: lấy khổ đọc tối ưu làm mốc 100%
+          const targetW = Math.min(availW, 960);
+          baseScale = targetW / unscaledViewport.width;
         }
 
         const computedScale = Math.min(Math.max(baseScale * scaleMultiplier, 0.3), 3.5);
@@ -403,6 +409,8 @@ export default function PdfReader({
     }
   };
 
+  const currentDeskBg = deskTheme === 'contrast' ? '#525659' : deskTheme === 'dark' ? '#1E293B' : '#CBD5E1';
+
   return (
     <div
       ref={containerRef}
@@ -413,12 +421,13 @@ export default function PdfReader({
         width: '100%',
         height: '100%',
         minHeight: 0,
-        background: '#0B132B',
-        overflow: 'hidden'
+        background: currentDeskBg,
+        overflow: 'hidden',
+        transition: 'background 0.2s ease'
       }}
     >
-      {/* THANH ĐIỀU KHIỂN CHUYÊN NGHIỆP */}
-      <div className="pdf-toolbar-card" style={{ background: '#0F1E36', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+      {/* THANH ĐIỀU KHIỂN CHUYÊN NGHIỆP - TƯƠI SÁNG, ĐỘ TƯƠNG PHẢN CAO */}
+      <div className="pdf-toolbar-card">
         {/* NHÓM 1: ĐIỀU HƯỚNG TRANG */}
         <div className="pdf-toolbar-group nav-group">
           <button
@@ -514,36 +523,28 @@ export default function PdfReader({
             <ZoomIn size={15} />
           </button>
 
-          {/* Vừa chiều rộng */}
+          {/* Vừa toàn trang (Mặc định) */}
           <button
             type="button"
-            className={`pdf-btn ${scaleMode === 'fit-width' && scaleMultiplier === 1.0 ? 'active' : ''}`}
-            onClick={handleFitWidth}
-            disabled={!document}
-            title="Vừa chiều rộng màn hình"
-            style={{
-              background: scaleMode === 'fit-width' && scaleMultiplier === 1.0 ? 'rgba(56, 189, 248, 0.25)' : undefined,
-              borderColor: scaleMode === 'fit-width' && scaleMultiplier === 1.0 ? '#38BDF8' : undefined
-            }}
-          >
-            <StretchHorizontal size={14} />
-            <span className="btn-label-desktop">Vừa rộng</span>
-          </button>
-
-          {/* Vừa toàn trang */}
-          <button
-            type="button"
-            className={`pdf-btn ${scaleMode === 'fit-page' && scaleMultiplier === 1.0 ? 'active' : ''}`}
+            className={`pdf-btn ${scaleMode === 'fit-page' ? 'active' : ''}`}
             onClick={handleFitPage}
             disabled={!document}
             title="Vừa toàn bộ trang vào màn hình"
-            style={{
-              background: scaleMode === 'fit-page' && scaleMultiplier === 1.0 ? 'rgba(56, 189, 248, 0.25)' : undefined,
-              borderColor: scaleMode === 'fit-page' && scaleMultiplier === 1.0 ? '#38BDF8' : undefined
-            }}
           >
             <Maximize size={13} />
             <span className="btn-label-desktop">Vừa trang</span>
+          </button>
+
+          {/* Vừa chiều rộng chuẩn đọc */}
+          <button
+            type="button"
+            className={`pdf-btn ${scaleMode === 'fit-width' ? 'active' : ''}`}
+            onClick={handleFitWidth}
+            disabled={!document}
+            title="Vừa chiều rộng chuẩn đọc"
+          >
+            <StretchHorizontal size={14} />
+            <span className="btn-label-desktop">Vừa rộng</span>
           </button>
 
           {/* Xoay trang 90 độ */}
@@ -559,38 +560,40 @@ export default function PdfReader({
           </button>
         </div>
 
-        {/* NHÓM 3: TÁC VỤ PHỤ */}
-        <div className="pdf-toolbar-group actions-group">
-          {downloadUrl && canDownload && (
-            <a
-              href={downloadUrl}
-              download={fileName}
-              className="pdf-btn pdf-btn-download"
-              title="Tải tệp PDF về máy"
-            >
-              <Download size={14} />
-              <span className="btn-label-desktop">Tải về</span>
-            </a>
-          )}
-
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pdf-btn"
-            title="Mở tài liệu PDF trong thẻ trình duyệt mới"
-          >
-            <ExternalLink size={14} />
-            <span className="btn-label-desktop">Tab mới</span>
-          </a>
-
+        {/* NHÓM 3: TÙY CHỈNH NỀN BÀN ĐỌC (TĂNG ĐỘ TƯƠNG PHẢN - CHỐNG MỎI MẮT) */}
+        <div className="pdf-toolbar-group contrast-group" title="Tùy chỉnh màu nền đọc tài liệu">
+          <span style={{ fontSize: '11px', fontWeight: 800, color: '#475569', paddingLeft: '4px', textTransform: 'uppercase' }}>
+            Nền:
+          </span>
           <button
             type="button"
-            className="pdf-btn pdf-btn-fullscreen"
-            onClick={toggleFullscreen}
-            title={isFullscreen ? 'Thu nhỏ cửa sổ' : 'Chế độ đọc toàn màn hình'}
+            className={`pdf-btn ${deskTheme === 'light' ? 'active' : ''}`}
+            onClick={() => setDeskTheme('light')}
+            title="Nền sáng dịu (Trung tính)"
+            style={{ padding: '4px 8px', minHeight: '28px', fontSize: '11.5px' }}
           >
-            {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+            <Sun size={13} />
+            <span className="btn-label-desktop">Sáng dịu</span>
+          </button>
+          <button
+            type="button"
+            className={`pdf-btn ${deskTheme === 'contrast' ? 'active' : ''}`}
+            onClick={() => setDeskTheme('contrast')}
+            title="Nền tương phản cao (Chuẩn Chrome PDF & Adobe Acrobat)"
+            style={{ padding: '4px 8px', minHeight: '28px', fontSize: '11.5px' }}
+          >
+            <Contrast size={13} />
+            <span className="btn-label-desktop">Tương phản</span>
+          </button>
+          <button
+            type="button"
+            className={`pdf-btn ${deskTheme === 'dark' ? 'active' : ''}`}
+            onClick={() => setDeskTheme('dark')}
+            title="Nền tối bảo vệ mắt buổi tối"
+            style={{ padding: '4px 8px', minHeight: '28px', fontSize: '11.5px' }}
+          >
+            <Moon size={13} />
+            <span className="btn-label-desktop">Tối</span>
           </button>
         </div>
       </div>
@@ -620,6 +623,8 @@ export default function PdfReader({
         tabIndex={0}
         style={{
           outline: 'none',
+          background: currentDeskBg,
+          transition: 'background 0.2s ease',
           cursor: scaleMultiplier > 1.0 ? 'grab' : 'default'
         }}
       >

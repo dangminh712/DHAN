@@ -26,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\server.csproj": {
-                "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\server.csproj"
+              "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj": {
+                "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj"
               }
             }
           }
@@ -85,12 +85,12 @@
         }
       }
     },
-    "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\server.csproj": {
+    "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\server.csproj",
-        "projectName": "server",
-        "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\server.csproj",
+        "projectUniqueName": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj",
+        "projectName": "Server",
+        "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj",
         "packagesPath": "C:\\Users\\DangMinh\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\obj\\",
         "projectStyle": "PackageReference",

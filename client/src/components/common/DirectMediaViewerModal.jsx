@@ -13,7 +13,6 @@ import {
   Download,
   Copy,
   Check,
-  ExternalLink,
   Shield,
   Maximize2,
   Minimize2
@@ -70,9 +69,6 @@ export default function DirectMediaViewerModal({
       minute: '2-digit'
     });
   };
-
-  // Mở tab mới: luôn mở trang xem tài liệu toàn màn hình độc lập #/view/:id
-  const newTabUrl = `#/view/${fileId}`;
 
   const formatBadgeLabel = () => {
     switch (viewerKind) {
@@ -195,29 +191,6 @@ export default function DirectMediaViewerModal({
               {isMaximized ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
               <span className="hidden sm:inline">{isMaximized ? 'Thu nhỏ' : 'Toàn màn hình'}</span>
             </button>
-
-            <a
-              href={newTabUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-icon-secondary"
-              style={{
-                textDecoration: 'none',
-                padding: '6px 12px',
-                fontSize: '12px',
-                background: 'rgba(255,255,255,0.12)',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.2)',
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px'
-              }}
-              title="Mở tài liệu ra một tab trình duyệt mới độc lập"
-            >
-              <ExternalLink size={13} />
-              <span>Mở tab mới</span>
-            </a>
 
             <button className="modal-close-btn" onClick={onClose} title="Đóng cửa sổ xem tài liệu">
               <X size={18} />

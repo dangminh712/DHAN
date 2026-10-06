@@ -688,7 +688,7 @@
           "build/net6.0/xunit.runner.visualstudio.props": {}
         }
       },
-      "server/1.0.0": {
+      "Server/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
@@ -696,10 +696,10 @@
           "Pomelo.EntityFrameworkCore.MySql": "8.0.2"
         },
         "compile": {
-          "bin/placeholder/server.dll": {}
+          "bin/placeholder/Server.dll": {}
         },
         "runtime": {
-          "bin/placeholder/server.dll": {}
+          "bin/placeholder/Server.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
@@ -1612,17 +1612,17 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "server/1.0.0": {
+    "Server/1.0.0": {
       "type": "project",
-      "path": "../server/server.csproj",
-      "msbuildProject": "../server/server.csproj"
+      "path": "../server/Server.csproj",
+      "msbuildProject": "../server/Server.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.EntityFrameworkCore.InMemory >= 8.0.13",
       "Microsoft.NET.Test.Sdk >= 17.11.1",
-      "server >= 1.0.0",
+      "Server >= 1.0.0",
       "xunit >= 2.9.2",
       "xunit.runner.visualstudio >= 2.8.2"
     ]
@@ -1652,8 +1652,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\server.csproj": {
-              "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\server.csproj"
+            "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj": {
+              "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server\\Server.csproj"
             }
           }
         }

@@ -175,8 +175,6 @@ export default function AdminPortalPage({
     whiteSpace: 'nowrap'
   };
 
-  const adminerUrl = 'http://localhost:8080/?server=127.0.0.1%3A3307&username=root&db=training_management';
-
   return (
     <main className="main-content-layout" style={{ paddingTop: '20px', paddingBottom: '40px' }}>
       <div className="dvc-tabs-container">
@@ -232,9 +230,7 @@ export default function AdminPortalPage({
             </button>
 
             <a
-              href={adminerUrl}
-              target="_blank"
-              rel="noreferrer"
+              href="#/dbms"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -250,8 +246,7 @@ export default function AdminPortalPage({
               }}
             >
               <Database size={15} />
-              <span>Mở Adminer MySQL</span>
-              <ExternalLink size={13} />
+              <span>Giám sát CSDL (27 bảng)</span>
             </a>
           </div>
         </div>
@@ -794,9 +789,7 @@ export default function AdminPortalPage({
               </div>
 
               <a
-                href={adminerUrl}
-                target="_blank"
-                rel="noreferrer"
+                href="#/dbms"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -811,8 +804,7 @@ export default function AdminPortalPage({
                 }}
               >
                 <Database size={15} />
-                <span>Truy cập Trực Tiếp Adminer</span>
-                <ExternalLink size={13} />
+                <span>Xem Chi Tiết 27 Bảng CSDL</span>
               </a>
             </div>
 

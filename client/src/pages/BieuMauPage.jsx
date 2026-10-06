@@ -700,30 +700,6 @@ export default function BieuMauPage() {
                 </button>
               )}
 
-              {/* Nút mở tab mới - là thẻ anchor do người dùng click trực tiếp nên trình duyệt KHÔNG BAO GIỜ chặn */}
-              <a
-                href={externalPdf.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 12px',
-                  borderRadius: '6px',
-                  background: 'rgba(255, 255, 255, 0.12)',
-                  color: '#FFFFFF',
-                  fontSize: '12.5px',
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  border: '1px solid rgba(255, 255, 255, 0.2)'
-                }}
-                title="Mở tệp PDF ra một tab mới riêng biệt của trình duyệt"
-              >
-                <ExternalLink size={15} />
-                <span>Mở tab mới</span>
-              </a>
-
               {/* Nút tải về máy */}
               <a
                 href={externalPdf.url}
