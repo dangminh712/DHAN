@@ -28,6 +28,7 @@ import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import ChapterDetailPage from './pages/ChapterDetailPage';
 import BieuMauPage from './pages/BieuMauPage';
+import FunctionsHubPage from './pages/FunctionsHubPage';
 import { parseCourseRoute } from './courseSearch';
 import './styles/portal.css';
 
@@ -389,6 +390,17 @@ export default function App() {
         )}
         {courseRoute?.name === 'chapter' && (
           <ChapterDetailPage courseId={courseRoute.courseId} chapterId={courseRoute.chapterId} currentUser={currentUser} onOpenMaterial={openCourseMaterial} />
+        )}
+
+        {/* TRUNG TÂM TỔNG HỢP CHỨC NĂNG DÀNH CHO GIẢNG VIÊN / QUẢN TRỊ VIÊN */}
+        {(route === '/chuc-nang' || route === '/hub' || route === '/tien-ich' || route === '/functions') && (
+          <FunctionsHubPage
+            currentUser={currentUser}
+            onOpenUpload={() => setIsUploadModalOpen(true)}
+            onOpenNetwork={() => setIsNetworkModalOpen(true)}
+            onSwitchUser={handleSwitchUser}
+            availableUsers={availableUsers}
+          />
         )}
 
         {/* HỆ THỐNG BIỂU MẪU NGHIỆP VỤ CAND */}

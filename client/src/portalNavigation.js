@@ -1,5 +1,6 @@
 export const portalNavigation = [
   { id: 'home', label: 'Trang chủ', href: '#/', path: '/', icon: 'home', exact: true },
+  { id: 'hub', label: 'Tất cả chức năng', href: '#/chuc-nang', path: '/chuc-nang', icon: 'hub', badge: 'Hub' },
   { id: 'courses', label: 'Môn học', href: '#/mon-hoc', path: '/mon-hoc', icon: 'courses' },
   { id: 'student', label: 'Cổng Học viên', href: '#/hoc-vien', path: '/hoc-vien', icon: 'student' },
   { id: 'teacher', label: 'Phòng Giảng viên', href: '#/giang-vien', path: '/giang-vien', icon: 'teacher' },

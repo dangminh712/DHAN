@@ -1,0 +1,1003 @@
+[
+  {
+    "id": 1,
+    "question": "Biện pháp xác thực là gì?",
+    "options": {
+      "A": "Là tập hợp các phương thức kiểm tra việc truy nhập trái phép.",
+      "B": "Là tập hợp các phương thức để thiết lập việc kiểm tra một định danh là đúng.",
+      "C": "Kiểm soát việc cấp quyền trên hệ thống và kiểm soát thông tin ra vào hệ thống.",
+      "D": "Là tập hợp các phương thức để xác minh dữ liệu."
+    },
+    "answer": "B",
+    "note": "Xuất hiện tại: Đề 01 – Câu 1, Đề 03 – Câu 13.",
+    "set": 1
+  },
+  {
+    "id": 2,
+    "question": "Một trong những giao thức được sử dụng để mã hóa lưu lượng được truyền giữa trình duyệt web và máy chủ web?",
+    "options": {
+      "A": "VPN (Virtual Private Network)",
+      "B": "IPSec (Internet Protocol Security)",
+      "C": "SSL (Secure Sockets Layer)",
+      "D": "HTTP (Hypertext Transfer Protocol)"
+    },
+    "answer": "C",
+    "note": "Xuất hiện tại: Đề 01 – Câu 2, Đề 05 – Câu 7.",
+    "set": 1
+  },
+  {
+    "id": 3,
+    "question": "Theo Luật An ninh mạng năm 2018, “tài khoản số” là gì?",
+    "options": {
+      "A": "Thông tin dùng để chứng thực, xác thực, phân quyền sử dụng các ứng dụng, dịch vụ trên không gian mạng.",
+      "B": "Số điện thoại di động của người dùng.",
+      "C": "Mã số định danh cá nhân trên căn cước.",
+      "D": "Tài khoản tiền gửi thanh toán mở tại ngân hàng."
+    },
+    "answer": "A",
+    "note": "Căn cứ: Khoản 11 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 3, Đề 04 – Câu 15, Đề 05 – Câu 35.",
+    "set": 1
+  },
+  {
+    "id": 4,
+    "question": "Theo Luật An ninh mạng năm 2018, Danh mục hệ thống thông tin quan trọng về an ninh quốc gia do ai ban hành và sửa đổi, bổ sung?",
+    "options": {
+      "A": "Thủ tướng Chính phủ",
+      "B": "Bộ trưởng Bộ Thông tin và Truyền thông",
+      "C": "Bộ trưởng Bộ Công an",
+      "D": "Ủy ban Thường vụ Quốc hội"
+    },
+    "answer": "A",
+    "note": "Căn cứ: Khoản 2 Điều 10 Luật An ninh mạng 2018 (Thủ tướng Chính phủ ban hành, sửa đổi, bổ sung). Có tại: Đề 01 – Câu 4, Đề 02 – Câu 32, Đề 04 – Câu 20, Đề 05 – Câu 9.",
+    "set": 1
+  },
+  {
+    "id": 5,
+    "question": "Theo Luật An ninh mạng năm 2018, “không gian mạng” được hiểu là gì?",
+    "options": {
+      "A": "Hệ thống cơ sở vật chất, kỹ thuật để truyền đưa và lưu trữ thông tin trên mạng Internet.",
+      "B": "Toàn bộ các trang thông tin điện tử và mạng xã hội đang hoạt động tại Việt Nam.",
+      "C": "Môi trường ảo do các doanh nghiệp viễn thông cung cấp cho người sử dụng dịch vụ.",
+      "D": "Mạng lưới kết nối của cơ sở hạ tầng công nghệ thông tin, bao gồm mạng viễn thông, mạng Internet, mạng máy tính, hệ thống thông tin, hệ thống xử lý và điều khiển thông tin, cơ sở dữ liệu; là nơi con người thực hiện các hành vi xã hội không bị giới hạn bởi không gian và thời gian."
+    },
+    "answer": "D",
+    "note": "Căn cứ: Khoản 3 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 5, Đề 02 – Câu 36, Đề 03 – Câu 4, Đề 04 – Câu 39.",
+    "set": 1
+  },
+  {
+    "id": 6,
+    "question": "Mạng riêng ảo (VPN) có tác dụng chủ yếu là gì?",
+    "options": {
+      "A": "Tạo kênh truyền được mã hóa, an toàn qua mạng công cộng.",
+      "B": "Thay thế phần mềm diệt virus.",
+      "C": "Chặn toàn bộ quảng cáo trên trình duyệt.",
+      "D": "Tăng tốc độ đường truyền Internet."
+    },
+    "answer": "A",
+    "note": "VPN (Virtual Private Network) tạo đường hầm mã hóa (encrypted tunnel) an toàn qua mạng công cộng. Có tại: Đề 01 – Câu 6, Đề 02 – Câu 39, Đề 04 – Câu 30, Đề 05 – Câu 4.",
+    "set": 1
+  },
+  {
+    "id": 7,
+    "question": "Đặc điểm nào đúng với mã độc Trojan?",
+    "options": {
+      "A": "Ngụy trang thành phần mềm hợp pháp, hữu ích để lừa người dùng cài đặt.",
+      "B": "Chỉ lây nhiễm vào phân vùng khởi động (boot sector).",
+      "C": "Tự nhân bản và lây lan qua mạng mà không cần tệp chủ.",
+      "D": "Chỉ hoạt động trên điện thoại di động."
+    },
+    "answer": "A",
+    "note": "Trojan Horse ngụy trang thành tiện ích hoặc phần mềm hợp pháp để lừa người dùng tải về cài đặt. Có tại: Đề 01 – Câu 7, Đề 02 – Câu 16, Đề 04 – Câu 31.",
+    "set": 1
+  },
+  {
+    "id": 8,
+    "question": "Khái niệm về tội phạm mạng là?",
+    "options": {
+      "A": "Hành vi cố ý vượt qua cảnh báo, mã truy cập, mật mã, tường lửa, sử dụng quyền quản trị của người khác… để chiếm đoạt, thu thập trái phép thông tin, tài nguyên thông tin trên mạng.",
+      "B": "Hành vi sử dụng không gian mạng, công nghệ thông tin hoặc phương tiện điện tử để thực hiện tội phạm được quy định tại Bộ luật Hình sự.",
+      "C": "Hành vi sử dụng không gian mạng, công nghệ thông tin hoặc phương tiện điện tử để phá hoại, gây gián đoạn hoạt động của mạng viễn thông, mạng Internet… cơ sở dữ liệu, phương tiện điện tử.",
+      "D": "Việc sử dụng không gian mạng, công nghệ thông tin hoặc phương tiện điện tử để thực hiện hành vi khủng bố, tài trợ khủng bố."
+    },
+    "answer": "B",
+    "note": "Căn cứ: Khoản 6 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 8, Đề 02 – Câu 18, Đề 03 – Câu 16.",
+    "set": 1
+  },
+  {
+    "id": 9,
+    "question": "Botnet là gì?",
+    "options": {
+      "A": "Mạng lưới các máy tính bị nhiễm mã độc và bị kẻ tấn công điều khiển từ xa.",
+      "B": "Mạng riêng ảo dùng để mã hóa đường truyền.",
+      "C": "Hệ thống phát hiện xâm nhập trái phép.",
+      "D": "Một phần mềm diệt virus miễn phí."
+    },
+    "answer": "A",
+    "note": "Botnet là mạng lưới các máy tính 'zombie' bị nhiễm mã độc và chịu sự điều khiển của kẻ tấn công (Botmaster). Có tại: Đề 01 – Câu 9, Đề 03 – Câu 8, Đề 05 – Câu 28.",
+    "set": 1
+  },
+  {
+    "id": 10,
+    "question": "Biện pháp hiệu quả nhất để phòng chống tấn công SQL Injection ở phía lập trình ứng dụng web là gì?",
+    "options": {
+      "A": "Tăng dung lượng máy chủ cơ sở dữ liệu.",
+      "B": "Đổi tên miền của website thường xuyên.",
+      "C": "Tắt tường lửa để website chạy nhanh hơn.",
+      "D": "Sử dụng truy vấn tham số hóa (Prepared Statement) và kiểm tra dữ liệu đầu vào."
+    },
+    "answer": "D",
+    "note": "Sử dụng Prepared Statements / Parameterized Queries tách biệt mã SQL với dữ liệu đầu vào, ngăn chặn injection hiệu quả nhất. Có tại: Đề 01 – Câu 10, Đề 03 – Câu 37, Đề 05 – Câu 30.",
+    "set": 1
+  },
+  {
+    "id": 11,
+    "question": "Giải pháp tốt nhất có thể phòng chống tấn công Man in the middle là?",
+    "options": {
+      "A": "Giải pháp tường lửa",
+      "B": "Mã hóa mạnh",
+      "C": "Mật khẩu mạnh, khó giải mã",
+      "D": "Xác thực mạnh"
+    },
+    "answer": "B",
+    "note": "Đáp án theo đề gốc: B (Mã hóa mạnh). Lưu ý: Mã hóa mạnh bảo vệ dữ liệu, còn xác thực hai đầu chống kẻ giả mạo MITM. Có tại: Đề 01 – Câu 11, Đề 04 – Câu 22.",
+    "set": 1
+  },
+  {
+    "id": 12,
+    "question": "Trong an toàn thông tin, đảm bảo tính toàn vẹn là:",
+    "options": {
+      "A": "Đảm bảo thông tin luôn sẵn sàng đáp ứng các yêu cầu truy cập hợp lệ.",
+      "B": "Đảm bảo xác định đúng danh tính của người gửi thông tin.",
+      "C": "Đảm bảo thông tin không bị sửa đổi, xóa bỏ trái phép bởi những người không được quyền.",
+      "D": "Đảm bảo thông tin chỉ được xem bởi những người được quyền."
+    },
+    "answer": "C",
+    "note": "Tính toàn vẹn (Integrity) đảm bảo dữ liệu không bị thay đổi, sửa đổi hay giả mạo trái phép. Có tại: Đề 01 – Câu 12, Đề 05 – Câu 6.",
+    "set": 1
+  },
+  {
+    "id": 13,
+    "question": "Nghị định của Chính phủ về quản lý, cung cấp, sử dụng dịch vụ Internet và thông tin trên mạng được ban hành vào thời gian nào?",
+    "options": {
+      "A": "01/07/2013",
+      "B": "01/07/2014",
+      "C": "15/07/2013",
+      "D": "01/01/2013"
+    },
+    "answer": "C",
+    "note": "Nghị định số 72/2013/NĐ-CP được Chính phủ ban hành ngày 15/07/2013. Có tại: Đề 01 – Câu 13, Đề 02 – Câu 21, Đề 03 – Câu 32, Đề 05 – Câu 11.",
+    "set": 1
+  },
+  {
+    "id": 14,
+    "question": "Luật An toàn thông tin mạng năm 2015 có hiệu lực thi hành từ ngày nào?",
+    "options": {
+      "A": "01/01/2019",
+      "B": "01/01/2016",
+      "C": "19/11/2015",
+      "D": "01/7/2016"
+    },
+    "answer": "D",
+    "note": "Luật An toàn thông tin mạng số 86/2015/QH13 có hiệu lực từ ngày 01/07/2016. Có tại: Đề 01 – Câu 14, Đề 02 – Câu 20, Đề 04 – Câu 35, Đề 05 – Câu 16.",
+    "set": 1
+  },
+  {
+    "id": 15,
+    "question": "Theo Luật An ninh mạng năm 2018, hành vi cố ý vượt qua cảnh báo, mã truy cập, mật mã, tường lửa, sử dụng quyền quản trị của người khác hoặc bằng phương thức khác để chiếm đoạt, thu thập trái phép thông tin, tài nguyên thông tin trên mạng… của cơ quan, tổ chức, cá nhân được gọi là gì?",
+    "options": {
+      "A": "Khủng bố mạng",
+      "B": "Tội phạm mạng",
+      "C": "Tấn công mạng",
+      "D": "Gián điệp mạng"
+    },
+    "answer": "D",
+    "note": "Căn cứ: Khoản 7 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 15.",
+    "set": 1
+  },
+  {
+    "id": 16,
+    "question": "Mục đích của trinh sát mạng là gì?",
+    "options": {
+      "A": "Để phát hiện kịp thời thông tin có nội dung kích động tụ tập đông người gây rối an ninh, trật tự trên không gian mạng.",
+      "B": "Để chuẩn bị, tích lũy dữ liệu về môi trường của một mục tiêu, đối tượng chính, đối tượng phụ và những người có liên quan của vụ án.",
+      "C": "Để phân tích trạng thái thông tin của đối tượng nhằm xác định những nhân tố ảnh hưởng đến an toàn hệ thống thông tin.",
+      "D": "Để phát hiện kịp thời việc lan truyền thông tin có nội dung xâm phạm quyền, lợi ích hợp pháp của tổ chức, cá nhân."
+    },
+    "answer": "B",
+    "note": "Đáp án theo phương án đề gốc chọn: B. Có tại: Đề 01 – Câu 16, Đề 04 – Câu 40.",
+    "set": 1
+  },
+  {
+    "id": 17,
+    "question": "Tội phạm mã hóa tất cả dữ liệu trong hệ thống máy tính hoặc hệ thống mạng, sau đó đưa ra thông báo yêu cầu tiền chuộc để giải mã dữ liệu, gọi là gì?",
+    "options": {
+      "A": "Ransomware",
+      "B": "CryptoLocker",
+      "C": "Botnet",
+      "D": "Zombie"
+    },
+    "answer": "A",
+    "note": "Ransomware (mã độc tống tiền) mã hóa dữ liệu đòi tiền chuộc. Có tại: Đề 01 – Câu 17, Đề 04 – Câu 9.",
+    "set": 1
+  },
+  {
+    "id": 18,
+    "question": "Phần mềm nào sau đây dùng để xóa dữ liệu?",
+    "options": {
+      "A": "TrueCrypt",
+      "B": "Wondershare",
+      "C": "Teardrop",
+      "D": "CCleaner"
+    },
+    "answer": "D",
+    "note": "CCleaner là công cụ dọn dẹp hệ thống, xóa cache, lịch sử và dữ liệu thừa. Có tại: Đề 01 – Câu 18, Đề 03 – Câu 17, Đề 05 – Câu 1.",
+    "set": 1
+  },
+  {
+    "id": 19,
+    "question": "Tấn công từ chối dịch vụ phân tán (DDoS) chủ yếu xâm phạm thuộc tính nào của thông tin?",
+    "options": {
+      "A": "Tính toàn vẹn",
+      "B": "Tính bí mật",
+      "C": "Tính chống chối bỏ",
+      "D": "Tính sẵn sàng"
+    },
+    "answer": "D",
+    "note": "DDoS làm cạn kiệt tài nguyên máy chủ khiến người dùng không thể truy cập, xâm phạm Tính sẵn sàng (Availability). Có tại: Đề 01 – Câu 19, Đề 02 – Câu 6, Đề 03 – Câu 31, Đề 05 – Câu 20.",
+    "set": 1
+  },
+  {
+    "id": 20,
+    "question": "Mô hình CIA trong đảm bảo an toàn thông tin gồm những thuộc tính nào?",
+    "options": {
+      "A": "Tính xác thực, tính toàn vẹn, tính chống chối bỏ",
+      "B": "Tính bí mật, tính toàn vẹn, tính sẵn sàng",
+      "C": "Tính bí mật, tính xác thực, tính sẵn sàng",
+      "D": "Tính kiểm soát, tính toàn vẹn, tính sẵn sàng"
+    },
+    "answer": "B",
+    "note": "Mô hình CIA = Confidentiality (Bí mật), Integrity (Toàn vẹn), Availability (Sẵn sàng). Có tại: Đề 01 – Câu 20, Đề 03 – Câu 10, Đề 05 – Câu 19.",
+    "set": 1
+  },
+  {
+    "id": 21,
+    "question": "Theo Luật An ninh mạng năm 2018, “sự cố an ninh mạng” là gì?",
+    "options": {
+      "A": "Lỗi kỹ thuật do nhà sản xuất phần cứng gây ra.",
+      "B": "Việc người dùng quên mật khẩu tài khoản số.",
+      "C": "Sự việc bất ngờ xảy ra trên không gian mạng xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân.",
+      "D": "Việc mất điện làm gián đoạn hoạt động của trung tâm dữ liệu."
+    },
+    "answer": "C",
+    "note": "Căn cứ: Khoản 9 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 21, Đề 02 – Câu 11.",
+    "set": 2
+  },
+  {
+    "id": 22,
+    "question": "Khẳng định nào sau đây là đúng?",
+    "options": {
+      "A": "… là hệ thống chỉnh sửa, vận chuyển, thu thập, xử lý, lưu trữ và trao đổi dữ liệu trên không gian mạng quốc gia.",
+      "B": "Cơ sở hạ tầng không gian mạng quốc gia là hệ thống cơ sở vật chất, kỹ thuật để tạo lập, truyền đưa, thu thập, xử lý, lưu trữ và trao đổi thông tin trên không gian mạng quốc gia.",
+      "C": "… là hệ thống vận chuyển, thu thập, tạo lập, xử lý, lưu trữ thông tin trên không gian mạng quốc gia.",
+      "D": "… là hệ thống cơ sở thông tin để tạo lập, truyền đưa, thu thập, xử lý, lưu trữ, chỉnh sửa và trao đổi dữ liệu trên không gian mạng quốc gia."
+    },
+    "answer": "B",
+    "note": "Căn cứ: Khoản 4 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 22, Đề 02 – Câu 22, Đề 03 – Câu 19.",
+    "set": 2
+  },
+  {
+    "id": 23,
+    "question": "Chữ ký số giúp đảm bảo những thuộc tính nào của thông điệp điện tử?",
+    "options": {
+      "A": "Tính xác thực, tính toàn vẹn và tính chống chối bỏ",
+      "B": "Chỉ đảm bảo tính bí mật",
+      "C": "Tính bí mật và tính sẵn sàng",
+      "D": "Tính sẵn sàng và tính chống chối bỏ"
+    },
+    "answer": "A",
+    "note": "Chữ ký số xác nhận nguồn gốc (Authenticity), kiểm tra dữ liệu không bị đổi (Integrity) và người ký không thể phủ nhận (Non-repudiation). Có tại: Đề 01 – Câu 23, Đề 03 – Câu 26, Đề 04 – Câu 38.",
+    "set": 2
+  },
+  {
+    "id": 24,
+    "question": "Thuật toán nào sau đây là hàm băm (hash function)?",
+    "options": {
+      "A": "RSA",
+      "B": "AES",
+      "C": "SHA-256",
+      "D": "DES"
+    },
+    "answer": "C",
+    "note": "SHA-256 (Secure Hash Algorithm 256-bit) là hàm băm một chiều. RSA là mã hóa bất đối xứng, AES và DES là mã hóa khối đối xứng. Có tại: Đề 01 – Câu 24, Đề 03 – Câu 15, Đề 04 – Câu 11, Đề 05 – Câu 5.",
+    "set": 2
+  },
+  {
+    "id": 25,
+    "question": "Luật An ninh mạng quy định bao nhiêu nhóm hành vi bị nghiêm cấm thực hiện trên không gian mạng?",
+    "options": {
+      "A": "7",
+      "B": "5",
+      "C": "6",
+      "D": "4"
+    },
+    "answer": "C",
+    "note": "Căn cứ: Điều 8 Luật An ninh mạng 2018 gồm 6 khoản quy định các nhóm hành vi bị nghiêm cấm. Có tại: Đề 01 – Câu 25, Đề 02 – Câu 34, Đề 03 – Câu 27.",
+    "set": 2
+  },
+  {
+    "id": 26,
+    "question": "Theo Luật An ninh mạng năm 2018, doanh nghiệp cung cấp dịch vụ trên không gian mạng phải ngăn chặn việc chia sẻ, xóa bỏ thông tin có nội dung vi phạm chậm nhất trong thời hạn bao lâu kể từ khi có yêu cầu của cơ quan có thẩm quyền?",
+    "options": {
+      "A": "72 giờ",
+      "B": "48 giờ",
+      "C": "12 giờ",
+      "D": "24 giờ"
+    },
+    "answer": "D",
+    "note": "Căn cứ: Điểm a Khoản 2 Điều 26 Luật An ninh mạng 2018 (chậm nhất là 24 giờ). Có tại: Đề 01 – Câu 26, Đề 04 – Câu 12.",
+    "set": 2
+  },
+  {
+    "id": 27,
+    "question": "Môi trường đám mây sử dụng chung phần cứng cho nhiều khách hàng. Vấn đề bảo mật cần được quan tâm ở đây là gì?",
+    "options": {
+      "A": "Tính bí mật dữ liệu",
+      "B": "Tính sẵn sàng của máy ảo",
+      "C": "Tính toàn vẹn phần cứng",
+      "D": "Tính toàn vẹn của dữ liệu"
+    },
+    "answer": "A",
+    "note": "Trong môi trường chia sẻ hạ tầng đám mây (multi-tenancy), rủi ro lớn nhất là rò rỉ dữ liệu giữa các khách hàng, đe dọa Tính bí mật dữ liệu. Có tại: Đề 01 – Câu 27, Đề 04 – Câu 32, Đề 05 – Câu 39.",
+    "set": 2
+  },
+  {
+    "id": 28,
+    "question": "Theo Luật An ninh mạng năm 2018, “cổng kết nối mạng quốc tế” là gì?",
+    "options": {
+      "A": "Điểm truy cập Internet công cộng tại sân bay quốc tế.",
+      "B": "Hệ thống tổng đài điện thoại quốc tế.",
+      "C": "Trang thông tin điện tử của Bộ Ngoại giao.",
+      "D": "Nơi diễn ra hoạt động chuyển nhận tín hiệu mạng qua lại giữa Việt Nam và các quốc gia, vùng lãnh thổ khác."
+    },
+    "answer": "D",
+    "note": "Căn cứ: Khoản 5 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 28, Đề 03 – Câu 5.",
+    "set": 2
+  },
+  {
+    "id": 29,
+    "question": "Lỗ hổng “zero-day” là gì?",
+    "options": {
+      "A": "Lỗ hổng đã được vá trong ngày phát hành phần mềm.",
+      "B": "Lỗ hổng chỉ tồn tại trong ngày đầu tiên cài đặt hệ điều hành.",
+      "C": "Lỗ hổng bảo mật chưa được công bố, nhà sản xuất chưa biết hoặc chưa có bản vá.",
+      "D": "Lỗ hổng không thể bị khai thác."
+    },
+    "answer": "C",
+    "note": "Lỗ hổng zero-day là điểm yếu bảo mật chưa được nhà phát triển nhận biết hoặc chưa phát hành bản vá, khiến hệ thống có nguy cơ bị khai thác ngày tức thì (0 ngày chuẩn bị). Có tại: Đề 01 – Câu 29, Đề 03 – Câu 2.",
+    "set": 2
+  },
+  {
+    "id": 30,
+    "question": "Tội phát tán chương trình tin học gây hại cho hoạt động của mạng máy tính, mạng viễn thông, phương tiện điện tử được quy định tại Điều nào trong Bộ luật Hình sự năm 2015?",
+    "options": {
+      "A": "Điều 288",
+      "B": "Điều 289",
+      "C": "Điều 286",
+      "D": "Điều 287"
+    },
+    "answer": "C",
+    "note": "Căn cứ: Điều 286 Bộ luật Hình sự 2015. Có tại: Đề 01 – Câu 30, Đề 02 – Câu 1, Đề 03 – Câu 21.",
+    "set": 2
+  },
+  {
+    "id": 31,
+    "question": "Bảo vệ an ninh mạng là gì?",
+    "options": {
+      "A": "Phòng ngừa, phát hiện, ngăn chặn, xử lý hành vi xâm phạm an ninh mạng.",
+      "B": "Bảo đảm hoạt động trên không gian mạng không gây phương hại đến ANQG, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân.",
+      "C": "Phòng ngừa, bảo vệ, phát hiện, ngăn chặn, xử lý hành vi xâm phạm an ninh mạng.",
+      "D": "Phòng ngừa, bảo vệ, phát hiện, ngăn chặn, bảo đảm hoạt động trên không gian mạng không gây phương hại đến ANQG."
+    },
+    "answer": "A",
+    "note": "Căn cứ: Khoản 2 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 01 – Câu 31, Đề 02 – Câu 14, Đề 03 – Câu 25, Đề 04 – Câu 36, Đề 05 – Câu 13.",
+    "set": 2
+  },
+  {
+    "id": 32,
+    "question": "Hình thức tấn công khai thác các lỗi trong phần mềm hoặc hệ điều hành được gọi là gì?",
+    "options": {
+      "A": "Hình thức tấn công khai thác lỗ hổng.",
+      "B": "Hình thức Social Engineering.",
+      "C": "Hình thức tấn công mạo danh.",
+      "D": "Hình thức tấn công điểm yếu cơ sở hạ tầng."
+    },
+    "answer": "A",
+    "note": "Khai thác lỗ hổng (Vulnerability exploitation) tấn công vào bug / lỗi trong phần mềm hoặc OS. Có tại: Đề 01 – Câu 32, Đề 02 – Câu 19, Đề 05 – Câu 22.",
+    "set": 2
+  },
+  {
+    "id": 33,
+    "question": "Chọn đáp án đúng điền vào khoảng trống: Quản lý nhà nước trong lĩnh vực An ninh mạng phải đảm bảo tính ______ của hệ thống pháp luật trong tháo gỡ những khó khăn, bất cập phát sinh để Chính phủ, các Bộ, ngành, cơ quan, tổ chức, cá nhân thực hiện có hiệu quả các chức năng, nhiệm vụ được giao.",
+    "options": {
+      "A": "Bảo mật, thống nhất",
+      "B": "Đồng bộ, thống nhất",
+      "C": "Khách quan, thống nhất",
+      "D": "Khoa học, kỹ thuật"
+    },
+    "answer": "B",
+    "note": "Xuất hiện tại: Đề 01 – Câu 33, Đề 03 – Câu 3, Đề 04 – Câu 28, Đề 05 – Câu 12.",
+    "set": 2
+  },
+  {
+    "id": 34,
+    "question": "Nguyên tắc sao lưu dữ liệu “3-2-1” có nghĩa là gì?",
+    "options": {
+      "A": "Sao lưu 3 lần mỗi ngày, 2 lần mỗi tuần, 1 lần mỗi tháng.",
+      "B": "3 bản sao dữ liệu, lưu trên 2 loại phương tiện khác nhau, 1 bản lưu ở vị trí khác (ngoài cơ sở).",
+      "C": "Lưu trữ 3 năm, kiểm tra 2 lần, xóa 1 lần.",
+      "D": "3 máy chủ, 2 ổ cứng, 1 USB."
+    },
+    "answer": "B",
+    "note": "Nguyên tắc 3-2-1: Có ít nhất 3 bản sao chép, trên 2 phương tiện lưu trữ khác nhau, và 1 bản lưu ngoại vi (off-site / cloud). Có tại: Đề 01 – Câu 34, Đề 02 – Câu 25, Đề 03 – Câu 33, Đề 04 – Câu 13.",
+    "set": 2
+  },
+  {
+    "id": 35,
+    "question": "Các phương thức của hoạt động trinh sát mạng bao gồm?",
+    "options": {
+      "A": "Phương thức lấy công khai che bí mật, phương thức hoạt động công khai, phương pháp chủ động",
+      "B": "Phương thức nửa công khai, phương thức hoạt động bí mật, phương thức lấy công khai che bí mật",
+      "C": "Phương thức hoạt động công khai, phương thức hoạt động bí mật, phương thức lấy công khai che bí mật",
+      "D": "Phương thức hoạt động bí mật, phương thức lấy công khai che bí mật"
+    },
+    "answer": "C",
+    "note": "Có tại: Đề 01 – Câu 35, Đề 02 – Câu 26, Đề 03 – Câu 11, Đề 04 – Câu 37, Đề 05 – Câu 23.",
+    "set": 2
+  },
+  {
+    "id": 36,
+    "question": "Trong bảo mật thông tin về tài khoản cá nhân, phương án nào sau đây không phải là xác thực?",
+    "options": {
+      "A": "Sử dụng vân tay khi đăng nhập",
+      "B": "Sử dụng backdoor để đăng nhập",
+      "C": "Sử dụng giọng nói khi đăng nhập",
+      "D": "Sử dụng mật khẩu khi đăng nhập"
+    },
+    "answer": "B",
+    "note": "Backdoor (cửa sau) là phương thức xâm nhập trái phép do kẻ tấn công cài đặt, không phải là cơ chế xác thực danh tính người dùng. Có tại: Đề 01 – Câu 36, Đề 02 – Câu 2, Đề 04 – Câu 33, Đề 05 – Câu 21.",
+    "set": 2
+  },
+  {
+    "id": 37,
+    "question": "Thuật toán AES thuộc loại mã hóa nào?",
+    "options": {
+      "A": "Mã hóa khối, khóa đối xứng",
+      "B": "Mã hóa khóa công khai (bất đối xứng)",
+      "C": "Hàm băm một chiều",
+      "D": "Mã hóa cổ điển thay thế đơn"
+    },
+    "answer": "A",
+    "note": "AES (Advanced Encryption Standard) là thuật toán mã hóa khối đối xứng (symmetric block cipher). Có tại: Đề 01 – Câu 37, Đề 05 – Câu 27.",
+    "set": 2
+  },
+  {
+    "id": 38,
+    "question": "Chức năng chính của tường lửa (Firewall) là gì?",
+    "options": {
+      "A": "Mã hóa toàn bộ ổ cứng.",
+      "B": "Sao lưu dữ liệu tự động.",
+      "C": "Kiểm soát, lọc lưu lượng mạng ra vào hệ thống theo các chính sách đã thiết lập.",
+      "D": "Diệt virus trong các tệp tin."
+    },
+    "answer": "C",
+    "note": "Tường lửa kiểm soát và lọc các gói tin mạng ra vào dựa trên danh sách quy tắc (rules/policies). Có tại: Đề 01 – Câu 38, Đề 03 – Câu 29, Đề 04 – Câu 5, Đề 05 – Câu 8.",
+    "set": 2
+  },
+  {
+    "id": 39,
+    "question": "Điều nào của Luật An ninh mạng năm 2018 quy định về bảo vệ trẻ em trên không gian mạng?",
+    "options": {
+      "A": "Điều 41",
+      "B": "Điều 29",
+      "C": "Điều 26",
+      "D": "Điều 16"
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điều 29 Luật An ninh mạng 2018 (Bảo vệ trẻ em trên không gian mạng). Có tại: Đề 01 – Câu 39, Đề 04 – Câu 10, Đề 05 – Câu 33.",
+    "set": 2
+  },
+  {
+    "id": 40,
+    "question": "Kiểu tấn công mà đối tượng gửi Email có file đính kèm và yêu cầu người dùng đăng nhập vào tài khoản của mình gọi là gì?",
+    "options": {
+      "A": "Debugging",
+      "B": "DDoS",
+      "C": "Social engineering",
+      "D": "Browser hijacking"
+    },
+    "answer": "C",
+    "note": "Hình thức gửi email lừa đảo đăng nhập là dạng điển hình của Social Engineering (Kỹ thuật xã hội / Lừa đảo tâm lý). Có tại: Đề 01 – Câu 40, Đề 04 – Câu 6.",
+    "set": 2
+  },
+  {
+    "id": 41,
+    "question": "Hoạt động nào phục vụ cho giám sát an ninh mạng?",
+    "options": {
+      "A": "Thay đổi mật khẩu định kì và thu thập dữ liệu",
+      "B": "Thu thập dữ liệu liên quan đến hoạt động của hệ thống",
+      "C": "Quét virus định kì, kiểm tra giám sát hệ thống",
+      "D": "Kiểm tra chính sách an ninh mạng thường xuyên"
+    },
+    "answer": "B",
+    "note": "Giám sát an ninh mạng bắt buộc phải thu thập dữ liệu liên quan đến lưu lượng và hoạt động của hệ thống (logs, event telemetry). Có tại: Đề 02 – Câu 3, Đề 04 – Câu 18, Đề 05 – Câu 3.",
+    "set": 3
+  },
+  {
+    "id": 42,
+    "question": "Điều 291 Bộ luật Hình sự năm 2015 quy định hành vi nào sau đây?",
+    "options": {
+      "A": "Hành vi xâm nhập trái phép vào mạng máy tính, mạng viễn thông hoặc phương tiện điện tử của người khác.",
+      "B": "Tội thu thập, tàng trữ, trao đổi, mua bán, công khai hóa trái phép thông tin về tài khoản ngân hàng.",
+      "C": "Hành vi cản trở hoặc gây rối loạn hoạt động của mạng máy tính, mạng viễn thông, phương tiện điện tử.",
+      "D": "Hành vi đưa hoặc sử dụng trái phép thông tin trên mạng máy tính, mạng viễn thông."
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điều 291 BLHS 2015. Có tại: Đề 02 – Câu 4, Đề 04 – Câu 14.",
+    "set": 3
+  },
+  {
+    "id": 43,
+    "question": "Mã độc tống tiền WannaCry gây ảnh hưởng trên phạm vi toàn cầu, trong đó có Việt Nam, vào năm nào?",
+    "options": {
+      "A": "2015",
+      "B": "2017",
+      "C": "2019",
+      "D": "2021"
+    },
+    "answer": "B",
+    "note": "Vụ tấn công mã độc ransomware WannaCry bùng phát vào tháng 5 năm 2017. Có tại: Đề 02 – Câu 5, Đề 03 – Câu 39, Đề 04 – Câu 2.",
+    "set": 3
+  },
+  {
+    "id": 44,
+    "question": "Luật An ninh mạng năm 2018 gồm bao nhiêu chương, bao nhiêu điều?",
+    "options": {
+      "A": "6 chương, 43 điều",
+      "B": "7 chương, 43 điều",
+      "C": "8 chương, 54 điều",
+      "D": "7 chương, 54 điều"
+    },
+    "answer": "B",
+    "note": "Luật An ninh mạng số 24/2018/QH14 gồm 7 chương, 43 điều. Có tại: Đề 02 – Câu 7.",
+    "set": 3
+  },
+  {
+    "id": 45,
+    "question": "Hành vi nào sau đây bị nghiêm cấm theo Điều 8 Luật An ninh mạng năm 2018?",
+    "options": {
+      "A": "Sử dụng mạng xã hội để chia sẻ kiến thức học tập.",
+      "B": "Sử dụng không gian mạng để tổ chức, hoạt động, cấu kết, xúi giục, mua chuộc, lừa gạt, lôi kéo, đào tạo, huấn luyện người chống Nhà nước CHXHCN Việt Nam.",
+      "C": "Sử dụng phần mềm mã hóa để bảo vệ dữ liệu cá nhân.",
+      "D": "Phản ánh, kiến nghị với cơ quan nhà nước qua cổng dịch vụ công trực tuyến."
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điểm a Khoản 1 Điều 8 Luật An ninh mạng 2018. Có tại: Đề 02 – Câu 8, Đề 03 – Câu 38, Đề 05 – Câu 40.",
+    "set": 3
+  },
+  {
+    "id": 46,
+    "question": "Phương thức tấn công mạng máy tính Spoofing attack là gì?",
+    "options": {
+      "A": "Phương pháp tấn công trung gian xảy ra ngay trong lúc hai đối tượng đang giao dịch với nhau.",
+      "B": "Phương pháp tấn công mà hacker từ ngoài hoặc trong hệ thống giả dạng là một máy tính đã được tin tưởng.",
+      "C": "Phương pháp tấn công nghe lén thông tin trên đường truyền khi hai đối tượng trao đổi với nhau.",
+      "D": "Phương pháp điều khiển các máy tính đã bị nhiễm virus."
+    },
+    "answer": "B",
+    "note": "Spoofing attack là phương thức giả mạo địa chỉ IP/danh tính của một thiết bị đáng tin cậy. Có tại: Đề 02 – Câu 9, Đề 03 – Câu 1, Đề 04 – Câu 26.",
+    "set": 3
+  },
+  {
+    "id": 47,
+    "question": "Hình thức tấn công giả mạo một đơn vị, cá nhân có uy tín (thường qua email, tin nhắn) để lừa người dùng cung cấp thông tin nhạy cảm như mật khẩu, thông tin thẻ được gọi là gì?",
+    "options": {
+      "A": "Phishing",
+      "B": "Sniffing",
+      "C": "Flooding",
+      "D": "Spamming"
+    },
+    "answer": "A",
+    "note": "Phishing (tấn công giả mạo/lừa đảo câu cá) nhằm đánh cắp thông tin nhạy cảm. Có tại: Đề 02 – Câu 10.",
+    "set": 3
+  },
+  {
+    "id": 48,
+    "question": "Nguyên tắc trong hợp tác quốc tế về đảm bảo an toàn thông tin mạng là?",
+    "options": {
+      "A": "Tôn trọng độc lập, chủ quyền và toàn vẹn lãnh thổ quốc gia, không can thiệp vào công việc nội bộ của nhau, bình đẳng và các bên cùng có lợi.",
+      "B": "Mở rộng hợp tác quốc tế trong việc phòng, chống hành vi phạm tội xâm phạm đến quyền và lợi ích hợp pháp của tổ chức, cá nhân trên lãnh thổ Việt Nam…",
+      "C": "Tăng cường hợp tác quốc tế trong đào tạo, nghiên cứu, ứng dụng khoa học, kỹ thuật và công nghệ về an toàn thông tin mạng.",
+      "D": "Tất cả các phương án trên."
+    },
+    "answer": "D",
+    "note": "Căn cứ: Điều 6 Luật An toàn thông tin mạng 2015. Có tại: Đề 02 – Câu 12, Đề 03 – Câu 30, Đề 05 – Câu 29.",
+    "set": 3
+  },
+  {
+    "id": 49,
+    "question": "Social Engineering là hình thức tấn công như thế nào?",
+    "options": {
+      "A": "Tin tặc giả mạo ngân hàng, trang web giao dịch trực tuyến, ví điện tử… để lừa người dùng chia sẻ thông tin nhạy cảm.",
+      "B": "Tin tặc thường gửi email rác, email mạo danh người thân, quảng cáo trúng thưởng… yêu cầu nạn nhân nhấp vào liên kết hoặc tệp đính kèm để điền thông tin cá nhân, số tài khoản ngân hàng, địa chỉ…",
+      "C": "Truy cập cơ sở dữ liệu với mật khẩu bị bẻ khóa.",
+      "D": "Cài đặt keylogger trên hệ thống nạn nhân để lấy mật khẩu."
+    },
+    "answer": "A",
+    "note": "Đáp án theo đề gốc: A. Cả A và B đều là biểu hiện thực tế của Social Engineering. Có tại: Đề 02 – Câu 13, Đề 03 – Câu 24, Đề 04 – Câu 25, Đề 05 – Câu 26.",
+    "set": 3
+  },
+  {
+    "id": 50,
+    "question": "Theo Luật An ninh mạng năm 2018, “khủng bố mạng” là gì?",
+    "options": {
+      "A": "Hành vi xâm nhập trái phép vào tài khoản mạng xã hội của người khác.",
+      "B": "Hành vi phát tán thư rác với số lượng lớn.",
+      "C": "Hành vi đăng tải thông tin sai sự thật gây hoang mang trong nhân dân.",
+      "D": "Việc sử dụng không gian mạng, công nghệ thông tin hoặc phương tiện điện tử để thực hiện hành vi khủng bố, tài trợ khủng bố."
+    },
+    "answer": "D",
+    "note": "Căn cứ: Khoản 8 Điều 2 Luật An ninh mạng 2018. Có tại: Đề 02 – Câu 15, Đề 03 – Câu 9.",
+    "set": 3
+  },
+  {
+    "id": 51,
+    "question": "Tội sử dụng mạng máy tính, mạng viễn thông, phương tiện điện tử thực hiện hành vi chiếm đoạt tài sản được quy định tại Điều nào của Bộ luật Hình sự năm 2015 (sửa đổi, bổ sung năm 2017)?",
+    "options": {
+      "A": "Điều 291",
+      "B": "Điều 290",
+      "C": "Điều 289",
+      "D": "Điều 288"
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điều 290 BLHS 2015. Có tại: Đề 02 – Câu 17, Đề 05 – Câu 15.",
+    "set": 3
+  },
+  {
+    "id": 52,
+    "question": "Biện pháp chủ yếu để phòng chống tấn công phi kỹ thuật (Social Engineering) là gì?",
+    "options": {
+      "A": "Nâng cao nhận thức, tinh thần cảnh giác và tuân thủ quy trình bảo mật của người dùng.",
+      "B": "Mua thiết bị mạng có cấu hình cao hơn.",
+      "C": "Tăng băng thông đường truyền.",
+      "D": "Cài đặt nhiều trình duyệt web khác nhau."
+    },
+    "answer": "A",
+    "note": "Vì Social Engineering nhắm vào yếu tố con người nên giải pháp trọng tâm là nâng cao nhận thức và cảnh giác. Có tại: Đề 02 – Câu 23, Đề 03 – Câu 7, Đề 05 – Câu 2.",
+    "set": 3
+  },
+  {
+    "id": 53,
+    "question": "Tội cản trở hoặc gây rối loạn hoạt động của mạng máy tính, mạng viễn thông, phương tiện điện tử được quy định tại Điều nào theo Bộ luật Hình sự năm 2015?",
+    "options": {
+      "A": "Điều 286",
+      "B": "Điều 287",
+      "C": "Điều 288",
+      "D": "Điều 289"
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điều 287 BLHS 2015. Có tại: Đề 02 – Câu 24, Đề 04 – Câu 3.",
+    "set": 3
+  },
+  {
+    "id": 54,
+    "question": "Điều 289 Bộ luật Hình sự năm 2015 quy định hành vi nào sau đây?",
+    "options": {
+      "A": "Hành vi truy cập bất hợp pháp vào tài khoản của người khác để rút tiền.",
+      "B": "Hành vi cản trở hoặc gây rối loạn hoạt động của mạng máy tính, mạng viễn thông, phương tiện điện tử.",
+      "C": "Hành vi đưa hoặc sử dụng trái phép thông tin trên mạng máy tính, mạng viễn thông.",
+      "D": "Hành vi xâm nhập trái phép vào mạng máy tính, mạng viễn thông hoặc phương tiện điện tử của người khác."
+    },
+    "answer": "D",
+    "note": "Căn cứ: Điều 289 BLHS 2015. Có tại: Đề 02 – Câu 27.",
+    "set": 3
+  },
+  {
+    "id": 55,
+    "question": "Theo Luật An ninh mạng năm 2018, ai có thẩm quyền xem xét, quyết định hoặc ủy quyền cho Bộ trưởng Bộ Công an quyết định xử lý tình huống nguy hiểm về an ninh mạng trong phạm vi cả nước?",
+    "options": {
+      "A": "Chủ tịch Quốc hội",
+      "B": "Thủ tướng Chính phủ",
+      "C": "Chủ tịch nước",
+      "D": "Bộ trưởng Bộ Thông tin và Truyền thông"
+    },
+    "answer": "B",
+    "note": "Căn cứ: Khoản 2 Điều 21 Luật An ninh mạng 2018. Có tại: Đề 02 – Câu 28, Đề 04 – Câu 17, Đề 05 – Câu 31.",
+    "set": 3
+  },
+  {
+    "id": 56,
+    "question": "Giao thức HTTPS mặc định sử dụng cổng (port) nào?",
+    "options": {
+      "A": "25",
+      "B": "21",
+      "C": "443",
+      "D": "80"
+    },
+    "answer": "C",
+    "note": "HTTPS mặc định sử dụng port 443 (HTTP dùng port 80, FTP dùng 21, SMTP dùng 25). Có tại: Đề 02 – Câu 29, Đề 03 – Câu 6, Đề 04 – Câu 24, Đề 05 – Câu 37.",
+    "set": 3
+  },
+  {
+    "id": 57,
+    "question": "IDS (Intrusion Detection System) là hệ thống có chức năng gì?",
+    "options": {
+      "A": "Lưu trữ dự phòng dữ liệu.",
+      "B": "Phân giải tên miền thành địa chỉ IP.",
+      "C": "Cấp phát địa chỉ IP tự động.",
+      "D": "Phát hiện các hành vi xâm nhập, bất thường trên hệ thống, mạng và đưa ra cảnh báo."
+    },
+    "answer": "D",
+    "note": "IDS giám sát lưu lượng mạng hoặc máy chủ để phát hiện hành vi xâm nhập trái phép và phát cảnh báo. Có tại: Đề 02 – Câu 30, Đề 03 – Câu 34, Đề 04 – Câu 4.",
+    "set": 3
+  },
+  {
+    "id": 58,
+    "question": "Điểm khác biệt cơ bản của sâu máy tính (Worm) so với virus là gì?",
+    "options": {
+      "A": "Worm không gây hại cho hệ thống.",
+      "B": "Worm luôn mã hóa dữ liệu để tống tiền.",
+      "C": "Worm có thể tự lây lan qua mạng mà không cần gắn vào tệp chủ hay cần người dùng kích hoạt.",
+      "D": "Worm chỉ lây qua USB."
+    },
+    "answer": "C",
+    "note": "Virus cần file chủ và sự kích hoạt của người dùng; còn Sâu máy tính (Worm) tự nhân bản và lây lan qua mạng một cách độc lập. Có tại: Đề 02 – Câu 31, Đề 03 – Câu 23, Đề 05 – Câu 14.",
+    "set": 3
+  },
+  {
+    "id": 59,
+    "question": "Phương án nào sau đây là xác thực hai yếu tố (2FA)?",
+    "options": {
+      "A": "Hai mật khẩu khác nhau",
+      "B": "Mật khẩu và câu hỏi bí mật",
+      "C": "Mật khẩu và mã OTP gửi về điện thoại của người dùng",
+      "D": "Tên đăng nhập và mật khẩu"
+    },
+    "answer": "C",
+    "note": "2FA kết hợp 2 yếu tố khác nhau: Thứ bạn biết (Mật khẩu) và Thứ bạn sở hữu (Điện thoại nhận OTP). Có tại: Đề 02 – Câu 33, Đề 04 – Câu 8.",
+    "set": 3
+  },
+  {
+    "id": 60,
+    "question": "Điều tra phương tiện lưu trữ (Disk Forensics) thuộc loại hình điều tra số nào sau đây?",
+    "options": {
+      "A": "Network Forensic",
+      "B": "Computer Forensic",
+      "C": "Mobile Forensic",
+      "D": "Memory Forensic"
+    },
+    "answer": "B",
+    "note": "Disk Forensics là một nhánh cốt lõi của Computer Forensic (Điều tra máy tính số). Có tại: Đề 02 – Câu 35, Đề 04 – Câu 16, Đề 05 – Câu 36.",
+    "set": 3
+  },
+  {
+    "id": 61,
+    "question": "Theo Luật An ninh mạng năm 2018, cơ quan nào chịu trách nhiệm trước Chính phủ thực hiện quản lý nhà nước về an ninh mạng (trừ nội dung thuộc chức năng của Bộ Quốc phòng và Ban Cơ yếu Chính phủ)?",
+    "options": {
+      "A": "Bộ Công an",
+      "B": "Bộ Quốc phòng",
+      "C": "Bộ Khoa học và Công nghệ",
+      "D": "Bộ Thông tin và Truyền thông"
+    },
+    "answer": "A",
+    "note": "Căn cứ: Khoản 2 Điều 40 Luật An ninh mạng 2018 (Bộ Công an chịu trách nhiệm trước Chính phủ...). Có tại: Đề 02 – Câu 37, Đề 03 – Câu 12, Đề 04 – Câu 7, Đề 05 – Câu 17.",
+    "set": 4
+  },
+  {
+    "id": 62,
+    "question": "Theo Luật An ninh mạng năm 2018, lực lượng chuyên trách bảo vệ an ninh mạng được bố trí tại đâu?",
+    "options": {
+      "A": "Bộ Thông tin và Truyền thông, Bộ Công an",
+      "B": "Bộ Công an, Bộ Quốc phòng",
+      "C": "Bộ Công an, Bộ Quốc phòng, Bộ Thông tin và Truyền thông",
+      "D": "Bộ Quốc phòng, Ban Cơ yếu Chính phủ"
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điều 30 Luật An ninh mạng 2018 (Lực lượng chuyên trách được bố trí tại Bộ Công an, Bộ Quốc phòng). Có tại: Đề 02 – Câu 38, Đề 04 – Câu 19.",
+    "set": 4
+  },
+  {
+    "id": 63,
+    "question": "Người có hành vi vi phạm pháp luật An ninh mạng thì bị xử lý như thế nào?",
+    "options": {
+      "A": "Nhẹ thì bị xử lý vi phạm hành chính, nặng thì bị truy cứu trách nhiệm hình sự, nếu gây thiệt hại thì phải bồi thường.",
+      "B": "Có thể bị buộc thôi việc, xử lý vi phạm hành chính hoặc bị truy cứu trách nhiệm hình sự…",
+      "C": "Tùy theo tính chất, mức độ vi phạm mà bị khiển trách, xử lý kỷ luật, xử lý vi phạm hành chính hoặc bị truy cứu trách nhiệm hình sự…",
+      "D": "Tùy theo tính chất, mức độ vi phạm mà bị xử lý kỷ luật, xử lý vi phạm hành chính hoặc bị truy cứu trách nhiệm hình sự, nếu gây thiệt hại thì phải bồi thường."
+    },
+    "answer": "D",
+    "note": "Căn cứ: Điều 9 Luật An ninh mạng 2018. Có tại: Đề 02 – Câu 40, Đề 03 – Câu 22.",
+    "set": 4
+  },
+  {
+    "id": 64,
+    "question": "Luật An ninh mạng năm 2018 có hiệu lực thi hành từ ngày nào?",
+    "options": {
+      "A": "01/7/2018",
+      "B": "01/7/2016",
+      "C": "01/01/2019",
+      "D": "01/7/2019"
+    },
+    "answer": "C",
+    "note": "Luật An ninh mạng 2018 có hiệu lực thi hành từ ngày 01 tháng 01 năm 2019. Có tại: Đề 03 – Câu 14, Đề 04 – Câu 27, Đề 05 – Câu 18.",
+    "set": 4
+  },
+  {
+    "id": 65,
+    "question": "Từ “Information-based warfare – IBW” có nghĩa là gì?",
+    "options": {
+      "A": "Chiến tranh tình báo",
+      "B": "Chiến tranh tin tặc",
+      "C": "Chiến tranh tâm lý",
+      "D": "Chiến tranh thông tin"
+    },
+    "answer": "D",
+    "note": "Information-based warfare (IBW) dịch nghĩa là Chiến tranh thông tin. Có tại: Đề 03 – Câu 18.",
+    "set": 4
+  },
+  {
+    "id": 66,
+    "question": "Điều 288 Bộ luật Hình sự năm 2015 (sửa đổi, bổ sung năm 2017) quy định tội danh nào?",
+    "options": {
+      "A": "Tội phát tán chương trình tin học gây hại.",
+      "B": "Tội xâm nhập trái phép vào mạng máy tính, mạng viễn thông hoặc phương tiện điện tử của người khác.",
+      "C": "Tội thu thập, mua bán trái phép thông tin về tài khoản ngân hàng.",
+      "D": "Tội đưa hoặc sử dụng trái phép thông tin mạng máy tính, mạng viễn thông."
+    },
+    "answer": "D",
+    "note": "Căn cứ: Điều 288 BLHS 2015. Có tại: Đề 03 – Câu 20.",
+    "set": 4
+  },
+  {
+    "id": 67,
+    "question": "Chọn đáp án đúng điền vào khoảng trống: Điều 17 Luật An ninh mạng (2018) quy định Bộ Công an có trách nhiệm “Giám sát an ninh mạng đối với ______ nhằm phát hiện, xử lý hoạt động thu thập trái phép thông tin thuộc bí mật nhà nước”.",
+    "options": {
+      "A": "Các ISP, IXP",
+      "B": "Các hệ thống tường lửa, IDS, IPS",
+      "C": "Hệ thống thông tin quan trọng về an ninh quốc gia",
+      "D": "Các hệ thống thu thập, phân tích"
+    },
+    "answer": "C",
+    "note": "Căn cứ: Điều 17 Luật An ninh mạng 2018 (Phòng, chống gián điệp mạng; bảo vệ thông tin thuộc bí mật nhà nước...). Có tại: Đề 03 – Câu 28.",
+    "set": 4
+  },
+  {
+    "id": 68,
+    "question": "Làm giả một trang web với mục đích lấy mật khẩu và tên người dùng là một loại tấn công kỹ thuật xã hội nào?",
+    "options": {
+      "A": "Web-based",
+      "B": "User-based",
+      "C": "Human-based",
+      "D": "Computer-based"
+    },
+    "answer": "A",
+    "note": "Tấn công dựa trên nền tảng web (Web-based social engineering attack). Có tại: Đề 03 – Câu 35, Đề 05 – Câu 34.",
+    "set": 4
+  },
+  {
+    "id": 69,
+    "question": "______ là một trong những kiểu hack web bằng cách chèn các mã SQL query/command vào input trước khi chuyển cho ứng dụng web xử lí.",
+    "options": {
+      "A": "XML Injection",
+      "B": "SQL Injection",
+      "C": "SQL Malicious code injection",
+      "D": "HTML injection"
+    },
+    "answer": "B",
+    "note": "SQL Injection là kỹ thuật chèn câu lệnh SQL trái phép vào tham số đầu vào. Có tại: Đề 03 – Câu 36, Đề 05 – Câu 10.",
+    "set": 4
+  },
+  {
+    "id": 70,
+    "question": "Biện pháp nào sau đây KHÔNG thuộc các biện pháp xử lý tình huống nguy hiểm về an ninh mạng theo Luật An ninh mạng năm 2018?",
+    "options": {
+      "A": "Ngừng cung cấp thông tin mạng tại khu vực cụ thể hoặc ngắt cổng kết nối mạng quốc tế.",
+      "B": "Tịch thu toàn bộ trang thiết bị của doanh nghiệp cung cấp dịch vụ viễn thông tại khu vực xảy ra tình huống.",
+      "C": "Bố trí lực lượng, phương tiện ngăn chặn, loại bỏ tình huống nguy hiểm về an ninh mạng.",
+      "D": "Thu thập thông tin liên quan; theo dõi, giám sát liên tục đối với tình huống nguy hiểm về an ninh mạng."
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điều 21 Luật An ninh mạng 2018 (Không có biện pháp tịch thu toàn bộ thiết bị của doanh nghiệp). Có tại: Đề 03 – Câu 40.",
+    "set": 4
+  },
+  {
+    "id": 71,
+    "question": "Kỹ thuật nào được sử dụng để che giấu thông tin vào các phương tiện “vỏ bọc” như ảnh kỹ thuật số, video, tập tin?",
+    "options": {
+      "A": "Encryption",
+      "B": "Decryption",
+      "C": "Data hiding",
+      "D": "Steganography"
+    },
+    "answer": "D",
+    "note": "Steganography (nghệ thuật giấu tin) giấu thông điệp vào tập tin vỏ bọc như hình ảnh, âm thanh, video mà không làm thay đổi bề ngoài của tệp. Có tại: Đề 04 – Câu 1, Đề 05 – Câu 24.",
+    "set": 4
+  },
+  {
+    "id": 72,
+    "question": "Theo Luật An toàn thông tin mạng năm 2015, cấp độ an toàn hệ thống thông tin được phân loại thành bao nhiêu cấp độ?",
+    "options": {
+      "A": "3 cấp độ",
+      "B": "5 cấp độ",
+      "C": "4 cấp độ",
+      "D": "6 cấp độ"
+    },
+    "answer": "B",
+    "note": "Căn cứ: Điều 21 Luật An toàn thông tin mạng 2015 (Cấp độ an toàn hệ thống thông tin được chia từ cấp độ 1 đến cấp độ 5). Có tại: Đề 04 – Câu 21.",
+    "set": 4
+  },
+  {
+    "id": 73,
+    "question": "Theo Điều 26 Luật An ninh mạng năm 2018, doanh nghiệp nước ngoài cung cấp dịch vụ trên không gian mạng tại Việt Nam có hoạt động thu thập, khai thác, xử lý dữ liệu của người dùng tại Việt Nam phải thực hiện yêu cầu nào?",
+    "options": {
+      "A": "Chỉ cần đăng ký tên miền quốc gia “.vn”.",
+      "B": "Nộp bản sao toàn bộ dữ liệu người dùng cho Bộ Công an hằng tháng.",
+      "C": "Lưu trữ dữ liệu tại Việt Nam trong thời gian theo quy định của Chính phủ và đặt chi nhánh hoặc văn phòng đại diện tại Việt Nam.",
+      "D": "Chuyển toàn bộ máy chủ về đặt tại Việt Nam và liên doanh với doanh nghiệp Việt Nam."
+    },
+    "answer": "C",
+    "note": "Căn cứ: Khoản 3 Điều 26 Luật An ninh mạng 2018. Có tại: Đề 04 – Câu 23.",
+    "set": 4
+  },
+  {
+    "id": 74,
+    "question": "System Hacking là phương thức tấn công kiểu nào sau đây?",
+    "options": {
+      "A": "Tấn công làm tê liệt hệ thống mạng của nạn nhân",
+      "B": "Điều khiển máy tính nạn nhân từ xa",
+      "C": "Đánh cắp dữ liệu của nạn nhân truyền trên mạng",
+      "D": "Can thiệp trực tiếp vào máy nạn nhân để lấy các thông tin quan trọng"
+    },
+    "answer": "D",
+    "note": "Đáp án theo đề gốc: D (Can thiệp trực tiếp vào máy nạn nhân để lấy các thông tin quan trọng). Có tại: Đề 04 – Câu 29, Đề 05 – Câu 38.",
+    "set": 4
+  },
+  {
+    "id": 75,
+    "question": "Phương thức bí mật của hoạt động trinh sát mạng là gì?",
+    "options": {
+      "A": "Là cách thức, phương pháp hoạt động trinh sát được giữ bí mật tuyệt đối về mục tiêu, yêu cầu, lực lượng, phương tiện với đối tượng và những người không có trách nhiệm trên không gian mạng.",
+      "B": "Là cách thức, phương pháp lực lượng trinh sát sử dụng danh nghĩa công khai, lý do công khai để che giấu ý đồ nghiệp vụ, yêu cầu trinh sát trên không gian mạng.",
+      "C": "Là việc cơ quan, đơn vị trinh sát, cán bộ trinh sát sử dụng các cách thức, phương pháp công khai, danh nghĩa công khai để thực hiện yêu cầu trinh sát.",
+      "D": "Là cách thức, lực lượng trinh sát, cách thức thực hiện được giữ bí mật tuyệt đối trên không gian mạng."
+    },
+    "answer": "A",
+    "note": "Có tại: Đề 04 – Câu 34.",
+    "set": 4
+  },
+  {
+    "id": 76,
+    "question": "Phát biểu nào đúng nhất về Network Forensics?",
+    "options": {
+      "A": "Là một nhánh của khoa học điều tra số liên quan đến việc giám sát và phân tích lưu lượng mạng máy tính nhằm phục vụ cho việc thu thập thông tin, chứng cứ pháp lý hay phát hiện các xâm nhập vào hệ thống máy tính.",
+      "B": "Là một nhánh của khoa học điều tra số liên quan đến việc phân tích các bằng chứng pháp lý được tìm thấy trong máy tính và các phương tiện lưu trữ kỹ thuật số.",
+      "C": "Là việc thu thập, phân tích dữ liệu được lưu trữ trên phương tiện lưu trữ vật lý, nhằm trích xuất dữ liệu ẩn, khôi phục các tập tin bị xóa, qua đó xác định người đã tạo ra những thay đổi dữ liệu trên thiết bị được phân tích.",
+      "D": "Là một nhánh của khoa học điều tra số liên quan đến việc thu hồi bằng chứng kỹ thuật số hoặc dữ liệu từ các thiết bị di động."
+    },
+    "answer": "A",
+    "note": "Network Forensics tập trung giám sát và phân tích gói tin/lưu lượng mạng (network traffic). Có tại: Đề 05 – Câu 25.",
+    "set": 4
+  },
+  {
+    "id": 77,
+    "question": "Phần mềm ghi lại các thao tác gõ phím của người dùng để đánh cắp mật khẩu được gọi là gì?",
+    "options": {
+      "A": "Adware",
+      "B": "Keylogger",
+      "C": "Firewall",
+      "D": "Rootkit"
+    },
+    "answer": "B",
+    "note": "Keylogger (Keystroke logging) là phần mềm hoặc phần cứng theo dõi và ghi lại thao tác gõ bàn phím. Có tại: Đề 05 – Câu 32.",
+    "set": 4
+  }
+]

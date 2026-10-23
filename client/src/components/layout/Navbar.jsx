@@ -1,9 +1,10 @@
 import React from 'react'
-import { BookOpen, Building2, Database, FileText, GraduationCap, House, Presentation, ShieldCheck, UserRoundPlus } from 'lucide-react'
+import { BookOpen, Building2, Database, FileText, GraduationCap, House, LayoutGrid, Presentation, ShieldCheck, UserRoundPlus } from 'lucide-react'
 import { isPortalRouteActive, portalNavigation } from '../../portalNavigation'
 
 const icons = {
   home: House,
+  hub: LayoutGrid,
   courses: BookOpen,
   student: GraduationCap,
   teacher: Presentation,

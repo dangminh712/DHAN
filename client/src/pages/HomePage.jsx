@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useReducer, useState } from 'react'
-import { ArrowRight, BookOpen, Building2, FileText, Library, Search, ShieldCheck } from 'lucide-react'
+import { ArrowRight, BookOpen, Building2, FileText, LayoutGrid, Library, Search, ShieldCheck } from 'lucide-react'
 import CourseCard from '../components/course/CourseCard'
 import { courseCollectionReducer, initialCourseCollectionState } from '../courseCollectionState'
 import { getPortalGreetingName } from '../portalGreeting'
@@ -7,6 +7,7 @@ import { courseService } from '../services/courseService'
 import { selectCatalogCourses } from '../courseCatalog'
 
 const quickLinks = [
+  { href: '#/chuc-nang', icon: LayoutGrid, title: 'Trung tâm chức năng', text: 'Tổng hợp tiện ích cho Giảng viên & Quản trị viên.' },
   { href: '#/mon-hoc', icon: BookOpen, title: 'Khám phá môn học', text: 'Tra cứu chương và học liệu theo môn.' },
   { href: '#/bieu-mau', icon: FileText, title: 'Biểu mẫu CAND', text: 'Mở kho biểu mẫu nghiệp vụ dùng chung.' },
   { href: '#/academic', icon: Building2, title: 'Khoa & Bộ môn', text: 'Xem cơ cấu đơn vị và chương trình đào tạo.' },
