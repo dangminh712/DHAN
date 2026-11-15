@@ -24,7 +24,8 @@ import {
   CheckCircle2,
   User,
   Shield,
-  Globe
+  Globe,
+  Lock
 } from 'lucide-react';
 
 export default function StudentPortalPage({
@@ -667,14 +668,24 @@ export default function StudentPortalPage({
                           Xem tài liệu trực tiếp
                         </button>
 
-                        <a
-                          href={`/api/media/download/${file.id}`}
-                          download={file.originalFileName}
-                          className="btn-card-icon"
-                          title="Tải học liệu về máy tính"
-                        >
-                          <Download size={15} />
-                        </a>
+                        {file.isDownloadable !== false ? (
+                          <a
+                            href={`/api/media/download/${file.id}`}
+                            download={file.originalFileName}
+                            className="btn-card-icon"
+                            title="Tải học liệu về máy tính"
+                          >
+                            <Download size={15} />
+                          </a>
+                        ) : (
+                          <span
+                            className="btn-card-icon disabled"
+                            style={{ opacity: 0.45, cursor: 'not-allowed' }}
+                            title="Tài liệu chỉ xem trực tuyến, không được phép tải về"
+                          >
+                            <Lock size={15} />
+                          </span>
+                        )}
                       </div>
                     </div>
                   );

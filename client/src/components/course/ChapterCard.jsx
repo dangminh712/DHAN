@@ -1,7 +1,7 @@
 import React from 'react'
 import { ArrowRight, FileText, GraduationCap } from 'lucide-react'
 
-export default function ChapterCard({ courseId, chapter }) {
+export default function ChapterCard({ courseId, lectureId, chapter }) {
   return (
     <article className="chapter-card">
       <div className="chapter-number" aria-hidden="true">{String(chapter.chapterNumber).padStart(2, '0')}</div>
@@ -18,13 +18,15 @@ export default function ChapterCard({ courseId, chapter }) {
         <a className="course-secondary-button" href={`#/mon-hoc/${courseId}/chuong/${chapter.id}`}>
           Xem tài liệu <ArrowRight size={16} aria-hidden="true" />
         </a>
-        <a 
-          className="portal-button portal-button--primary" 
-          href={`#/study/${courseId}`}
-          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '12px', padding: '6px 12px' }}
-        >
-          <GraduationCap size={15} /> Phòng học
-        </a>
+        {lectureId && (
+          <a 
+            className="portal-button portal-button--primary" 
+            href={`#/study/${lectureId}`}
+            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '12px', padding: '6px 12px' }}
+          >
+            <GraduationCap size={15} /> Phòng học
+          </a>
+        )}
       </div>
     </article>
   )

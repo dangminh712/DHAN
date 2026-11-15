@@ -528,36 +528,58 @@ export default function DocumentViewerPage({
           </button>
 
           {/* Nút Tải về máy (Được bảo vệ theo quyền) */}
-          <a
-            href={downloadUrl}
-            download={fileName}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '7px',
-              padding: '8px 18px',
-              fontSize: '13px',
-              fontWeight: 800,
-              borderRadius: '8px',
-              background: 'linear-gradient(135deg, #B91C1C 0%, #991B1B 100%)',
-              color: '#FFFFFF',
-              textDecoration: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(185, 28, 28, 0.3)',
-              border: '1px solid #7F1D1D',
-              transition: 'all 0.15s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'linear-gradient(135deg, #B91C1C 0%, #991B1B 100%)';
-            }}
-            title="Tải tệp học liệu an toàn về máy tính"
-          >
-            <Download size={15} strokeWidth={2.4} />
-            <span>Tải về máy</span>
-          </a>
+          {file?.isDownloadable !== false ? (
+            <a
+              href={downloadUrl}
+              download={fileName}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7px',
+                padding: '8px 18px',
+                fontSize: '13px',
+                fontWeight: 800,
+                borderRadius: '8px',
+                background: 'linear-gradient(135deg, #B91C1C 0%, #991B1B 100%)',
+                color: '#FFFFFF',
+                textDecoration: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(185, 28, 28, 0.3)',
+                border: '1px solid #7F1D1D',
+                transition: 'all 0.15s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #B91C1C 0%, #991B1B 100%)';
+              }}
+              title="Tải tệp học liệu an toàn về máy tính"
+            >
+              <Download size={15} strokeWidth={2.4} />
+              <span>Tải về máy</span>
+            </a>
+          ) : (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 16px',
+                fontSize: '12.5px',
+                fontWeight: 700,
+                borderRadius: '8px',
+                background: '#F1F5F9',
+                color: '#64748B',
+                border: '1px solid #CBD5E1',
+                cursor: 'not-allowed'
+              }}
+              title="Tài liệu chỉ xem trực tuyến, tính năng tải về đã bị khóa"
+            >
+              <Lock size={14} color="#64748B" />
+              <span>Chỉ xem</span>
+            </span>
+          )}
         </div>
       </header>
 
@@ -603,13 +625,15 @@ export default function DocumentViewerPage({
                 >
                   Quay lại trang trước
                 </button>
-                <a
-                  href={downloadUrl}
-                  download
-                  style={{ padding: '9px 20px', background: '#B91C1C', color: '#fff', borderRadius: '8px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, boxShadow: '0 2px 6px rgba(185, 28, 28, 0.25)' }}
-                >
-                  Thử tải tệp về máy
-                </a>
+                {file?.isDownloadable !== false && (
+                  <a
+                    href={downloadUrl}
+                    download
+                    style={{ padding: '9px 20px', background: '#B91C1C', color: '#fff', borderRadius: '8px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, boxShadow: '0 2px 6px rgba(185, 28, 28, 0.25)' }}
+                  >
+                    Thử tải tệp về máy
+                  </a>
+                )}
               </div>
             </div>
           )}
@@ -624,6 +648,7 @@ export default function DocumentViewerPage({
                   fileName={fileName}
                   file={file}
                   downloadUrl={downloadUrl}
+                  canDownload={file?.isDownloadable !== false}
                 />
               )}
 
@@ -634,6 +659,7 @@ export default function DocumentViewerPage({
                   fileName={fileName}
                   file={file}
                   downloadUrl={downloadUrl}
+                  canDownload={file?.isDownloadable !== false}
                 />
               )}
 
@@ -643,6 +669,7 @@ export default function DocumentViewerPage({
                   url={streamUrl}
                   fileName={fileName}
                   downloadUrl={downloadUrl}
+                  canDownload={file?.isDownloadable !== false}
                 />
               )}
 
@@ -655,7 +682,7 @@ export default function DocumentViewerPage({
                     initialPage={pdfPage}
                     fileName={fileName}
                     downloadUrl={downloadUrl}
-                    canDownload={true}
+                    canDownload={file?.isDownloadable !== false}
                     onPage={(p) => setPdfPage(p)}
                   />
                 </div>
@@ -668,6 +695,7 @@ export default function DocumentViewerPage({
                   fileName={fileName}
                   downloadUrl={downloadUrl}
                   formatType="powerpoint"
+                  canDownload={file?.isDownloadable !== false}
                 />
               )}
 
@@ -678,6 +706,7 @@ export default function DocumentViewerPage({
                   fileName={fileName}
                   downloadUrl={downloadUrl}
                   formatType="archive"
+                  canDownload={file?.isDownloadable !== false}
                 />
               )}
 
@@ -688,6 +717,7 @@ export default function DocumentViewerPage({
                   fileName={fileName}
                   downloadUrl={downloadUrl}
                   formatType="other"
+                  canDownload={file?.isDownloadable !== false}
                 />
               )}
 

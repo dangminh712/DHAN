@@ -69,4 +69,4 @@ C:\Users\DangMinh\Documents\GitHub\DHAN\server.PaginationTests\bin\Debug\net8.0\
 C:\Users\DangMinh\Documents\GitHub\DHAN\server.PaginationTests\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\DangMinh\Documents\GitHub\DHAN\server.PaginationTests\bin\Debug\net8.0\Server.dll
 C:\Users\DangMinh\Documents\GitHub\DHAN\server.PaginationTests\bin\Debug\net8.0\Server.pdb
-C:\Users\DangMinh\Documents\GitHub\DHAN\server.PaginationTests\obj\Debug\net8.0\Server.P.14372445.Up2Date
+C:\Users\DangMinh\Documents\GitHub\DHAN\server.PaginationTests\obj\Debug\net8.0\server.P.E4306257.Up2Date

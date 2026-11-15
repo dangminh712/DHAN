@@ -14,5 +14,18 @@ export default defineConfig({
         secure: false,
       }
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-icons': ['lucide-react'],
+          'vendor-docs': ['xlsx', 'mammoth'],
+          'vendor-pdf': ['pdfjs-dist']
+        }
+      }
+    }
   }
 })

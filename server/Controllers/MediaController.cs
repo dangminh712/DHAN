@@ -76,6 +76,7 @@ public class MediaController : ControllerBase
                     f.Extension,
                     f.ChecksumSha256,
                     f.CreatedAt,
+                    f.Status,
                     Classification = f.ClassificationLevel != null ? f.ClassificationLevel.Name : "Lưu hành nội bộ",
                     ClassificationOrder = f.ClassificationLevel != null ? f.ClassificationLevel.LevelOrder : 2,
                     ClassificationLevelId = f.ClassificationLevelId,
@@ -97,7 +98,8 @@ public class MediaController : ControllerBase
                 Classification = f.Classification,
                 ClassificationOrder = f.ClassificationOrder,
                 ClassificationLevelId = f.ClassificationLevelId,
-                UploaderName = f.UploaderName
+                UploaderName = f.UploaderName,
+                IsDownloadable = f.Status != "LOCKED"
             }).ToList();
 
             return Ok(page.HasValue ? TableQuery.Envelope(mapped, total, page, pageSize) : mapped);
@@ -131,7 +133,8 @@ public class MediaController : ControllerBase
             Classification = f.ClassificationLevel?.Name ?? "Lưu hành nội bộ",
             ClassificationOrder = f.ClassificationLevel?.LevelOrder ?? 2,
             ClassificationLevelId = f.ClassificationLevelId,
-            UploaderName = f.Uploader?.FullName ?? "Cán bộ quản trị T04"
+            UploaderName = f.Uploader?.FullName ?? "Cán bộ quản trị T04",
+            IsDownloadable = f.Status != "LOCKED"
         };
 
         return Ok(mapped);
@@ -141,7 +144,7 @@ public class MediaController : ControllerBase
     [HttpHead("stream/{id}")]
     public async Task<IActionResult> Stream(ulong id)
     {
-        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id);
+        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id && x.Status != "DELETED");
         if (file == null) return NotFound(new { message = "Không tìm thấy tập tin trong hệ thống." });
 
         string physicalPath = _storage.GetPhysicalFullPath(file.StoragePath);
@@ -159,8 +162,9 @@ public class MediaController : ControllerBase
     [HttpHead("download/{id}")]
     public async Task<IActionResult> Download(ulong id)
     {
-        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id);
+        var file = await _db.Files.FirstOrDefaultAsync(x => x.Id == id && x.Status != "DELETED");
         if (file == null) return NotFound(new { message = "Không tìm thấy tập tin trong hệ thống." });
+        if (file.Status == "LOCKED") return StatusCode(403, new { message = "Tập tin đã bị khóa tải về." });
 
         string physicalPath = _storage.GetPhysicalFullPath(file.StoragePath);
         if (string.IsNullOrWhiteSpace(physicalPath) || !System.IO.File.Exists(physicalPath))

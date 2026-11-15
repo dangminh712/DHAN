@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models;
 
@@ -38,4 +39,7 @@ public class MediaFile
 
     [MaxLength(150)]
     public string? UploaderName { get; set; }
+
+    [NotMapped]
+    public bool IsDownloadable { get; set; } = true;
 }

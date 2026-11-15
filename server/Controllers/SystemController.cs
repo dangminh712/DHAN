@@ -97,7 +97,7 @@ public class SystemController : ControllerBase
                 CreatedAt = s.CreatedAt
             });
 
-        if (!string.IsNullOrWhiteSpace(search)) selected = selected.Where(s => s.Username.Contains(search));
+        if (!string.IsNullOrWhiteSpace(search)) selected = selected.Where(s => s.Username != null && s.Username.Contains(search));
         return Ok(await selected.Sort(sortBy, sortDir ?? "desc", "CreatedAt", "Id,Username,AlertType,Severity,Description,SourceIp,Status,ResolverName,ResolvedAt,CreatedAt").ResultAsync(page, pageSize));
     }
 
@@ -125,7 +125,7 @@ public class SystemController : ControllerBase
                 RevokedAt = s.RevokedAt
             });
 
-        if (!string.IsNullOrWhiteSpace(search)) selected = selected.Where(s => s.Username.Contains(search));
+        if (!string.IsNullOrWhiteSpace(search)) selected = selected.Where(s => s.Username != null && s.Username.Contains(search));
         return Ok(await selected.Sort(sortBy, sortDir ?? "desc", "LastActivityAt", "Id,UserId,Username,DeviceId,DeviceName,IpAddress,LastActivityAt,lastSeenAt:LastActivityAt,ExpiresAt,RevokedAt").ResultAsync(page, pageSize));
     }
 

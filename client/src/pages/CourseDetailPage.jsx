@@ -84,7 +84,7 @@ export default function CourseDetailPage({ courseId, currentUser, onOpenMaterial
           </div>
         </section>
       ) : (
-        <section className="chapter-section"><div className="section-heading"><div><span>Nội dung môn học</span><h2>Danh sách {course.chapters.length} chương</h2></div></div><div className="chapter-list">{course.chapters.map((chapter) => <ChapterCard key={chapter.id} courseId={course.id} chapter={chapter} />)}</div></section>
+        <section className="chapter-section"><div className="section-heading"><div><span>Nội dung môn học</span><h2>Danh sách {course.chapters.length} chương</h2></div></div><div className="chapter-list">{course.chapters.map((chapter) => <ChapterCard key={chapter.id} courseId={course.id} lectureId={course.primaryLectureId} chapter={chapter} />)}</div></section>
       )}
     </main>
   )

@@ -16,6 +16,7 @@ public class CourseSummaryDto
 
 public class CourseDetailDto : CourseSummaryDto
 {
+    public ulong? PrimaryLectureId { get; set; }
     public List<ChapterSummaryDto> Chapters { get; set; } = new();
 }
 
@@ -32,6 +33,7 @@ public class ChapterSummaryDto
 public class ChapterDetailDto : ChapterSummaryDto
 {
     public ulong CourseId { get; set; }
+    public ulong? PrimaryLectureId { get; set; }
     public string CourseCode { get; set; } = string.Empty;
     public string CourseName { get; set; } = string.Empty;
     public List<CourseMaterialDto> Materials { get; set; } = new();

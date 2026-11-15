@@ -1,0 +1,62 @@
+﻿[
+  {
+    "Id": 1,
+    "OriginalFileName": "Giao_trinh_An_ninh_dieu_tra_Chuong_1.pdf",
+    "StoredFileName": "sample_giaotrinh.pdf",
+    "ContentType": "application/pdf",
+    "FileSize": 712,
+    "Category": "document",
+    "Checksum": "a1b2c3d4e5f6789012345678901234567890abcd1234567890abcdef12345678",
+    "CreatedAt": "2026-09-01T08:30:00Z"
+  },
+  {
+    "Id": 2,
+    "OriginalFileName": "Video_bai_giang_Ky_thuat_dieu_tra_co_ban.mp4",
+    "StoredFileName": "sample_video.mp4",
+    "ContentType": "video/mp4",
+    "FileSize": 32,
+    "Category": "video",
+    "Checksum": "b2c3d4e5f6a1890123456789012345678901bcde2345678901cdef0123456789",
+    "CreatedAt": "2026-09-02T10:15:00Z"
+  },
+  {
+    "Id": 3,
+    "OriginalFileName": "Slide_minh_hoa_Nghiep_vu_An_ninh_mang.svg",
+    "StoredFileName": "sample_slide.svg",
+    "ContentType": "image/svg+xml",
+    "FileSize": 1504,
+    "Category": "image",
+    "Checksum": "c3d4e5f6a1b2901234567890123456789012cdef3456789012ef01234567890a",
+    "CreatedAt": "2026-09-03T14:00:00Z"
+  },
+  {
+    "Id": 4,
+    "OriginalFileName": "De_cuong_bai_giang_Luat_to_tung_hinh_su.pdf",
+    "StoredFileName": "sample_de_cuong.pdf",
+    "ContentType": "application/pdf",
+    "FileSize": 1063,
+    "Category": "document",
+    "Checksum": "d4e5f6a1b2c3012345678901234567890123def04567890123f012345678901b",
+    "CreatedAt": "2026-09-04T09:45:00Z"
+  },
+  {
+    "Id": 5,
+    "OriginalFileName": "Bai_giang_Bao_ve_bi_mat_nha_nuoc_Chuong_3.pdf",
+    "StoredFileName": "sample_bai_giang.pdf",
+    "ContentType": "application/pdf",
+    "FileSize": 1182,
+    "Category": "document",
+    "Checksum": "e5f6a1b2c3d4123456789012345678901234ef015678901234012345678902c",
+    "CreatedAt": "2026-09-05T11:20:00Z"
+  },
+  {
+    "Id": 6,
+    "OriginalFileName": "Anh_minh_hoa_So_do_to_chuc_Khoa_ANDT.png",
+    "StoredFileName": "sample_photo.png",
+    "ContentType": "image/png",
+    "FileSize": 68,
+    "Category": "image",
+    "Checksum": "f6a1b2c3d4e5234567890123456789012345f0126789012345123456789013d",
+    "CreatedAt": "2026-09-06T16:30:00Z"
+  }
+]

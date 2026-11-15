@@ -7,10 +7,11 @@ import {
   Shield,
   CheckCircle2,
   FileCheck2,
-  Award
+  Award,
+  Lock
 } from 'lucide-react';
 
-export default function OfficeDocCard({ file, fileName, downloadUrl, formatType }) {
+export default function OfficeDocCard({ file, fileName, downloadUrl, formatType, canDownload = true }) {
   const isPpt = formatType === 'slide' || formatType === 'powerpoint';
   const isArchive = formatType === 'archive';
   const sizeMb = file?.fileSize ? (file.fileSize / (1024 * 1024)).toFixed(2) : null;
@@ -96,18 +97,25 @@ export default function OfficeDocCard({ file, fileName, downloadUrl, formatType 
 
         {/* Action Button */}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <a
-            href={downloadUrl}
-            download={fileName}
-            className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-md transition-all duration-200 cursor-pointer text-white ${
-              isPpt
-                ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/25 active:scale-95'
-                : 'bg-red-700 hover:bg-red-800 shadow-red-700/25 active:scale-95'
-            }`}
-          >
-            <Download className="w-4 h-4 stroke-[2.2]" />
-            <span>{isPpt ? 'Tải slide về máy để trình chiếu' : 'Tải tài liệu về máy'}</span>
-          </a>
+          {canDownload !== false ? (
+            <a
+              href={downloadUrl}
+              download={fileName}
+              className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-md transition-all duration-200 cursor-pointer text-white ${
+                isPpt
+                  ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/25 active:scale-95'
+                  : 'bg-red-700 hover:bg-red-800 shadow-red-700/25 active:scale-95'
+              }`}
+            >
+              <Download className="w-4 h-4 stroke-[2.2]" />
+              <span>{isPpt ? 'Tải slide về máy để trình chiếu' : 'Tải tài liệu về máy'}</span>
+            </a>
+          ) : (
+            <span className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 font-semibold text-xs">
+              <Lock className="w-4 h-4" />
+              <span>Tài liệu chỉ xem trực tuyến — không cho phép tải về</span>
+            </span>
+          )}
         </div>
 
         {/* Integrity Notice */}

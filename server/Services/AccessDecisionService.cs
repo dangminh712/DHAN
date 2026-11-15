@@ -96,9 +96,9 @@ public class AccessDecisionService : IAccessDecisionService
         {
             var isAttachedToStudentLecture = await _db.LectureFiles
                 .Include(lf => lf.Lecture)
-                    .ThenInclude(l => l.Permissions)
+                    .ThenInclude(l => l!.Permissions)
                 .AnyAsync(lf => lf.FileId == fileId && lf.IsVisible &&
-                    lf.Lecture.Status == "PUBLISHED" && lf.Lecture.DeletedAt == null &&
+                    lf.Lecture != null && lf.Lecture.Status == "PUBLISHED" && lf.Lecture.DeletedAt == null &&
                     (!lf.Lecture.Permissions.Any() || lf.Lecture.Permissions.Any(lp => lp.ClassId == 0 || (userClassIds.Contains(lp.ClassId) && lp.CanView))));
 
             if (isAttachedToStudentLecture)

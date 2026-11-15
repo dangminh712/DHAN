@@ -47,7 +47,11 @@ export default function AdminPortalPage({
   const auditTotal = auditTable.totalCount, auditPage = auditTable.page, auditPageSize = auditTable.pageSize;
   const setAuditPage = auditTable.setPage, setAuditPageSize = auditTable.setPageSize;
   const loading = userTable.loading || sessionTable.loading || alertTable.loading || auditTable.loading;
-  const loadAuditLogs = (page = 1) => { auditTable.setPage(page); auditTable.reload(); };
+  const loadAuditLogs = (page = 1, searchOverride = null) => {
+    if (searchOverride !== null) setAuditSearch(searchOverride);
+    auditTable.setPage(page);
+    auditTable.reload();
+  };
   const loadAdminData = () => {
     userTable.reload();
     sessionTable.reload();
@@ -246,7 +250,7 @@ export default function AdminPortalPage({
               }}
             >
               <Database size={15} />
-              <span>Giám sát CSDL (27 bảng)</span>
+              <span>Giám sát CSDL ({overview?.totalTables || 35} bảng)</span>
             </a>
           </div>
         </div>
@@ -306,7 +310,7 @@ export default function AdminPortalPage({
             style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <Database size={15} />
-            <span>4. CSDL MySQL 8.x (27 Bảng)</span>
+            <span>4. CSDL MySQL 8.x ({overview?.totalTables || 35} Bảng)</span>
           </button>
         </div>
 
@@ -689,7 +693,7 @@ export default function AdminPortalPage({
                   Tìm kiếm
                 </button>
                 <button
-                  onClick={() => { setAuditSearch(''); loadAuditLogs(1, ''); }}
+                  onClick={() => { if (auditSearch) setAuditSearch(''); else { auditTable.setPage(1); auditTable.reload(); } }}
                   style={{
                     padding: '7px 10px',
                     background: '#F1F5F9',
@@ -764,7 +768,7 @@ export default function AdminPortalPage({
           </div>
         )}
 
-        {/* TAB 4: THỐNG KÊ CSDL MYSQL 8.X (27 BẢNG) */}
+        {/* TAB 4: THỐNG KÊ CSDL MYSQL 8.X */}
         {activeTab === 'dbms' && (
           <div style={{ padding: '24px' }}>
             <div style={{
@@ -784,7 +788,7 @@ export default function AdminPortalPage({
                   HỆ QUẢN TRỊ CSDL MYSQL 8.X: training_management
                 </h5>
                 <p style={{ margin: '4px 0 0', fontSize: '12.5px', color: '#64748B' }}>
-                  27 bảng quan hệ chuẩn 3NF, phân tách metadata trong MySQL và file vật lý trong Local Private Storage.
+                  {overview?.totalTables || 35} bảng quan hệ chuẩn 3NF, phân tách metadata trong MySQL và file vật lý trong Local Private Storage.
                 </p>
               </div>
 
@@ -804,7 +808,7 @@ export default function AdminPortalPage({
                 }}
               >
                 <Database size={15} />
-                <span>Xem Chi Tiết 27 Bảng CSDL</span>
+                <span>Xem Chi Tiết {overview?.totalTables || 35} Bảng CSDL</span>
               </a>
             </div>
 

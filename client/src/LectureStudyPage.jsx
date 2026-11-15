@@ -270,6 +270,15 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
   // Quyền tải file
   const activeBackendFile = backendLecture?.files?.find(f => String(f.fileId) === String(fileId) || String(f.fileId) === String(slideFileId) || String(f.fileId) === String(videoFileId)) || backendLecture?.files?.[0];
   const isDownloadAllowed = activeBackendFile ? activeBackendFile.isDownloadable : (lectureObj?.isDownloadable !== false);
+  const targetDownloadFileId = (mediaTab === 'slide' && slideFileId)
+    || (mediaTab === 'doc' && docFileId)
+    || (mediaTab === 'video' && videoFileId)
+    || (mediaTab === 'image' && imageFileId)
+    || activeBackendFile?.fileId
+    || activeBackendFile?.id
+    || lectureObj?.fileId
+    || (lectureObj?.files?.[0]?.fileId || lectureObj?.files?.[0]?.id)
+    || null;
 
   // 1. Màn hình chặn nếu Bài giảng bị Giảng viên Khóa / Đóng
   if (isLocked) {
@@ -402,12 +411,12 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
             </span>
 
             {/* Quyền tải học liệu do giảng viên thiết lập */}
-            {isDownloadAllowed ? (
+            {isDownloadAllowed && targetDownloadFileId ? (
               <a
-                href={`/api/media/download/${fileId}`}
+                href={`/api/media/download/${targetDownloadFileId}`}
                 download={fileName}
                 className="btn-study-action"
-                title="Tải toàn bộ học liệu về máy tính"
+                title="Tải học liệu về máy tính"
               >
                 <Download size={15} />
                 <span>Tải học liệu</span>
@@ -836,16 +845,34 @@ export default function LectureStudyPage({ lectureId, file, onBack, allFiles = [
                         Tài liệu văn bản nghiệp vụ phục vụ nghiên cứu và đối chiếu thực hành. Học viên có thể tải tập tin về máy để tra cứu nội dung chi tiết.
                       </p>
                       <div className="doc-office-actions">
-                        <a
-                          href={`/api/media/download/${currentDocFile.fileId}`}
-                          download={currentDocFile.originalName}
-                          className="btn-study-action"
-                          style={{ background: '#991B1B', color: '#fff', border: 'none' }}
-                        >
-                          <Download size={15} />
-                          <span>Tải tài liệu về máy tính</span>
-                        </a>
-
+                        {isDownloadAllowed && currentDocFile.isDownloadable !== false ? (
+                          <a
+                            href={`/api/media/download/${currentDocFile.fileId}`}
+                            download={currentDocFile.originalName}
+                            className="btn-study-action"
+                            style={{ background: '#991B1B', color: '#fff', border: 'none' }}
+                          >
+                            <Download size={15} />
+                            <span>Tải tài liệu về máy tính</span>
+                          </a>
+                        ) : (
+                          <span
+                            className="btn-study-action disabled"
+                            style={{
+                              background: '#F1F5F9',
+                              color: '#64748B',
+                              border: '1px solid #CBD5E1',
+                              cursor: 'not-allowed',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px'
+                            }}
+                            title="Tài liệu chỉ xem trực tuyến, giảng viên đã khóa tính năng tải về"
+                          >
+                            <Lock size={15} />
+                            <span>Tải về đã bị khóa</span>
+                          </span>
+                        )}
                       </div>
                     </div>
                   )

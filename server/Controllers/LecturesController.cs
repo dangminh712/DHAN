@@ -46,7 +46,7 @@ public class LecturesController : ControllerBase
                 .ThenInclude(lp => lp.Class)
             .Include(l => l.LectureFiles)
                 .ThenInclude(lf => lf.File)
-                    .ThenInclude(f => f.ClassificationLevel)
+                    .ThenInclude(f => f!.ClassificationLevel)
             .AsNoTracking()
             .AsQueryable();
 
@@ -110,7 +110,7 @@ public class LecturesController : ControllerBase
             CloseAt = l.CloseAt,
             CreatedAt = l.CreatedAt,
             IsPublicAll = !l.Permissions.Any() || l.Permissions.Any(lp => lp.ClassId == 0),
-            AssignedClasses = l.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class.Code).ToList(),
+            AssignedClasses = l.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class!.Code).ToList(),
             AssignedClassIds = l.Permissions.Select(lp => lp.ClassId).ToList(),
             FileCount = l.LectureFiles.Count(lf => lf.IsVisible),
             Files = l.LectureFiles
@@ -118,11 +118,11 @@ public class LecturesController : ControllerBase
                 .Select(lf => new LectureFileItemDto
                 {
                     FileId = lf.FileId,
-                    OriginalName = lf.File.OriginalName,
-                    FileType = lf.File.FileType,
-                    FileSize = lf.File.FileSize,
-                    Classification = lf.File.ClassificationLevel != null ? lf.File.ClassificationLevel.Name : "Công khai",
-                    ClassificationOrder = lf.File.ClassificationLevel != null ? lf.File.ClassificationLevel.LevelOrder : 1,
+                    OriginalName = lf.File!.OriginalName,
+                    FileType = lf.File!.FileType,
+                    FileSize = lf.File!.FileSize,
+                    Classification = lf.File!.ClassificationLevel != null ? lf.File!.ClassificationLevel.Name : "Công khai",
+                    ClassificationOrder = lf.File!.ClassificationLevel != null ? lf.File!.ClassificationLevel.LevelOrder : 1,
                     DisplayOrder = lf.DisplayOrder,
                     IsVisible = lf.IsVisible,
                     IsDownloadable = lf.IsDownloadable,
@@ -146,13 +146,13 @@ public class LecturesController : ControllerBase
     {
         var lecture = await _db.Lectures
             .Include(l => l.Subject)
-                .ThenInclude(s => s.OrganizationalUnit)
+                .ThenInclude(s => s!.OrganizationalUnit)
             .Include(l => l.Teacher)
             .Include(l => l.Permissions)
                 .ThenInclude(lp => lp.Class)
             .Include(l => l.LectureFiles)
                 .ThenInclude(lf => lf.File)
-                    .ThenInclude(f => f.ClassificationLevel)
+                    .ThenInclude(f => f!.ClassificationLevel)
             .Include(l => l.QuizQuestions)
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
@@ -176,7 +176,7 @@ public class LecturesController : ControllerBase
             CloseAt = lecture.CloseAt,
             CreatedAt = lecture.CreatedAt,
             IsPublicAll = !lecture.Permissions.Any() || lecture.Permissions.Any(lp => lp.ClassId == 0),
-            AssignedClasses = lecture.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class.Code).ToList(),
+            AssignedClasses = lecture.Permissions.Where(lp => lp.Class != null).Select(lp => lp.Class!.Code).ToList(),
             AssignedClassIds = lecture.Permissions.Select(lp => lp.ClassId).ToList(),
             FileCount = lecture.LectureFiles.Count(lf => lf.IsVisible),
             Files = lecture.LectureFiles
@@ -184,11 +184,11 @@ public class LecturesController : ControllerBase
                 .Select(lf => new LectureFileItemDto
                 {
                     FileId = lf.FileId,
-                    OriginalName = lf.File.OriginalName,
-                    FileType = lf.File.FileType,
-                    FileSize = lf.File.FileSize,
-                    Classification = lf.File.ClassificationLevel?.Name ?? "Công khai",
-                    ClassificationOrder = lf.File.ClassificationLevel?.LevelOrder ?? 1,
+                    OriginalName = lf.File!.OriginalName,
+                    FileType = lf.File!.FileType,
+                    FileSize = lf.File!.FileSize,
+                    Classification = lf.File!.ClassificationLevel?.Name ?? "Công khai",
+                    ClassificationOrder = lf.File!.ClassificationLevel?.LevelOrder ?? 1,
                     DisplayOrder = lf.DisplayOrder,
                     IsVisible = lf.IsVisible,
                     IsDownloadable = lf.IsDownloadable,
@@ -277,8 +277,12 @@ public class LecturesController : ControllerBase
     }
 
     [HttpPut("{id}/parts")]
-    public async Task<IActionResult> UpdateLectureParts(ulong id, [FromBody] List<UpdateLecturePartDto> updatedParts)
+    public async Task<IActionResult> UpdateLectureParts(ulong id, [FromBody] List<UpdateLecturePartDto> updatedParts, [FromQuery] ulong? userId)
     {
+        ulong uid = (userId.HasValue && userId.Value > 0) ? userId.Value : ((await LearningAccess.UserIdAsync(_db, Request)) ?? 1);
+        var perm = await _access.CanManageLectureAsync(uid, id);
+        if (!perm.Allowed) return StatusCode(perm.StatusCode, new { message = perm.Reason });
+
         var lectureExists = await _db.Lectures.AnyAsync(l => l.Id == id);
         if (!lectureExists) return NotFound(new { message = "Không tìm thấy bài giảng." });
 
@@ -630,9 +634,8 @@ public class LecturesController : ControllerBase
     [HttpPut("{id}/status")]
     public async Task<IActionResult> UpdateStatus(ulong id, [FromBody] UpdateLectureStatusDto dto, [FromQuery] ulong? userId)
     {
-        ulong uid = (userId.HasValue && userId.Value > 0) ? userId.Value : ((await LearningAccess.UserIdAsync(_db, Request)) ?? 1);
-        var perm = await _access.CanManageLectureAsync(uid, id);
-        if (!perm.Allowed) return StatusCode(perm.StatusCode, new { message = perm.Reason });
+        var (uid, denied) = await AuthorizeManageLectureAsync(id, userId);
+        if (denied != null) return denied;
 
         var lecture = await _db.Lectures.FirstOrDefaultAsync(l => l.Id == id);
         if (lecture == null) return NotFound();
@@ -659,7 +662,9 @@ public class LecturesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLecture(ulong id, [FromBody] UpdateLectureDto dto, [FromQuery] ulong? userId)
     {
-        ulong uid = (userId.HasValue && userId.Value > 0) ? userId.Value : ((await LearningAccess.UserIdAsync(_db, Request)) ?? 1);
+        var (uid, denied) = await AuthorizeManageLectureAsync(id, userId);
+        if (denied != null) return denied;
+
         var lecture = await _db.Lectures
             .Include(l => l.Permissions)
             .Include(l => l.LectureFiles)
@@ -773,7 +778,7 @@ public class LecturesController : ControllerBase
             }
 
             await _db.SaveChangesAsync();
-            await _audit.LogAsync(userId, "UPDATE_LECTURE", "LECTURE", lecture.Id, null, $"{{\"title\":\"{lecture.Title}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
+            await _audit.LogAsync(uid, "UPDATE_LECTURE", "LECTURE", lecture.Id, null, $"{{\"title\":\"{lecture.Title}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
 
             InvalidateCache();
@@ -787,9 +792,19 @@ public class LecturesController : ControllerBase
         }
     }
 
-    [HttpPut("{id}/permissions")]
-    public async Task<IActionResult> UpdateLecturePermissions(ulong id, [FromQuery] ulong userId, [FromBody] UpdateLecturePermissionsDto dto)
+    private async Task<(ulong uid, IActionResult? denied)> AuthorizeManageLectureAsync(ulong lectureId, ulong? userId)
     {
+        ulong uid = (userId.HasValue && userId.Value > 0) ? userId.Value : ((await LearningAccess.UserIdAsync(_db, Request)) ?? 1);
+        var perm = await _access.CanManageLectureAsync(uid, lectureId);
+        return perm.Allowed ? (uid, null) : (uid, StatusCode(perm.StatusCode, new { message = perm.Reason }));
+    }
+
+    [HttpPut("{id}/permissions")]
+    public async Task<IActionResult> UpdateLecturePermissions(ulong id, [FromQuery] ulong? userId, [FromBody] UpdateLecturePermissionsDto dto)
+    {
+        var (uid, denied) = await AuthorizeManageLectureAsync(id, userId);
+        if (denied != null) return denied;
+
         var lecture = await _db.Lectures.Include(l => l.Permissions).FirstOrDefaultAsync(l => l.Id == id);
         if (lecture == null) return NotFound(new { message = "Không tìm thấy bài giảng." });
 
@@ -823,7 +838,7 @@ public class LecturesController : ControllerBase
             lecture.UpdatedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync();
 
-            await _audit.LogAsync(userId, "UPDATE_LECTURE_PERMISSIONS", "LECTURE", lecture.Id, null,
+            await _audit.LogAsync(uid, "UPDATE_LECTURE_PERMISSIONS", "LECTURE", lecture.Id, null,
                 $"{{\"scope\":\"{dto.Scope}\",\"classCount\":{validClassIds.Count}}}",
                 HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
@@ -847,8 +862,11 @@ public class LecturesController : ControllerBase
     }
 
     [HttpPut("{id}/files/{fileId}/downloadable")]
-    public async Task<IActionResult> ToggleFileDownloadable(ulong id, ulong fileId, [FromQuery] ulong userId, [FromBody] ToggleFileDownloadableDto dto)
+    public async Task<IActionResult> ToggleFileDownloadable(ulong id, ulong fileId, [FromQuery] ulong? userId, [FromBody] ToggleFileDownloadableDto dto)
     {
+        var (uid, denied) = await AuthorizeManageLectureAsync(id, userId);
+        if (denied != null) return denied;
+
         var lectureFile = await _db.LectureFiles
             .Include(lf => lf.File)
             .FirstOrDefaultAsync(lf => lf.LectureId == id && lf.FileId == fileId);
@@ -859,7 +877,7 @@ public class LecturesController : ControllerBase
         lectureFile.IsDownloadable = dto.IsDownloadable;
         await _db.SaveChangesAsync();
 
-        await _audit.LogAsync(userId, "TOGGLE_FILE_DOWNLOADABLE", "LECTURE_FILE", fileId,
+        await _audit.LogAsync(uid, "TOGGLE_FILE_DOWNLOADABLE", "LECTURE_FILE", fileId,
             $"LectureId={id}",
             $"{{\"isDownloadable\":{dto.IsDownloadable.ToString().ToLowerInvariant()}}}",
             HttpContext.Connection.RemoteIpAddress?.ToString());
@@ -878,8 +896,11 @@ public class LecturesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteLecture(ulong id, [FromQuery] ulong userId)
+    public async Task<IActionResult> DeleteLecture(ulong id, [FromQuery] ulong? userId)
     {
+        var (uid, denied) = await AuthorizeManageLectureAsync(id, userId);
+        if (denied != null) return denied;
+
         var lecture = await _db.Lectures
             .Include(l => l.Permissions)
             .Include(l => l.LectureFiles)
@@ -894,7 +915,7 @@ public class LecturesController : ControllerBase
             lecture.DeletedAt = DateTime.UtcNow;
             await _db.SaveChangesAsync();
 
-            await _audit.LogAsync(userId, "DELETE_LECTURE", "LECTURE", lecture.Id, null, $"{{\"title\":\"{lecture.Title}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
+            await _audit.LogAsync(uid, "DELETE_LECTURE", "LECTURE", lecture.Id, null, $"{{\"title\":\"{lecture.Title}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
             await trans.CommitAsync();
 
             InvalidateCache();
@@ -933,8 +954,11 @@ public class LecturesController : ControllerBase
     }
 
     [HttpPut("{id}/quiz-questions")]
-    public async Task<IActionResult> UpdateQuizQuestions(ulong id, [FromBody] List<QuizQuestionDto> questions)
+    public async Task<IActionResult> UpdateQuizQuestions(ulong id, [FromBody] List<QuizQuestionDto> questions, [FromQuery] ulong? userId = null)
     {
+        var (uid, denied) = await AuthorizeManageLectureAsync(id, userId);
+        if (denied != null) return denied;
+
         var lectureExists = await _db.Lectures.AnyAsync(l => l.Id == id);
         if (!lectureExists) return NotFound(new { message = "Không tìm thấy bài giảng." });
 
@@ -958,6 +982,7 @@ public class LecturesController : ControllerBase
         }
 
         await _db.SaveChangesAsync();
+        await _audit.LogAsync(uid, "UPDATE_QUIZ_QUESTIONS", "LECTURE", id, null, $"{{\"count\":{questions.Count}}}", HttpContext.Connection.RemoteIpAddress?.ToString());
         InvalidateCache();
 
         return Ok(new { message = "Cập nhật ngân hàng câu hỏi ôn tập thành công!", count = questions.Count });

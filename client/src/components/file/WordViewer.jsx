@@ -8,10 +8,11 @@ import {
   Loader2,
   ZoomIn,
   ZoomOut,
-  RotateCcw
+  RotateCcw,
+  Lock
 } from 'lucide-react';
 
-export default function WordViewer({ url, fileName, file, downloadUrl }) {
+export default function WordViewer({ url, fileName, file, downloadUrl, canDownload = true }) {
   const [htmlContent, setHtmlContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -86,14 +87,21 @@ export default function WordViewer({ url, fileName, file, downloadUrl }) {
         <p className="text-xs text-slate-400 max-w-md mb-4">
           Tệp định dạng Word cần mở qua trình soạn thảo văn bản để xem trọn vẹn mọi định dạng biểu bảng phức tạp.
         </p>
-        <a
-          href={effectiveDownloadUrl}
-          download={fileName}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          <span>Tải tệp Word (.docx / .doc) về máy</span>
-        </a>
+        {canDownload !== false ? (
+          <a
+            href={effectiveDownloadUrl}
+            download={fileName}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            <span>Tải tệp Word (.docx / .doc) về máy</span>
+          </a>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg text-xs font-semibold">
+            <Lock className="w-3.5 h-3.5" />
+            <span>Tài liệu chỉ xem trực tuyến — không cho phép tải về</span>
+          </span>
+        )}
       </div>
     );
   }
@@ -137,14 +145,21 @@ export default function WordViewer({ url, fileName, file, downloadUrl }) {
             </button>
           </div>
 
-          <a
-            href={effectiveDownloadUrl}
-            download={fileName}
-            className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Tải về</span>
-          </a>
+          {canDownload !== false ? (
+            <a
+              href={effectiveDownloadUrl}
+              download={fileName}
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Tải về</span>
+            </a>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg text-xs font-semibold" title="Không cho phép tải về">
+              <Lock className="w-3.5 h-3.5" />
+              <span>Chỉ xem</span>
+            </span>
+          )}
         </div>
       </div>
 

@@ -35,7 +35,7 @@ export default function Header({ currentUser, availableUsers, onSwitchUser, onOp
               <img src="/assets/logo-dhan.jpg" alt="Logo Trường Đại học An ninh nhân dân" />
             </span>
             <span className="brand-text">
-              <span className="brand-kicker">Bộ Công an</span>
+              <span className="brand-kicker">Bộ Công an · Mã hiệu T04</span>
               <strong>Trường Đại học An ninh nhân dân</strong>
               <span className="brand-portal-name">Cổng môn học và học liệu số</span>
             </span>

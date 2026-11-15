@@ -44,7 +44,7 @@ export default function DbmsAdminPage() {
   const filteredTables = tables.filter(table => [table.tableName, table.module, table.description].some(value => String(value || '').toLocaleLowerCase('vi').includes(search)));
   return <div className="portal-container dbms-page">
     <header className="dbms-header">
-      <div className="dbms-heading"><span className="dbms-emblem"><Database size={28} aria-hidden="true" /></span><div><p className="dbms-eyebrow">QUẢN TRỊ HỆ THỐNG</p><h1>Cơ sở dữ liệu</h1><p>Theo dõi cấu trúc 27 bảng quan hệ, thời gian truy vấn và dung lượng lưu trữ nội bộ T04.</p></div></div>
+      <div className="dbms-heading"><span className="dbms-emblem"><Database size={28} aria-hidden="true" /></span><div><p className="dbms-eyebrow">QUẢN TRỊ HỆ THỐNG</p><h1>Cơ sở dữ liệu</h1><p>Theo dõi cấu trúc {overview?.totalTables || 35} bảng quan hệ, thời gian truy vấn và dung lượng lưu trữ nội bộ T04.</p></div></div>
       <div className="dbms-actions"><button type="button" onClick={loadOverview} disabled={loading} className="dbms-button"><RefreshCw size={17} aria-hidden="true" />{loading ? 'Đang kiểm tra…' : 'Làm mới số liệu CSDL'}</button></div>
     </header>
     <div className="dbms-status" role="status" aria-live="polite">{loading ? <><RefreshCw size={16} aria-hidden="true" />Đang tải số liệu từ máy chủ…</> : error ? <><AlertCircle size={16} aria-hidden="true" />Chưa xác nhận kết nối</> : <><CheckCircle2 size={16} aria-hidden="true" />Đã nhận số liệu từ máy chủ<span className="dbms-updated">Cập nhật {updatedAt?.toLocaleTimeString('vi-VN')}</span></>}</div>

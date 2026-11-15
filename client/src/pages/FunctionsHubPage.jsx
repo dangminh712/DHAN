@@ -199,7 +199,7 @@ export default function FunctionsHubPage({
     // 4. Kỹ thuật & CSDL
     {
       id: 'dbms-admin',
-      title: 'Quản trị Cơ sở dữ liệu (27 Bảng)',
+      title: 'Quản trị Cơ sở dữ liệu (35 Bảng)',
       category: 'system',
       categoryLabel: 'Kỹ thuật & CSDL',
       role: 'SUPER_ADMIN',
@@ -209,10 +209,10 @@ export default function FunctionsHubPage({
       iconBg: '#fef3c7',
       iconColor: '#92400e',
       href: '#/dbms',
-      description: 'Trình quản lý trực quan toàn bộ 27 bảng dữ liệu quan hệ của hệ thống: xem dữ liệu, cấu trúc khóa ngoại, số lượng bản ghi và thực thi truy vấn nội bộ.',
-      features: ['Duyệt 27 bảng dữ liệu MySQL', 'Kiểm tra ràng buộc quan hệ', 'Theo dõi dung lượng & bản ghi'],
-      actionLabel: 'Khám phá CSDL 27 bảng',
-      badgeText: '27 Bảng'
+      description: 'Trình quản lý trực quan toàn bộ 35 bảng dữ liệu quan hệ của hệ thống: xem dữ liệu, cấu trúc khóa ngoại, số lượng bản ghi và thực thi truy vấn nội bộ.',
+      features: ['Duyệt 35 bảng dữ liệu MySQL', 'Kiểm tra ràng buộc quan hệ', 'Theo dõi dung lượng & bản ghi'],
+      actionLabel: 'Khám phá CSDL 35 bảng',
+      badgeText: '35 Bảng'
     },
     {
       id: 'network-info',

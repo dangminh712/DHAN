@@ -90,7 +90,7 @@ export default function DashboardPage({ onNavigate, onOpenDetail, onOpenStudy, o
               className="px-4 py-2.5 bg-red-900/40 hover:bg-red-900/70 text-red-100 rounded-xl text-xs sm:text-sm font-semibold border border-red-400/20 transition-all flex items-center gap-2"
             >
               <Database className="w-4 h-4 text-amber-400" />
-              <span>Xem CSDL (27 bảng)</span>
+              <span>Xem CSDL (35 bảng)</span>
             </button>
           </div>
         </div>

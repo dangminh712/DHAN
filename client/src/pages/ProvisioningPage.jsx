@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import {
   Users,
@@ -627,7 +627,11 @@ export default function ProvisioningPage({ onSwitchUser, currentUser, academicCl
   });
 
   // Unique classes for filter
-  const classList = Array.from(new Set(students.map(s => s.classCode).filter(Boolean)));
+  const classList = useMemo(() => {
+    const fromAcademic = (academicClasses || []).map(c => c.code || c.classCode || c.name).filter(Boolean);
+    const fromStudents = (students || []).map(s => s.classCode).filter(Boolean);
+    return Array.from(new Set([...fromAcademic, ...fromStudents])).sort();
+  }, [academicClasses, students]);
 
   return (
     <main className="main-content-layout" style={{ paddingTop: '20px', paddingBottom: '50px' }}>

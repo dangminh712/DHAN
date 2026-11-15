@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\Server.PaginationTests.csproj": {}
+    "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\server.PaginationTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\Server.PaginationTests.csproj": {
+    "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\server.PaginationTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\Server.PaginationTests.csproj",
-        "projectName": "Server.PaginationTests",
-        "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\Server.PaginationTests.csproj",
+        "projectUniqueName": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\server.PaginationTests.csproj",
+        "projectName": "server.PaginationTests",
+        "projectPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\server.PaginationTests.csproj",
         "packagesPath": "C:\\Users\\DangMinh\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\DangMinh\\Documents\\GitHub\\DHAN\\server.PaginationTests\\obj\\",
         "projectStyle": "PackageReference",

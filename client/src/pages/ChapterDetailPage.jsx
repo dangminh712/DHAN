@@ -52,14 +52,16 @@ export default function ChapterDetailPage({ courseId, chapterId, currentUser, on
         <p>{chapter.description}</p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginTop: '14px' }}>
           <div><FileText size={18} /> {chapter.materialCount} tài liệu</div>
-          <a
-            href={`#/study/${courseId}`}
-            className="portal-button portal-button--primary"
-            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}
-          >
-            <GraduationCap size={18} />
-            <span>Vào phòng học chuyên đề 5 phần</span>
-          </a>
+          {chapter.primaryLectureId && (
+            <a
+              href={`#/study/${chapter.primaryLectureId}`}
+              className="portal-button portal-button--primary"
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}
+            >
+              <GraduationCap size={18} />
+              <span>Vào phòng học chuyên đề 5 phần</span>
+            </a>
+          )}
         </div>
       </header>
       <CourseFilters search={search} onSearch={setSearch} format={format} onFormat={setFormat} />

@@ -45,9 +45,9 @@ public class CoursesController : ControllerBase
             ResponsibleTeacherName = s.ResponsibleTeacherName,
             ResponsibilitySource = s.ResponsibilitySource,
             ChapterCount = s.Chapters.Count(c => c.Status == "PUBLISHED"),
-            MaterialCount = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)),
+            MaterialCount = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel!.LevelOrder <= maxClearance)),
             Formats = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials)
-                .Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance))
+                .Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel!.LevelOrder <= maxClearance))
                 .Select(m => m.File!.FileType).Distinct().ToList()
         }).ToListAsync();
         return Ok(courses);
@@ -67,8 +67,9 @@ public class CoursesController : ControllerBase
                 ResponsibleTeacherName = s.ResponsibleTeacherName,
                 ResponsibilitySource = s.ResponsibilitySource,
                 ChapterCount = s.Chapters.Count(c => c.Status == "PUBLISHED"),
-                MaterialCount = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)),
-                Formats = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)).Select(m => m.File!.FileType).Distinct().ToList(),
+                MaterialCount = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel!.LevelOrder <= maxClearance)),
+                Formats = s.Chapters.Where(c => c.Status == "PUBLISHED").SelectMany(c => c.Materials).Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel!.LevelOrder <= maxClearance)).Select(m => m.File!.FileType).Distinct().ToList(),
+                PrimaryLectureId = s.Lectures.Where(l => l.Status == "PUBLISHED" && l.DeletedAt == null).OrderBy(l => l.Id).Select(l => (ulong?)l.Id).FirstOrDefault(),
                 Chapters = s.Chapters.Where(c => c.Status == "PUBLISHED").OrderBy(c => c.DisplayOrder).ThenBy(c => c.ChapterNumber)
                     .Select(c => new ChapterSummaryDto
                     {
@@ -76,8 +77,8 @@ public class CoursesController : ControllerBase
                         ChapterNumber = c.ChapterNumber,
                         Title = c.Title,
                         Description = c.Description,
-                        MaterialCount = c.Materials.Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)),
-                        Formats = c.Materials.Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel.LevelOrder <= maxClearance)).Select(m => m.File!.FileType).Distinct().ToList()
+                        MaterialCount = c.Materials.Count(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel!.LevelOrder <= maxClearance)),
+                        Formats = c.Materials.Where(m => m.IsVisible && m.File != null && m.File.Status == "ACTIVE" && (isStaff || m.File.ClassificationLevel!.LevelOrder <= maxClearance)).Select(m => m.File!.FileType).Distinct().ToList()
                     }).ToList()
             }).FirstOrDefaultAsync();
         return course == null ? NotFound(new { message = "Không tìm thấy môn học." }) : Ok(course);
@@ -110,9 +111,14 @@ public class CoursesController : ControllerBase
             OriginalName = m.File!.OriginalName, Extension = m.File.Extension, MimeType = m.File.MimeType, FileType = m.File.FileType,
             FileSize = m.File.FileSize, MaterialGroup = m.MaterialGroup, CanDownload = m.IsDownloadable, CanPrint = m.IsPrintable
         }).ToList();
+        var primaryLectureId = await _db.Lectures.AsNoTracking()
+            .Where(l => l.SubjectId == courseId && l.Status == "PUBLISHED" && l.DeletedAt == null)
+            .OrderBy(l => l.Id)
+            .Select(l => (ulong?)l.Id)
+            .FirstOrDefaultAsync();
         return Ok(new ChapterDetailDto
         {
-            Id = chapter.Id, CourseId = chapter.SubjectId, CourseCode = chapter.Subject?.Code ?? string.Empty, CourseName = chapter.Subject?.Name ?? string.Empty,
+            Id = chapter.Id, CourseId = chapter.SubjectId, PrimaryLectureId = primaryLectureId, CourseCode = chapter.Subject?.Code ?? string.Empty, CourseName = chapter.Subject?.Name ?? string.Empty,
             ChapterNumber = chapter.ChapterNumber, Title = chapter.Title, Description = chapter.Description,
             MaterialCount = materials.Count, Formats = materials.Select(m => m.FileType).Distinct().ToList(), Materials = materials
         });
@@ -126,7 +132,7 @@ public class CoursesController : ControllerBase
         var (maxClearance, isStaff) = await GetViewerAsync(userId);
         var materials = _db.ChapterMaterials.AsNoTracking()
             .Where(m => m.Chapter!.SubjectId == courseId && m.Chapter.Status == "PUBLISHED" && m.IsVisible && m.File != null && m.File.Status == "ACTIVE")
-            .Where(m => isStaff || m.File!.ClassificationLevel.LevelOrder <= maxClearance);
+            .Where(m => isStaff || m.File!.ClassificationLevel!.LevelOrder <= maxClearance);
         if (chapterId.HasValue) materials = materials.Where(m => m.ChapterId == chapterId.Value);
         if (!string.IsNullOrWhiteSpace(format)) materials = ApplyFormat(materials, format);
         if (!string.IsNullOrWhiteSpace(q))

@@ -66,18 +66,18 @@ public class AcademicController : ControllerBase
         {
             string s = search.Trim().ToLower();
             query = query.Where(sc =>
-                sc.Student.Username.ToLower().Contains(s) ||
-                sc.Student.FullName.ToLower().Contains(s) ||
-                (sc.Student.StudentCode != null && sc.Student.StudentCode.ToLower().Contains(s)));
+                sc.Student!.Username.ToLower().Contains(s) ||
+                sc.Student!.FullName.ToLower().Contains(s) ||
+                (sc.Student!.StudentCode != null && sc.Student!.StudentCode.ToLower().Contains(s)));
         }
 
         var selected = query
-            .OrderBy(sc => sc.Student.StudentCode)
+            .OrderBy(sc => sc.Student!.StudentCode)
             .Select(sc => new
             {
                 sc.StudentId,
-                Username = sc.Student.Username,
-                FullName = sc.Student.FullName,
+                Username = sc.Student!.Username,
+                FullName = sc.Student!.FullName,
                 StudentCode = sc.Student.StudentCode,
                 Email = sc.Student.Email,
                 Phone = sc.Student.Phone,
@@ -117,7 +117,7 @@ public class AcademicController : ControllerBase
                 FacultyName = s.OrganizationalUnit != null ? s.OrganizationalUnit.Name : "T04",
                 ResponsibleTeacherName = s.ResponsibleTeacherName,
                 ResponsibilitySource = s.ResponsibilitySource,
-                AssignedTeachers = s.TeacherSubjects.Select(ts => ts.Teacher.FullName).ToList()
+                AssignedTeachers = s.TeacherSubjects.Select(ts => ts.Teacher!.FullName).ToList()
             });
 
         if (!string.IsNullOrWhiteSpace(search)) query = query.Where(s => s.Code.Contains(search) || s.Name.Contains(search));

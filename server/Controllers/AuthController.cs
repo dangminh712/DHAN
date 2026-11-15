@@ -20,6 +20,8 @@ public class AuthController : ControllerBase
     private readonly IPasswordHasher _hasher;
     private readonly IAuditService _audit;
     private readonly IMemoryCache _cache;
+    private static int _userCacheVersion = 1;
+    public static void InvalidateUserCache() => Interlocked.Increment(ref _userCacheVersion);
 
     public AuthController(TrainingDbContext db, IPasswordHasher hasher, IAuditService audit, IMemoryCache cache)
     {
@@ -63,7 +65,7 @@ public class AuthController : ControllerBase
             });
 
         if (!string.IsNullOrWhiteSpace(role)) query = query.Where(u => u.Role == role);
-        string cacheKey = $"users:{page}:{pageSize}:{search}:{sortBy}:{sortDir}:{role}";
+        string cacheKey = $"users:v{_userCacheVersion}:{page}:{pageSize}:{search}:{sortBy}:{sortDir}:{role}";
         if (_cache.TryGetValue(cacheKey, out object? cachedResult) && cachedResult != null)
         {
             return Ok(cachedResult);
@@ -256,6 +258,7 @@ public class AuthController : ControllerBase
 
             await trans.CommitAsync();
 
+            InvalidateUserCache();
             return Ok(new
             {
                 message = "Tạo tài khoản cán bộ/học viên thành công!",
@@ -337,6 +340,7 @@ public class AuthController : ControllerBase
 
             await trans.CommitAsync();
 
+            InvalidateUserCache();
             return Ok(new { message = "Cập nhật thông tin tài khoản thành công!", userId = user.Id });
         }
         catch (Exception ex)
@@ -367,6 +371,7 @@ public class AuthController : ControllerBase
             await _audit.LogAsync(adminUserId.Value, "DELETE_USER", "USER", user.Id, null, $"{{\"username\":\"{user.Username}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
         }
 
+        InvalidateUserCache();
         return Ok(new { message = $"Đã ngưng hoạt động / vô hiệu hóa tài khoản {user.Username} thành công.", userId = id });
     }
 
@@ -546,6 +551,7 @@ public class AuthController : ControllerBase
 
             await trans.CommitAsync();
 
+            InvalidateUserCache();
             return Ok(new
             {
                 message = $"Cấp tài khoản hàng loạt thành công! Tạo mới: {createdCount} tài khoản, Đã tồn tại: {skippedCount}.",
@@ -653,6 +659,7 @@ public class AuthController : ControllerBase
 
             await _audit.LogAsync(adminUserId ?? 1, "PROVISION_SINGLE", "USER", newUser.Id, null, $"{{\"username\":\"{username}\",\"classCode\":\"{classCode}\"}}", HttpContext.Connection.RemoteIpAddress?.ToString());
 
+            InvalidateUserCache();
             return Ok(new
             {
                 message = $"Cấp tài khoản cho học viên {studentCode} thành công!",
@@ -1052,6 +1059,7 @@ public class AuthController : ControllerBase
 
             await trans.CommitAsync();
 
+            InvalidateUserCache();
             return Ok(new
             {
                 message = $"Nhập liệu từ file Excel thành công! Tạo mới: {createdCount} học viên, Cập nhật: {updatedCount}, Bỏ qua: {skippedCount}.",

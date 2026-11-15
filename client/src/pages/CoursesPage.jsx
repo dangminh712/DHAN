@@ -16,6 +16,8 @@ export default function CoursesPage({ currentUser }) {
   const [editingCourse, setEditingCourse] = useState(null)
   const deferredSearch = useDeferredValue(search)
   const visibleCourses = useMemo(() => selectCatalogCourses(courses, { search: deferredSearch, onlyReady, sort }), [courses, deferredSearch, onlyReady, sort])
+  const userRole = (typeof currentUser?.role === 'string' ? currentUser.role : currentUser?.role?.code || '').toUpperCase();
+  const canManageCourses = ['SUPER_ADMIN', 'ADMIN', 'TEACHER'].includes(userRole);
 
   const loadCourses = () => {
     dispatchCourses({ type: 'start' })
@@ -38,15 +40,17 @@ export default function CoursesPage({ currentUser }) {
       <header className="course-page-heading">
         <div><span className="course-kicker">Kho học liệu số</span><h1>Danh sách môn học</h1><p>Tìm kiếm và truy cập nội dung đào tạo được phân quyền cho tài khoản của đồng chí.</p></div>
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <button
-            type="button"
-            className="portal-button portal-button--primary"
-            onClick={() => { setEditingCourse(null); setIsModalOpen(true); }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-          >
-            <PlusCircle size={18} />
-            <span>Thêm môn học</span>
-          </button>
+          {canManageCourses && (
+            <button
+              type="button"
+              className="portal-button portal-button--primary"
+              onClick={() => { setEditingCourse(null); setIsModalOpen(true); }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <PlusCircle size={18} />
+              <span>Thêm môn học</span>
+            </button>
+          )}
           <div className="course-heading-summary" aria-label={`${visibleCourses.length} môn học phù hợp`}><strong>{status === 'ready' ? visibleCourses.length : '—'}</strong><span>Môn học<br />phù hợp</span></div>
         </div>
       </header>

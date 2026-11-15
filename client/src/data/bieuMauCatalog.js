@@ -160,7 +160,7 @@ export const BIEU_MAU_CATALOG = [
     {
         "id": "hsan_db_b19a",
         "code": "B19-a",
-        "name": "Danh sách đối tượng liên quan đến an ninh quốc gia - \r\n\t\t\t\t\t <em>QLNV, KTNV, Đối tượng chính trị khác<\/em>",
+        "name": "Danh sách đối tượng liên quan đến an ninh quốc gia - (QLNV, KTNV, Đối tượng chính trị khác)",
         "categoryKey": "DB",
         "categoryName": "Hồ sơ Điều tra cơ bản (ĐB)",
         "branch": "HSAN",
@@ -1850,7 +1850,7 @@ export const BIEU_MAU_CATALOG = [
     {
         "id": "hsan_all_an_b19",
         "code": "B19",
-        "name": "Danh sách người liên quan đến an ninh quốc gia - \r\n\t\t\t\t\t <em>QLNV, KTNV, Đối tượng chính trị khác<\/em>",
+        "name": "Danh sách người liên quan đến an ninh quốc gia - (QLNV, KTNV, Đối tượng chính trị khác)",
         "categoryKey": "ALL_AN",
         "categoryName": "Biểu mẫu Thông dụng An ninh",
         "branch": "HSAN",
